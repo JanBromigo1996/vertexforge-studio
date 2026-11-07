@@ -7,6 +7,10 @@
 
 If you installed 2.3.0: just run the new setup over it. Your projects stay untouched.
 
+**VirusTotal (2.3.1):** 2 of about 70 engines – **Bkav Pro** `W32.Malware.B4D2B4A6` (generic) and **Trapmine**
+`Malicious.moderate.ml.score` (machine-learning guess). All large vendors (Microsoft, Kaspersky, Bitdefender, ESET,
+CrowdStrike, …) report it clean. Both detections are reported as false positives.
+
 ---
 
 ## VertexForge Studio 2.3.0
