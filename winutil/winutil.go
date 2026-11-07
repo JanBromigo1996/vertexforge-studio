@@ -9,9 +9,11 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"image"
 	"image/png"
 	"os"
+	"runtime"
 	"strings"
 	"syscall"
 	"unicode/utf16"
@@ -180,8 +182,80 @@ func lnkString(s string) []byte {
 	return b
 }
 
-// WriteLnk schreibt eine einfache Windows-Verknüpfung (ohne COM, nach MS-SHLLINK).
+var (
+	procCoCreateInstance = ole32.NewProc("CoCreateInstance")
+	procCoUninitialize   = ole32.NewProc("CoUninitialize")
+)
+
+type guid struct {
+	d1 uint32
+	d2 uint16
+	d3 uint16
+	d4 [8]byte
+}
+
+var (
+	clsidShellLink  = guid{0x00021401, 0, 0, [8]byte{0xC0, 0, 0, 0, 0, 0, 0, 0x46}}
+	iidIShellLinkW  = guid{0x000214F9, 0, 0, [8]byte{0xC0, 0, 0, 0, 0, 0, 0, 0x46}}
+	iidIPersistFile = guid{0x0000010B, 0, 0, [8]byte{0xC0, 0, 0, 0, 0, 0, 0, 0x46}}
+)
+
+// comCall ruft Methode Nummer idx aus der vtable eines COM-Objekts auf.
+func comCall(obj uintptr, idx int, args ...uintptr) uintptr {
+	vtbl := *(*uintptr)(unsafe.Pointer(obj))
+	fn := *(*uintptr)(unsafe.Pointer(vtbl + uintptr(idx)*unsafe.Sizeof(uintptr(0))))
+	r, _, _ := syscall.SyscallN(fn, append([]uintptr{obj}, args...)...)
+	return r
+}
+
+func wstr(s string) uintptr {
+	p, _ := syscall.UTF16PtrFromString(s)
+	return uintptr(unsafe.Pointer(p))
+}
+
+// WriteLnk legt eine Windows-Verknüpfung über die offizielle Shell-Schnittstelle an
+// (IShellLink + IPersistFile, wie Inno Setup/NSIS). Nur falls das scheitert, wird die
+// Datei selbst nach MS-SHLLINK geschrieben.
 func WriteLnk(lnkPath, target, workDir, description, iconPath string) error {
+	if err := writeLnkCOM(lnkPath, target, workDir, description, iconPath); err == nil {
+		return nil
+	}
+	return writeLnkRaw(lnkPath, target, workDir, description, iconPath)
+}
+
+func writeLnkCOM(lnkPath, target, workDir, description, iconPath string) error {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+	hr, _, _ := procCoInitializeEx.Call(0, 0x2) // COINIT_APARTMENTTHREADED
+	if int32(hr) >= 0 {
+		defer procCoUninitialize.Call()
+	}
+	var sl uintptr
+	hr, _, _ = procCoCreateInstance.Call(uintptr(unsafe.Pointer(&clsidShellLink)), 0, 1 /*CLSCTX_INPROC_SERVER*/, uintptr(unsafe.Pointer(&iidIShellLinkW)), uintptr(unsafe.Pointer(&sl)))
+	if int32(hr) < 0 || sl == 0 {
+		return fmt.Errorf("CoCreateInstance(ShellLink): 0x%x", uint32(hr))
+	}
+	defer comCall(sl, 2) // Release
+	if r := comCall(sl, 20, wstr(target)); int32(r) < 0 { // SetPath
+		return fmt.Errorf("SetPath: 0x%x", uint32(r))
+	}
+	comCall(sl, 9, wstr(workDir))       // SetWorkingDirectory
+	comCall(sl, 7, wstr(description))   // SetDescription
+	comCall(sl, 17, wstr(iconPath), 0)  // SetIconLocation
+	comCall(sl, 15, 1)                  // SetShowCmd(SW_SHOWNORMAL)
+	var pf uintptr
+	if r := comCall(sl, 0, uintptr(unsafe.Pointer(&iidIPersistFile)), uintptr(unsafe.Pointer(&pf))); int32(r) < 0 || pf == 0 {
+		return fmt.Errorf("QueryInterface(IPersistFile): 0x%x", uint32(r))
+	}
+	defer comCall(pf, 2)
+	_ = os.Remove(lnkPath)
+	if r := comCall(pf, 6, wstr(lnkPath), 1); int32(r) < 0 { // Save
+		return fmt.Errorf("IPersistFile.Save: 0x%x", uint32(r))
+	}
+	return nil
+}
+
+func writeLnkRaw(lnkPath, target, workDir, description, iconPath string) error {
 	var b bytes.Buffer
 	le := func(v interface{}) { _ = binary.Write(&b, binary.LittleEndian, v) }
 	const (

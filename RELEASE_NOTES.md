@@ -1,3 +1,14 @@
+## VertexForge Studio 2.3.1
+
+**Bug fix:** after installing 2.3.0 the program did not start from the desktop/Start menu shortcut.
+- Shortcuts are now created with the official Windows shell interface (IShellLink) instead of a hand-written file.
+- More robust start: working folder set to the program folder, network drives no longer slow down the start,
+  and any start error is shown in a message and written to `%LOCALAPPDATA%\VertexForge Studio\vertexforge.log`.
+
+If you installed 2.3.0: just run the new setup over it. Your projects stay untouched.
+
+---
+
 ## VertexForge Studio 2.3.0
 
 A free, open-source planning tool for 3D artists: pipeline, deadlines, mind board, shot list and story in one place.
@@ -29,7 +40,7 @@ A free, open-source planning tool for 3D artists: pipeline, deadlines, mind boar
   **Cause:** the window library hid Microsoft's `WebView2Loader.dll` inside the program and loaded it from memory –
   a technique malware also uses. **Fix:** the DLL is now a normal Microsoft-signed file next to the program; the setup
   unpacks a compressed package, uses a separate uninstaller and no longer copies itself.
-- **This release on VirusTotal:** all large vendors (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, …) report it clean.
+- **2.3.0 on VirusTotal:** all large vendors (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, …) report it clean.
   Two smaller engines still raise generic guesses: **Bkav Pro** `W32.Malware.69DD7DC0` and **Trapmine**
   `Malicious.moderate.ml.score`. Neither names a real virus; both were reported as false positives.
 - **Live results of these exact files** on VirusTotal are linked on the [website](https://vertexforge.pages.dev/#security)

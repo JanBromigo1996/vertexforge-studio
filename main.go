@@ -24,6 +24,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 	"sync"
 	"syscall"
@@ -39,7 +40,7 @@ import (
 
 const (
 	appName    = "VertexForge Studio"
-	appVersion = "2.3.0"
+	appVersion = "2.3.1"
 	virtHost   = "vertexforge.example"
 )
 
@@ -53,7 +54,11 @@ var (
 	shell32           = syscall.NewLazyDLL("shell32.dll")
 	procShellExecute  = shell32.NewProc("ShellExecuteW")
 	user32            = syscall.NewLazyDLL("user32.dll")
+	kernel32 = syscall.NewLazyDLL("kernel32.dll")
 	procMessageBox    = user32.NewProc("MessageBoxW")
+	procSetErrorMode     = kernel32.NewProc("SetErrorMode")
+	procGetLogicalDrives = kernel32.NewProc("GetLogicalDrives")
+	procGetDriveType     = kernel32.NewProc("GetDriveTypeW")
 	procSetForeground = user32.NewProc("SetForegroundWindow")
 	procGetWindowLong = user32.NewProc("GetWindowLongPtrW")
 	procSetWindowLong = user32.NewProc("SetWindowLongPtrW")
@@ -383,6 +388,14 @@ func systemIcons(reqs []iconReq) map[string]string {
 	return res
 }
 
+func exePath() string {
+	p, err := os.Executable()
+	if err != nil {
+		return ""
+	}
+	return p
+}
+
 func main() {
 	base := os.Getenv("LOCALAPPDATA")
 	if base == "" {
@@ -393,6 +406,20 @@ func main() {
 	if lf, err := os.OpenFile(filepath.Join(base, "vertexforge.log"), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o644); err == nil {
 		log.SetOutput(lf)
 		defer lf.Close()
+	}
+	log.Printf("VertexForge Studio %s – Start (%s)", appVersion, exePath())
+	// Keine Windows-Fehlerdialoge („Kein Datenträger im Laufwerk“) beim Prüfen von Laufwerken
+	procSetErrorMode.Call(0x0001 | 0x8000) // SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX
+	// Unerwartete Fehler nicht stumm verschlucken, sondern melden
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("PANIC: %v\n%s", r, debug.Stack())
+			messageBox(fmt.Sprintf("VertexForge Studio konnte nicht starten / could not start:\n\n%v\n\nLog: %s", r, filepath.Join(base, "vertexforge.log")), appName, 0x10)
+		}
+	}()
+	// Arbeitsordner = Programmordner, damit die Microsoft-DLL daneben sicher gefunden wird
+	if exe := exePath(); exe != "" {
+		_ = os.Chdir(filepath.Dir(exe))
 	}
 	appDir := filepath.Join(base, "app")
 	if err := extractApp(appDir); err != nil {
@@ -411,6 +438,7 @@ func main() {
 		},
 	})
 	if w == nil {
+		log.Printf("WebView2 konnte nicht gestartet werden")
 		messageBox("Microsoft Edge WebView2 Runtime wurde nicht gefunden.\n\nBitte installiere sie (kostenlos) und starte VertexForge Studio erneut.\n\n"+
 			"Microsoft Edge WebView2 Runtime is missing. Please install it and restart.", appName, 0x30)
 		_ = shellOpen(0, "https://go.microsoft.com/fwlink/p/?LinkId=2124703")
@@ -444,8 +472,16 @@ func main() {
 			log.Printf("virtual host: %v", err)
 		}
 		// Verknüpfte Bilder/Videos direkt von der Festplatte anzeigen (nur lesend, nur in dieser App).
+		// Nur feste und Wechsel-Laufwerke mit Datenträger – Netzlaufwerke können beim Start lange hängen.
+		drives, _, _ := procGetLogicalDrives.Call()
 		for c := 'C'; c <= 'Z'; c++ {
+			if drives&(1<<uint(c-'A')) == 0 {
+				continue
+			}
 			root := string(c) + `:\`
+			if t, _, _ := procGetDriveType.Call(uintptr(unsafe.Pointer(ptr(root)))); t != 2 && t != 3 { // REMOVABLE, FIXED
+				continue
+			}
 			if fi, err := os.Stat(root); err == nil && fi.IsDir() {
 				_ = wv3.SetVirtualHostNameToFolderMapping("drive-"+strings.ToLower(string(c))+".vertexforge.example", root, edge.COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW)
 			}
