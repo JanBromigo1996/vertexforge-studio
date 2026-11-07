@@ -46,6 +46,12 @@ function openDesignPop(btn, area){
   el.style.left = clamp(r.right - w, 8, innerWidth - w - 8) + 'px'; el.style.top = (r.bottom + 8) + 'px';
   requestAnimationFrame(()=>el.classList.add('open'));
   setTimeout(()=>document.addEventListener('pointerdown', out, true), 0);
+  el.addEventListener('input', e=>{
+    const r = e.target.closest('[data-hub]'); if(!r) return;
+    const k = r.dataset.hub; S.settings[k] = parseFloat(r.value);
+    const g = $('hubGrid'); if(g) g.style.setProperty(k==='cardSize' ? '--card-w' : '--title-scale', k==='cardSize' ? r.value+'px' : r.value);
+    persistSoon();
+  });
   el.addEventListener('click', e=>{
     const p = e.target.closest('[data-preset]'); if(p){ const [bg, node] = BOARD_PRESETS[p.dataset.preset]; setBoardStyle({bg, node}); return; }
     const bgb = e.target.closest('[data-bg]'); if(bgb){ setBoardStyle({bg:bgb.dataset.bg}); return; }
@@ -72,6 +78,9 @@ function refreshDesignPop(){
     const cur = S.settings.hubStyle;
     el.innerHTML = `<div class="dp-head">${ic('palette',14)}<span>${t('ds.lib')}</span></div>
       <div class="dp-presets libs">${LIB_STYLES.map(k=>`<button class="dp-preset ${cur===k?'on':''}" data-lib="${k}"><span class="lib-prev lp-${k}"><i></i><i></i><i></i></span><em>${t('ds.lib.'+k)}</em></button>`).join('')}</div>
+      <div class="dp-label">${t('ds.sizes')}</div>
+      <label class="dp-range">${ic('grid',14)}<span>${t('hub.cover')}</span><input type="range" min="160" max="380" step="1" value="${S.settings.cardSize}" data-hub="cardSize"></label>
+      <label class="dp-range">${ic('type',14)}<span>${t('hub.titleSize')}</span><input type="range" min="0.6" max="1.6" step="0.01" value="${S.settings.titleScale}" data-hub="titleScale"></label>
       <div class="dp-note">${t('ds.libNote')}</div>`;
   }else if(designPop.area==='pipeline' || designPop.area==='shots'){
     const p = activeProject(), cur = designPop.area==='pipeline' ? p.pipeStyle : p.shotStyle;

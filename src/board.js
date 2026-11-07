@@ -3,7 +3,7 @@
    ============================================================================ */
 const CV = {drag:null, pointers:new Map(), pinch:null, target:null, raf:0, space:false, sizes:null, moveRaf:0, lastMove:null, geo:{}};
 const GAP = 10;
-const NODE_LABEL = {mindmap:'bd.node', card:'bd.card', note:'bd.note', image:'bd.image', text:'bd.text', video:'bd.video', file:'bd.file'};
+const NODE_LABEL = {mindmap:'bd.node', card:'bd.card', char:'bd.char', note:'bd.note', image:'bd.image', text:'bd.text', video:'bd.video', file:'bd.file'};
 
 function activeBoard(){
   const p = activeProject();
@@ -35,6 +35,7 @@ function renderBoard(){
         <span class="bt-sep"></span>
         <button class="btn btn-ghost btn-xs" onclick="fitBoard()" title="Home">${ic('fit',14)}<span class="hide-sm">${t('bd.fit')}</span></button>
         <span class="bt-sep"></span>
+        <button class="icon-btn sm" onclick="openDeck()" title="${esc(t('cc.deck'))}">${ic('cards',16)}</button>
         <button class="icon-btn sm" id="boardDesign" title="${esc(t('ds.board'))}">${ic('palette',16)}</button>
         <button class="icon-btn sm ${ui.areaFull?'on':''}" onclick="toggleAreaFull()" title="${esc(ui.areaFull ? t('fs.exit') : t('fs.enter'))} · F11 / Esc">${ic(ui.areaFull?'shrink':'expand',16)}</button>
       </div>
@@ -45,10 +46,10 @@ function renderBoard(){
       <span class="bt-hsep"></span>
       ${tool(`onclick="addNode('mindmap')"`, 'node', t('bd.node'), 'Shift+A')}
       ${tool(`onclick="addNode('card')"`, 'card', t('bd.card'))}
+      ${tool(`onclick="addNode('char')"`, 'cards', t('bd.char'))}
       ${tool(`onclick="addNode('note')"`, 'note', t('bd.note'))}
       ${tool(`onclick="addNode('text')"`, 'type', t('bd.text'))}
-      ${tool(`onclick="pickBoardImages()"`, 'image', t('bd.images'), 'Ctrl+V')}
-      ${tool(`onclick="pickBoardVideos()"`, 'video', t('bd.videos'))}
+      ${tool(`onclick="pickBoardMedia()"`, 'image', t('bd.media'), 'Ctrl+V')}
       ${tool(`onclick="linkFiles()"`, 'link', t('bd.linkFile'))}
     </div>`;
   $('boardPick').onclick = e => openBoardMenu(e.currentTarget);
@@ -77,7 +78,7 @@ function addBoard(){ const b = newBoard(t('bd.newName',{n:activeProject().boards
 async function renameBoard(id){ const b = activeProject().boards.find(x=>x.id===id); if(!b) return; const n = await askText(t('bd.rename'), b.name); if(n && n.trim()){ b.name = n.trim(); changed(); renderBoard(); } }
 async function deleteBoard(id){
   const p = activeProject(), b = p.boards.find(x=>x.id===id); if(!b || p.boards.length<2) return;
-  if(!(await confirmDelete(t('bd.del'), t('bd.delText',{name:b.name, n:b.nodes.length})))) return;
+  if(!(await softDelete(b.name))) return;
   p.boards = p.boards.filter(x=>x!==b); changed(); renderBoard();
 }
 
@@ -108,6 +109,8 @@ function nodeHTML(n, i){
     body = ui.editing===n.id
       ? `<textarea class="n-textedit" data-field="text" spellcheck="false" style="font-family:${fontStack(st.font)};font-size:${st.size}px;font-weight:${st.weight};line-height:${st.line};letter-spacing:${st.spacing}em;text-align:${st.align};font-style:${st.italic?'italic':'normal'};color:${st.foil==='plain'?st.color:'var(--text)'}">${esc(n.text)}</textarea>`
       : `<div class="n-textview" data-act="move">${stxHTML(st, n.text || ' ', 'px')}</div>`;
+  }else if(n.type==='char'){
+    body = charCardHTML(n, true);
   }else if(n.type==='note'){
     body = `<textarea class="n-note" data-field="text" placeholder="${esc(t('nd.noteText'))}">${esc(n.text)}</textarea>`;
   }else{
@@ -307,6 +310,7 @@ function addNode(type, at){
   const base = {
     mindmap:{w:240, h:110, cat:t('nd.idea'), title:t('nd.newNode'), desc:'', links:[]},
     card:{w:290, h:150, cat:t('nd.cardCat'), title:t('nd.newCard'), desc:t('nd.cardDesc'), links:[], stage:0},
+    char:{w:250, h:350, kind:'character', title:t('cc.newName'), sub:'', desc:'', stats:[0,0,0,0,0], facts:[{k:t('cc.f.poly'), v:''},{k:t('cc.f.tex'), v:''}], links:[], src:''},
     note:{w:220, h:150, text:''},
     text:{text:t('nd.textDefault'), st:textDefaults({size:44, align:'center', foil:S.settings.mode==='dark'?'gold':'plain', color:S.settings.mode==='dark'?'#e3cf9f':'#3a2f22', fx:S.settings.mode==='dark'?'extrude':'none', fxColor:'#3a2508', fxDepth:5, shadow:S.settings.mode==='dark'})}
   }[type];
@@ -316,7 +320,7 @@ function addNode(type, at){
   b.nodes.push(n); ui.sel = new Set([n.id]); ui.active = n.id; ui.selConn = null;
   changed(); renderNodes(); renderInspector();
   if(type==='text') editNode(n.id);
-  else { const f = nodeEl(n.id) && nodeEl(n.id).querySelector(type==='note' ? '.n-note' : '.n-title'); if(f){ f.focus(); f.select && f.select(); } }
+  else { const f = nodeEl(n.id) && nodeEl(n.id).querySelector(type==='note' ? '.n-note' : type==='char' ? '.tc-name' : '.n-title'); if(f){ f.focus(); f.select && f.select(); } }
 }
 async function addImages(files, at){
   const b = activeBoard(), base = at || mouseWorld(), added = [];
@@ -330,6 +334,7 @@ async function addImages(files, at){
   }
   if(added.length){ ui.sel = new Set(added); ui.active = added[added.length-1]; changed(); renderNodes(); renderInspector(); toast(t('bd.imgAdded',{n:added.length})); }
 }
+async function pickBoardMedia(at){ const files = await pickFiles('image/*,video/*', true); if(!files.length) return; const c = at || viewCenter(), img = files.filter(f=>f.type.startsWith('image/')), vid = files.filter(f=>f.type.startsWith('video/')); if(img.length) addImages(img, c); if(vid.length) addVideos(vid, img.length ? {x:c.x+40, y:c.y+40} : c); }
 async function pickBoardImages(){ const files = await pickFiles('image/*', true); if(files.length) addImages(files, viewCenter()); }
 async function pickBoardVideos(){ const files = await pickFiles('video/*', true); if(files.length) addVideos(files, viewCenter()); }
 const VIDEO_MAX = 80 * 1024 * 1024;
@@ -582,6 +587,8 @@ function renderInspector(){
     }else if(n.type==='note'){
       const cols = ['', '#e8d9a8','#d9e3b4','#c9dde6','#e6c9c9','#d9cde6','#2f2a20'];
       h += `<div class="f"><span class="f-l">${t('insp.paper')}</span><div class="swatches">${cols.map(c=>`<button class="swatch ${n.color===c?'active':''}" data-ncol="${c}" style="background:${c||'var(--note)'}"></button>`).join('')}</div></div>`;
+    }else if(n.type==='char'){
+      h += charInspectorHTML(n);
     }else if(n.type!=='image'){
       const cols = ['', '#cfa75c','#7fb6a5','#5cc4d3','#cc7461','#9b7fc8','#8fa3b8','#9bb07a','#c07a4f'];
       h += `<div class="f"><span class="f-l">${t('insp.accent')}</span><div class="swatches">${cols.map(c=>`<button class="swatch ${n.color===c?'active':''}" data-ncol="${c}" style="background:${c||'var(--accent)'}"></button>`).join('')}</div></div>`;
@@ -608,6 +615,7 @@ function initInspector(){
       }
       const c = e.target.closest('[data-ncol]'); if(c && n){ n.color = c.dataset.ncol; changed(); updateNodeEl(n); renderInspector(); return; }
     }
+    if(n && n.type==='char' && charInspectorEvent(n, e)) return;
     if(n && n.type==='text'){
       const r = applyStyleEvent(n.st, e);
       if(r){ if(r!=='fonts') { changed(); updateNodeEl(n); } if(r==='all') renderInspector(); }
@@ -623,10 +631,10 @@ function addMenuItems(at){
   return [
     {label:t('bd.node'), icon:'node', run:()=>addNode('mindmap', at)},
     {label:t('bd.card'), icon:'card', run:()=>addNode('card', at)},
+    {label:t('bd.char'), icon:'cards', run:()=>addNode('char', at)},
     {label:t('bd.note'), icon:'note', run:()=>addNode('note', at)},
     {label:t('bd.text'), icon:'type', run:()=>addNode('text', at)},
-    {label:t('bd.images'), icon:'image', run:async()=>{ const f = await pickFiles('image/*', true); if(f.length) addImages(f, at); }},
-    {label:t('bd.videos'), icon:'video', run:async()=>{ const f = await pickFiles('video/*', true); if(f.length) addVideos(f, at); }},
+    {label:t('bd.media'), icon:'image', run:()=>pickBoardMedia(at)},
     {label:t('bd.linkFile'), icon:'link', run:()=>linkFiles(at)}
   ];
 }
@@ -786,6 +794,8 @@ function initBoard(){
     const editable = !act && e.target.closest('input,textarea,select,button,.sw-link,.sw-add,.stage-row');
     if(act==='del'){ deleteNodes([id]); return; }
     if(act==='fopen' || act==='freveal' || act==='fcopy'){ e.preventDefault(); fileAction(n, act); return; }
+    if(act==='flip'){ e.preventDefault(); e.stopPropagation(); flipCard(id); return; }
+    const sb = e.target.closest('[data-stat]'); if(sb && n.type==='char'){ e.preventDefault(); ui.sel = new Set([id]); ui.active = id; refreshSel(); setCardStat(n, +sb.dataset.stat, e, sb); return; }
     let toggledOff = false;
     if(e.shiftKey){ if(ui.sel.has(id) && ui.active===id){ ui.sel.delete(id); ui.active = [...ui.sel].pop() || null; toggledOff = true; } else { ui.sel.add(id); ui.active = id; } }
     else if(!ui.sel.has(id)){ ui.sel = new Set([id]); ui.active = id; }
@@ -1000,6 +1010,8 @@ function initBoard(){
   vp.addEventListener('drop', e=>{
     e.preventDefault(); vp.classList.remove('drop');
     const all = [...e.dataTransfer.files], at = toWorld(e.clientX, e.clientY);
+    const onCard = e.target.closest && e.target.closest('.node-char'), cimg = all.find(x=>x.type.startsWith('image/'));
+    if(onCard && cimg && all.length===1){ dropCardImage(onCard.dataset.id, cimg); return; }
     const img = all.filter(x=>x.type.startsWith('image/')), vid = all.filter(x=>x.type.startsWith('video/'));
     if(img.length) addImages(img, at);
     if(vid.length) addVideos(vid, img.length ? {x:at.x + 40, y:at.y + 40} : at);

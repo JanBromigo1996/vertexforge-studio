@@ -22,7 +22,7 @@ function renderShots(){
       <div><div class="eyebrow">${t('sh.eyebrow')}</div><h1 class="page-title">${esc(projectName(p))}</h1><p class="page-sub">${t('sh.sub')}</p></div>
       <div class="head-actions">
         <label class="mini-range">${ic('film',14)}<span>${t('sh.fps')}</span><select class="sel" id="shFps">${[24,25,30,48,60].map(f=>`<option value="${f}" ${f===fps?'selected':''}>${f} fps</option>`).join('')}</select></label>
-        <button class="btn" id="shDesign" title="${esc(t('ds.surfShots'))}">${ic('palette',14)}<span class="hide-sm">${t('ds.design')}</span></button>
+        <button class="btn btn-icon" id="shDesign" title="${esc(t('ds.surfShots'))}">${ic('palette',15)}</button>
         <button class="btn btn-primary" id="shAdd" title="Shift+A">${ic('plus',14)}<span>${t('sh.add')}</span></button>
       </div>
     </div>
@@ -54,7 +54,7 @@ function renderShots(){
     const d = e.target.closest('[data-dept]'); if(d){ const o = ['todo','wip','done'], k = d.dataset.dept; s.status[k] = o[(o.indexOf(s.status[k])+1) % 3]; changed(); renderShots(); return; }
     const a = e.target.closest('[data-sact]'); if(!a) return;
     if(a.dataset.sact==='thumb'){ const [f] = await pickFiles('image/*'); if(!f) return; s.thumb = addAsset(await compressImage(f, 640)); changed(); renderShots(); }
-    if(a.dataset.sact==='del'){ if(await confirmDelete(t('sh.del'), t('g.delNamed',{name:s.code}))){ p.shots.splice(i,1); changed(); renderShots(); } }
+    if(a.dataset.sact==='del'){ if(await softDelete(s.code)){ p.shots.splice(i,1); changed(); renderShots(); } }
   };
 }
 /* Shots per Griff am rechten Rand umsortieren (Drag & Drop mit Live-Vorschau) */
@@ -187,10 +187,10 @@ function selectChapter(id){ ui.chapterId = id; renderStory(); }
 function moveChapter(id, dir){ const l = activeProject().chapters, i = l.findIndex(c=>c.id===id), j = i + dir; if(i<0 || j<0 || j>=l.length) return; [l[i], l[j]] = [l[j], l[i]]; changed(); renderStoryLists(); }
 function selectLore(id){ ui.loreId = id; renderStoryLists(); renderLoreInspector(); if(innerWidth < 900) $('loreInsp').scrollIntoView({behavior:'smooth'}); }
 function addChapter(){ const p = activeProject(); const c = {id:uid('ch'), title:t('sy.sceneN',{n:p.chapters.length+1}), body:L('INT. SCHAUPLATZ – NACHT\n\n','INT. LOCATION – NIGHT\n\n')}; p.chapters.push(c); ui.chapterId = c.id; changed(); renderStory(); setTimeout(()=>{ const ti = $('chTitle'); if(ti){ ti.focus(); ti.select(); } }, 20); }
-async function deleteChapter(id){ const p = activeProject(), c = p.chapters.find(x=>x.id===id); if(!c || p.chapters.length<2) return; if(!(await confirmDelete(t('sy.delScene'), t('g.delNamed',{name:c.title})))) return; p.chapters = p.chapters.filter(x=>x!==c); changed(); renderStory(); }
+async function deleteChapter(id){ const p = activeProject(), c = p.chapters.find(x=>x.id===id); if(!c || p.chapters.length<2) return; if(!(await softDelete(c.title))) return; p.chapters = p.chapters.filter(x=>x!==c); changed(); renderStory(); }
 function addLore(){ const p = activeProject(); const l = {id:uid('lr'), name:t('sy.newAsset'), category:'Prop', polyTarget:'15,000 quads (UDIM 1001)', shader:'Principled BSDF', notes:'', stage:0, links:[]}; p.lore.push(l); ui.loreId = l.id; changed(); renderStoryLists(); renderLoreInspector(); }
 function setLore(id, k, v, rerender){ const l = activeProject().lore.find(x=>x.id===id); if(!l) return; l[k] = v; changed(); if(k==='name'){ renderStoryLists(); updateStoryMeta(); } if(rerender){ renderStoryLists(); renderLoreInspector(); } }
-async function deleteLore(id){ const p = activeProject(), l = p.lore.find(x=>x.id===id); if(!l) return; if(!(await confirmDelete(t('li.delQ'), t('g.delNamed',{name:l.name})))) return; p.lore = p.lore.filter(x=>x!==l); ui.loreId = null; changed(); renderStory(); }
+async function deleteLore(id){ const p = activeProject(), l = p.lore.find(x=>x.id===id); if(!l) return; if(!(await softDelete(l.name))) return; p.lore = p.lore.filter(x=>x!==l); ui.loreId = null; changed(); renderStory(); }
 MOD_KEYS.story = (e, ctrl, k) => {
   if(e.shiftKey && !ctrl && e.code==='KeyA'){ addChapter(); return true; }
   if(ctrl && e.code==='Space'){ toggleFocus(); return true; }

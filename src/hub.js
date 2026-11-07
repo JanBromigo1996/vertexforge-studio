@@ -59,13 +59,11 @@ function renderProjects(){
   v.className = v.className.replace(/\blib-\w+/g,'').trim(); v.classList.add('lib-' + st.hubStyle);
   v.innerHTML = `<div class="page wide">
     <div class="page-head">
-      <div><div class="eyebrow">${t('hub.eyebrow')}</div><h1 class="page-title">${t('mod.projects')}</h1><p class="page-sub">${t('hub.sub',{n:S.projects.length})}</p></div>
+      <div><div class="eyebrow">${t('hub.eyebrow')}</div><h1 class="page-title">${t('mod.projects')}</h1><p class="page-sub">${t(document.documentElement.classList.contains('touch') ? 'hub.subTouch' : 'hub.sub',{n:S.projects.length})}</p></div>
       <div class="head-actions">
         <div class="search">${ic('search',14)}<input class="inp" id="hubSearch" placeholder="${esc(t('hub.search'))}" value="${esc(ui.hubQuery)}"></div>
         <label class="mini-range" title="${esc(t('hub.sort'))}">${ic('sort',14)}<select class="sel" id="hubSort">${['recent','name','progress','deadline'].map(k=>`<option value="${k}" ${st.hubSort===k?'selected':''}>${t('sort.'+k)}</option>`).join('')}</select></label>
-        <label class="mini-range" title="${esc(t('hub.cover'))}">${ic('grid',14)}<span class="hide-sm">${t('hub.cover')}</span><input type="range" min="160" max="380" step="1" value="${st.cardSize}" data-hub="cardSize"></label>
-        <label class="mini-range" title="${esc(t('hub.titleSize'))}">${ic('type',14)}<span class="hide-sm">${t('hub.titleSize')}</span><input type="range" min="0.6" max="1.6" step="0.01" value="${st.titleScale}" data-hub="titleScale"></label>
-        <button class="btn" id="hubDesign" title="${esc(t('ds.lib'))}">${ic('palette',15)}<span class="hide-sm">${t('ds.design')}</span></button>
+        <button class="btn" id="hubDesign" title="${esc(t('ds.lib'))}">${ic('palette',15)}<span class="hide-sm">${t('ds.view')}</span></button>
         <button class="btn btn-primary" id="hubNew">${ic('plus',15)}<span>${t('np.title')}</span></button>
       </div>
     </div>
@@ -79,11 +77,6 @@ function renderProjects(){
   $('hubNewCard').onkeydown = e => { if(e.key==='Enter') newProjectDialog(); };
   $('hubSearch').oninput = e => { ui.hubQuery = e.target.value; const pos = e.target.selectionStart; renderProjects(); const s = $('hubSearch'); s.focus(); s.setSelectionRange(pos,pos); };
   $('hubSort').onchange = e => { st.hubSort = e.target.value; persistSoon(); renderProjects(); };
-  v.querySelectorAll('[data-hub]').forEach(r=>r.oninput = () => {
-    const k = r.dataset.hub; st[k] = parseFloat(r.value);
-    $('hubGrid').style.setProperty(k==='cardSize' ? '--card-w' : '--title-scale', k==='cardSize' ? r.value+'px' : r.value);
-    persistSoon();
-  });
   const grid = $('hubGrid');
   // Cover folgen der Maus in Echtzeit (leichte Neigung + Lichtreflex)
   grid.onpointermove = e => {

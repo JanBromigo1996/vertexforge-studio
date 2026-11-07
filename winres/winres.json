@@ -9,7 +9,7 @@
       "0409": {
         "identity": {
           "name": "VertexForge.Studio",
-          "version": "2.4.0.0"
+          "version": "2.5.0.0"
         },
         "description": "VertexForge Studio",
         "minimum-os": "win10",
@@ -24,16 +24,16 @@
     "#1": {
       "0000": {
         "fixed": {
-          "file_version": "2.4.0.0",
-          "product_version": "2.4.0.0"
+          "file_version": "2.5.0.0",
+          "product_version": "2.5.0.0"
         },
         "info": {
           "0409": {
             "CompanyName": "VertexForge",
             "FileDescription": "VertexForge Studio \u2013 3D Pipeline & Planning",
-            "FileVersion": "2.4.0",
+            "FileVersion": "2.5.0",
             "ProductName": "VertexForge Studio",
-            "ProductVersion": "2.4.0",
+            "ProductVersion": "2.5.0",
             "OriginalFilename": "VertexForge Studio.exe",
             "LegalCopyright": "Copyright (c) 2026 Jan and the VertexForge Studio contributors (MIT License)",
             "Comments": "Open source: https://github.com/JanBromigo1996/vertexforge-studio"

@@ -684,7 +684,7 @@ html[data-mode="light"] .paper{background:linear-gradient(180deg,#ebe2cf,#e5dbc6
    11. RESPONSIVE
    ============================================================================ */
 .only-sm{display:none}
-@media (max-width:1380px){ .tabs button:not(.active) span{display:none} .tabs button{padding:0 10px} }
+@media (max-width:1600px){ .tabs button:not(.active) span{display:none} .tabs button{padding:0 10px} }
 @media (max-width:1100px){ .proj-crumb{max-width:150px} }
 @media (max-width:1240px){
   .story{grid-template-columns:220px 1fr;grid-template-rows:1fr auto;overflow:auto}
@@ -1172,6 +1172,113 @@ html.touch .lib-books .pcard-more{top:14%;right:12%}
 html.touch .lib-gallery .pcard-more{top:12%;right:12%}
 html.touch .dept button{min-width:40px;min-height:34px}
 html.touch .menu{min-width:220px}
+
+/* ============================================================================
+   SAMMELKARTEN (Denkbrett & Deck) — skaliert mit der Kartenbreite (cqw)
+   ============================================================================ */
+.node-char{background:none;border:none;box-shadow:none;container-type:inline-size}
+.node-char .node-grip{display:none}
+.node-char.selected{box-shadow:none}
+.node-char.selected .tc-face{box-shadow:0 0 0 2px var(--accent),0 0 0 6px var(--acc-soft),0 16px 30px -10px rgba(0,0,0,.65)}
+.tc{position:absolute;inset:0;perspective:1400px}
+.tc-inner{position:relative;width:100%;height:100%;transition:transform .75s cubic-bezier(.3,.75,.2,1);transform-style:preserve-3d}
+.tc.flip .tc-inner{transform:rotateY(180deg)}
+.tc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:4.6cqw;padding:3.6cqw;display:flex;flex-direction:column;gap:2.4cqw;overflow:hidden;color:#2a2116;
+  background:radial-gradient(ellipse at 20% 0,rgba(255,255,255,.45),transparent 55%),linear-gradient(160deg,color-mix(in srgb,var(--kc) 82%,#fff 18%),color-mix(in srgb,var(--kc) 72%,#000 28%));
+  box-shadow:0 14px 28px -10px rgba(0,0,0,.65),inset 0 0 0 1.2cqw color-mix(in srgb,var(--kc) 55%,#fff 45%),inset 0 0 0 1.6cqw rgba(0,0,0,.18)}
+.tc-back{transform:rotateY(180deg)}
+.tc-top{display:flex;align-items:center;gap:2cqw;padding:0 1cqw;min-height:9cqw}
+.tc-name{flex:1;min-width:0;font:700 6.4cqw/1.15 var(--display);color:#1d160c;background:none;border:none;padding:0;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.tc-hp{font:800 7.4cqw/1 var(--display);color:#1d160c;white-space:nowrap}
+.tc-hp small{font-size:3.6cqw;margin-left:.3cqw;opacity:.7}
+.tc-art{position:relative;flex:0 0 auto;aspect-ratio:4/3;border-radius:2.2cqw;overflow:hidden;background:#1a1712;border:1cqw solid color-mix(in srgb,var(--kc) 45%,#2a2116);box-shadow:0 1.4cqw 3cqw rgba(0,0,0,.35)}
+.tc-art img{display:block;width:100%;height:100%;object-fit:cover}
+.tc-art.empty{display:grid;place-items:center;color:rgba(255,255,255,.65);background:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 2cqw,transparent 2cqw 4cqw),#221d16}
+.tc-art.empty span{display:flex;flex-direction:column;align-items:center;gap:1.6cqw;font-size:3.6cqw}
+.tc-art.empty em{font-style:normal}
+.tc-shine{position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:color-dodge;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 44%,rgba(255,150,240,.25) 50%,rgba(120,220,255,.3) 56%,transparent 70%);background-size:260% 260%;transition:opacity .3s}
+.node-char:hover .tc-shine,.deck-card:hover .tc-shine{opacity:.85;animation:tcShine 2.2s ease-in-out infinite}
+@keyframes tcShine{0%{background-position:100% 100%}100%{background-position:0 0}}
+.tc-type{display:flex;align-items:center;gap:2cqw;background:rgba(255,252,244,.62);border-radius:1.8cqw;padding:1.4cqw 2.4cqw;min-height:8cqw}
+.tc-kind{display:inline-flex;align-items:center;gap:1.2cqw;font:700 3cqw var(--ui);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;color:color-mix(in srgb,var(--kc) 55%,#1d160c)}
+.tc .ic{width:3.6cqw;height:3.6cqw}
+.tc-sub{flex:1;min-width:0;background:none;border:none;padding:0;font:italic 3.6cqw var(--ui);color:#3a2f22;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tc-stats{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-evenly;background:rgba(255,252,244,.86);border-radius:2.2cqw;padding:1.6cqw 2.8cqw}
+.tc-stat{display:grid;grid-template-columns:19cqw minmax(0,1fr) 7cqw;align-items:center;gap:2cqw;font-size:3.4cqw}
+.tc-sl{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tc-bar{display:block;height:2.8cqw;border-radius:2cqw;background:rgba(0,0,0,.12);overflow:hidden}
+.tc-bar[data-stat]{cursor:pointer}
+.tc-bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,color-mix(in srgb,var(--kc) 70%,#000),var(--kc));transition:width .4s var(--ease)}
+.tc-stat b{text-align:right;font:600 3.2cqw var(--mono)}
+.tc-foot{display:flex;align-items:center;justify-content:space-between;font:600 3cqw var(--mono);color:rgba(29,22,12,.78);padding:0 1cqw}
+.tc-flip{width:8.4cqw;height:8.4cqw;border-radius:50%;border:none;background:rgba(255,252,244,.7);color:#2a2116;display:grid;place-items:center;cursor:pointer;transition:transform .35s var(--ease),background .2s}
+.tc-flip:hover{transform:rotate(-150deg);background:#fff}
+.tc-flip .ic{width:4.6cqw;height:4.6cqw}
+.tc-back .tc-desc{flex:1;min-height:0;background:rgba(255,252,244,.88);border:none;border-radius:2.2cqw;padding:2.6cqw;font:3.6cqw/1.45 var(--ui);color:#2a2116;resize:none;outline:none;overflow:auto;margin:0}
+.tc-facts{background:rgba(255,252,244,.88);border-radius:2.2cqw;padding:1.4cqw 2.8cqw;margin:0;display:flex;flex-direction:column;font-size:3.3cqw}
+.tc-facts div{display:flex;justify-content:space-between;gap:2cqw;padding:.9cqw 0;border-bottom:1px dashed rgba(0,0,0,.16)}
+.tc-facts div:last-child{border-bottom:none}
+.tc-facts dt{font-weight:600}
+.tc-facts dd{margin:0;font-family:var(--mono);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tc-hint{font-size:3.1cqw;line-height:1.4;color:rgba(29,22,12,.72);background:rgba(255,252,244,.45);border-radius:1.8cqw;padding:1.8cqw 2.2cqw}
+.tc-back .n-links{max-height:30cqw;overflow:auto;background:rgba(255,252,244,.88);border-radius:2.2cqw;padding:1.2cqw;color:#2a2116;--text:#2a2116;--text-2:#4a3f30;--muted:#6f6352;--panel:#fffaf0;--panel-2:#f4ecdc;--line:#ddd0b8;--line-2:#cbbb9c}
+.tc-files{font-size:3.2cqw;display:flex;align-items:center;gap:1cqw}
+.node.found,.found{animation:foundPulse 1.7s var(--ease)}
+.node-char.found .tc-face{animation:foundPulse 1.7s var(--ease)}
+@keyframes foundPulse{0%,100%{box-shadow:0 0 0 0 transparent}25%{box-shadow:0 0 0 4px var(--accent),0 0 0 14px var(--acc-soft)}}
+.f-range{display:grid;grid-template-columns:76px 1fr 30px;align-items:center;gap:8px}
+.f-range b{text-align:right;font-size:11px;color:var(--text-2)}
+.cc-facts{display:flex;flex-direction:column;gap:6px}
+.cc-fact{display:grid;grid-template-columns:1fr 1fr auto;gap:6px}
+.row-btns{display:flex;gap:6px;flex-wrap:wrap}
+
+/* Deck */
+.deck{position:fixed;inset:0;z-index:1500;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;opacity:0;transition:opacity .22s ease}
+.deck.open{opacity:1}
+.deck-head{display:flex;align-items:flex-end;gap:18px 24px;padding:28px 70px 12px 36px;flex-wrap:wrap}
+.deck-head h2{font:700 26px/1.1 var(--display);margin-top:4px}
+.deck-filter{display:flex;gap:6px;flex-wrap:wrap}
+.deck-filter button{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line-2);background:var(--panel);color:var(--text-2);font-size:12px;cursor:pointer;transition:all .15s}
+.deck-filter button span{font:11px var(--mono);color:var(--muted)}
+.deck-filter button:hover{color:var(--text)}
+.deck-filter button.on{color:var(--text);border-color:var(--kc,var(--accent));box-shadow:0 0 0 3px color-mix(in srgb,var(--kc,var(--accent)) 22%,transparent)}
+.deck-x{position:absolute;top:18px;right:20px}
+.deck-grid{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:40px 26px;padding:20px 36px 50px;align-content:start;justify-items:center}
+.deck-card{position:relative;width:230px;aspect-ratio:5/7;container-type:inline-size;cursor:pointer;animation:dealIn .55s var(--ease) both;animation-delay:calc(min(var(--i),12) * 45ms);transition:transform .3s var(--ease)}
+.deck-card:hover{transform:translateY(-8px) rotate(-1.2deg)}
+.deck-card .tc-face{box-shadow:0 22px 40px -16px rgba(0,0,0,.7),inset 0 0 0 1.2cqw color-mix(in srgb,var(--kc) 55%,#fff 45%),inset 0 0 0 1.6cqw rgba(0,0,0,.18)}
+@keyframes dealIn{from{opacity:0;transform:translateY(34px) rotate(5deg) scale(.92)}}
+.deck-loc{position:absolute;left:50%;bottom:-18px;transform:translate(-50%,6px);opacity:0;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--line-2);background:var(--panel);color:var(--text);font-size:11.5px;cursor:pointer;box-shadow:var(--shadow-sm);transition:opacity .2s,transform .2s var(--ease)}
+.deck-card:hover .deck-loc,html.touch .deck-loc{opacity:1;transform:translate(-50%,0)}
+.deck-loc:hover{border-color:var(--accent);color:var(--accent)}
+.deck-tip{text-align:center;padding:10px 16px 16px;color:var(--muted);font-size:12px}
+.deck-empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:14px;padding:80px 20px;color:var(--text-2);text-align:center;max-width:440px}
+@media (max-width:640px){.deck-head{padding:20px 60px 8px 16px}.deck-grid{padding:16px 16px 40px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:34px 14px}.deck-card{width:100%}}
+
+/* Schnellsuche: zweite Zeile mit Fundort */
+.palette .menu-item .lbl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.palette .menu-item .lbl small{display:block;font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.palette .pc-item{min-height:42px}
+
+/* Rückgängig-Hinweis nach dem Löschen */
+.toast.undo{pointer-events:auto;display:flex;align-items:center;gap:10px;position:relative;overflow:hidden;padding-right:8px}
+.toast.undo button{margin-left:6px;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--acc-line);background:var(--acc-soft);color:var(--accent);border-radius:999px;padding:3px 11px;font-size:12px;font-weight:600;cursor:pointer}
+.toast.undo button:hover{background:var(--accent);color:var(--on-accent)}
+.toast-time{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--accent);transform-origin:left;animation:toastTime 6.5s linear forwards}
+@keyframes toastTime{to{transform:scaleX(0)}}
+html.touch .toast.undo button{padding:8px 14px}
+
+/* Kanban per Finger */
+.kb-ghost{position:fixed;z-index:3000;pointer-events:none;opacity:.95;box-shadow:0 22px 40px -10px rgba(0,0,0,.55);transition:none}
+
+/* Darstellungs-Fenster: Größenregler */
+.dp-range{display:flex;align-items:center;gap:8px;padding:5px 2px;font-size:12px;color:var(--text-2)}
+.dp-range span{width:70px}
+.dp-range input{flex:1}
+.btn.btn-icon{width:30px;padding:0}
+html.touch .btn.btn-icon{width:40px}
+@media (prefers-reduced-motion:reduce){.tc-inner{transition:none}.deck-card{animation:none}}
+@media (max-width:1180px) and (min-width:641px){ .proj-crumb{max-width:130px} .tb-sep{margin:0 2px} }
 
 </style>
 </head>
@@ -1689,6 +1796,54 @@ const T = {
   "fs.enter":["Vollbild", "Fullscreen", "Plein écran", "Pantalla completa", "Schermo intero", "Tela cheia"],
   "fs.exit":["Vollbild beenden", "Exit fullscreen", "Quitter le plein écran", "Salir de pantalla completa", "Esci da schermo intero", "Sair da tela cheia"],
   "act.more":["Weitere Aktionen", "More actions", "Plus d’actions", "Más acciones", "Altre azioni", "Mais ações"],
+  "ds.view":["Darstellung", "View", "Affichage", "Vista", "Vista", "Visualização"],
+  "ds.sizes":["Größen", "Sizes", "Tailles", "Tamaños", "Dimensioni", "Tamanhos"],
+  "hub.subTouch":["{n} Projekte · Cover antippen zum Öffnen · ⋯ für mehr", "{n} projects · tap a cover to open · ⋯ for more", "{n} projets · touchez une couverture · ⋯ pour plus", "{n} proyectos · toca una portada · ⋯ para más", "{n} progetti · tocca una copertina · ⋯ per altro", "{n} projetos · toque numa capa · ⋯ para mais"],
+  "pal.searchTip":["Suchen", "Search", "Rechercher", "Buscar", "Cerca", "Pesquisar"],
+  "pal.task":["Aufgabe", "Task", "Tâche", "Tarea", "Attività", "Tarefa"],
+  "pal.chapter":["Kapitel", "Chapter", "Chapitre", "Capítulo", "Capitolo", "Capítulo"],
+  "ts.deleted":["Gelöscht", "Deleted", "Supprimé", "Eliminado", "Eliminato", "Excluído"],
+  "ts.deletedNamed":["„{name}“ gelöscht", "“{name}” deleted", "« {name} » supprimé", "«{name}» eliminado", "«{name}» eliminato", "“{name}” excluído"],
+  "bd.char":["Sammelkarte", "Collectible card", "Carte à collectionner", "Carta coleccionable", "Carta collezionabile", "Carta colecionável"],
+  "bd.media":["Bilder & Videos", "Images & videos", "Images et vidéos", "Imágenes y vídeos", "Immagini e video", "Imagens e vídeos"],
+  "cc.deck":["Deck", "Deck", "Deck", "Mazo", "Mazzo", "Baralho"],
+  "cc.deckTitle":["{n} Karten", "{n} cards", "{n} cartes", "{n} cartas", "{n} carte", "{n} cartas"],
+  "cc.deckTip":["Karte anklicken zum Umdrehen · Esc schließt", "Click a card to flip it · Esc closes", "Cliquez pour retourner · Échap ferme", "Haz clic para girar · Esc cierra", "Clic per girare · Esc chiude", "Clique para virar · Esc fecha"],
+  "cc.all":["Alle", "All", "Toutes", "Todas", "Tutte", "Todas"],
+  "cc.locate":["Auf dem Denkbrett zeigen", "Show on board", "Voir sur le tableau", "Ver en el tablero", "Mostra sulla lavagna", "Mostrar no quadro"],
+  "cc.empty":["Noch keine Sammelkarten. Lege Charaktere, Kreaturen, Props, Fahrzeuge oder Umgebungen als Karten an.", "No collectible cards yet. Create characters, creatures, props, vehicles or environments as cards.", "Aucune carte pour l’instant. Créez personnages, créatures, accessoires, véhicules ou décors.", "Aún no hay cartas. Crea personajes, criaturas, props, vehículos o entornos.", "Ancora nessuna carta. Crea personaggi, creature, oggetti, veicoli o ambienti.", "Ainda sem cartas. Crie personagens, criaturas, props, veículos ou ambientes."],
+  "cc.new":["Erste Karte anlegen", "Create first card", "Créer une carte", "Crear la primera carta", "Crea la prima carta", "Criar primeira carta"],
+  "cc.newName":["Neuer Charakter", "New character", "Nouveau personnage", "Nuevo personaje", "Nuovo personaggio", "Novo personagem"],
+  "cc.name":["Name", "Name", "Nom", "Nombre", "Nome", "Nome"],
+  "cc.role":["Rolle / Kurzbeschreibung", "Role / tagline", "Rôle / accroche", "Rol / lema", "Ruolo / motto", "Papel / frase"],
+  "cc.overall":["Gesamtfortschritt", "Overall progress", "Progression totale", "Progreso total", "Avanzamento totale", "Progresso total"],
+  "cc.dropImg":["Bild hierher ziehen", "Drop an image here", "Déposez une image", "Suelta una imagen", "Trascina un’immagine", "Solte uma imagem"],
+  "cc.flip":["Karte umdrehen", "Flip card", "Retourner", "Girar carta", "Gira carta", "Virar carta"],
+  "cc.descPh":["Hintergrund, Look, Besonderheiten …", "Backstory, look, details …", "Histoire, look, détails…", "Historia, aspecto, detalles…", "Storia, look, dettagli…", "História, visual, detalhes…"],
+  "cc.factsHint":["Fakten wie Polycount oder Texturen im Eigenschaften-Fenster (N) eintragen.", "Add facts like polycount or textures in the properties panel (N).", "Ajoutez des faits (polycount, textures) dans les propriétés (N).", "Añade datos como polycount o texturas en propiedades (N).", "Aggiungi dati come polycount o texture nelle proprietà (N).", "Adicione dados como polycount ou texturas nas propriedades (N)."],
+  "cc.files":["Dateien", "files", "fichiers", "archivos", "file", "arquivos"],
+  "cc.kind":["Art", "Type", "Type", "Tipo", "Tipo", "Tipo"],
+  "cc.image":["Bild", "Image", "Image", "Imagen", "Immagine", "Imagem"],
+  "cc.imgPick":["Bild wählen", "Choose image", "Choisir une image", "Elegir imagen", "Scegli immagine", "Escolher imagem"],
+  "cc.imgChange":["Bild ändern", "Change image", "Changer l’image", "Cambiar imagen", "Cambia immagine", "Trocar imagem"],
+  "cc.imgRemove":["Entfernen", "Remove", "Retirer", "Quitar", "Rimuovi", "Remover"],
+  "cc.progress":["Fortschritt je Disziplin", "Progress per discipline", "Progression par discipline", "Progreso por disciplina", "Avanzamento per disciplina", "Progresso por disciplina"],
+  "cc.facts":["Fakten (Rückseite)", "Facts (back side)", "Faits (verso)", "Datos (reverso)", "Dati (retro)", "Dados (verso)"],
+  "cc.factK":["z. B. Polycount", "e.g. polycount", "ex. polycount", "p. ej. polycount", "es. polycount", "ex. polycount"],
+  "cc.factV":["Wert", "Value", "Valeur", "Valor", "Valore", "Valor"],
+  "cc.factAdd":["Fakt hinzufügen", "Add fact", "Ajouter un fait", "Añadir dato", "Aggiungi dato", "Adicionar dado"],
+  "cc.f.poly":["Polycount", "Polycount", "Polycount", "Polycount", "Polycount", "Polycount"],
+  "cc.f.tex":["Texturen", "Textures", "Textures", "Texturas", "Texture", "Texturas"],
+  "cc.k.character":["Charakter", "Character", "Personnage", "Personaje", "Personaggio", "Personagem"],
+  "cc.k.creature":["Kreatur", "Creature", "Créature", "Criatura", "Creatura", "Criatura"],
+  "cc.k.prop":["Prop", "Prop", "Accessoire", "Prop", "Oggetto", "Prop"],
+  "cc.k.vehicle":["Fahrzeug", "Vehicle", "Véhicule", "Vehículo", "Veicolo", "Veículo"],
+  "cc.k.environment":["Umgebung", "Environment", "Décor", "Entorno", "Ambiente", "Ambiente"],
+  "cc.s.model":["Modell", "Model", "Modèle", "Modelado", "Modello", "Modelo"],
+  "cc.s.sculpt":["Sculpt", "Sculpt", "Sculpt", "Esculpido", "Sculpt", "Escultura"],
+  "cc.s.texture":["Textur", "Texture", "Texture", "Textura", "Texture", "Textura"],
+  "cc.s.rig":["Rig", "Rig", "Rig", "Rig", "Rig", "Rig"],
+  "cc.s.anim":["Animation", "Anim", "Anim", "Anim", "Anim", "Anim"],
   "ds.design":["Design", "Design", "Style", "Diseño", "Stile", "Design"],
   "ds.lib":["Darstellung der Bibliothek", "Library style", "Style de la bibliothèque", "Estilo de la biblioteca", "Stile della libreria", "Estilo da biblioteca"],
   "ds.lib.studio":["Studio", "Studio", "Studio", "Estudio", "Studio", "Estúdio"],
@@ -1802,8 +1957,8 @@ const T = {
   "tour.hub.d":["Jedes Projekt hat ein 2:3-Cover. <b>Klick</b> öffnet es. Beim Überfahren erscheinen Schnellaktionen (Titel-Designer, Bild, Duplizieren …), <b>Rechtsklick</b> zeigt alle.", "Every project has a 2:3 cover. <b>Click</b> opens it. Hover for quick actions (title designer, image, duplicate …), <b>right-click</b> for all of them.", "Chaque projet a une couverture 2:3. <b>Clic</b> pour ouvrir, survol pour les actions rapides, <b>clic droit</b> pour tout.", "Cada proyecto tiene portada 2:3. <b>Clic</b> para abrir, pasa el ratón para acciones rápidas, <b>clic derecho</b> para todas.", "Ogni progetto ha una copertina 2:3. <b>Clic</b> per aprire, passa sopra per le azioni rapide, <b>clic destro</b> per tutte.", "Cada projeto tem uma capa 2:3. <b>Clique</b> para abrir, passe o mouse para ações rápidas, <b>botão direito</b> para todas."],
   "tour.new.t":["Neues Projekt", "New project", "Nouveau projet", "Nuevo proyecto", "Nuovo progetto", "Novo projeto"],
   "tour.new.d":["Starte leer oder mit einer Vorlage (Character, Environment, Hard-Surface, Motion, Kurzfilm) – Phasen, Aufgaben und Programme sind dann schon angelegt. <kbd>Strg</kbd>+<kbd>N</kbd>", "Start blank or from a template (character, environment, hard-surface, motion, short film) – phases, tasks and programs are set up for you. <kbd>Ctrl</kbd>+<kbd>N</kbd>", "Partez de zéro ou d’un modèle (personnage, environnement, hard-surface, motion, court-métrage) – phases, tâches et logiciels sont prêts. <kbd>Ctrl</kbd>+<kbd>N</kbd>", "Empieza en blanco o con una plantilla (personaje, entorno, hard-surface, motion, cortometraje): fases, tareas y programas ya listos. <kbd>Ctrl</kbd>+<kbd>N</kbd>", "Parti da zero o da un modello (personaggio, ambiente, hard-surface, motion, corto): fasi, attività e programmi già pronti. <kbd>Ctrl</kbd>+<kbd>N</kbd>", "Comece do zero ou de um modelo (personagem, ambiente, hard-surface, motion, curta): fases, tarefas e programas já prontos. <kbd>Ctrl</kbd>+<kbd>N</kbd>"],
-  "tour.size.t":["Cover-Größe", "Cover size", "Taille des couvertures", "Tamaño de portadas", "Dimensione copertine", "Tamanho das capas"],
-  "tour.size.d":["Mit diesem Regler stellst du ein, wie groß die Cover im Hub erscheinen – daneben regelst du die Titelgröße.", "This slider sets how large the covers appear in the hub – the one next to it scales the titles.", "Ce curseur règle la taille des couvertures ; le suivant, celle des titres.", "Este control ajusta el tamaño de las portadas; el de al lado, los títulos.", "Questo cursore regola le copertine; quello accanto i titoli.", "Este controle ajusta o tamanho das capas; o ao lado, os títulos."],
+  "tour.size.t":["Darstellung", "Library style", "Présentation", "Presentación", "Aspetto", "Aparência"],
+  "tour.size.d":["Hier wählst du, wie deine Projekte aussehen – Studio, DVD-Regal, Poster-Wand, Lederbücher oder Galerie – und wie groß Cover und Titel sind.", "Choose how your projects look here – studio, DVD shelf, poster wall, leather books or gallery – and how large covers and titles are.", "Choisissez ici l’aspect de vos projets – studio, étagère DVD, mur d’affiches, livres reliés ou galerie – et la taille des couvertures et des titres.", "Elige aquí cómo se ven tus proyectos – estudio, estante de DVD, pared de pósters, libros de cuero o galería – y el tamaño de portadas y títulos.", "Scegli qui l’aspetto dei progetti – studio, scaffale DVD, parete di poster, libri in pelle o galleria – e la dimensione di copertine e titoli.", "Escolha aqui a aparência dos projetos – estúdio, estante de DVD, parede de pôsteres, livros de couro ou galeria – e o tamanho de capas e títulos."],
   "tour.tabs.t":["Arbeitsbereiche", "Workspaces", "Espaces de travail", "Espacios de trabajo", "Aree di lavoro", "Áreas de trabalho"],
   "tour.tabs.d":["Projekte, Pipeline, Denkbrett, Shotlist, Story und Anleitung. Wechseln mit <kbd>Alt</kbd>+<kbd>1</kbd>…<kbd>6</kbd> oder <kbd>Strg</kbd>+<kbd>Bild↑/↓</kbd>.", "Projects, pipeline, board, shot list, story and guide. Switch with <kbd>Alt</kbd>+<kbd>1</kbd>…<kbd>6</kbd> or <kbd>Ctrl</kbd>+<kbd>PgUp/PgDn</kbd>.", "Projets, pipeline, tableau, plans, histoire et guide. <kbd>Alt</kbd>+<kbd>1</kbd>…<kbd>6</kbd> pour changer.", "Proyectos, pipeline, tablero, planos, historia y guía. Cambia con <kbd>Alt</kbd>+<kbd>1</kbd>…<kbd>6</kbd>.", "Progetti, pipeline, lavagna, inquadrature, storia e guida. Cambia con <kbd>Alt</kbd>+<kbd>1</kbd>…<kbd>6</kbd>.", "Projetos, pipeline, quadro, planos, história e guia. Troque com <kbd>Alt</kbd>+<kbd>1</kbd>…<kbd>6</kbd>."],
   "tour.kpi.t":["Alles auf einen Blick", "Everything at a glance", "Tout en un coup d’œil", "Todo de un vistazo", "Tutto a colpo d’occhio", "Tudo num relance"],
@@ -1866,8 +2021,8 @@ const T = {
   'cl.discard':['Nicht speichern','Don’t save','Ne pas enregistrer','No guardar','Non salvare','Não salvar'],
   'sb.desktop':['Desktop-App','Desktop app','App de bureau','App de escritorio','App desktop','App desktop'],
   'sb.browser':['Browser','Browser','Navigateur','Navegador','Browser','Navegador'],
-  'hint.projects':['Klick: öffnen · Rechtsklick: Menü · Strg+N: neu · F3: Suche','Click: open · right-click: menu · Ctrl+N: new · F3: search','Clic : ouvrir · clic droit : menu · Ctrl+N : nouveau · F3','Clic: abrir · clic derecho: menú · Ctrl+N: nuevo · F3','Clic: apri · destro: menu · Ctrl+N: nuovo · F3','Clique: abrir · direito: menu · Ctrl+N: novo · F3'],
-  'hint.pipeline':['Shift+A: Phase · V: Liste/Kanban · Strg+Z: rückgängig · F3: Suche','Shift+A: phase · V: list/kanban · Ctrl+Z: undo · F3: search','Maj+A : phase · V : liste/kanban · Ctrl+Z · F3','Mayús+A: fase · V: lista/kanban · Ctrl+Z · F3','Maiusc+A: fase · V: elenco/kanban · Ctrl+Z · F3','Shift+A: fase · V: lista/kanban · Ctrl+Z · F3'],
+  'hint.projects':['Klick: öffnen · Rechtsklick: Menü · Strg+N: neu · Strg+K: Suche','Click: open · right-click: menu · Ctrl+N: new · Ctrl+K: search','Clic : ouvrir · clic droit : menu · Ctrl+N : nouveau · F3','Clic: abrir · clic derecho: menú · Ctrl+N: nuevo · F3','Clic: apri · destro: menu · Ctrl+N: nuovo · F3','Clique: abrir · direito: menu · Ctrl+N: novo · F3'],
+  'hint.pipeline':['Shift+A: Phase · V: Liste/Kanban · Strg+Z: rückgängig · Strg+K: Suche','Shift+A: phase · V: list/kanban · Ctrl+Z: undo · Ctrl+K: search','Maj+A : phase · V : liste/kanban · Ctrl+Z · F3','Mayús+A: fase · V: lista/kanban · Ctrl+Z · F3','Maiusc+A: fase · V: elenco/kanban · Ctrl+Z · F3','Shift+A: fase · V: lista/kanban · Ctrl+Z · F3'],
   'hint.board':['LMB: wählen · Shift+A: hinzufügen · G/S: bewegen/skalieren · X: löschen · Rechts: Menü · Rad: Zoom','LMB: select · Shift+A: add · G/S: move/scale · X: delete · RMB: menu · wheel: zoom','Clic : sélection · Maj+A : ajouter · G/S · X : supprimer · clic droit : menu','Clic: seleccionar · Mayús+A: añadir · G/S · X: eliminar · derecho: menú','Clic: seleziona · Maiusc+A: aggiungi · G/S · X: elimina · destro: menu','Clique: selecionar · Shift+A: adicionar · G/S · X: excluir · direito: menu'],
   'hint.shots':['Shift+A: Shot hinzufügen · Status-Zellen anklicken','Shift+A: add shot · click status cells','Maj+A : ajouter un plan · cliquez les statuts','Mayús+A: añadir plano · clic en estados','Maiusc+A: aggiungi · clic sugli stati','Shift+A: adicionar plano · clique nos status'],
   'hint.story':['Shift+A: Szene · Strg+Leertaste: Fokusmodus','Shift+A: scene · Ctrl+Space: focus mode','Maj+A : scène · Ctrl+Espace : focus','Mayús+A: escena · Ctrl+Espacio: enfoque','Maiusc+A: scena · Ctrl+Spazio: focus','Shift+A: cena · Ctrl+Espaço: foco'],
@@ -2361,7 +2516,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.4.0';
+const APP_VERSION = '2.5.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -2424,6 +2579,13 @@ const L = (de, en) => currentLang()==='de' ? de : en;
    B. ICONS (eigene Linien-Icons, offline)
    ============================================================================ */
 const ICONS = {
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/>',
+  paw:'<circle cx="6" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="18" cy="10" r="2"/><path d="M8.5 15.5c1-2.3 2.2-3.5 3.5-3.5s2.5 1.2 3.5 3.5c.8 1.9-.3 4-2.3 4h-2.4c-2 0-3.1-2.1-2.3-4z"/>',
+  cube:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',
+  wheel:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M12 14.5v6M3.5 12h6M14.5 12h6"/>',
+  mountain:'<path d="M3 20l6.5-11 4 6.5 2.5-4L21 20z"/><circle cx="17" cy="6" r="1.6"/>',
+  rotate:'<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>',
+  cards:'<rect x="3" y="6" width="11" height="15" rx="1.8" transform="rotate(-8 8.5 13.5)"/><rect x="10" y="4" width="11" height="15" rx="1.8" transform="rotate(8 15.5 11.5)"/>',
   grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
   calendar:'<rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 10h18M8 14h3"/>',
   network:'<circle cx="5.5" cy="6" r="2.5"/><circle cx="18.5" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.4 7.8l3.4 7.8M16.6 7.8l-3.4 7.8M8 6h8"/>',
@@ -2881,7 +3043,14 @@ function demoProjects(){
           links:[{sw:'zbrush', path:P+'sculpt\\quak_body_v07.ztl'},{sw:'blender', path:P+'quak_master.blend'}]},
         {id:'nd_staff', type:'mindmap', x:480, y:40, w:250, h:110, cat:L('Hero-Prop · Emission','Hero prop · emission'), title:L('Wurzelstab des Ahnen','Root staff of the elder'), desc:L('Knorriges Wurzelholz mit eingeschlossenem Leuchtkäfer im Bernstein.','Gnarled root wood with a firefly trapped in amber.'), color:''},
         {id:'nd_bag', type:'card', x:480, y:220, w:260, h:140, cat:'Marvelous · Substance', title:L('Alchemie-Ledertasche','Alchemy leather bag'), desc:L('Vernähtes Leder, Messingschnallen, Schlaufen für sechs Phiolen.','Stitched leather, brass buckles, loops for six vials.'), stage:1, color:'#c07a4f', links:[{sw:'marvelous', path:P+'cloth\\tasche_gurte.zprj'}]},
-        {id:'nd_note', type:'note', x:800, y:40, w:220, h:150, text:L('Look: feuchte Haut, warmes Bernsteinlicht, kühler Nebel. Referenz: Laubfrosch-Makrofotos.','Look: wet skin, warm amber light, cool fog. Reference: tree-frog macro photos.'), color:''}
+        {id:'nd_note', type:'note', x:800, y:40, w:220, h:150, text:L('Look: feuchte Haut, warmes Bernsteinlicht, kühler Nebel. Referenz: Laubfrosch-Makrofotos.','Look: wet skin, warm amber light, cool fog. Reference: tree-frog macro photos.'), color:''},
+        {id:'nd_cc1', type:'char', x:70, y:430, w:250, h:350, kind:'character', title:L('Meister Quak','Master Croak'), sub:L('Sumpfmagier · Protagonist','Swamp mage · protagonist'), art:'ink', stats:[90,70,35,20,0],
+          desc:L('142 Jahre alt, gemächlich, aber gefährlich, wenn der Kehlsack zu leuchten beginnt. Silhouette: runder Körper, lange Finger, schwerer Umhang.','142 years old, unhurried, but dangerous once the throat sac starts to glow. Silhouette: round body, long fingers, heavy cloak.'),
+          facts:[{k:'Polycount',v:'48k tris'},{k:L('Texturen','Textures'),v:'4× 4K UDIM'},{k:L('Größe','Height'),v:'1.10 m'}]},
+        {id:'nd_cc2', type:'char', x:350, y:430, w:250, h:350, kind:'prop', title:L('Wurzelstab','Root staff'), sub:L('Hero-Prop · Emission','Hero prop · emission'), art:'brass', stats:[100,85,60,40,0],
+          desc:L('Knorriges Wurzelholz mit einem Glühwürmchen in Bernstein. Der Bernstein bekommt Emission und Subsurface.','Gnarled root wood with a firefly trapped in amber. The amber gets emission and subsurface.'), facts:[{k:'Polycount',v:'9k tris'},{k:L('Material','Material'),v:'Wood, amber'}]},
+        {id:'nd_cc3', type:'char', x:630, y:430, w:250, h:350, kind:'environment', title:L('Nebelsumpf','Fog swamp'), sub:L('Hauptschauplatz','Main location'), art:'storm', stats:[40,10,20,0,0],
+          desc:L('Zypressenwurzeln, Bodennebel, Glühwürmchen. Fokus auf Lichtstimmung statt Detail.','Cypress roots, ground fog, fireflies. Focus on lighting mood rather than detail.'), facts:[{k:L('Fläche','Area'),v:'40 × 40 m'}], flip:false}
       ],
       connections:[
         {id:'cn_1', from:'nd_frog', to:'nd_staff', label:L('trägt rechts','carries right')},
@@ -2973,7 +3142,7 @@ function normalizeCover(c, A){
 function normalizeNode(n, seen, A){
   n = n || {};
   let id = sid(n.id,'nd'); if(seen.has(id)) id = uid('nd'); seen.add(id);
-  const type = ['mindmap','card','note','image','text','video','file'].includes(n.type) ? n.type : 'mindmap';
+  const type = ['mindmap','card','char','note','image','text','video','file'].includes(n.type) ? n.type : 'mindmap';
   const base = {id, type, x:Math.round(num(n.x,0)), y:Math.round(num(n.y,0)), w:num(n.w,240,40,6000), h:num(n.h,120,24,6000), color:safeColor(n.color,'')};
   if(DOCK_TYPES.has(type) && typeof n.parent==='string'){ base.parent = n.parent; base.dock = ['top','bottom','left','right'].includes(n.dock) ? n.dock : 'bottom'; base.order = num(n.order,0); }
   if(type==='image') return Object.assign(base, {src:A.ref(n.src), title:str(n.title)});
@@ -2986,6 +3155,11 @@ function normalizeNode(n, seen, A){
     return Object.assign(base, {text:str(n.text,'Titel'), st:normStyle(n.st || legacy, d)});
   }
   if(type==='note') return Object.assign(base, {text:str(n.text)});
+  if(type==='char'){
+    const st = arr(n.stats); delete base.color;
+    return Object.assign(base, {w:num(n.w,250,150,900), h:num(n.h,350,210,1260), kind:CHAR_KINDS.includes(n.kind) ? n.kind : 'character', title:str(n.title).slice(0,80), sub:str(n.sub).slice(0,80), desc:str(n.desc),
+      src:A.ref(n.src), art:/^[a-z]{2,12}$/.test(n.art||'') ? n.art : '', stats:CHAR_STATS.map((_,i)=>Math.round(num(st[i],0,0,100))), facts:arr(n.facts).slice(0,8).map(f=>({k:str(f && f.k).slice(0,40), v:str(f && f.v).slice(0,80)})), links:normLinks(n.links), flip:!!n.flip});
+  }
   return Object.assign(base, {cat:str(n.cat), title:str(n.title), desc:str(n.desc), links:normLinks(n.links), stage:Math.round(num(n.stage,0,0,STAGES-1))});
 }
 function normalizeBoard(b, A){
@@ -3249,6 +3423,22 @@ async function loadContent(text, info, mergeOnly){
 /* ============================================================================
    I. UI-BAUSTEINE: Toast, Dialog, Sheet, Menü, Befehlssuche, Datei-Auswahl
    ============================================================================ */
+/* Löschen ohne Rückfrage – stattdessen ein Hinweis mit „Rückgängig“ (der Verlauf hält alles fest) */
+function softDelete(name){
+  histCommit();
+  setTimeout(()=>{ histCommit(); undoToast(name ? t('ts.deletedNamed',{name}) : t('ts.deleted')); }, 0);
+  return Promise.resolve(true);
+}
+function undoToast(msg){
+  const el = document.createElement('div');
+  el.className = 'toast undo';
+  el.innerHTML = ic('trash',15) + `<span>${esc(msg)}</span><button>${ic('undo',14)}${t('e.undo')}</button><i class="toast-time"></i>`;
+  $('toasts').appendChild(el);
+  while($('toasts').children.length > 4) $('toasts').firstChild.remove();
+  const close = () => { el.style.transition = 'opacity .25s, transform .25s'; el.style.opacity = '0'; el.style.transform = 'translateY(6px)'; setTimeout(()=>el.remove(), 260); };
+  el.querySelector('button').onclick = () => { clearTimeout(timer); undo(); close(); };
+  const timer = setTimeout(close, 6500);
+}
 function toast(msg, err=false){
   const el = document.createElement('div');
   el.className = 'toast' + (err ? ' err' : '');
@@ -3350,8 +3540,9 @@ function getCommands(){
   add(t('h.keys'), openKeys, '?', t('menu.help'), 'keyboard');
   add(t('mod.guide'), ()=>go('guide'), 'F1', t('menu.help'), 'compass');
   if(m==='board'){
-    [['mindmap','bd.node','node'],['card','bd.card','card'],['note','bd.note','note'],['text','bd.text','type']].forEach(([ty,k,icn])=>add(`${t('bd.add')}: ${t(k)}`, ()=>addNode(ty), 'Shift+A', t('mod.board'), icn));
-    add(`${t('bd.add')}: ${t('bd.images')}`, pickBoardImages, '', t('mod.board'), 'image');
+    [['mindmap','bd.node','node'],['card','bd.card','card'],['char','bd.char','cards'],['note','bd.note','note'],['text','bd.text','type']].forEach(([ty,k,icn])=>add(`${t('bd.add')}: ${t(k)}`, ()=>addNode(ty), 'Shift+A', t('mod.board'), icn));
+    add(`${t('bd.add')}: ${t('bd.media')}`, ()=>pickBoardMedia(), '', t('mod.board'), 'image');
+    add(t('cc.deck'), openDeck, '', t('mod.board'), 'cards');
     add(t('bd.fit'), ()=>fitBoard(), 'Home', t('mod.board'), 'fit');
     add(t('bd.selectAll'), selectAll, 'A', t('mod.board'), 'check');
   }
@@ -3364,9 +3555,27 @@ function getCommands(){
   if(m==='story'){ add(t('sy.scene'), addChapter, 'Shift+A', t('mod.story'), 'plus'); add(t('sy.focus'), toggleFocus, 'Ctrl+Space', t('mod.story'), 'focus'); }
   return cmds;
 }
+/* Inhalte für die Schnellsuche: Aufgaben, Denkbrett-Elemente, Karten, Shots, Kapitel */
+function getContentItems(){
+  const out = [], ap = activeProject();
+  const add = (label, sub, group, icon, run, extra='') => out.push({label, sub, group, icon, run, extra, content:true});
+  const ensure = pid => { if(S.activeProjectId!==pid) openProject(pid, false); };
+  S.projects.forEach(p=>p.phases.forEach(ph=>ph.tasks.forEach(x=>{ if(x.text) add(x.text, `${projectName(p)} · ${ph.title || ''}`, t('pal.task'), x.status==='done' ? 'check' : 'list', ()=>{
+    ensure(p.id); ph.collapsed = false; if(S.settings.taskFilter!=='all') S.settings.taskFilter = 'all';
+    go('pipeline'); setTimeout(()=>flashEl(document.querySelector(`[data-task="${ph.id}:${x.id}"]`)), 280); }); })));
+  ap.boards.forEach(b=>b.nodes.forEach(n=>{
+    const label = n.title || n.text || n.cat || n.path || ''; if(!label.trim()) return;
+    const extra = [n.sub, n.desc, n.cat!==label ? n.cat : '', ...(n.facts||[]).map(f=>f.k+' '+f.v)].filter(Boolean).join(' ');
+    add(label.split('\n')[0].slice(0,90), `${b.name} · ${t(NODE_LABEL[n.type])}${n.type==='char' ? ' · ' + t('cc.k.'+n.kind) : ''}`, n.type==='char' ? t('bd.char') : t('mod.board'), n.type==='char' ? 'cards' : n.type==='note' ? 'note' : 'node', ()=>locateNode(n.id), extra);
+  }));
+  ap.shots.forEach((s,i)=>{ const label = [s.code, s.seq, s.desc].filter(Boolean).join(' · '); if(label) add(label.slice(0,90), projectName(ap), t('mod.shots'), 'film', ()=>{ go('shots'); setTimeout(()=>flashEl(document.querySelector(`#view-shots [data-shot="${i}"]`)), 280); }); });
+  ap.chapters.forEach(c=>add(c.title || t('g.untitled'), (c.body || '').replace(/<[^>]+>/g,' ').slice(0,70), t('pal.chapter'), 'book', ()=>{ ui.chapterId = c.id; go('story'); }));
+  return out;
+}
+function flashEl(el){ if(!el) return; el.scrollIntoView({block:'center', behavior:'smooth'}); el.classList.remove('found'); void el.offsetWidth; el.classList.add('found'); }
 function openPalette(){
   closeMenu(); closePalette();
-  const cmds = getCommands();
+  const cmds = getCommands(), content = getContentItems();
   const el = document.createElement('div');
   el.className = 'palette';
   el.innerHTML = `<input placeholder="${esc(t('pal.ph'))}" aria-label="${esc(t('e.search'))}"><div class="palette-list"></div>`;
@@ -3375,9 +3584,10 @@ function openPalette(){
   let shown = [], hl = 0;
   const draw = () => {
     const q = input.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
-    shown = cmds.filter(c=>{ const h = (c.label + ' ' + c.group).toLowerCase(); return q.every(w=>h.includes(w)); }).slice(0, 60);
+    const hit = c => { const h = (c.label + ' ' + c.group + ' ' + (c.sub || '') + ' ' + (c.extra || '')).toLowerCase(); return q.every(w=>h.includes(w)); };
+    shown = q.length ? [...content.filter(hit).slice(0, 40), ...cmds.filter(hit)].slice(0, 70) : cmds.slice(0, 60);
     hl = clamp(hl, 0, Math.max(0, shown.length-1));
-    list.innerHTML = shown.length ? shown.map((c,i)=>`<button class="menu-item ${i===hl?'hl':''}" data-pi="${i}">${ic(c.icon,15)}<span class="lbl">${esc(c.label)}</span>${c.kbd?`<kbd>${esc(c.kbd)}</kbd>`:''}<span class="grp">${esc(c.group)}</span></button>`).join('') : `<div class="palette-empty">${t('pal.none')}</div>`;
+    list.innerHTML = shown.length ? shown.map((c,i)=>`<button class="menu-item ${i===hl?'hl':''} ${c.content?'pc-item':''}" data-pi="${i}">${ic(c.icon,15)}<span class="lbl">${esc(c.label)}${c.sub?`<small>${esc(c.sub)}</small>`:''}</span>${c.kbd?`<kbd>${esc(c.kbd)}</kbd>`:''}<span class="grp">${esc(c.group)}</span></button>`).join('') : `<div class="palette-empty">${t('pal.none')}</div>`;
     const h = list.querySelector('.hl'); if(h) h.scrollIntoView({block:'nearest'});
   };
   const run = i => { const c = shown[i]; closePalette(); if(c) c.run(); };
@@ -3455,6 +3665,7 @@ function renderChrome(){
     <nav class="tabs" id="tabs" role="tablist"><span class="tab-ink" id="tabInk"></span>${MODULES.map((m,i)=>`<button role="tab" data-mod="${m}" class="${S.activeModule===m?'active':''}" title="${esc(t('mod.'+m))} · Alt+${i+1}">${ic(MOD_ICONS[m],15)}<span>${t('mod.'+m)}</span></button>`).join('')}</nav>
     <div class="tb-right">
       <div class="tb-tools">
+        <button class="icon-btn" data-act="search" title="${esc(t('pal.searchTip'))} · Ctrl+K">${ic('search',17)}</button>
         <button class="icon-btn save-btn" id="savePill"></button>
         <button class="icon-btn" data-act="versions" title="${esc(t('ver.title'))} · Ctrl+Alt+H">${ic('history',17)}</button>
         <span class="tb-sep"></span>
@@ -3471,6 +3682,7 @@ function renderChrome(){
   tb.querySelector('[data-act=mode]').onclick = toggleMode;
   tb.querySelector('[data-act=settings]').onclick = openSettings;
   tb.querySelector('[data-act=versions]').onclick = openVersions;
+  tb.querySelector('[data-act=search]').onclick = openPalette;
   const fs = tb.querySelector('[data-act=fullscreen]'); if(fs) fs.onclick = toggleFullscreen;
   tb.querySelectorAll('[data-win]').forEach(b=>b.onclick = () => winAction(b.dataset.win));
   $('projCrumb').onclick = e => openProjectMenu(e.currentTarget);
@@ -3584,7 +3796,7 @@ function openMainMenu(btn){
     {label:t('e.undo'), icon:'undo', kbd:'Ctrl+Z', run:undo, disabled:!H.undo.length && snapshot()===H.base},
     {label:t('e.redo'), icon:'redo', kbd:'Ctrl+Shift+Z', run:redo, disabled:!H.redo.length},
     {sep:1},
-    {label:t('e.search'), icon:'search', kbd:'F3', run:openPalette}];
+    {label:t('e.search'), icon:'search', kbd:'Ctrl+K', run:openPalette}];
   if(m==='view') items = [
     ...MODULES.map((mod,i)=>({label:t('mod.'+mod), checked:S.activeModule===mod, kbd:'Alt+'+(i+1), run:()=>go(mod)})),
     {sep:1},
@@ -3600,7 +3812,7 @@ function openMainMenu(btn){
     {label:t('tour.menu'), icon:'sparkle', run:startTour},
     {label:t('mod.guide'), icon:'compass', kbd:'F1', run:()=>go('guide')},
     {label:t('h.keys'), icon:'keyboard', kbd:'?', run:openKeys},
-    {label:t('e.search'), icon:'search', kbd:'F3', run:openPalette},
+    {label:t('e.search'), icon:'search', kbd:'Ctrl+K', run:openPalette},
     {sep:1},
     {label:t('h.about'), icon:'sparkle', run:()=>dialog({title:'VertexForge Studio ' + APP_VERSION, text:t('h.aboutText')})}];
   openMenu(r.left, r.bottom + 4, items);
@@ -3755,7 +3967,7 @@ async function openSettings(){
 }
 const KEYMAP = [
   ['global','Ctrl+Z','k.undo'],['global','Ctrl+Shift+Z / Ctrl+Y','k.redo'],['global','Ctrl+S','k.save'],['global','Ctrl+Shift+S','k.saveAs'],['global','Ctrl+Alt+S','ver.save'],['global','Ctrl+Alt+H','ver.title'],['global','Ctrl+Alt+Shift+S','f.saveInc'],['global','Ctrl+O','k.open'],
-  ['global','Ctrl+N','k.newProject'],['global','F3','k.search'],['global','F1','k.guide'],['global','?','k.keys'],['global','Ctrl+,','k.settings'],
+  ['global','Ctrl+N','k.newProject'],['global','Ctrl+K / F3','k.search'],['global','F1','k.guide'],['global','?','k.keys'],['global','Ctrl+,','k.settings'],
   ['global','Ctrl+PgUp / Ctrl+PgDn','k.workspace'],['global','Alt+1 … Alt+6','k.workspaceN'],['global','Shift+A','k.addCtx'],['global','Esc','k.esc'],['global','F11','v.fullscreen'],['global','Ctrl+Wheel / Ctrl++ / Ctrl+-','k.uiZoom'],['global','Ctrl+0','uz.reset'],
   ['board','LMB','k.select'],['board','Shift+LMB','k.selectAdd'],['board','LMB-Drag','k.box'],['board','A','k.selectAll'],['board','Alt+A','k.deselect'],['board','Ctrl+I','k.invert'],
   ['board','G','k.grab'],['board','G → X / Y','k.axis'],['board','S','k.scale'],['board','X / Del','k.delete'],['board','Shift+D','k.duplicate'],['board','Ctrl+C / Ctrl+V','k.copyPaste'],
@@ -3843,7 +4055,7 @@ document.addEventListener('keydown', e=>{
   if(ctrl && k==='o'){ e.preventDefault(); openFile(); return; }
   if(ctrl && k==='n'){ e.preventDefault(); newProjectDialog(); return; }
   if(ctrl && e.key===','){ e.preventDefault(); openSettings(); return; }
-  if(e.key==='F3'){ e.preventDefault(); openPalette(); return; }
+  if(e.key==='F3' || ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && e.code==='KeyK')){ e.preventDefault(); openPalette(); return; }
   if(e.key==='F1'){ e.preventDefault(); go('guide'); return; }
   if(ctrl && (e.key==='PageUp' || e.key==='PageDown')){ e.preventDefault(); const i = MODULES.indexOf(S.activeModule); go(MODULES[(i + (e.key==='PageDown'?1:-1) + MODULES.length) % MODULES.length]); return; }
   if(e.altKey && !ctrl && /^Digit[1-6]$/.test(e.code)){ e.preventDefault(); go(MODULES[+e.code.slice(5)-1]); return; }
@@ -3945,13 +4157,11 @@ function renderProjects(){
   v.className = v.className.replace(/\blib-\w+/g,'').trim(); v.classList.add('lib-' + st.hubStyle);
   v.innerHTML = `<div class="page wide">
     <div class="page-head">
-      <div><div class="eyebrow">${t('hub.eyebrow')}</div><h1 class="page-title">${t('mod.projects')}</h1><p class="page-sub">${t('hub.sub',{n:S.projects.length})}</p></div>
+      <div><div class="eyebrow">${t('hub.eyebrow')}</div><h1 class="page-title">${t('mod.projects')}</h1><p class="page-sub">${t(document.documentElement.classList.contains('touch') ? 'hub.subTouch' : 'hub.sub',{n:S.projects.length})}</p></div>
       <div class="head-actions">
         <div class="search">${ic('search',14)}<input class="inp" id="hubSearch" placeholder="${esc(t('hub.search'))}" value="${esc(ui.hubQuery)}"></div>
         <label class="mini-range" title="${esc(t('hub.sort'))}">${ic('sort',14)}<select class="sel" id="hubSort">${['recent','name','progress','deadline'].map(k=>`<option value="${k}" ${st.hubSort===k?'selected':''}>${t('sort.'+k)}</option>`).join('')}</select></label>
-        <label class="mini-range" title="${esc(t('hub.cover'))}">${ic('grid',14)}<span class="hide-sm">${t('hub.cover')}</span><input type="range" min="160" max="380" step="1" value="${st.cardSize}" data-hub="cardSize"></label>
-        <label class="mini-range" title="${esc(t('hub.titleSize'))}">${ic('type',14)}<span class="hide-sm">${t('hub.titleSize')}</span><input type="range" min="0.6" max="1.6" step="0.01" value="${st.titleScale}" data-hub="titleScale"></label>
-        <button class="btn" id="hubDesign" title="${esc(t('ds.lib'))}">${ic('palette',15)}<span class="hide-sm">${t('ds.design')}</span></button>
+        <button class="btn" id="hubDesign" title="${esc(t('ds.lib'))}">${ic('palette',15)}<span class="hide-sm">${t('ds.view')}</span></button>
         <button class="btn btn-primary" id="hubNew">${ic('plus',15)}<span>${t('np.title')}</span></button>
       </div>
     </div>
@@ -3965,11 +4175,6 @@ function renderProjects(){
   $('hubNewCard').onkeydown = e => { if(e.key==='Enter') newProjectDialog(); };
   $('hubSearch').oninput = e => { ui.hubQuery = e.target.value; const pos = e.target.selectionStart; renderProjects(); const s = $('hubSearch'); s.focus(); s.setSelectionRange(pos,pos); };
   $('hubSort').onchange = e => { st.hubSort = e.target.value; persistSoon(); renderProjects(); };
-  v.querySelectorAll('[data-hub]').forEach(r=>r.oninput = () => {
-    const k = r.dataset.hub; st[k] = parseFloat(r.value);
-    $('hubGrid').style.setProperty(k==='cardSize' ? '--card-w' : '--title-scale', k==='cardSize' ? r.value+'px' : r.value);
-    persistSoon();
-  });
   const grid = $('hubGrid');
   // Cover folgen der Maus in Echtzeit (leichte Neigung + Lichtreflex)
   grid.onpointermove = e => {
@@ -4405,7 +4610,7 @@ function renderPipeline(){
         <div class="seg">${filters.map(k=>`<button data-filter="${k}" class="${st.taskFilter===k?'active':''}">${t('flt.'+k)}</button>`).join('')}</div>
         <button class="btn" id="plSort">${ic('sort',14)}<span>${st.sortByDate ? t('pl.sortDate') : t('pl.sortManual')}</span></button>
         <button class="btn" id="plTpl">${ic('layers',14)}<span class="hide-sm">${t('tpl.insert')}</span></button>
-        <button class="btn" id="plDesign" title="${esc(t('ds.surfPipe'))}">${ic('palette',14)}<span class="hide-sm">${t('ds.design')}</span></button>
+        <button class="btn btn-icon" id="plDesign" title="${esc(t('ds.surfPipe'))}">${ic('palette',15)}</button>
         <button class="btn btn-primary" id="plAdd">${ic('plus',14)}<span>${t('pl.addPhase')}</span></button>
       </div>
     </div>
@@ -4479,7 +4684,7 @@ function bindPipeline(v){
     if(act==='up' && i>0){ [list[i-1], list[i]] = [list[i], list[i-1]]; changed(); renderPipeline(); }
     if(act==='down' && i<list.length-1){ [list[i+1], list[i]] = [list[i], list[i+1]]; changed(); renderPipeline(); }
     if(act==='addtask') addTaskFrom(sec);
-    if(act==='delete'){ if(ph.tasks.length && !(await confirmDelete(t('ph.del'), t('ph.delText',{name:ph.title, n:ph.tasks.length})))) return; activeProject().phases = list.filter(x=>x!==ph); changed(); renderPipeline(); }
+    if(act==='delete'){ if(ph.tasks.length && !(await softDelete(ph.title))) return; activeProject().phases = list.filter(x=>x!==ph); changed(); renderPipeline(); }
   };
   v.onkeydown = e => { if(e.key==='Enter' && e.target.dataset.new){ e.preventDefault(); addTaskFrom(e.target.closest('[data-phase]')); } };
   const onField = (e, final) => {
@@ -4512,6 +4717,33 @@ function bindPipeline(v){
   v.ondragend = e => { const c = e.target.closest('[data-kb]'); if(c) c.classList.remove('dragging'); v.querySelectorAll('.kb-col').forEach(x=>x.classList.remove('drop')); };
   v.ondragover = e => { const col = e.target.closest('[data-kbcol]'); if(!col) return; e.preventDefault(); v.querySelectorAll('.kb-col').forEach(x=>x.classList.toggle('drop', x===col)); };
   v.ondrop = e => { const col = e.target.closest('[data-kbcol]'); if(!col) return; e.preventDefault(); const {x} = findTask(e.dataTransfer.getData('text/plain')); if(x){ x.status = col.dataset.kbcol; changed(); renderPipeline(); } };
+  /* Kanban mit dem Finger: kurz gedrückt halten, dann in eine andere Spalte ziehen */
+  v.onpointerdown = e => {
+    if(e.pointerType!=='touch') return;
+    const c = e.target.closest('[data-kb]'); if(!c) return;
+    const sx = e.clientX, sy = e.clientY; let drag = null;
+    const hold = setTimeout(()=>{
+      const r = c.getBoundingClientRect();
+      drag = c.cloneNode(true); drag.className += ' kb-ghost'; Object.assign(drag.style, {width:r.width+'px', left:r.left+'px', top:r.top+'px'});
+      document.body.appendChild(drag); c.classList.add('dragging'); if(navigator.vibrate) navigator.vibrate(12);
+    }, 260);
+    const colAt = (x, y) => { const el = document.elementFromPoint(x, y); return el && el.closest('[data-kbcol]'); };
+    const move = ev => {
+      if(!drag){ if(Math.hypot(ev.clientX-sx, ev.clientY-sy) > 10) end(); return; }
+      ev.preventDefault();
+      drag.style.transform = `translate(${ev.clientX-sx}px,${ev.clientY-sy}px) rotate(2deg)`;
+      drag.style.visibility = 'hidden'; const col = colAt(ev.clientX, ev.clientY); drag.style.visibility = '';
+      v.querySelectorAll('.kb-col').forEach(x=>x.classList.toggle('drop', x===col));
+    };
+    const end = ev => {
+      clearTimeout(hold); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', end); window.removeEventListener('pointercancel', end);
+      if(!drag) return;
+      drag.remove(); c.classList.remove('dragging'); v.querySelectorAll('.kb-col').forEach(x=>x.classList.remove('drop'));
+      const col = ev && ev.type==='pointerup' && colAt(ev.clientX, ev.clientY), {x} = findTask(c.dataset.kb);
+      if(col && x && x.status!==col.dataset.kbcol){ x.status = col.dataset.kbcol; changed(); renderPipeline(); }
+    };
+    window.addEventListener('pointermove', move, {passive:false}); window.addEventListener('pointerup', end); window.addEventListener('pointercancel', end);
+  };
 }
 MOD_KEYS.pipeline = (e, ctrl, k) => {
   if(e.shiftKey && k==='a' && !ctrl){ addPhase(); return true; }
@@ -4524,7 +4756,7 @@ MOD_KEYS.pipeline = (e, ctrl, k) => {
    ============================================================================ */
 const CV = {drag:null, pointers:new Map(), pinch:null, target:null, raf:0, space:false, sizes:null, moveRaf:0, lastMove:null, geo:{}};
 const GAP = 10;
-const NODE_LABEL = {mindmap:'bd.node', card:'bd.card', note:'bd.note', image:'bd.image', text:'bd.text', video:'bd.video', file:'bd.file'};
+const NODE_LABEL = {mindmap:'bd.node', card:'bd.card', char:'bd.char', note:'bd.note', image:'bd.image', text:'bd.text', video:'bd.video', file:'bd.file'};
 
 function activeBoard(){
   const p = activeProject();
@@ -4556,6 +4788,7 @@ function renderBoard(){
         <span class="bt-sep"></span>
         <button class="btn btn-ghost btn-xs" onclick="fitBoard()" title="Home">${ic('fit',14)}<span class="hide-sm">${t('bd.fit')}</span></button>
         <span class="bt-sep"></span>
+        <button class="icon-btn sm" onclick="openDeck()" title="${esc(t('cc.deck'))}">${ic('cards',16)}</button>
         <button class="icon-btn sm" id="boardDesign" title="${esc(t('ds.board'))}">${ic('palette',16)}</button>
         <button class="icon-btn sm ${ui.areaFull?'on':''}" onclick="toggleAreaFull()" title="${esc(ui.areaFull ? t('fs.exit') : t('fs.enter'))} · F11 / Esc">${ic(ui.areaFull?'shrink':'expand',16)}</button>
       </div>
@@ -4566,10 +4799,10 @@ function renderBoard(){
       <span class="bt-hsep"></span>
       ${tool(`onclick="addNode('mindmap')"`, 'node', t('bd.node'), 'Shift+A')}
       ${tool(`onclick="addNode('card')"`, 'card', t('bd.card'))}
+      ${tool(`onclick="addNode('char')"`, 'cards', t('bd.char'))}
       ${tool(`onclick="addNode('note')"`, 'note', t('bd.note'))}
       ${tool(`onclick="addNode('text')"`, 'type', t('bd.text'))}
-      ${tool(`onclick="pickBoardImages()"`, 'image', t('bd.images'), 'Ctrl+V')}
-      ${tool(`onclick="pickBoardVideos()"`, 'video', t('bd.videos'))}
+      ${tool(`onclick="pickBoardMedia()"`, 'image', t('bd.media'), 'Ctrl+V')}
       ${tool(`onclick="linkFiles()"`, 'link', t('bd.linkFile'))}
     </div>`;
   $('boardPick').onclick = e => openBoardMenu(e.currentTarget);
@@ -4598,7 +4831,7 @@ function addBoard(){ const b = newBoard(t('bd.newName',{n:activeProject().boards
 async function renameBoard(id){ const b = activeProject().boards.find(x=>x.id===id); if(!b) return; const n = await askText(t('bd.rename'), b.name); if(n && n.trim()){ b.name = n.trim(); changed(); renderBoard(); } }
 async function deleteBoard(id){
   const p = activeProject(), b = p.boards.find(x=>x.id===id); if(!b || p.boards.length<2) return;
-  if(!(await confirmDelete(t('bd.del'), t('bd.delText',{name:b.name, n:b.nodes.length})))) return;
+  if(!(await softDelete(b.name))) return;
   p.boards = p.boards.filter(x=>x!==b); changed(); renderBoard();
 }
 
@@ -4629,6 +4862,8 @@ function nodeHTML(n, i){
     body = ui.editing===n.id
       ? `<textarea class="n-textedit" data-field="text" spellcheck="false" style="font-family:${fontStack(st.font)};font-size:${st.size}px;font-weight:${st.weight};line-height:${st.line};letter-spacing:${st.spacing}em;text-align:${st.align};font-style:${st.italic?'italic':'normal'};color:${st.foil==='plain'?st.color:'var(--text)'}">${esc(n.text)}</textarea>`
       : `<div class="n-textview" data-act="move">${stxHTML(st, n.text || ' ', 'px')}</div>`;
+  }else if(n.type==='char'){
+    body = charCardHTML(n, true);
   }else if(n.type==='note'){
     body = `<textarea class="n-note" data-field="text" placeholder="${esc(t('nd.noteText'))}">${esc(n.text)}</textarea>`;
   }else{
@@ -4828,6 +5063,7 @@ function addNode(type, at){
   const base = {
     mindmap:{w:240, h:110, cat:t('nd.idea'), title:t('nd.newNode'), desc:'', links:[]},
     card:{w:290, h:150, cat:t('nd.cardCat'), title:t('nd.newCard'), desc:t('nd.cardDesc'), links:[], stage:0},
+    char:{w:250, h:350, kind:'character', title:t('cc.newName'), sub:'', desc:'', stats:[0,0,0,0,0], facts:[{k:t('cc.f.poly'), v:''},{k:t('cc.f.tex'), v:''}], links:[], src:''},
     note:{w:220, h:150, text:''},
     text:{text:t('nd.textDefault'), st:textDefaults({size:44, align:'center', foil:S.settings.mode==='dark'?'gold':'plain', color:S.settings.mode==='dark'?'#e3cf9f':'#3a2f22', fx:S.settings.mode==='dark'?'extrude':'none', fxColor:'#3a2508', fxDepth:5, shadow:S.settings.mode==='dark'})}
   }[type];
@@ -4837,7 +5073,7 @@ function addNode(type, at){
   b.nodes.push(n); ui.sel = new Set([n.id]); ui.active = n.id; ui.selConn = null;
   changed(); renderNodes(); renderInspector();
   if(type==='text') editNode(n.id);
-  else { const f = nodeEl(n.id) && nodeEl(n.id).querySelector(type==='note' ? '.n-note' : '.n-title'); if(f){ f.focus(); f.select && f.select(); } }
+  else { const f = nodeEl(n.id) && nodeEl(n.id).querySelector(type==='note' ? '.n-note' : type==='char' ? '.tc-name' : '.n-title'); if(f){ f.focus(); f.select && f.select(); } }
 }
 async function addImages(files, at){
   const b = activeBoard(), base = at || mouseWorld(), added = [];
@@ -4851,6 +5087,7 @@ async function addImages(files, at){
   }
   if(added.length){ ui.sel = new Set(added); ui.active = added[added.length-1]; changed(); renderNodes(); renderInspector(); toast(t('bd.imgAdded',{n:added.length})); }
 }
+async function pickBoardMedia(at){ const files = await pickFiles('image/*,video/*', true); if(!files.length) return; const c = at || viewCenter(), img = files.filter(f=>f.type.startsWith('image/')), vid = files.filter(f=>f.type.startsWith('video/')); if(img.length) addImages(img, c); if(vid.length) addVideos(vid, img.length ? {x:c.x+40, y:c.y+40} : c); }
 async function pickBoardImages(){ const files = await pickFiles('image/*', true); if(files.length) addImages(files, viewCenter()); }
 async function pickBoardVideos(){ const files = await pickFiles('video/*', true); if(files.length) addVideos(files, viewCenter()); }
 const VIDEO_MAX = 80 * 1024 * 1024;
@@ -5103,6 +5340,8 @@ function renderInspector(){
     }else if(n.type==='note'){
       const cols = ['', '#e8d9a8','#d9e3b4','#c9dde6','#e6c9c9','#d9cde6','#2f2a20'];
       h += `<div class="f"><span class="f-l">${t('insp.paper')}</span><div class="swatches">${cols.map(c=>`<button class="swatch ${n.color===c?'active':''}" data-ncol="${c}" style="background:${c||'var(--note)'}"></button>`).join('')}</div></div>`;
+    }else if(n.type==='char'){
+      h += charInspectorHTML(n);
     }else if(n.type!=='image'){
       const cols = ['', '#cfa75c','#7fb6a5','#5cc4d3','#cc7461','#9b7fc8','#8fa3b8','#9bb07a','#c07a4f'];
       h += `<div class="f"><span class="f-l">${t('insp.accent')}</span><div class="swatches">${cols.map(c=>`<button class="swatch ${n.color===c?'active':''}" data-ncol="${c}" style="background:${c||'var(--accent)'}"></button>`).join('')}</div></div>`;
@@ -5129,6 +5368,7 @@ function initInspector(){
       }
       const c = e.target.closest('[data-ncol]'); if(c && n){ n.color = c.dataset.ncol; changed(); updateNodeEl(n); renderInspector(); return; }
     }
+    if(n && n.type==='char' && charInspectorEvent(n, e)) return;
     if(n && n.type==='text'){
       const r = applyStyleEvent(n.st, e);
       if(r){ if(r!=='fonts') { changed(); updateNodeEl(n); } if(r==='all') renderInspector(); }
@@ -5144,10 +5384,10 @@ function addMenuItems(at){
   return [
     {label:t('bd.node'), icon:'node', run:()=>addNode('mindmap', at)},
     {label:t('bd.card'), icon:'card', run:()=>addNode('card', at)},
+    {label:t('bd.char'), icon:'cards', run:()=>addNode('char', at)},
     {label:t('bd.note'), icon:'note', run:()=>addNode('note', at)},
     {label:t('bd.text'), icon:'type', run:()=>addNode('text', at)},
-    {label:t('bd.images'), icon:'image', run:async()=>{ const f = await pickFiles('image/*', true); if(f.length) addImages(f, at); }},
-    {label:t('bd.videos'), icon:'video', run:async()=>{ const f = await pickFiles('video/*', true); if(f.length) addVideos(f, at); }},
+    {label:t('bd.media'), icon:'image', run:()=>pickBoardMedia(at)},
     {label:t('bd.linkFile'), icon:'link', run:()=>linkFiles(at)}
   ];
 }
@@ -5307,6 +5547,8 @@ function initBoard(){
     const editable = !act && e.target.closest('input,textarea,select,button,.sw-link,.sw-add,.stage-row');
     if(act==='del'){ deleteNodes([id]); return; }
     if(act==='fopen' || act==='freveal' || act==='fcopy'){ e.preventDefault(); fileAction(n, act); return; }
+    if(act==='flip'){ e.preventDefault(); e.stopPropagation(); flipCard(id); return; }
+    const sb = e.target.closest('[data-stat]'); if(sb && n.type==='char'){ e.preventDefault(); ui.sel = new Set([id]); ui.active = id; refreshSel(); setCardStat(n, +sb.dataset.stat, e, sb); return; }
     let toggledOff = false;
     if(e.shiftKey){ if(ui.sel.has(id) && ui.active===id){ ui.sel.delete(id); ui.active = [...ui.sel].pop() || null; toggledOff = true; } else { ui.sel.add(id); ui.active = id; } }
     else if(!ui.sel.has(id)){ ui.sel = new Set([id]); ui.active = id; }
@@ -5521,6 +5763,8 @@ function initBoard(){
   vp.addEventListener('drop', e=>{
     e.preventDefault(); vp.classList.remove('drop');
     const all = [...e.dataTransfer.files], at = toWorld(e.clientX, e.clientY);
+    const onCard = e.target.closest && e.target.closest('.node-char'), cimg = all.find(x=>x.type.startsWith('image/'));
+    if(onCard && cimg && all.length===1){ dropCardImage(onCard.dataset.id, cimg); return; }
     const img = all.filter(x=>x.type.startsWith('image/')), vid = all.filter(x=>x.type.startsWith('video/'));
     if(img.length) addImages(img, at);
     if(vid.length) addVideos(vid, img.length ? {x:at.x + 40, y:at.y + 40} : at);
@@ -5578,6 +5822,150 @@ MOD_KEYS.board = (e, ctrl, k) => {
 };
 
 /* ============================================================================
+   SAMMELKARTEN — Charaktere, Kreaturen, Props, Fahrzeuge, Umgebungen
+   Eine Karte auf dem Denkbrett: Vorderseite (Bild, Typ, Fortschritt je Disziplin),
+   Rückseite (Beschreibung, Fakten, verknüpfte Dateien). Klick auf ↻ dreht sie um.
+   Das Deck zeigt alle Karten eines Projekts auf einen Blick.
+   ============================================================================ */
+const CHAR_KINDS = ['character','creature','prop','vehicle','environment'];
+const CHAR_COLORS = {character:'#d6a740', creature:'#c4553f', prop:'#3f9c97', vehicle:'#4f7cc4', environment:'#5e9a4c'};
+const CHAR_ICONS = {character:'user', creature:'paw', prop:'cube', vehicle:'wheel', environment:'mountain'};
+const CHAR_STATS = ['model','sculpt','texture','rig','anim'];
+
+function charPct(n){ return Math.round(n.stats.reduce((a,b)=>a+b,0) / n.stats.length); }
+function charNumber(n){
+  const p = activeProject(); let i = 0, found = 0;
+  p.boards.forEach(b=>b.nodes.forEach(x=>{ if(x.type==='char'){ i++; if(x.id===n.id) found = i; } }));
+  return found || 0;
+}
+/* Kartenkörper. edit=true: auf dem Denkbrett (Felder bearbeitbar), sonst Deck/Lesemodus */
+function charCardHTML(n, edit){
+  const kind = n.kind, col = CHAR_COLORS[kind], pct = charPct(n), no = String(charNumber(n)).padStart(3,'0');
+  const img = assetSrc(n.src) || (n.art ? presetArt(n.art) : '');
+  const field = (f, cls, ph) => edit
+    ? `<input class="${cls}" data-field="${f}" value="${esc(n[f])}" placeholder="${esc(ph)}" spellcheck="false">`
+    : `<span class="${cls}">${esc(n[f] || ph)}</span>`;
+  const stats = CHAR_STATS.map((k,i)=>`<div class="tc-stat"><span class="tc-sl">${t('cc.s.'+k)}</span><span class="tc-bar" ${edit?`data-stat="${i}"`:''} title="${t('cc.s.'+k)} · ${n.stats[i]}%"><i style="width:${n.stats[i]}%"></i></span><b>${n.stats[i]}</b></div>`).join('');
+  const facts = n.facts.filter(f=>f.k || f.v);
+  return `<div class="tc ${n.flip?'flip':''}" style="--kc:${col}" data-kind="${kind}">
+    <div class="tc-inner">
+      <div class="tc-face tc-front">
+        <div class="tc-top">${field('title','tc-name',t('cc.name'))}<span class="tc-hp" title="${t('cc.overall')}">${pct}<small>%</small></span></div>
+        <div class="tc-art ${img?'':'empty'}" ${edit?'data-act="move"':''}>${img ? `<img src="${esc(img)}" alt="" draggable="false">` : `<span>${ic('image',22)}<em>${t('cc.dropImg')}</em></span>`}<span class="tc-shine"></span></div>
+        <div class="tc-type"><span class="tc-kind">${ic(CHAR_ICONS[kind],12)}${t('cc.k.'+kind)}</span>${field('sub','tc-sub',t('cc.role'))}</div>
+        <div class="tc-stats">${stats}</div>
+        <div class="tc-foot"><span class="tc-no">#${no}</span><button class="tc-flip" data-act="flip" title="${esc(t('cc.flip'))}">${ic('rotate',13)}</button></div>
+      </div>
+      <div class="tc-face tc-back">
+        <div class="tc-top"><span class="tc-name">${esc(n.title || t('cc.name'))}</span><span class="tc-kind">${ic(CHAR_ICONS[kind],12)}</span></div>
+        ${edit ? `<textarea class="tc-desc" data-field="desc" placeholder="${esc(t('cc.descPh'))}">${esc(n.desc)}</textarea>` : `<p class="tc-desc">${esc(n.desc || t('cc.descPh'))}</p>`}
+        ${facts.length ? `<dl class="tc-facts">${facts.map(f=>`<div><dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd></div>`).join('')}</dl>` : (edit ? `<div class="tc-hint">${t('cc.factsHint')}</div>` : '')}
+        ${edit ? `<div class="n-links">${linksHTML(n.links,'node',n.id)}</div>` : (n.links.length ? `<div class="tc-files">${ic('link',11)} ${n.links.length} ${t('cc.files')}</div>` : '')}
+        <div class="tc-foot"><span class="tc-no">#${no}</span><button class="tc-flip" data-act="flip" title="${esc(t('cc.flip'))}">${ic('rotate',13)}</button></div>
+      </div>
+    </div>
+  </div>`;
+}
+function flipCard(id){
+  const n = nodeById(id); if(!n) return;
+  n.flip = !n.flip; changed();
+  const el = nodeEl(id), tc = el && el.querySelector('.tc'); if(tc) tc.classList.toggle('flip', n.flip);
+}
+/* Klick auf einen Balken setzt den Wert (wie bei einer Bewertung) */
+function setCardStat(n, i, e, bar){
+  const r = bar.getBoundingClientRect(), v = Math.round(clamp((e.clientX - r.left) / r.width, 0, 1) * 20) * 5;
+  n.stats[i] = v; changed(); updateNodeEl(n); renderInspector();
+}
+async function pickCardImage(id){
+  const n = nodeById(id); if(!n) return;
+  const [f] = await pickFiles('image/*'); if(!f) return;
+  n.src = addAsset(await compressImage(f, 1400)); n.art = ''; changed(); updateNodeEl(n); renderInspector();
+}
+async function dropCardImage(id, file){
+  const n = nodeById(id); if(!n) return;
+  n.src = addAsset(await compressImage(file, 1400)); n.art = ''; changed(); updateNodeEl(n); renderInspector();
+}
+function charInspectorHTML(n){
+  return `<label class="f"><span class="f-l">${t('cc.kind')}</span><select class="sel" data-cf="kind">${CHAR_KINDS.map(k=>`<option value="${k}" ${k===n.kind?'selected':''}>${t('cc.k.'+k)}</option>`).join('')}</select></label>
+    <div class="f"><span class="f-l">${t('cc.image')}</span><div class="row-btns"><button class="btn btn-xs" data-cact="img">${ic('image',13)} ${t(n.src||n.art?'cc.imgChange':'cc.imgPick')}</button>${n.src||n.art?`<button class="btn btn-xs" data-cact="noimg">${ic('x',13)} ${t('cc.imgRemove')}</button>`:''}</div></div>
+    <div class="subhead"><span>${t('cc.progress')}</span></div>
+    ${CHAR_STATS.map((k,i)=>`<label class="f f-range"><span class="f-l">${t('cc.s.'+k)}</span><input type="range" min="0" max="100" step="5" value="${n.stats[i]}" data-cstat="${i}"><b class="mono">${n.stats[i]}</b></label>`).join('')}
+    <div class="subhead"><span>${t('cc.facts')}</span></div>
+    <div class="cc-facts">${n.facts.map((f,i)=>`<div class="cc-fact"><input class="inp" data-fk="${i}" value="${esc(f.k)}" placeholder="${esc(t('cc.factK'))}"><input class="inp" data-fv="${i}" value="${esc(f.v)}" placeholder="${esc(t('cc.factV'))}"><button class="icon-btn sm" data-cact="fdel" data-i="${i}" title="${esc(t('g.delete'))}">${ic('x',12)}</button></div>`).join('')}
+      ${n.facts.length < 8 ? `<button class="btn btn-xs" data-cact="fadd">${ic('plus',13)} ${t('cc.factAdd')}</button>` : ''}</div>
+    <button class="btn btn-xs" data-cact="flip">${ic('rotate',13)} ${t('cc.flip')}</button>`;
+}
+function charInspectorEvent(n, e){
+  const tg = e.target;
+  if(e.type==='input' || e.type==='change'){
+    if(tg.dataset.cstat!=null){ n.stats[+tg.dataset.cstat] = +tg.value; tg.nextElementSibling.textContent = tg.value; changed(); updateNodeEl(n); return true; }
+    if(tg.dataset.cf==='kind'){ n.kind = tg.value; changed(); updateNodeEl(n); return true; }
+    if(tg.dataset.fk!=null){ n.facts[+tg.dataset.fk].k = tg.value; changed(); updateNodeEl(n); return true; }
+    if(tg.dataset.fv!=null){ n.facts[+tg.dataset.fv].v = tg.value; changed(); updateNodeEl(n); return true; }
+    return false;
+  }
+  const b = tg.closest('[data-cact]'); if(!b) return false;
+  const a = b.dataset.cact;
+  if(a==='img') pickCardImage(n.id);
+  else if(a==='noimg'){ n.src = ''; n.art = ''; changed(); updateNodeEl(n); renderInspector(); }
+  else if(a==='fadd'){ n.facts.push({k:'', v:''}); changed(); renderInspector(); setTimeout(()=>{ const i = $('nodeInspector').querySelector(`[data-fk="${n.facts.length-1}"]`); if(i) i.focus(); }, 0); }
+  else if(a==='fdel'){ n.facts.splice(+b.dataset.i, 1); changed(); updateNodeEl(n); renderInspector(); }
+  else if(a==='flip') flipCard(n.id);
+  return true;
+}
+
+/* ---------- Deck: alle Karten eines Projekts ---------- */
+let deckEl = null;
+function closeDeck(){ if(!deckEl) return; const el = deckEl; deckEl = null; el.classList.remove('open'); setTimeout(()=>el.remove(), 220); }
+function allCards(){
+  const p = activeProject(), out = [];
+  p.boards.forEach(b=>b.nodes.forEach(n=>{ if(n.type==='char') out.push({n, b}); }));
+  return out;
+}
+function openDeck(){
+  closeMenu(); closeDeck();
+  const el = document.createElement('div'); el.className = 'deck'; deckEl = el;
+  let filter = 'all';
+  const draw = () => {
+    const cards = allCards(), list = cards.filter(c=>filter==='all' || c.n.kind===filter);
+    const counts = Object.fromEntries(CHAR_KINDS.map(k=>[k, cards.filter(c=>c.n.kind===k).length]));
+    el.innerHTML = `<div class="deck-head">
+        <div><div class="eyebrow">${t('cc.deck')} · ${esc(projectName(activeProject()))}</div><h2>${t('cc.deckTitle',{n:cards.length})}</h2></div>
+        <div class="deck-filter">${['all', ...CHAR_KINDS.filter(k=>counts[k])].map(k=>`<button class="${filter===k?'on':''}" data-df="${k}" ${k!=='all'?`style="--kc:${CHAR_COLORS[k]}"`:''}>${k==='all' ? t('cc.all') : `${ic(CHAR_ICONS[k],12)}${t('cc.k.'+k)}`}<span>${k==='all' ? cards.length : counts[k]}</span></button>`).join('')}</div>
+        <button class="icon-btn deck-x" data-dact="close" title="Esc">${ic('x',18)}</button>
+      </div>
+      <div class="deck-grid">${list.length ? list.map((c,i)=>`<div class="deck-card" data-cid="${c.n.id}" style="--i:${i}">${charCardHTML(c.n, false)}<button class="deck-loc" data-dact="locate" data-cid="${c.n.id}">${ic('target',13)} ${t('cc.locate')}</button></div>`).join('')
+        : `<div class="deck-empty">${ic('cards',34)}<p>${t('cc.empty')}</p><button class="btn btn-primary" data-dact="new">${ic('plus',14)} ${t('cc.new')}</button></div>`}</div>
+      <div class="deck-tip">${t('cc.deckTip')}</div>`;
+  };
+  draw();
+  document.body.appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('open'));
+  el.addEventListener('click', e=>{
+    const f = e.target.closest('[data-df]'); if(f){ filter = f.dataset.df; draw(); return; }
+    const a = e.target.closest('[data-dact]');
+    if(a){
+      if(a.dataset.dact==='close') closeDeck();
+      else if(a.dataset.dact==='new'){ closeDeck(); if(S.activeModule!=='board') go('board'); setTimeout(()=>addNode('char'), 60); }
+      else if(a.dataset.dact==='locate') locateNode(a.dataset.cid);
+      return;
+    }
+    const card = e.target.closest('.deck-card');
+    if(card){ const n = allCards().find(c=>c.n.id===card.dataset.cid); if(n){ card.querySelector('.tc').classList.toggle('flip'); } return; }
+    if(e.target===el || e.target.classList.contains('deck-grid')) closeDeck();
+  });
+}
+/* Zu einem Element springen (Deck, Schnellsuche) */
+function locateNode(id){
+  closeDeck();
+  const p = activeProject(), b = p.boards.find(x=>x.nodes.some(n=>n.id===id)); if(!b) return;
+  ui.boardId = b.id; ui.sel = new Set([id]); ui.active = id;
+  if(S.activeModule!=='board') go('board'); else renderBoard();
+  setTimeout(()=>{ fitBoard(true); const el = nodeEl(id); if(el){ el.classList.remove('found'); void el.offsetWidth; el.classList.add('found'); } renderInspector(); }, 120);
+}
+document.addEventListener('keydown', e=>{ if(deckEl && e.key==='Escape'){ e.stopImmediatePropagation(); e.preventDefault(); closeDeck(); } }, true);
+
+/* ============================================================================
    DESIGN JE BEREICH — Denkbrett: Hintergrund & Knoten-Stil (pro Brett), Story: Papier (pro Projekt)
    Live-Vorschau: Änderungen wirken sofort, ohne die Ansicht neu aufzubauen.
    ============================================================================ */
@@ -5625,6 +6013,12 @@ function openDesignPop(btn, area){
   el.style.left = clamp(r.right - w, 8, innerWidth - w - 8) + 'px'; el.style.top = (r.bottom + 8) + 'px';
   requestAnimationFrame(()=>el.classList.add('open'));
   setTimeout(()=>document.addEventListener('pointerdown', out, true), 0);
+  el.addEventListener('input', e=>{
+    const r = e.target.closest('[data-hub]'); if(!r) return;
+    const k = r.dataset.hub; S.settings[k] = parseFloat(r.value);
+    const g = $('hubGrid'); if(g) g.style.setProperty(k==='cardSize' ? '--card-w' : '--title-scale', k==='cardSize' ? r.value+'px' : r.value);
+    persistSoon();
+  });
   el.addEventListener('click', e=>{
     const p = e.target.closest('[data-preset]'); if(p){ const [bg, node] = BOARD_PRESETS[p.dataset.preset]; setBoardStyle({bg, node}); return; }
     const bgb = e.target.closest('[data-bg]'); if(bgb){ setBoardStyle({bg:bgb.dataset.bg}); return; }
@@ -5651,6 +6045,9 @@ function refreshDesignPop(){
     const cur = S.settings.hubStyle;
     el.innerHTML = `<div class="dp-head">${ic('palette',14)}<span>${t('ds.lib')}</span></div>
       <div class="dp-presets libs">${LIB_STYLES.map(k=>`<button class="dp-preset ${cur===k?'on':''}" data-lib="${k}"><span class="lib-prev lp-${k}"><i></i><i></i><i></i></span><em>${t('ds.lib.'+k)}</em></button>`).join('')}</div>
+      <div class="dp-label">${t('ds.sizes')}</div>
+      <label class="dp-range">${ic('grid',14)}<span>${t('hub.cover')}</span><input type="range" min="160" max="380" step="1" value="${S.settings.cardSize}" data-hub="cardSize"></label>
+      <label class="dp-range">${ic('type',14)}<span>${t('hub.titleSize')}</span><input type="range" min="0.6" max="1.6" step="0.01" value="${S.settings.titleScale}" data-hub="titleScale"></label>
       <div class="dp-note">${t('ds.libNote')}</div>`;
   }else if(designPop.area==='pipeline' || designPop.area==='shots'){
     const p = activeProject(), cur = designPop.area==='pipeline' ? p.pipeStyle : p.shotStyle;
@@ -5686,7 +6083,7 @@ const TOUR_STEPS = [
   {k:'welcome'},
   {k:'hub',      mod:'projects', sel:'#hubGrid .pcard-cover', pad:6},
   {k:'new',      mod:'projects', sel:'#hubNew'},
-  {k:'size',     mod:'projects', sel:'#view-projects .mini-range:has([data-hub=cardSize])'},
+  {k:'size',     mod:'projects', sel:'#hubDesign'},
   {k:'tabs',     mod:'projects', sel:'#tabs'},
   {k:'kpi',      mod:'pipeline', sel:'#view-pipeline .kpi-row'},
   {k:'timeline', mod:'pipeline', sel:'#view-pipeline .timeline'},
@@ -6047,7 +6444,7 @@ function renderShots(){
       <div><div class="eyebrow">${t('sh.eyebrow')}</div><h1 class="page-title">${esc(projectName(p))}</h1><p class="page-sub">${t('sh.sub')}</p></div>
       <div class="head-actions">
         <label class="mini-range">${ic('film',14)}<span>${t('sh.fps')}</span><select class="sel" id="shFps">${[24,25,30,48,60].map(f=>`<option value="${f}" ${f===fps?'selected':''}>${f} fps</option>`).join('')}</select></label>
-        <button class="btn" id="shDesign" title="${esc(t('ds.surfShots'))}">${ic('palette',14)}<span class="hide-sm">${t('ds.design')}</span></button>
+        <button class="btn btn-icon" id="shDesign" title="${esc(t('ds.surfShots'))}">${ic('palette',15)}</button>
         <button class="btn btn-primary" id="shAdd" title="Shift+A">${ic('plus',14)}<span>${t('sh.add')}</span></button>
       </div>
     </div>
@@ -6079,7 +6476,7 @@ function renderShots(){
     const d = e.target.closest('[data-dept]'); if(d){ const o = ['todo','wip','done'], k = d.dataset.dept; s.status[k] = o[(o.indexOf(s.status[k])+1) % 3]; changed(); renderShots(); return; }
     const a = e.target.closest('[data-sact]'); if(!a) return;
     if(a.dataset.sact==='thumb'){ const [f] = await pickFiles('image/*'); if(!f) return; s.thumb = addAsset(await compressImage(f, 640)); changed(); renderShots(); }
-    if(a.dataset.sact==='del'){ if(await confirmDelete(t('sh.del'), t('g.delNamed',{name:s.code}))){ p.shots.splice(i,1); changed(); renderShots(); } }
+    if(a.dataset.sact==='del'){ if(await softDelete(s.code)){ p.shots.splice(i,1); changed(); renderShots(); } }
   };
 }
 /* Shots per Griff am rechten Rand umsortieren (Drag & Drop mit Live-Vorschau) */
@@ -6212,10 +6609,10 @@ function selectChapter(id){ ui.chapterId = id; renderStory(); }
 function moveChapter(id, dir){ const l = activeProject().chapters, i = l.findIndex(c=>c.id===id), j = i + dir; if(i<0 || j<0 || j>=l.length) return; [l[i], l[j]] = [l[j], l[i]]; changed(); renderStoryLists(); }
 function selectLore(id){ ui.loreId = id; renderStoryLists(); renderLoreInspector(); if(innerWidth < 900) $('loreInsp').scrollIntoView({behavior:'smooth'}); }
 function addChapter(){ const p = activeProject(); const c = {id:uid('ch'), title:t('sy.sceneN',{n:p.chapters.length+1}), body:L('INT. SCHAUPLATZ – NACHT\n\n','INT. LOCATION – NIGHT\n\n')}; p.chapters.push(c); ui.chapterId = c.id; changed(); renderStory(); setTimeout(()=>{ const ti = $('chTitle'); if(ti){ ti.focus(); ti.select(); } }, 20); }
-async function deleteChapter(id){ const p = activeProject(), c = p.chapters.find(x=>x.id===id); if(!c || p.chapters.length<2) return; if(!(await confirmDelete(t('sy.delScene'), t('g.delNamed',{name:c.title})))) return; p.chapters = p.chapters.filter(x=>x!==c); changed(); renderStory(); }
+async function deleteChapter(id){ const p = activeProject(), c = p.chapters.find(x=>x.id===id); if(!c || p.chapters.length<2) return; if(!(await softDelete(c.title))) return; p.chapters = p.chapters.filter(x=>x!==c); changed(); renderStory(); }
 function addLore(){ const p = activeProject(); const l = {id:uid('lr'), name:t('sy.newAsset'), category:'Prop', polyTarget:'15,000 quads (UDIM 1001)', shader:'Principled BSDF', notes:'', stage:0, links:[]}; p.lore.push(l); ui.loreId = l.id; changed(); renderStoryLists(); renderLoreInspector(); }
 function setLore(id, k, v, rerender){ const l = activeProject().lore.find(x=>x.id===id); if(!l) return; l[k] = v; changed(); if(k==='name'){ renderStoryLists(); updateStoryMeta(); } if(rerender){ renderStoryLists(); renderLoreInspector(); } }
-async function deleteLore(id){ const p = activeProject(), l = p.lore.find(x=>x.id===id); if(!l) return; if(!(await confirmDelete(t('li.delQ'), t('g.delNamed',{name:l.name})))) return; p.lore = p.lore.filter(x=>x!==l); ui.loreId = null; changed(); renderStory(); }
+async function deleteLore(id){ const p = activeProject(), l = p.lore.find(x=>x.id===id); if(!l) return; if(!(await softDelete(l.name))) return; p.lore = p.lore.filter(x=>x!==l); ui.loreId = null; changed(); renderStory(); }
 MOD_KEYS.story = (e, ctrl, k) => {
   if(e.shiftKey && !ctrl && e.code==='KeyA'){ addChapter(); return true; }
   if(ctrl && e.code==='Space'){ toggleFocus(); return true; }

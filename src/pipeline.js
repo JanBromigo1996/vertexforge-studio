@@ -198,7 +198,7 @@ function renderPipeline(){
         <div class="seg">${filters.map(k=>`<button data-filter="${k}" class="${st.taskFilter===k?'active':''}">${t('flt.'+k)}</button>`).join('')}</div>
         <button class="btn" id="plSort">${ic('sort',14)}<span>${st.sortByDate ? t('pl.sortDate') : t('pl.sortManual')}</span></button>
         <button class="btn" id="plTpl">${ic('layers',14)}<span class="hide-sm">${t('tpl.insert')}</span></button>
-        <button class="btn" id="plDesign" title="${esc(t('ds.surfPipe'))}">${ic('palette',14)}<span class="hide-sm">${t('ds.design')}</span></button>
+        <button class="btn btn-icon" id="plDesign" title="${esc(t('ds.surfPipe'))}">${ic('palette',15)}</button>
         <button class="btn btn-primary" id="plAdd">${ic('plus',14)}<span>${t('pl.addPhase')}</span></button>
       </div>
     </div>
@@ -272,7 +272,7 @@ function bindPipeline(v){
     if(act==='up' && i>0){ [list[i-1], list[i]] = [list[i], list[i-1]]; changed(); renderPipeline(); }
     if(act==='down' && i<list.length-1){ [list[i+1], list[i]] = [list[i], list[i+1]]; changed(); renderPipeline(); }
     if(act==='addtask') addTaskFrom(sec);
-    if(act==='delete'){ if(ph.tasks.length && !(await confirmDelete(t('ph.del'), t('ph.delText',{name:ph.title, n:ph.tasks.length})))) return; activeProject().phases = list.filter(x=>x!==ph); changed(); renderPipeline(); }
+    if(act==='delete'){ if(ph.tasks.length && !(await softDelete(ph.title))) return; activeProject().phases = list.filter(x=>x!==ph); changed(); renderPipeline(); }
   };
   v.onkeydown = e => { if(e.key==='Enter' && e.target.dataset.new){ e.preventDefault(); addTaskFrom(e.target.closest('[data-phase]')); } };
   const onField = (e, final) => {
@@ -305,6 +305,33 @@ function bindPipeline(v){
   v.ondragend = e => { const c = e.target.closest('[data-kb]'); if(c) c.classList.remove('dragging'); v.querySelectorAll('.kb-col').forEach(x=>x.classList.remove('drop')); };
   v.ondragover = e => { const col = e.target.closest('[data-kbcol]'); if(!col) return; e.preventDefault(); v.querySelectorAll('.kb-col').forEach(x=>x.classList.toggle('drop', x===col)); };
   v.ondrop = e => { const col = e.target.closest('[data-kbcol]'); if(!col) return; e.preventDefault(); const {x} = findTask(e.dataTransfer.getData('text/plain')); if(x){ x.status = col.dataset.kbcol; changed(); renderPipeline(); } };
+  /* Kanban mit dem Finger: kurz gedrückt halten, dann in eine andere Spalte ziehen */
+  v.onpointerdown = e => {
+    if(e.pointerType!=='touch') return;
+    const c = e.target.closest('[data-kb]'); if(!c) return;
+    const sx = e.clientX, sy = e.clientY; let drag = null;
+    const hold = setTimeout(()=>{
+      const r = c.getBoundingClientRect();
+      drag = c.cloneNode(true); drag.className += ' kb-ghost'; Object.assign(drag.style, {width:r.width+'px', left:r.left+'px', top:r.top+'px'});
+      document.body.appendChild(drag); c.classList.add('dragging'); if(navigator.vibrate) navigator.vibrate(12);
+    }, 260);
+    const colAt = (x, y) => { const el = document.elementFromPoint(x, y); return el && el.closest('[data-kbcol]'); };
+    const move = ev => {
+      if(!drag){ if(Math.hypot(ev.clientX-sx, ev.clientY-sy) > 10) end(); return; }
+      ev.preventDefault();
+      drag.style.transform = `translate(${ev.clientX-sx}px,${ev.clientY-sy}px) rotate(2deg)`;
+      drag.style.visibility = 'hidden'; const col = colAt(ev.clientX, ev.clientY); drag.style.visibility = '';
+      v.querySelectorAll('.kb-col').forEach(x=>x.classList.toggle('drop', x===col));
+    };
+    const end = ev => {
+      clearTimeout(hold); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', end); window.removeEventListener('pointercancel', end);
+      if(!drag) return;
+      drag.remove(); c.classList.remove('dragging'); v.querySelectorAll('.kb-col').forEach(x=>x.classList.remove('drop'));
+      const col = ev && ev.type==='pointerup' && colAt(ev.clientX, ev.clientY), {x} = findTask(c.dataset.kb);
+      if(col && x && x.status!==col.dataset.kbcol){ x.status = col.dataset.kbcol; changed(); renderPipeline(); }
+    };
+    window.addEventListener('pointermove', move, {passive:false}); window.addEventListener('pointerup', end); window.addEventListener('pointercancel', end);
+  };
 }
 MOD_KEYS.pipeline = (e, ctrl, k) => {
   if(e.shiftKey && k==='a' && !ctrl){ addPhase(); return true; }

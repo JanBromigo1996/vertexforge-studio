@@ -3,7 +3,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.4.0';
+const APP_VERSION = '2.5.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -66,6 +66,13 @@ const L = (de, en) => currentLang()==='de' ? de : en;
    B. ICONS (eigene Linien-Icons, offline)
    ============================================================================ */
 const ICONS = {
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/>',
+  paw:'<circle cx="6" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="18" cy="10" r="2"/><path d="M8.5 15.5c1-2.3 2.2-3.5 3.5-3.5s2.5 1.2 3.5 3.5c.8 1.9-.3 4-2.3 4h-2.4c-2 0-3.1-2.1-2.3-4z"/>',
+  cube:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',
+  wheel:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M12 14.5v6M3.5 12h6M14.5 12h6"/>',
+  mountain:'<path d="M3 20l6.5-11 4 6.5 2.5-4L21 20z"/><circle cx="17" cy="6" r="1.6"/>',
+  rotate:'<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>',
+  cards:'<rect x="3" y="6" width="11" height="15" rx="1.8" transform="rotate(-8 8.5 13.5)"/><rect x="10" y="4" width="11" height="15" rx="1.8" transform="rotate(8 15.5 11.5)"/>',
   grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
   calendar:'<rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 10h18M8 14h3"/>',
   network:'<circle cx="5.5" cy="6" r="2.5"/><circle cx="18.5" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.4 7.8l3.4 7.8M16.6 7.8l-3.4 7.8M8 6h8"/>',
@@ -523,7 +530,14 @@ function demoProjects(){
           links:[{sw:'zbrush', path:P+'sculpt\\quak_body_v07.ztl'},{sw:'blender', path:P+'quak_master.blend'}]},
         {id:'nd_staff', type:'mindmap', x:480, y:40, w:250, h:110, cat:L('Hero-Prop · Emission','Hero prop · emission'), title:L('Wurzelstab des Ahnen','Root staff of the elder'), desc:L('Knorriges Wurzelholz mit eingeschlossenem Leuchtkäfer im Bernstein.','Gnarled root wood with a firefly trapped in amber.'), color:''},
         {id:'nd_bag', type:'card', x:480, y:220, w:260, h:140, cat:'Marvelous · Substance', title:L('Alchemie-Ledertasche','Alchemy leather bag'), desc:L('Vernähtes Leder, Messingschnallen, Schlaufen für sechs Phiolen.','Stitched leather, brass buckles, loops for six vials.'), stage:1, color:'#c07a4f', links:[{sw:'marvelous', path:P+'cloth\\tasche_gurte.zprj'}]},
-        {id:'nd_note', type:'note', x:800, y:40, w:220, h:150, text:L('Look: feuchte Haut, warmes Bernsteinlicht, kühler Nebel. Referenz: Laubfrosch-Makrofotos.','Look: wet skin, warm amber light, cool fog. Reference: tree-frog macro photos.'), color:''}
+        {id:'nd_note', type:'note', x:800, y:40, w:220, h:150, text:L('Look: feuchte Haut, warmes Bernsteinlicht, kühler Nebel. Referenz: Laubfrosch-Makrofotos.','Look: wet skin, warm amber light, cool fog. Reference: tree-frog macro photos.'), color:''},
+        {id:'nd_cc1', type:'char', x:70, y:430, w:250, h:350, kind:'character', title:L('Meister Quak','Master Croak'), sub:L('Sumpfmagier · Protagonist','Swamp mage · protagonist'), art:'ink', stats:[90,70,35,20,0],
+          desc:L('142 Jahre alt, gemächlich, aber gefährlich, wenn der Kehlsack zu leuchten beginnt. Silhouette: runder Körper, lange Finger, schwerer Umhang.','142 years old, unhurried, but dangerous once the throat sac starts to glow. Silhouette: round body, long fingers, heavy cloak.'),
+          facts:[{k:'Polycount',v:'48k tris'},{k:L('Texturen','Textures'),v:'4× 4K UDIM'},{k:L('Größe','Height'),v:'1.10 m'}]},
+        {id:'nd_cc2', type:'char', x:350, y:430, w:250, h:350, kind:'prop', title:L('Wurzelstab','Root staff'), sub:L('Hero-Prop · Emission','Hero prop · emission'), art:'brass', stats:[100,85,60,40,0],
+          desc:L('Knorriges Wurzelholz mit einem Glühwürmchen in Bernstein. Der Bernstein bekommt Emission und Subsurface.','Gnarled root wood with a firefly trapped in amber. The amber gets emission and subsurface.'), facts:[{k:'Polycount',v:'9k tris'},{k:L('Material','Material'),v:'Wood, amber'}]},
+        {id:'nd_cc3', type:'char', x:630, y:430, w:250, h:350, kind:'environment', title:L('Nebelsumpf','Fog swamp'), sub:L('Hauptschauplatz','Main location'), art:'storm', stats:[40,10,20,0,0],
+          desc:L('Zypressenwurzeln, Bodennebel, Glühwürmchen. Fokus auf Lichtstimmung statt Detail.','Cypress roots, ground fog, fireflies. Focus on lighting mood rather than detail.'), facts:[{k:L('Fläche','Area'),v:'40 × 40 m'}], flip:false}
       ],
       connections:[
         {id:'cn_1', from:'nd_frog', to:'nd_staff', label:L('trägt rechts','carries right')},
@@ -615,7 +629,7 @@ function normalizeCover(c, A){
 function normalizeNode(n, seen, A){
   n = n || {};
   let id = sid(n.id,'nd'); if(seen.has(id)) id = uid('nd'); seen.add(id);
-  const type = ['mindmap','card','note','image','text','video','file'].includes(n.type) ? n.type : 'mindmap';
+  const type = ['mindmap','card','char','note','image','text','video','file'].includes(n.type) ? n.type : 'mindmap';
   const base = {id, type, x:Math.round(num(n.x,0)), y:Math.round(num(n.y,0)), w:num(n.w,240,40,6000), h:num(n.h,120,24,6000), color:safeColor(n.color,'')};
   if(DOCK_TYPES.has(type) && typeof n.parent==='string'){ base.parent = n.parent; base.dock = ['top','bottom','left','right'].includes(n.dock) ? n.dock : 'bottom'; base.order = num(n.order,0); }
   if(type==='image') return Object.assign(base, {src:A.ref(n.src), title:str(n.title)});
@@ -628,6 +642,11 @@ function normalizeNode(n, seen, A){
     return Object.assign(base, {text:str(n.text,'Titel'), st:normStyle(n.st || legacy, d)});
   }
   if(type==='note') return Object.assign(base, {text:str(n.text)});
+  if(type==='char'){
+    const st = arr(n.stats); delete base.color;
+    return Object.assign(base, {w:num(n.w,250,150,900), h:num(n.h,350,210,1260), kind:CHAR_KINDS.includes(n.kind) ? n.kind : 'character', title:str(n.title).slice(0,80), sub:str(n.sub).slice(0,80), desc:str(n.desc),
+      src:A.ref(n.src), art:/^[a-z]{2,12}$/.test(n.art||'') ? n.art : '', stats:CHAR_STATS.map((_,i)=>Math.round(num(st[i],0,0,100))), facts:arr(n.facts).slice(0,8).map(f=>({k:str(f && f.k).slice(0,40), v:str(f && f.v).slice(0,80)})), links:normLinks(n.links), flip:!!n.flip});
+  }
   return Object.assign(base, {cat:str(n.cat), title:str(n.title), desc:str(n.desc), links:normLinks(n.links), stage:Math.round(num(n.stage,0,0,STAGES-1))});
 }
 function normalizeBoard(b, A){
@@ -891,6 +910,22 @@ async function loadContent(text, info, mergeOnly){
 /* ============================================================================
    I. UI-BAUSTEINE: Toast, Dialog, Sheet, Menü, Befehlssuche, Datei-Auswahl
    ============================================================================ */
+/* Löschen ohne Rückfrage – stattdessen ein Hinweis mit „Rückgängig“ (der Verlauf hält alles fest) */
+function softDelete(name){
+  histCommit();
+  setTimeout(()=>{ histCommit(); undoToast(name ? t('ts.deletedNamed',{name}) : t('ts.deleted')); }, 0);
+  return Promise.resolve(true);
+}
+function undoToast(msg){
+  const el = document.createElement('div');
+  el.className = 'toast undo';
+  el.innerHTML = ic('trash',15) + `<span>${esc(msg)}</span><button>${ic('undo',14)}${t('e.undo')}</button><i class="toast-time"></i>`;
+  $('toasts').appendChild(el);
+  while($('toasts').children.length > 4) $('toasts').firstChild.remove();
+  const close = () => { el.style.transition = 'opacity .25s, transform .25s'; el.style.opacity = '0'; el.style.transform = 'translateY(6px)'; setTimeout(()=>el.remove(), 260); };
+  el.querySelector('button').onclick = () => { clearTimeout(timer); undo(); close(); };
+  const timer = setTimeout(close, 6500);
+}
 function toast(msg, err=false){
   const el = document.createElement('div');
   el.className = 'toast' + (err ? ' err' : '');
@@ -992,8 +1027,9 @@ function getCommands(){
   add(t('h.keys'), openKeys, '?', t('menu.help'), 'keyboard');
   add(t('mod.guide'), ()=>go('guide'), 'F1', t('menu.help'), 'compass');
   if(m==='board'){
-    [['mindmap','bd.node','node'],['card','bd.card','card'],['note','bd.note','note'],['text','bd.text','type']].forEach(([ty,k,icn])=>add(`${t('bd.add')}: ${t(k)}`, ()=>addNode(ty), 'Shift+A', t('mod.board'), icn));
-    add(`${t('bd.add')}: ${t('bd.images')}`, pickBoardImages, '', t('mod.board'), 'image');
+    [['mindmap','bd.node','node'],['card','bd.card','card'],['char','bd.char','cards'],['note','bd.note','note'],['text','bd.text','type']].forEach(([ty,k,icn])=>add(`${t('bd.add')}: ${t(k)}`, ()=>addNode(ty), 'Shift+A', t('mod.board'), icn));
+    add(`${t('bd.add')}: ${t('bd.media')}`, ()=>pickBoardMedia(), '', t('mod.board'), 'image');
+    add(t('cc.deck'), openDeck, '', t('mod.board'), 'cards');
     add(t('bd.fit'), ()=>fitBoard(), 'Home', t('mod.board'), 'fit');
     add(t('bd.selectAll'), selectAll, 'A', t('mod.board'), 'check');
   }
@@ -1006,9 +1042,27 @@ function getCommands(){
   if(m==='story'){ add(t('sy.scene'), addChapter, 'Shift+A', t('mod.story'), 'plus'); add(t('sy.focus'), toggleFocus, 'Ctrl+Space', t('mod.story'), 'focus'); }
   return cmds;
 }
+/* Inhalte für die Schnellsuche: Aufgaben, Denkbrett-Elemente, Karten, Shots, Kapitel */
+function getContentItems(){
+  const out = [], ap = activeProject();
+  const add = (label, sub, group, icon, run, extra='') => out.push({label, sub, group, icon, run, extra, content:true});
+  const ensure = pid => { if(S.activeProjectId!==pid) openProject(pid, false); };
+  S.projects.forEach(p=>p.phases.forEach(ph=>ph.tasks.forEach(x=>{ if(x.text) add(x.text, `${projectName(p)} · ${ph.title || ''}`, t('pal.task'), x.status==='done' ? 'check' : 'list', ()=>{
+    ensure(p.id); ph.collapsed = false; if(S.settings.taskFilter!=='all') S.settings.taskFilter = 'all';
+    go('pipeline'); setTimeout(()=>flashEl(document.querySelector(`[data-task="${ph.id}:${x.id}"]`)), 280); }); })));
+  ap.boards.forEach(b=>b.nodes.forEach(n=>{
+    const label = n.title || n.text || n.cat || n.path || ''; if(!label.trim()) return;
+    const extra = [n.sub, n.desc, n.cat!==label ? n.cat : '', ...(n.facts||[]).map(f=>f.k+' '+f.v)].filter(Boolean).join(' ');
+    add(label.split('\n')[0].slice(0,90), `${b.name} · ${t(NODE_LABEL[n.type])}${n.type==='char' ? ' · ' + t('cc.k.'+n.kind) : ''}`, n.type==='char' ? t('bd.char') : t('mod.board'), n.type==='char' ? 'cards' : n.type==='note' ? 'note' : 'node', ()=>locateNode(n.id), extra);
+  }));
+  ap.shots.forEach((s,i)=>{ const label = [s.code, s.seq, s.desc].filter(Boolean).join(' · '); if(label) add(label.slice(0,90), projectName(ap), t('mod.shots'), 'film', ()=>{ go('shots'); setTimeout(()=>flashEl(document.querySelector(`#view-shots [data-shot="${i}"]`)), 280); }); });
+  ap.chapters.forEach(c=>add(c.title || t('g.untitled'), (c.body || '').replace(/<[^>]+>/g,' ').slice(0,70), t('pal.chapter'), 'book', ()=>{ ui.chapterId = c.id; go('story'); }));
+  return out;
+}
+function flashEl(el){ if(!el) return; el.scrollIntoView({block:'center', behavior:'smooth'}); el.classList.remove('found'); void el.offsetWidth; el.classList.add('found'); }
 function openPalette(){
   closeMenu(); closePalette();
-  const cmds = getCommands();
+  const cmds = getCommands(), content = getContentItems();
   const el = document.createElement('div');
   el.className = 'palette';
   el.innerHTML = `<input placeholder="${esc(t('pal.ph'))}" aria-label="${esc(t('e.search'))}"><div class="palette-list"></div>`;
@@ -1017,9 +1071,10 @@ function openPalette(){
   let shown = [], hl = 0;
   const draw = () => {
     const q = input.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
-    shown = cmds.filter(c=>{ const h = (c.label + ' ' + c.group).toLowerCase(); return q.every(w=>h.includes(w)); }).slice(0, 60);
+    const hit = c => { const h = (c.label + ' ' + c.group + ' ' + (c.sub || '') + ' ' + (c.extra || '')).toLowerCase(); return q.every(w=>h.includes(w)); };
+    shown = q.length ? [...content.filter(hit).slice(0, 40), ...cmds.filter(hit)].slice(0, 70) : cmds.slice(0, 60);
     hl = clamp(hl, 0, Math.max(0, shown.length-1));
-    list.innerHTML = shown.length ? shown.map((c,i)=>`<button class="menu-item ${i===hl?'hl':''}" data-pi="${i}">${ic(c.icon,15)}<span class="lbl">${esc(c.label)}</span>${c.kbd?`<kbd>${esc(c.kbd)}</kbd>`:''}<span class="grp">${esc(c.group)}</span></button>`).join('') : `<div class="palette-empty">${t('pal.none')}</div>`;
+    list.innerHTML = shown.length ? shown.map((c,i)=>`<button class="menu-item ${i===hl?'hl':''} ${c.content?'pc-item':''}" data-pi="${i}">${ic(c.icon,15)}<span class="lbl">${esc(c.label)}${c.sub?`<small>${esc(c.sub)}</small>`:''}</span>${c.kbd?`<kbd>${esc(c.kbd)}</kbd>`:''}<span class="grp">${esc(c.group)}</span></button>`).join('') : `<div class="palette-empty">${t('pal.none')}</div>`;
     const h = list.querySelector('.hl'); if(h) h.scrollIntoView({block:'nearest'});
   };
   const run = i => { const c = shown[i]; closePalette(); if(c) c.run(); };
@@ -1097,6 +1152,7 @@ function renderChrome(){
     <nav class="tabs" id="tabs" role="tablist"><span class="tab-ink" id="tabInk"></span>${MODULES.map((m,i)=>`<button role="tab" data-mod="${m}" class="${S.activeModule===m?'active':''}" title="${esc(t('mod.'+m))} · Alt+${i+1}">${ic(MOD_ICONS[m],15)}<span>${t('mod.'+m)}</span></button>`).join('')}</nav>
     <div class="tb-right">
       <div class="tb-tools">
+        <button class="icon-btn" data-act="search" title="${esc(t('pal.searchTip'))} · Ctrl+K">${ic('search',17)}</button>
         <button class="icon-btn save-btn" id="savePill"></button>
         <button class="icon-btn" data-act="versions" title="${esc(t('ver.title'))} · Ctrl+Alt+H">${ic('history',17)}</button>
         <span class="tb-sep"></span>
@@ -1113,6 +1169,7 @@ function renderChrome(){
   tb.querySelector('[data-act=mode]').onclick = toggleMode;
   tb.querySelector('[data-act=settings]').onclick = openSettings;
   tb.querySelector('[data-act=versions]').onclick = openVersions;
+  tb.querySelector('[data-act=search]').onclick = openPalette;
   const fs = tb.querySelector('[data-act=fullscreen]'); if(fs) fs.onclick = toggleFullscreen;
   tb.querySelectorAll('[data-win]').forEach(b=>b.onclick = () => winAction(b.dataset.win));
   $('projCrumb').onclick = e => openProjectMenu(e.currentTarget);
@@ -1226,7 +1283,7 @@ function openMainMenu(btn){
     {label:t('e.undo'), icon:'undo', kbd:'Ctrl+Z', run:undo, disabled:!H.undo.length && snapshot()===H.base},
     {label:t('e.redo'), icon:'redo', kbd:'Ctrl+Shift+Z', run:redo, disabled:!H.redo.length},
     {sep:1},
-    {label:t('e.search'), icon:'search', kbd:'F3', run:openPalette}];
+    {label:t('e.search'), icon:'search', kbd:'Ctrl+K', run:openPalette}];
   if(m==='view') items = [
     ...MODULES.map((mod,i)=>({label:t('mod.'+mod), checked:S.activeModule===mod, kbd:'Alt+'+(i+1), run:()=>go(mod)})),
     {sep:1},
@@ -1242,7 +1299,7 @@ function openMainMenu(btn){
     {label:t('tour.menu'), icon:'sparkle', run:startTour},
     {label:t('mod.guide'), icon:'compass', kbd:'F1', run:()=>go('guide')},
     {label:t('h.keys'), icon:'keyboard', kbd:'?', run:openKeys},
-    {label:t('e.search'), icon:'search', kbd:'F3', run:openPalette},
+    {label:t('e.search'), icon:'search', kbd:'Ctrl+K', run:openPalette},
     {sep:1},
     {label:t('h.about'), icon:'sparkle', run:()=>dialog({title:'VertexForge Studio ' + APP_VERSION, text:t('h.aboutText')})}];
   openMenu(r.left, r.bottom + 4, items);
@@ -1397,7 +1454,7 @@ async function openSettings(){
 }
 const KEYMAP = [
   ['global','Ctrl+Z','k.undo'],['global','Ctrl+Shift+Z / Ctrl+Y','k.redo'],['global','Ctrl+S','k.save'],['global','Ctrl+Shift+S','k.saveAs'],['global','Ctrl+Alt+S','ver.save'],['global','Ctrl+Alt+H','ver.title'],['global','Ctrl+Alt+Shift+S','f.saveInc'],['global','Ctrl+O','k.open'],
-  ['global','Ctrl+N','k.newProject'],['global','F3','k.search'],['global','F1','k.guide'],['global','?','k.keys'],['global','Ctrl+,','k.settings'],
+  ['global','Ctrl+N','k.newProject'],['global','Ctrl+K / F3','k.search'],['global','F1','k.guide'],['global','?','k.keys'],['global','Ctrl+,','k.settings'],
   ['global','Ctrl+PgUp / Ctrl+PgDn','k.workspace'],['global','Alt+1 … Alt+6','k.workspaceN'],['global','Shift+A','k.addCtx'],['global','Esc','k.esc'],['global','F11','v.fullscreen'],['global','Ctrl+Wheel / Ctrl++ / Ctrl+-','k.uiZoom'],['global','Ctrl+0','uz.reset'],
   ['board','LMB','k.select'],['board','Shift+LMB','k.selectAdd'],['board','LMB-Drag','k.box'],['board','A','k.selectAll'],['board','Alt+A','k.deselect'],['board','Ctrl+I','k.invert'],
   ['board','G','k.grab'],['board','G → X / Y','k.axis'],['board','S','k.scale'],['board','X / Del','k.delete'],['board','Shift+D','k.duplicate'],['board','Ctrl+C / Ctrl+V','k.copyPaste'],
@@ -1485,7 +1542,7 @@ document.addEventListener('keydown', e=>{
   if(ctrl && k==='o'){ e.preventDefault(); openFile(); return; }
   if(ctrl && k==='n'){ e.preventDefault(); newProjectDialog(); return; }
   if(ctrl && e.key===','){ e.preventDefault(); openSettings(); return; }
-  if(e.key==='F3'){ e.preventDefault(); openPalette(); return; }
+  if(e.key==='F3' || ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && e.code==='KeyK')){ e.preventDefault(); openPalette(); return; }
   if(e.key==='F1'){ e.preventDefault(); go('guide'); return; }
   if(ctrl && (e.key==='PageUp' || e.key==='PageDown')){ e.preventDefault(); const i = MODULES.indexOf(S.activeModule); go(MODULES[(i + (e.key==='PageDown'?1:-1) + MODULES.length) % MODULES.length]); return; }
   if(e.altKey && !ctrl && /^Digit[1-6]$/.test(e.code)){ e.preventDefault(); go(MODULES[+e.code.slice(5)-1]); return; }

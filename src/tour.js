@@ -6,7 +6,7 @@ const TOUR_STEPS = [
   {k:'welcome'},
   {k:'hub',      mod:'projects', sel:'#hubGrid .pcard-cover', pad:6},
   {k:'new',      mod:'projects', sel:'#hubNew'},
-  {k:'size',     mod:'projects', sel:'#view-projects .mini-range:has([data-hub=cardSize])'},
+  {k:'size',     mod:'projects', sel:'#hubDesign'},
   {k:'tabs',     mod:'projects', sel:'#tabs'},
   {k:'kpi',      mod:'pipeline', sel:'#view-pipeline .kpi-row'},
   {k:'timeline', mod:'pipeline', sel:'#view-pipeline .timeline'},

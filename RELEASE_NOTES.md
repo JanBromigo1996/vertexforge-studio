@@ -1,3 +1,24 @@
+## VertexForge Studio 2.5.0
+
+### New
+- **Collectible cards** on the mind board for characters, creatures, props, vehicles and environments: image,
+  role, progress per discipline (model, sculpt, texture, rig, animation – click a bar to set it), facts on the back.
+  Click ↻ to flip the card. Drop an image on a card to use it.
+- **Deck:** all cards of a project at a glance, filter by type, flip them, jump to a card on its board.
+- **Quick search (Ctrl+K or the magnifier):** finds projects, tasks, board elements, cards, shots, chapters and commands.
+- **Delete with undo:** boards, phases, shots, scenes and lore entries are deleted right away with an “Undo” button
+  instead of a confirmation dialog. Projects still ask first.
+- **Touch:** move kanban tasks with your finger (hold, then drag).
+
+### Tidier interface
+- Cover and title size moved from the library header into “View”, next to the library style.
+- Images and videos share one “Images & videos” button on the board.
+- Compact design buttons in pipeline and shot list; tabs show labels only for the active area on smaller screens.
+
+**VirusTotal (2.5.0):** results for these exact files are linked on the website and will be added here.
+
+---
+
 ## VertexForge Studio 2.4.0
 
 ### New: designs for every area – only the look changes, never the features
@@ -10,8 +31,6 @@
   two-finger zoom on the mind board, board tools stay visible on tablets
 
 Install over 2.3.x – projects, versions and settings are kept.
-
-**VirusTotal (2.4.0):** results for these exact files are linked on the website and will be added here.
 
 ---
 
