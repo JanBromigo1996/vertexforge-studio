@@ -1,5 +1,5 @@
-dist/
-app/
+/dist/
+/app/
 installer/payload/*.exe
 installer/payload/*.zip
 *.syso
