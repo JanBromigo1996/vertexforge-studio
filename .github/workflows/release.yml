@@ -20,29 +20,17 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.24'
+          go-version: '1.25'
 
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Build app (browser version + desktop files with offline fonts)
-        run: python3 build.py --desktop
-
       - name: Install go-winres
         run: go install github.com/tc-hib/go-winres@v0.3.3
 
-      - name: Build Windows app
-        run: |
-          go-winres make --in winres/winres.json --arch amd64
-          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags "-H windowsgui -s -w" -o dist/VertexForge-Studio.exe .
-
-      - name: Build installer
-        run: |
-          cp dist/VertexForge-Studio.exe installer/payload/app.exe
-          (cd installer && go-winres make --in winres/winres.json --arch amd64)
-          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags "-H windowsgui -s -w" -o dist/VertexForge-Studio-Setup.exe ./installer
-          cp dist/vertexforge_studio.html dist/VertexForge-Studio-Browser.html
+      - name: Build app, uninstaller and setup
+        run: ./build_windows.sh
 
       - name: Virus scan (ClamAV) – the release fails if anything is found
         run: |
@@ -50,7 +38,7 @@ jobs:
           sudo systemctl stop clamav-freshclam || true
           sudo freshclam
           clamscan --scan-pe=yes --heuristic-alerts=yes --alert-broken=yes \
-            dist/VertexForge-Studio-Setup.exe dist/VertexForge-Studio.exe dist/VertexForge-Studio-Browser.html | tee dist/clamscan.txt
+            dist/VertexForge-Studio-Setup.exe dist/VertexForge-Studio.exe dist/Uninstall-VertexForge-Studio.exe dist/VertexForge-Studio-Browser.html | tee dist/clamscan.txt
           grep -q "Infected files: 0" dist/clamscan.txt
 
       - name: Checksums

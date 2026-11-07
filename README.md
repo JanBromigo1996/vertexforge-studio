@@ -54,16 +54,15 @@ models, textures or stories and is not meant to replace anyone. It's a small per
 
 ## Build it yourself
 
-Requirements: Python 3, Go 1.24+, [`go-winres`](https://github.com/tc-hib/go-winres).
+Requirements: Python 3, Go 1.25+, [`go-winres`](https://github.com/tc-hib/go-winres) (`go install github.com/tc-hib/go-winres@v0.3.3`).
 
 ```bash
-python3 build.py --desktop                     # dist/vertexforge_studio.html + app/ (with offline fonts)
-go-winres make --in winres/winres.json --arch amd64
-GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags "-H windowsgui -s -w" -o "dist/VertexForge Studio.exe" .
-cp "dist/VertexForge Studio.exe" installer/payload/app.exe
-(cd installer && go-winres make --in winres/winres.json --arch amd64)
-GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags "-H windowsgui -s -w" -o "dist/VertexForge Studio Setup.exe" ./installer
+./build_windows.sh   # dist/: app, uninstaller, setup and the browser version
 ```
+
+The setup carries the app and the uninstaller as a compressed package (`installer/payload/app.zip`, created by the
+script). The binaries are built **without** `-s -w` on purpose: stripped Go programs trigger far more false alarms in
+machine-learning virus scanners.
 
 | Folder | Content |
 |---|---|

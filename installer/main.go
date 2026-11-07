@@ -7,6 +7,8 @@
 package main
 
 import (
+	"archive/zip"
+	"bytes"
 	_ "embed"
 	"encoding/base64"
 	"encoding/json"
@@ -35,9 +37,6 @@ const (
 	uninstName = "Uninstall VertexForge Studio.exe"
 	regKey     = `Software\Microsoft\Windows\CurrentVersion\Uninstall\VertexForgeStudio`
 )
-
-//go:embed payload/app.exe
-var payload []byte
 
 //go:embed ui.html
 var uiHTML string
@@ -139,39 +138,27 @@ func install(o installOpts, progress func(p float64, step string)) error {
 		return err
 	}
 	progress(0.05, "files")
-	// Programm kopieren (in Blöcken, damit der Fortschritt sichtbar ist)
-	target := filepath.Join(dir, exeName)
-	tmp := target + ".new"
-	f, err := os.Create(tmp)
+	// Programmdateien aus dem komprimierten Paket entpacken (wie bei üblichen Installern)
+	zr, err := zip.NewReader(bytes.NewReader(payload), int64(len(payload)))
 	if err != nil {
 		return err
 	}
-	const chunk = 256 * 1024
-	for i := 0; i < len(payload); i += chunk {
-		end := i + chunk
-		if end > len(payload) {
-			end = len(payload)
-		}
-		if _, err := f.Write(payload[i:end]); err != nil {
-			f.Close()
+	total := uint64(0)
+	for _, zf := range zr.File {
+		total += zf.UncompressedSize64
+	}
+	done := uint64(0)
+	for _, zf := range zr.File {
+		name := filepath.Base(zf.Name) // nur flache Dateinamen
+		dst := filepath.Join(dir, name)
+		if err := extractFile(zf, dst, func(n int) {
+			done += uint64(n)
+			progress(0.05+0.6*float64(done)/float64(total+1), "files")
+		}); err != nil {
 			return err
 		}
-		progress(0.05+0.55*float64(end)/float64(len(payload)), "files")
 	}
-	f.Close()
-	_ = os.Remove(target)
-	if err := os.Rename(tmp, target); err != nil {
-		return err
-	}
-	// Deinstallationsprogramm = dieses Setup
-	self, _ := os.Executable()
-	if src, err := os.Open(self); err == nil {
-		if dst, err := os.Create(filepath.Join(dir, uninstName)); err == nil {
-			_, _ = io.Copy(dst, src)
-			dst.Close()
-		}
-		src.Close()
-	}
+	target := filepath.Join(dir, exeName)
 	progress(0.68, "shortcuts")
 	desk, start := shortcutPaths()
 	if o.Desktop {
@@ -199,7 +186,7 @@ func install(o installOpts, progress func(p float64, step string)) error {
 		_ = k.SetStringValue("InstallDate", time.Now().Format("20060102"))
 		_ = k.SetStringValue("UninstallString", `"`+filepath.Join(dir, uninstName)+`" /uninstall`)
 		_ = k.SetStringValue("QuietUninstallString", `"`+filepath.Join(dir, uninstName)+`" /uninstall /quiet`)
-		_ = k.SetDWordValue("EstimatedSize", uint32((len(payload)*2)/1024))
+		_ = k.SetDWordValue("EstimatedSize", uint32(payloadSize() / 1024))
 		_ = k.SetDWordValue("NoModify", 1)
 		_ = k.SetDWordValue("NoRepair", 1)
 		if langOK[o.Lang] {
@@ -219,6 +206,53 @@ func install(o installOpts, progress func(p float64, step string)) error {
 	}
 	progress(1, "done")
 	return nil
+}
+
+func extractFile(zf *zip.File, dst string, step func(int)) error {
+	rc, err := zf.Open()
+	if err != nil {
+		return err
+	}
+	defer rc.Close()
+	tmp := dst + ".new"
+	f, err := os.Create(tmp)
+	if err != nil {
+		return err
+	}
+	buf := make([]byte, 256*1024)
+	for {
+		n, rerr := rc.Read(buf)
+		if n > 0 {
+			if _, werr := f.Write(buf[:n]); werr != nil {
+				f.Close()
+				return werr
+			}
+			step(n)
+		}
+		if rerr == io.EOF {
+			break
+		}
+		if rerr != nil {
+			f.Close()
+			return rerr
+		}
+	}
+	f.Close()
+	_ = os.Remove(dst)
+	return os.Rename(tmp, dst)
+}
+
+// Unkomprimierte Größe des Pakets (für Anzeige und "Apps & Features")
+func payloadSize() uint64 {
+	zr, err := zip.NewReader(bytes.NewReader(payload), int64(len(payload)))
+	if err != nil {
+		return 0
+	}
+	t := uint64(0)
+	for _, zf := range zr.File {
+		t += zf.UncompressedSize64
+	}
+	return t
 }
 
 func uninstall(removeData bool, progress func(p float64, step string)) error {
@@ -263,7 +297,7 @@ func launchApp(dir string) {
 }
 
 func main() {
-	uninstallMode := false
+	uninstallMode := isUninstaller
 	quiet := false
 	for _, a := range os.Args[1:] {
 		switch strings.ToLower(a) {
@@ -354,7 +388,7 @@ func main() {
 			"mode": map[bool]string{true: "uninstall", false: "install"}[uninstallMode],
 			"lang": map[bool]string{true: storedLang(), false: "en"}[uninstallMode],
 			"version": appVersion, "dir": dir, "existing": ex != "",
-			"sizeMB": float64(len(payload)) / 1e6, "logo": "data:image/png;base64," + base64.StdEncoding.EncodeToString(logoPNG),
+			"sizeMB": float64(payloadSize()) / 1e6, "logo": "data:image/png;base64," + base64.StdEncoding.EncodeToString(logoPNG),
 		}
 	})
 	_ = w.Bind("setupWin", func(a string) bool {

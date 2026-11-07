@@ -1,15 +1,16 @@
-/tmp/claude-0/scan/VertexForge Studio Setup.exe: OK
-/tmp/claude-0/scan/vertexforge_studio.html: OK
-/tmp/claude-0/scan/VertexForge Studio.exe: OK
+dist/VertexForge-Studio-Setup.exe: OK
+dist/VertexForge-Studio.exe: OK
+dist/Uninstall-VertexForge-Studio.exe: OK
+dist/VertexForge-Studio-Browser.html: OK
 
 ----------- SCAN SUMMARY -----------
 Known viruses: 3628245
 Engine version: 1.5.4
-Scanned directories: 1
-Scanned files: 3
+Scanned directories: 0
+Scanned files: 4
 Infected files: 0
-Data scanned: 37.03 MiB
-Data read: 18.00 MiB (ratio 2.06:1)
-Time: 26.462 sec (0 m 26 s)
-Start Date: 2026:11:07 02:17:22
-End Date:   2026:11:07 02:17:48
+Data scanned: 53.91 MiB
+Data read: 27.11 MiB (ratio 1.99:1)
+Time: 38.850 sec (0 m 38 s)
+Start Date: 2026:11:07 02:45:45
+End Date:   2026:11:07 02:46:23

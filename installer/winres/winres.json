@@ -35,7 +35,8 @@
             "ProductName": "VertexForge Studio",
             "ProductVersion": "2.3.0",
             "OriginalFilename": "VertexForge Studio Setup.exe",
-            "LegalCopyright": "VertexForge Studio"
+            "LegalCopyright": "Copyright (c) 2026 Jan and the VertexForge Studio contributors (MIT License)",
+            "Comments": "Open source: https://github.com/JanBromigo1996/vertexforge-studio"
           }
         }
       }
