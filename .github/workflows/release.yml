@@ -2,9 +2,9 @@
 # prüft alles mit ClamAV (und optional VirusTotal) und veröffentlicht ein GitHub-Release.
 name: Release
 
+# Nur manuell starten: Die Website listet Prüfsummen und Scan-Ergebnisse genau der veröffentlichten Dateien.
+# Ein automatischer Neubau beim Taggen würde andere Dateien (andere Prüfsummen) erzeugen.
 on:
-  push:
-    tags: ['v*']
   workflow_dispatch:
 
 permissions:
