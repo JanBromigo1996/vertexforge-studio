@@ -12,7 +12,7 @@ PAGES = {
 }
 for name, (title, desc) in PAGES.items():
     body = open(os.path.join(H, name + '.body.html'), encoding='utf-8').read().replace('/*@COMMONJS*/', js)
-    head = f'<title>{title}</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<meta name="description" content="{desc}">\n<meta property="og:title" content="{title}">\n<meta property="og:description" content="{desc}">\n<meta property="og:image" content="assets/shot-hero.webp">\n<link rel="icon" href="assets/favicon.png">\n{FONTS}\n<style>\n{css}\n</style>\n'
+    head = f'<title>{title}</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<meta name="description" content="{desc}">\n<meta property="og:title" content="{title}">\n<meta property="og:description" content="{desc}">\n<meta property="og:image" content="https://vertexforge.pages.dev/assets/shot-hero.webp">\n<meta property="og:url" content="https://vertexforge.pages.dev/">\n<link rel="icon" href="assets/favicon.png">\n{FONTS}\n<style>\n{css}\n</style>\n'
     frag = head + body
     open(os.path.join(H, name + '.html'), 'w', encoding='utf-8').write(frag)
     full = '<!doctype html>\n<html lang="en" data-l="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n' + head + '</head>\n<body>\n' + body + '\n</body>\n</html>\n'

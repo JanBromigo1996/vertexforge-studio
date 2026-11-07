@@ -3,9 +3,9 @@
 <p align="center"><b>A free, open-source planning tool for 3D artists.</b><br>Pipeline, deadlines, mind board, shot list and story for a personal 3D project – in one calm place.</p>
 
 <p align="center">
-  <a href="https://janbromigo1996.github.io/vertexforge-studio/"><b>Website</b></a> ·
-  <a href="https://janbromigo1996.github.io/vertexforge-studio/install.html"><b>Installation guide</b></a> ·
-  <a href="https://janbromigo1996.github.io/vertexforge-studio/app/"><b>Open in browser</b></a> ·
+  <a href="https://vertexforge.pages.dev/"><b>Website</b></a> ·
+  <a href="https://vertexforge.pages.dev/install.html"><b>Installation guide</b></a> ·
+  <a href="https://vertexforge.pages.dev/app/"><b>Open in browser</b></a> ·
   <a href="../../releases/latest"><b>Download</b></a>
 </p>
 
@@ -22,9 +22,9 @@ code, report problems and make it better. The tool itself contains **no generati
 | Platform | What you get |
 |---|---|
 | **Windows 10/11** | `VertexForge-Studio-Setup.exe` from [Releases](../../releases/latest) – installer in 6 languages, Start menu + desktop shortcuts, clean uninstall |
-| **macOS / Linux** | The browser version – [open it on the website](https://janbromigo1996.github.io/vertexforge-studio/app/) or download `VertexForge-Studio-Browser.html` from [Releases](../../releases/latest) |
+| **macOS / Linux** | The browser version – [open it on the website](https://vertexforge.pages.dev/app/) or download `VertexForge-Studio-Browser.html` from [Releases](../../releases/latest) |
 
-Step-by-step instructions (SmartScreen, updates, uninstalling, troubleshooting): **[Installation guide](https://janbromigo1996.github.io/vertexforge-studio/install.html)**
+Step-by-step instructions (SmartScreen, updates, uninstalling, troubleshooting): **[Installation guide](https://vertexforge.pages.dev/install.html)**
 
 A native macOS app does not exist yet. Help is welcome!
 
@@ -70,7 +70,7 @@ machine-learning virus scanners.
 | `main.go` | Windows wrapper (WebView2 window, file dialogs, opening files in programs, program icons) |
 | `installer/` | Setup & uninstall wizard |
 | `winutil/` | Small native Windows helpers (icons, shortcuts, folder picker) |
-| `docs/` | The project website (GitHub Pages) incl. the browser version in `docs/app/` |
+| `docs/` | The project website (Cloudflare Pages, deployed from `main`) incl. the browser version in `docs/app/` |
 | `site/` | Website sources – run `python3 site/build_site.py` to rebuild `docs/index.html` and `docs/install.html` |
 
 ## Contributing

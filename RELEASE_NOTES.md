@@ -32,7 +32,7 @@ A free, open-source planning tool for 3D artists: pipeline, deadlines, mind boar
 - **This release on VirusTotal:** all large vendors (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, …) report it clean.
   Two smaller engines still raise generic guesses: **Bkav Pro** `W32.Malware.69DD7DC0` and **Trapmine**
   `Malicious.moderate.ml.score`. Neither names a real virus; both were reported as false positives.
-- **Live results of these exact files** on VirusTotal are linked on the [website](https://janbromigo1996.github.io/vertexforge-studio/#security)
+- **Live results of these exact files** on VirusTotal are linked on the [website](https://vertexforge.pages.dev/#security)
   and, if the automated scan is enabled, appended below. Any remaining detection is reported to the vendor as a false
   positive and tracked in [issues labelled `false-positive`](https://github.com/JanBromigo1996/vertexforge-studio/issues?q=label%3Afalse-positive).
 - **On your PC:** `Program Files\VertexForge Studio` (3 files), optional shortcuts, an Apps entry; your data in
