@@ -1277,3 +1277,16 @@ html.touch .thumb-swap{width:32px;height:32px}
 .lb-actions{display:flex;gap:8px;margin-top:4px}
 .lb-actions .btn{background:rgba(30,28,32,.85);border-color:rgba(255,255,255,.14);color:#eee}
 .lb-actions .btn:hover{border-color:var(--accent);color:var(--accent)}
+/* Team-Ordner: Status in der Titelleiste */
+.team-badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 9px 0 8px;margin-left:6px;border-radius:999px;border:1px solid var(--line-2);background:var(--panel);color:var(--text-2);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s}
+.team-badge:hover{color:var(--text);border-color:var(--accent)}
+.team-badge.st-ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line-2))}
+.team-badge.st-ok::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent);animation:teamPulse 2.4s ease-in-out infinite}
+@keyframes teamPulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--ok) 10%,transparent)}}
+.team-badge.st-locked{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,var(--line-2))}
+.team-badge.st-error,.team-badge.st-missing{color:var(--danger)}
+.tb-av{display:inline-flex;margin-left:2px}
+.tb-av i{width:18px;height:18px;margin-left:-5px;border-radius:50%;display:grid;place-items:center;font:700 9.5px var(--ui);font-style:normal;color:#fff;background:hsl(var(--h) 45% 42%);border:1.5px solid var(--panel)}
+.tb-av i:first-child{margin-left:0}
+@media (max-width:1180px){ .team-badge .tb-lbl{display:none} }
+html.touch .team-badge{height:36px}

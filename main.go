@@ -18,6 +18,7 @@ import (
 	"sort"
 	"embed"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 	"log"
@@ -40,7 +41,7 @@ import (
 
 const (
 	appName    = "VertexForge Studio"
-	appVersion = "2.5.0"
+	appVersion = "2.6.0"
 	virtHost   = "vertexforge.example"
 )
 
@@ -222,6 +223,71 @@ func messageBox(text, caption string, flags uintptr) {
 
 // writeAtomic schreibt zuerst in eine Temp-Datei und benennt dann um –
 // so bleibt bei einem Absturz die alte Projektdatei erhalten.
+// ---- Team-Ordner: gemeinsamer Projektordner (OneDrive, Dropbox, Netzlaufwerk …) ----
+// Alle Zugriffe bleiben strikt innerhalb des gewählten Ordners.
+func teamPath(root, rel string) (string, error) {
+	if root == "" || rel == "" {
+		return "", errors.New("empty path")
+	}
+	clean := filepath.Clean(filepath.FromSlash(rel))
+	if filepath.IsAbs(clean) || clean == "." || strings.HasPrefix(clean, "..") || strings.ContainsAny(clean, ":*?\"<>|") {
+		return "", errors.New("invalid path")
+	}
+	return filepath.Join(root, clean), nil
+}
+
+type teamEntry struct {
+	Rel   string `json:"rel"`
+	Mtime int64  `json:"mtime"`
+	Size  int64  `json:"size"`
+}
+
+func teamScan(root string) ([]teamEntry, error) {
+	out := []teamEntry{}
+	st, err := os.Stat(root)
+	if err != nil || !st.IsDir() {
+		return out, errors.New("folder not reachable")
+	}
+	err = filepath.WalkDir(root, func(p string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if d.IsDir() {
+			if p != root && strings.Count(strings.TrimPrefix(p, root), string(os.PathSeparator)) > 3 {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		name := d.Name()
+		if strings.HasSuffix(name, ".tmp") || strings.HasPrefix(name, "~") || len(out) >= 50000 {
+			return nil
+		}
+		info, err := d.Info()
+		if err != nil {
+			return nil
+		}
+		rel, _ := filepath.Rel(root, p)
+		out = append(out, teamEntry{Rel: filepath.ToSlash(rel), Mtime: info.ModTime().UnixMilli(), Size: info.Size()})
+		return nil
+	})
+	return out, err
+}
+
+func teamWrite(root, rel, content string) error {
+	p, err := teamPath(root, rel)
+	if err != nil {
+		return err
+	}
+	if err := os.MkdirAll(filepath.Dir(p), 0o755); err != nil {
+		return err
+	}
+	tmp := p + ".tmp"
+	if err := os.WriteFile(tmp, []byte(content), 0o644); err != nil {
+		return err
+	}
+	return os.Rename(tmp, p)
+}
+
 func writeAtomic(path, content string) error {
 	tmp := path + ".tmp"
 	if err := os.WriteFile(tmp, []byte(content), 0o644); err != nil {
@@ -520,7 +586,7 @@ func main() {
 		if b, err := os.ReadFile(filepath.Join(base, "setup-lang.txt")); err == nil {
 			lang = strings.TrimSpace(string(b))
 		}
-		return map[string]string{"version": appVersion, "platform": "windows", "dataDir": base, "lang": lang}
+		return map[string]string{"version": appVersion, "platform": "windows", "dataDir": base, "lang": lang, "user": os.Getenv("USERNAME")}
 	})
 	_ = w.Bind("vfSetTitle", func(t string) { w.SetTitle(t) })
 	// Native UI-Zoom (Strg+Mausrad / Strg +/-/0) – scharf, ohne CSS-Tricks.
@@ -656,6 +722,39 @@ func main() {
 		})
 	})
 	_ = w.Bind("vfWriteFile", func(path, content string) error { return writeAtomic(path, content) })
+	_ = w.Bind("vfTeamPick", func(id int) {
+		w.Dispatch(func() { resolve(id, winutil.BrowseFolder(hwnd, "Team folder / Team-Ordner"), nil) })
+	})
+	_ = w.Bind("vfTeamScan", func(root string) ([]teamEntry, error) { return teamScan(root) })
+	_ = w.Bind("vfTeamRead", func(root string, rels []string) map[string]string {
+		out := map[string]string{}
+		for _, r := range rels {
+			if p, err := teamPath(root, r); err == nil {
+				if b, err := os.ReadFile(p); err == nil {
+					out[r] = string(b)
+				}
+			}
+		}
+		return out
+	})
+	_ = w.Bind("vfTeamWrite", func(root, rel, content string) error { return teamWrite(root, rel, content) })
+	_ = w.Bind("vfTeamDelete", func(root, rel string) error {
+		p, err := teamPath(root, rel)
+		if err != nil {
+			return err
+		}
+		if err := os.Remove(p); err != nil && !os.IsNotExist(err) {
+			return err
+		}
+		return nil
+	})
+	_ = w.Bind("vfTeamMkdir", func(parent, name string) (string, error) {
+		p, err := teamPath(parent, name)
+		if err != nil {
+			return "", err
+		}
+		return p, os.MkdirAll(p, 0o755)
+	})
 	_ = w.Bind("vfOpenFile", func(id int) {
 		w.Dispatch(func() {
 			p := fileDialog(hwnd, false, "Projekt öffnen", "", projectFilter, "")

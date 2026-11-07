@@ -1279,6 +1279,32 @@ html.touch .toast.undo button{padding:8px 14px}
 html.touch .btn.btn-icon{width:40px}
 @media (prefers-reduced-motion:reduce){.tc-inner{transition:none}.deck-card{animation:none}}
 @media (max-width:1180px) and (min-width:641px){ .proj-crumb{max-width:130px} .tb-sep{margin:0 2px} }
+/* Shotlist: Bild groß ansehen, ersetzen */
+.thumb{position:relative}
+.thumb.has{cursor:zoom-in}
+.thumb.has img{transition:transform .3s var(--ease)}
+.thumb.has:hover img{transform:scale(1.06)}
+.thumb-swap{position:absolute;right:3px;bottom:3px;width:24px;height:24px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(12,12,14,.72);color:#eee;display:grid;place-items:center;cursor:pointer;opacity:0;transform:translateY(3px);transition:opacity .15s,transform .15s}
+.thumb:hover .thumb-swap,html.touch .thumb-swap{opacity:1;transform:none}
+.thumb-swap:hover{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+html.touch .thumb-swap{width:32px;height:32px}
+.thumb.drop{outline:2px dashed var(--accent);outline-offset:2px}
+.lb-actions{display:flex;gap:8px;margin-top:4px}
+.lb-actions .btn{background:rgba(30,28,32,.85);border-color:rgba(255,255,255,.14);color:#eee}
+.lb-actions .btn:hover{border-color:var(--accent);color:var(--accent)}
+/* Team-Ordner: Status in der Titelleiste */
+.team-badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 9px 0 8px;margin-left:6px;border-radius:999px;border:1px solid var(--line-2);background:var(--panel);color:var(--text-2);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s}
+.team-badge:hover{color:var(--text);border-color:var(--accent)}
+.team-badge.st-ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line-2))}
+.team-badge.st-ok::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent);animation:teamPulse 2.4s ease-in-out infinite}
+@keyframes teamPulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--ok) 10%,transparent)}}
+.team-badge.st-locked{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,var(--line-2))}
+.team-badge.st-error,.team-badge.st-missing{color:var(--danger)}
+.tb-av{display:inline-flex;margin-left:2px}
+.tb-av i{width:18px;height:18px;margin-left:-5px;border-radius:50%;display:grid;place-items:center;font:700 9.5px var(--ui);font-style:normal;color:#fff;background:hsl(var(--h) 45% 42%);border:1.5px solid var(--panel)}
+.tb-av i:first-child{margin-left:0}
+@media (max-width:1180px){ .team-badge .tb-lbl{display:none} }
+html.touch .team-badge{height:36px}
 
 </style>
 </head>
@@ -1844,6 +1870,43 @@ const T = {
   "cc.s.texture":["Textur", "Texture", "Texture", "Textura", "Texture", "Textura"],
   "cc.s.rig":["Rig", "Rig", "Rig", "Rig", "Rig", "Rig"],
   "cc.s.anim":["Animation", "Anim", "Anim", "Anim", "Anim", "Anim"],
+  "sh.view":["Klicken zum Vergrößern", "Click to enlarge", "Cliquer pour agrandir", "Clic para ampliar", "Clic per ingrandire", "Clique para ampliar"],
+  "sh.replace":["Bild ersetzen", "Replace image", "Remplacer l’image", "Reemplazar imagen", "Sostituisci immagine", "Substituir imagem"],
+  "sh.removeImg":["Bild entfernen", "Remove image", "Retirer l’image", "Quitar imagen", "Rimuovi immagine", "Remover imagem"],
+  "f.teamShare":["Im Team-Ordner teilen …", "Share in a team folder…", "Partager dans un dossier d’équipe…", "Compartir en carpeta de equipo…", "Condividi in una cartella del team…", "Compartilhar numa pasta de equipe…"],
+  "f.teamOpen":["Team-Projekt öffnen …", "Open team project…", "Ouvrir un projet d’équipe…", "Abrir proyecto de equipo…", "Apri progetto del team…", "Abrir projeto de equipe…"],
+  "tm.manage":["Team-Ordner …", "Team folder…", "Dossier d’équipe…", "Carpeta de equipo…", "Cartella del team…", "Pasta de equipe…"],
+  "tm.title":["Team-Ordner", "Team folder", "Dossier d’équipe", "Carpeta de equipo", "Cartella del team", "Pasta de equipe"],
+  "tm.team":["Team", "Team", "Équipe", "Equipo", "Team", "Equipe"],
+  "tm.someone":["Jemand", "Someone", "Quelqu’un", "Alguien", "Qualcuno", "Alguém"],
+  "tm.updatedBy":["{names} hat {n} Änderung(en) beigetragen", "{names} contributed {n} change(s)", "{names} a apporté {n} modification(s)", "{names} aportó {n} cambio(s)", "{names} ha apportato {n} modifica/e", "{names} contribuiu com {n} alteração(ões)"],
+  "tm.updated":["{n} Änderung(en) aus dem Team-Ordner übernommen", "{n} change(s) taken from the team folder", "{n} modification(s) reprise(s) du dossier", "{n} cambio(s) tomados de la carpeta", "{n} modifica/e dalla cartella", "{n} alteração(ões) da pasta"],
+  "tm.conflict":["„{name}“ wurde gleichzeitig von {by} geändert – deine Fassung gilt, die andere liegt im Ordner „conflicts“.", "“{name}” was changed by {by} at the same time – your version wins, theirs is kept in “conflicts”.", "« {name} » modifié en même temps par {by} – votre version est conservée, l’autre est dans « conflicts ».", "«{name}» fue cambiado a la vez por {by}: tu versión se mantiene, la otra está en «conflicts».", "«{name}» modificato contemporaneamente da {by}: vale la tua versione, l’altra è in «conflicts».", "“{name}” foi alterado ao mesmo tempo por {by} – vale a sua versão, a outra fica em “conflicts”."],
+  "tm.connect":["Ordner verbinden", "Connect folder", "Connecter le dossier", "Conectar carpeta", "Collega cartella", "Conectar pasta"],
+  "tm.offline":["Nicht erreichbar", "Not reachable", "Inaccessible", "No disponible", "Non raggiungibile", "Indisponível"],
+  "tm.synced":["Abgeglichen um {time}", "Synced at {time}", "Synchronisé à {time}", "Sincronizado a las {time}", "Sincronizzato alle {time}", "Sincronizado às {time}"],
+  "tm.st.locked":["Der Browser braucht deine Erlaubnis für den Ordner – klicken zum Verbinden.", "The browser needs your permission for the folder – click to connect.", "Le navigateur a besoin de votre autorisation – cliquez pour connecter.", "El navegador necesita tu permiso – haz clic para conectar.", "Il browser chiede il permesso – clicca per collegare.", "O navegador precisa da sua permissão – clique para conectar."],
+  "tm.st.error":["Der Team-Ordner ist gerade nicht erreichbar. Du arbeitest lokal weiter, später wird abgeglichen.", "The team folder is not reachable right now. You keep working locally; it syncs later.", "Le dossier est inaccessible. Vous continuez en local, la synchronisation suivra.", "La carpeta no está disponible. Sigues en local y se sincroniza después.", "La cartella non è raggiungibile. Continui in locale, si sincronizza dopo.", "A pasta não está acessível. Você continua localmente e sincroniza depois."],
+  "tm.st.missing":["Im gewählten Ordner fehlt die Team-Datei.", "The team file is missing in this folder.", "Le fichier d’équipe manque dans ce dossier.", "Falta el archivo de equipo en la carpeta.", "Manca il file del team nella cartella.", "Falta o arquivo de equipe na pasta."],
+  "tm.st.sync":["Wird abgeglichen …", "Syncing…", "Synchronisation…", "Sincronizando…", "Sincronizzazione…", "Sincronizando…"],
+  "tm.online":["Gerade dabei: {names}", "Working now: {names}", "En ligne : {names}", "Trabajando ahora: {names}", "Al lavoro ora: {names}", "Trabalhando agora: {names}"],
+  "tm.alone":["Gerade arbeitet niemand sonst daran.", "Nobody else is working on it right now.", "Personne d’autre ne travaille dessus.", "Nadie más está trabajando ahora.", "Nessun altro ci sta lavorando.", "Ninguém mais está trabalhando agora."],
+  "tm.nameQ":["Wie heißt du im Team?", "Your name in the team", "Votre nom dans l’équipe", "Tu nombre en el equipo", "Il tuo nome nel team", "Seu nome na equipe"],
+  "tm.nameText":["Der Name erscheint bei deinen Änderungen und zeigt den anderen, dass du gerade arbeitest.", "Shown with your changes and tells others you are working.", "Affiché avec vos modifications.", "Se muestra con tus cambios.", "Mostrato con le tue modifiche.", "Aparece com suas alterações."],
+  "tm.unsupported":["Team-Ordner funktionieren in der Windows-App sowie in Chrome und Edge am Computer. Dieser Browser erlaubt keinen Ordnerzugriff – nutze dort Export und Import von .vforge-Dateien.", "Team folders work in the Windows app and in Chrome or Edge on a computer. This browser does not allow folder access – use .vforge export and import here.", "Les dossiers d’équipe fonctionnent dans l’app Windows et dans Chrome ou Edge sur ordinateur. Ici, utilisez l’export/import .vforge.", "Las carpetas de equipo funcionan en la app de Windows y en Chrome o Edge en ordenador. Aquí usa exportar/importar .vforge.", "Le cartelle del team funzionano nell’app Windows e in Chrome o Edge su computer. Qui usa esporta/importa .vforge.", "Pastas de equipe funcionam no app Windows e no Chrome ou Edge no computador. Aqui use exportar/importar .vforge."],
+  "tm.shareQ":["„{name}“ im Team-Ordner teilen", "Share “{name}” in a team folder", "Partager « {name} »", "Compartir «{name}»", "Condividi «{name}»", "Compartilhar “{name}”"],
+  "tm.shareText":["Wähle einen Ordner, den dein Team bereits teilt – z. B. in OneDrive, Dropbox, Google Drive, Nextcloud oder auf einem Netzlaufwerk. Darin entsteht ein Projektordner. Jede Person öffnet ihn mit „Team-Projekt öffnen“. Änderungen werden alle paar Sekunden abgeglichen; es gibt keinen Server und kein Konto.", "Choose a folder your team already shares – e.g. in OneDrive, Dropbox, Google Drive, Nextcloud or on a network drive. A project folder is created inside. Everyone opens it with “Open team project”. Changes sync every few seconds; there is no server and no account.", "Choisissez un dossier déjà partagé (OneDrive, Dropbox, Google Drive, Nextcloud, lecteur réseau). Chacun l’ouvre avec « Ouvrir un projet d’équipe ». Synchronisation toutes les quelques secondes, sans serveur ni compte.", "Elige una carpeta que tu equipo ya comparte (OneDrive, Dropbox, Google Drive, Nextcloud, unidad de red). Cada persona la abre con «Abrir proyecto de equipo». Se sincroniza cada pocos segundos, sin servidor ni cuenta.", "Scegli una cartella già condivisa (OneDrive, Dropbox, Google Drive, Nextcloud, unità di rete). Ognuno la apre con «Apri progetto del team». Sincronizzazione ogni pochi secondi, senza server né account.", "Escolha uma pasta que a equipe já compartilha (OneDrive, Dropbox, Google Drive, Nextcloud, rede). Cada um abre com “Abrir projeto de equipe”. Sincroniza a cada poucos segundos, sem servidor nem conta."],
+  "tm.pickFolder":["Ordner wählen …", "Choose folder…", "Choisir…", "Elegir carpeta…", "Scegli cartella…", "Escolher pasta…"],
+  "tm.exists":["Dort liegt schon ein Team-Projekt mit diesem Namen. Öffne es mit „Team-Projekt öffnen“.", "A team project with this name already exists there. Open it with “Open team project”.", "Un projet d’équipe de ce nom existe déjà.", "Ya existe un proyecto de equipo con ese nombre.", "Esiste già un progetto del team con questo nome.", "Já existe um projeto de equipe com esse nome."],
+  "tm.readme":["Dieser Ordner ist ein VertexForge-Studio-Team-Projekt. Öffne ihn in VertexForge mit Datei > Team-Projekt öffnen. Bitte keine Dateien darin von Hand ändern. https://vertexforge.pages.dev", "This folder is a VertexForge Studio team project. Open it in VertexForge via File > Open team project. Please do not edit files in here by hand. https://vertexforge.pages.dev", "Ce dossier est un projet d’équipe VertexForge Studio. Ouvrez-le via Fichier > Ouvrir un projet d’équipe. https://vertexforge.pages.dev", "Esta carpeta es un proyecto de equipo de VertexForge Studio. Ábrela con Archivo > Abrir proyecto de equipo. https://vertexforge.pages.dev", "Questa cartella è un progetto del team di VertexForge Studio. Aprila con File > Apri progetto del team. https://vertexforge.pages.dev", "Esta pasta é um projeto de equipe do VertexForge Studio. Abra em Arquivo > Abrir projeto de equipe. https://vertexforge.pages.dev"],
+  "tm.shared":["Geteilt in „{folder}“", "Shared in “{folder}”", "Partagé dans « {folder} »", "Compartido en «{folder}»", "Condiviso in «{folder}»", "Compartilhado em “{folder}”"],
+  "tm.notTeam":["Das ist kein VertexForge-Team-Ordner. Wähle den Ordner, der auf „.vforge-team“ endet.", "This is not a VertexForge team folder. Choose the folder ending in “.vforge-team”.", "Ce n’est pas un dossier d’équipe. Choisissez le dossier « .vforge-team ».", "No es una carpeta de equipo. Elige la carpeta «.vforge-team».", "Non è una cartella del team. Scegli la cartella «.vforge-team».", "Não é uma pasta de equipe. Escolha a pasta “.vforge-team”."],
+  "tm.opened":["Team-Projekt „{name}“ geöffnet", "Team project “{name}” opened", "Projet « {name} » ouvert", "Proyecto «{name}» abierto", "Progetto «{name}» aperto", "Projeto “{name}” aberto"],
+  "tm.stopQ":["Teilen beenden?", "Stop sharing?", "Arrêter le partage ?", "¿Dejar de compartir?", "Interrompere la condivisione?", "Parar de compartilhar?"],
+  "tm.stopText":["Dein lokales Projekt bleibt vollständig erhalten. Der Team-Ordner und die Arbeit der anderen bleiben ebenfalls unverändert – du gleichst nur nicht mehr ab.", "Your local project stays complete. The team folder and everyone else’s work stay unchanged – you just stop syncing.", "Votre projet local reste intact, le dossier aussi – vous arrêtez seulement la synchronisation.", "Tu proyecto local queda intacto y la carpeta también: solo dejas de sincronizar.", "Il progetto locale resta intatto, anche la cartella: smetti solo di sincronizzare.", "Seu projeto local fica intacto, a pasta também – você só para de sincronizar."],
+  "tm.stop":["Teilen beenden", "Stop sharing", "Arrêter le partage", "Dejar de compartir", "Interrompi condivisione", "Parar de compartilhar"],
+  "tm.syncNow":["Jetzt abgleichen", "Sync now", "Synchroniser", "Sincronizar ahora", "Sincronizza ora", "Sincronizar agora"],
+  "tm.myName":["Mein Name: {name}", "My name: {name}", "Mon nom : {name}", "Mi nombre: {name}", "Il mio nome: {name}", "Meu nome: {name}"],
   "ds.design":["Design", "Design", "Style", "Diseño", "Stile", "Design"],
   "ds.lib":["Darstellung der Bibliothek", "Library style", "Style de la bibliothèque", "Estilo de la biblioteca", "Stile della libreria", "Estilo da biblioteca"],
   "ds.lib.studio":["Studio", "Studio", "Studio", "Estudio", "Studio", "Estúdio"],
@@ -2115,6 +2178,13 @@ de: [
   <li><b>Versionen</b> (Uhr-Symbol, <kbd>Strg</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): automatisch alle 10 Minuten, bei jedem Speichern, vor dem Öffnen, Wiederherstellen und vor jedem Update. Benannte Version mit <kbd>Strg</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. Wiederherstellen, als Kopie öffnen, exportieren oder behalten.</li>
   <li><b>PC ↔ Laptop:</b> .vforge-Datei in einen Cloud-Ordner legen und dort öffnen oder importieren.</li></ul>
   <div class="tip">Im Browser gehen die Daten verloren, wenn du die Browser-Daten löschst – sichere wichtige Stände als .vforge-Datei.</div>`],
+ ['team','users','Im Team arbeiten',`
+  <p>Mehrere Personen – oder du an mehreren Computern – arbeiten am selben Projekt, <b>ohne Server und ohne Konto</b>. Das Projekt liegt dazu in einem Ordner, den ihr ohnehin teilt: OneDrive, Dropbox, Google Drive, Nextcloud oder ein Netzlaufwerk.</p>
+  <ol><li><b>Datei ▸ Im Team-Ordner teilen …</b> – geteilten Ordner wählen. Darin entsteht „Projektname.vforge-team“.</li>
+  <li>Alle anderen: <b>Datei ▸ Team-Projekt öffnen …</b> und genau diesen Ordner wählen.</li>
+  <li>Oben neben dem Projektnamen zeigt <b>Team</b> den Status und wer gerade mitarbeitet.</li></ol>
+  <p>Jede Aufgabe, Karte, jeder Shot und jedes Kapitel ist eine eigene kleine Datei. Ändern zwei Leute <i>verschiedene</i> Dinge, wird alles automatisch zusammengeführt. Ändern beide <i>dasselbe</i> gleichzeitig, gilt deine Fassung – die andere bleibt im Unterordner „conflicts“ erhalten. Abgeglichen wird alle paar Sekunden; wie schnell es bei den anderen ankommt, hängt vom Cloud-Dienst ab.</p>
+  <div class="tip">Ist der Ordner kurz nicht erreichbar (offline, Laptop unterwegs), arbeitest du einfach lokal weiter – beim nächsten Kontakt wird abgeglichen. Team-Ordner funktionieren in der Windows-App sowie in Chrome und Edge am Computer.</div>`],
  ['install','download','Installation & Updates',`
   <ul><li><b>Installieren:</b> „VertexForge Studio Setup.exe“ starten, Sprache und Zielordner wählen – Desktop- und Startmenü-Verknüpfung werden angelegt.</li>
   <li><b>Updates:</b> einfach das neue Setup ausführen. Deine Projekte liegen getrennt vom Programm in deinem Benutzerprofil und werden <b>nie überschrieben</b>; vor jedem Update entsteht automatisch eine Sicherheits-Version, und ältere Daten werden verlustfrei übernommen.</li>
@@ -2194,6 +2264,13 @@ en: [
   <li><b>Versions</b> (clock icon, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): automatically every 10 minutes, on every save, before opening, restoring and before every update. Named version with <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. Restore, open as a copy, export or keep.</li>
   <li><b>PC ↔ laptop:</b> keep the .vforge file in a cloud folder and open or import it there.</li></ul>
   <div class="tip">In the browser, clearing browser data deletes your data – keep important states as .vforge files.</div>`],
+ ['team','users','Working as a team',`
+  <p>Several people – or you on several computers – work on the same project <b>without a server or an account</b>. The project lives in a folder you already share: OneDrive, Dropbox, Google Drive, Nextcloud or a network drive.</p>
+  <ol><li><b>File ▸ Share in a team folder…</b> – choose the shared folder. A “Project name.vforge-team” folder is created inside.</li>
+  <li>Everyone else: <b>File ▸ Open team project…</b> and choose exactly that folder.</li>
+  <li><b>Team</b> next to the project name shows the status and who is working right now.</li></ol>
+  <p>Every task, card, shot and chapter is its own small file. When two people change <i>different</i> things, everything is merged automatically. When both change <i>the same</i> thing at the same moment, your version wins – the other one is kept in the “conflicts” subfolder. Syncing happens every few seconds; how fast it reaches the others depends on the cloud service.</p>
+  <div class="tip">If the folder is briefly unreachable (offline, laptop on the road), just keep working locally – it syncs on the next contact. Team folders work in the Windows app and in Chrome or Edge on a computer.</div>`],
  ['install','download','Installation & updates',`
   <ul><li><b>Install:</b> run “VertexForge Studio Setup.exe”, choose language and folder – desktop and Start menu shortcuts are created.</li>
   <li><b>Updates:</b> just run the new setup. Your projects live separately from the program in your user profile and are <b>never overwritten</b>; a safety version is created before every update and older data is migrated without loss.</li>
@@ -2270,6 +2347,10 @@ fr: [
   <li><b>Fichier projet (.vforge) :</b> disquette en haut à droite ou <kbd>Ctrl</kbd>+<kbd>S</kbd> ; <kbd>Ctrl</kbd>+<kbd>Maj</kbd>+<kbd>S</kbd> sous un autre nom ; <b>incrémental</b> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Maj</kbd>+<kbd>S</kbd>) crée <i>_v02</i>, <i>_v03</i> …</li>
   <li><b>Versions</b> (icône horloge, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>) : toutes les 10 minutes, à chaque enregistrement, avant ouverture, restauration et mise à jour. Version nommée : <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>.</li></ul>
   <div class="tip">Dans le navigateur, effacer les données du navigateur supprime vos données – gardez des fichiers .vforge.</div>`],
+ ['team','users','Travailler en équipe',`
+  <p>Plusieurs personnes – ou vous sur plusieurs ordinateurs – travaillent sur le même projet, <b>sans serveur ni compte</b>, via un dossier déjà partagé (OneDrive, Dropbox, Google Drive, Nextcloud, lecteur réseau).</p>
+  <ol><li><b>Fichier ▸ Partager dans un dossier d’équipe…</b></li><li>Les autres : <b>Fichier ▸ Ouvrir un projet d’équipe…</b> et choisir le dossier « .vforge-team ».</li><li><b>Équipe</b> à côté du nom du projet montre l’état et qui travaille.</li></ol>
+  <p>Les modifications d’éléments différents sont fusionnées automatiquement. Si le même élément change en même temps, votre version est gardée et l’autre est conservée dans « conflicts ».</p>`],
  ['install','download','Installation & mises à jour',`
   <ul><li><b>Installer :</b> lancez « VertexForge Studio Setup.exe », choisissez langue et dossier – raccourcis bureau et menu Démarrer inclus.</li>
   <li><b>Mises à jour :</b> lancez simplement le nouveau setup. Vos projets sont stockés à part dans votre profil et ne sont <b>jamais écrasés</b> ; une version de sécurité est créée avant chaque mise à jour.</li>
@@ -2345,6 +2426,10 @@ es: [
   <li><b>Archivo de proyecto (.vforge):</b> disquete arriba a la derecha o <kbd>Ctrl</kbd>+<kbd>S</kbd>; <kbd>Ctrl</kbd>+<kbd>Mayús</kbd>+<kbd>S</kbd> con otro nombre; <b>incremental</b> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Mayús</kbd>+<kbd>S</kbd>) crea <i>_v02</i>, <i>_v03</i> …</li>
   <li><b>Versiones</b> (icono de reloj, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): cada 10 minutos, al guardar, antes de abrir, restaurar y actualizar. Versión con nombre: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>.</li></ul>
   <div class="tip">En el navegador, borrar sus datos elimina tus proyectos: guarda archivos .vforge.</div>`],
+ ['team','users','Trabajar en equipo',`
+  <p>Varias personas – o tú en varios ordenadores – trabajan en el mismo proyecto <b>sin servidor ni cuenta</b>, mediante una carpeta ya compartida (OneDrive, Dropbox, Google Drive, Nextcloud, unidad de red).</p>
+  <ol><li><b>Archivo ▸ Compartir en carpeta de equipo…</b></li><li>Los demás: <b>Archivo ▸ Abrir proyecto de equipo…</b> y elegir la carpeta «.vforge-team».</li><li><b>Equipo</b> junto al nombre del proyecto muestra el estado y quién trabaja.</li></ol>
+  <p>Los cambios en elementos distintos se combinan solos. Si el mismo elemento cambia a la vez, se mantiene tu versión y la otra se guarda en «conflicts».</p>`],
  ['install','download','Instalación y actualizaciones',`
   <ul><li><b>Instalar:</b> ejecuta «VertexForge Studio Setup.exe», elige idioma y carpeta; se crean accesos directos en el escritorio y el menú Inicio.</li>
   <li><b>Actualizar:</b> ejecuta el nuevo instalador. Tus proyectos se guardan aparte en tu perfil y <b>nunca se sobrescriben</b>; antes de cada actualización se crea una versión de seguridad.</li>
@@ -2420,6 +2505,10 @@ it: [
   <li><b>File progetto (.vforge):</b> dischetto in alto a destra o <kbd>Ctrl</kbd>+<kbd>S</kbd>; <kbd>Ctrl</kbd>+<kbd>Maiusc</kbd>+<kbd>S</kbd> con nuovo nome; <b>incrementale</b> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>S</kbd>) crea <i>_v02</i>, <i>_v03</i> …</li>
   <li><b>Versioni</b> (icona orologio, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): ogni 10 minuti, a ogni salvataggio, prima di aprire, ripristinare e aggiornare. Versione con nome: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>.</li></ul>
   <div class="tip">Nel browser, cancellare i dati del browser elimina i progetti – conserva file .vforge.</div>`],
+ ['team','users','Lavorare in team',`
+  <p>Più persone – o tu su più computer – lavorano sullo stesso progetto <b>senza server né account</b>, tramite una cartella già condivisa (OneDrive, Dropbox, Google Drive, Nextcloud, unità di rete).</p>
+  <ol><li><b>File ▸ Condividi in una cartella del team…</b></li><li>Gli altri: <b>File ▸ Apri progetto del team…</b> e scegliere la cartella «.vforge-team».</li><li><b>Team</b> accanto al nome del progetto mostra lo stato e chi sta lavorando.</li></ol>
+  <p>Le modifiche a elementi diversi vengono unite automaticamente. Se lo stesso elemento cambia insieme, vale la tua versione e l’altra resta in «conflicts».</p>`],
  ['install','download','Installazione e aggiornamenti',`
   <ul><li><b>Installare:</b> avvia «VertexForge Studio Setup.exe», scegli lingua e cartella – vengono create le scorciatoie su desktop e menu Start.</li>
   <li><b>Aggiornare:</b> avvia il nuovo setup. I progetti sono salvati a parte nel tuo profilo e <b>non vengono mai sovrascritti</b>; prima di ogni aggiornamento si crea una versione di sicurezza.</li>
@@ -2495,6 +2584,10 @@ pt: [
   <li><b>Arquivo de projeto (.vforge):</b> disquete no canto superior direito ou <kbd>Ctrl</kbd>+<kbd>S</kbd>; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> com outro nome; <b>incremental</b> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>) cria <i>_v02</i>, <i>_v03</i> …</li>
   <li><b>Versões</b> (ícone de relógio, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): a cada 10 minutos, ao salvar, antes de abrir, restaurar e atualizar. Versão com nome: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>.</li></ul>
   <div class="tip">No navegador, limpar os dados do navegador apaga seus projetos – guarde arquivos .vforge.</div>`],
+ ['team','users','Trabalhar em equipe',`
+  <p>Várias pessoas – ou você em vários computadores – trabalham no mesmo projeto <b>sem servidor nem conta</b>, por uma pasta já compartilhada (OneDrive, Dropbox, Google Drive, Nextcloud, rede).</p>
+  <ol><li><b>Arquivo ▸ Compartilhar numa pasta de equipe…</b></li><li>Os outros: <b>Arquivo ▸ Abrir projeto de equipe…</b> e escolher a pasta “.vforge-team”.</li><li><b>Equipe</b> ao lado do nome do projeto mostra o estado e quem está trabalhando.</li></ol>
+  <p>Alterações em elementos diferentes são unidas automaticamente. Se o mesmo elemento muda ao mesmo tempo, vale a sua versão e a outra fica em “conflicts”.</p>`],
  ['install','download','Instalação e atualizações',`
   <ul><li><b>Instalar:</b> execute «VertexForge Studio Setup.exe», escolha idioma e pasta – atalhos na área de trabalho e no menu Iniciar são criados.</li>
   <li><b>Atualizar:</b> basta executar o novo instalador. Seus projetos ficam separados no seu perfil e <b>nunca são sobrescritos</b>; antes de cada atualização é criada uma versão de segurança.</li>
@@ -2516,7 +2609,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.5.0';
+const APP_VERSION = '2.6.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -2579,6 +2672,8 @@ const L = (de, en) => currentLang()==='de' ? de : en;
    B. ICONS (eigene Linien-Icons, offline)
    ============================================================================ */
 const ICONS = {
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c1.9.7 3.1 2.5 3.5 5.2"/>',
+  refresh:'<path d="M20 11a8 8 0 0 0-14.7-4.3L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.7 4.3L20 16"/><path d="M20 21v-5h-5"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/>',
   paw:'<circle cx="6" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="18" cy="10" r="2"/><path d="M8.5 15.5c1-2.3 2.2-3.5 3.5-3.5s2.5 1.2 3.5 3.5c.8 1.9-.3 4-2.3 4h-2.4c-2 0-3.1-2.1-2.3-4z"/>',
   cube:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',
@@ -3192,6 +3287,7 @@ function normalizeProject(p, A){
     boards:arr(p.boards).map(b=>normalizeBoard(b, A)),
     shots:arr(p.shots).map(s=>({uid:sid(s.uid,'sh'), code:str(s.code ?? s.id,'SH_010'), seq:str(s.seq), desc:str(s.desc), frames:Math.round(num(s.frames,48,1,1e6)), lens:str(s.lens,'35mm'), vfx:str(s.vfx), thumb:A.ref(s.thumb), status:Object.fromEntries(DEPTS.map(([k])=>[k, st(s.status && s.status[k])]))})),
     chapters:arr(p.chapters).map(c=>({id:sid(c.id,'ch'), title:str(c.title,'Szene'), body:str(c.body)})),
+    team:p.team && typeof p.team==='object' && p.team.label ? {label:str(p.team.label).slice(0,200), path:str(p.team.path).slice(0,1000)} : null,
     lore:arr(p.lore).map(l=>({id:sid(l.id,'lr'), name:str(l.name,'Asset'), category:str(l.category), polyTarget:str(l.polyTarget), shader:str(l.shader), notes:str(l.notes), stage:Math.round(num(l.stage,0,0,STAGES-1)), links:normLinks(l.links)}))
   };
   if(!proj.boards.length) proj.boards.push(newBoard('Board'));
@@ -3208,6 +3304,7 @@ function normalizeSettings(s){
     cardSize:num(s.cardSize,240,160,380), titleScale:num(s.titleScale,1,.6,1.6),
     hubSort:['recent','name','progress','deadline'].includes(s.hubSort) ? s.hubSort : 'recent',
     hubStyle:LIB_STYLES.includes(s.hubStyle) ? s.hubStyle : 'studio',
+    userName:str(s.userName).slice(0,40),
     taskFilter:['all','open','overdue','critical'].includes(s.taskFilter) ? s.taskFilter : 'all',
     sortByDate:!!s.sortByDate, pipeView:s.pipeView==='kanban' ? 'kanban' : 'list',
     leftDrag:s.leftDrag==='pan' ? 'pan' : 'select', snap:s.snap!==false, grid:s.grid!==false, sysIcons:s.sysIcons!==false,
@@ -3290,6 +3387,7 @@ function changed(){
   if(!ui.fileDirty && S.file && S.file.name){ ui.fileDirty = true; renderSavePill(); }
   persistSoon();
   clearTimeout(histTimer); histTimer = setTimeout(histCommit, 450);
+  if(typeof teamPoke==='function') teamPoke();
 }
 async function saveNow(){
   clearTimeout(saveTimer); saveTimer = 0;
@@ -3349,6 +3447,7 @@ function serialize(projects){
   projects = projects || S.projects;
   const refs = collectRefs(projects), assets = {};
   refs.forEach(id=>{ if(S.assets[id]) assets[id] = S.assets[id]; });
+  projects = projects.map(p=>p.team ? Object.assign({}, p, {team:null}) : p);   // Team-Verknüpfung ist gerätebezogen
   return JSON.stringify({app:'VertexForge Studio', schema:SCHEMA, version:APP_VERSION, exportedAt:new Date().toISOString(), data:{activeProjectId:S.activeProjectId, projects, assets}});
 }
 function stamp(){ const d = new Date(); return `${isoLocal(d)}_${pad(d.getHours())}${pad(d.getMinutes())}`; }
@@ -3661,6 +3760,7 @@ function renderChrome(){
       <button class="brand" data-act="home" title="VertexForge Studio · ${esc(t('mod.projects'))}">${LOGO_SVG}</button>
       <nav class="menubar">${['file','edit','view','help'].map(m=>`<button data-menu="${m}">${t('menu.'+m)}</button>`).join('')}</nav>
       <button class="proj-crumb" id="projCrumb" title="${esc(t('pal.project'))}"><span class="pc-dot"></span><span class="pc-name">${esc(projectName(p))}</span>${ic('chevron',13)}</button>
+      <button class="team-badge" id="teamBadge" hidden></button>
     </div>
     <nav class="tabs" id="tabs" role="tablist"><span class="tab-ink" id="tabInk"></span>${MODULES.map((m,i)=>`<button role="tab" data-mod="${m}" class="${S.activeModule===m?'active':''}" title="${esc(t('mod.'+m))} · Alt+${i+1}">${ic(MOD_ICONS[m],15)}<span>${t('mod.'+m)}</span></button>`).join('')}</nav>
     <div class="tb-right">
@@ -3686,6 +3786,8 @@ function renderChrome(){
   const fs = tb.querySelector('[data-act=fullscreen]'); if(fs) fs.onclick = toggleFullscreen;
   tb.querySelectorAll('[data-win]').forEach(b=>b.onclick = () => winAction(b.dataset.win));
   $('projCrumb').onclick = e => openProjectMenu(e.currentTarget);
+  $('teamBadge').onclick = () => { const p = activeProject(); if(TEAM.status==='locked') teamSync(p, {ask:true}); else teamMenuInfo(); };
+  renderTeamBadge();
   $('savePill').onclick = () => saveFile();
   renderSavePill(); renderStatus(); updateTitle();
   requestAnimationFrame(()=>moveTabInk(true));
@@ -3786,6 +3888,9 @@ function openMainMenu(btn){
     {sep:1},
     {label:t('ver.save'), icon:'flag', kbd:'Ctrl+Alt+S', run:()=>saveVersionPrompt()},
     {label:t('ver.title'), icon:'history', kbd:'Ctrl+Alt+H', run:openVersions},
+    {sep:1},
+    {label:t(activeProject().team ? 'tm.manage' : 'f.teamShare'), icon:'users', run:teamShare},
+    {label:t('f.teamOpen'), icon:'folder', run:teamOpen},
     {sep:1},
     {label:t('f.exportProject'), icon:'download', run:()=>exportProject(S.activeProjectId)},
     {label:t('f.backup'), icon:'download', run:exportBackup},
@@ -6421,6 +6526,333 @@ async function saveIncremental(){
 }
 
 /* ============================================================================
+   TEAM-ORDNER — gemeinsam an einem Projekt arbeiten, ohne Server und ohne Konto
+   Das Projekt liegt als Ordner in einem geteilten Ordner (OneDrive, Dropbox,
+   Google Drive, Nextcloud, Netzlaufwerk). Jede Aufgabe, Karte, jeder Shot … ist
+   eine eigene kleine Datei. Beim Abgleich wird pro Element verglichen:
+     nur ich geändert → schreiben · nur jemand anderes → übernehmen ·
+     beide → meine Fassung gilt, die andere landet als Kopie in „conflicts/“.
+   Bilder liegen einmalig unter „assets/“. „presence/“ zeigt, wer gerade arbeitet.
+   ============================================================================ */
+const TEAM_EXT = '.vforge-team';
+const TEAM_MANIFEST = 'vforge-team.json';
+const TEAM_INTERVAL = 5000;
+const TEAM = {state:{}, timer:null, busy:false, clientId:'', handles:{}};
+
+/* ---------- Dateizugriff: Desktop-App (Go) oder Browser (File System Access API) ---------- */
+const TEAM_BROWSER = typeof window.showDirectoryPicker === 'function';
+const TEAM_OK = IS_DESKTOP || TEAM_BROWSER;
+const TFS = {
+  async pick(){
+    if(IS_DESKTOP){ const p = await nativeAsync('vfTeamPick'); return p ? {path:p, label:p.split(/[\\/]/).pop()} : null; }
+    try{ const h = await window.showDirectoryPicker({mode:'readwrite', id:'vforge-team'}); return {handle:h, label:h.name}; }catch(e){ return null; }
+  },
+  async mkdir(loc, name){
+    if(IS_DESKTOP){ const p = await window.vfTeamMkdir(loc.path, name); return {path:p, label:name}; }
+    const h = await loc.handle.getDirectoryHandle(name, {create:true}); return {handle:h, label:name};
+  },
+  async dirFor(loc, parts, create){
+    let h = loc.handle; for(const part of parts) h = await h.getDirectoryHandle(part, {create}); return h;
+  },
+  async scan(loc){
+    if(IS_DESKTOP) return (await window.vfTeamScan(loc.path)) || [];
+    const out = [];
+    const walk = async (h, pre, depth) => {
+      for await (const [name, e] of h.entries()){
+        if(e.kind==='directory'){ if(depth < 3) await walk(e, pre + name + '/', depth + 1); }
+        else if(!name.endsWith('.tmp') && !name.endsWith('.crswap')){ const f = await e.getFile(); out.push({rel:pre + name, mtime:f.lastModified, size:f.size}); }
+      }
+    };
+    await walk(loc.handle, '', 0); return out;
+  },
+  async read(loc, rels){
+    if(!rels.length) return {};
+    if(IS_DESKTOP) return (await window.vfTeamRead(loc.path, rels)) || {};
+    const out = {};
+    for(const r of rels){
+      try{ const parts = r.split('/'), name = parts.pop(), d = await TFS.dirFor(loc, parts, false); out[r] = await (await (await d.getFileHandle(name)).getFile()).text(); }catch(e){}
+    }
+    return out;
+  },
+  async write(loc, rel, content){
+    if(IS_DESKTOP) return window.vfTeamWrite(loc.path, rel, content);
+    const parts = rel.split('/'), name = parts.pop(), d = await TFS.dirFor(loc, parts, true);
+    const w = await (await d.getFileHandle(name, {create:true})).createWritable(); await w.write(content); await w.close();
+  },
+  async remove(loc, rel){
+    if(IS_DESKTOP) return window.vfTeamDelete(loc.path, rel);
+    try{ const parts = rel.split('/'), name = parts.pop(), d = await TFS.dirFor(loc, parts, false); await d.removeEntry(name); }catch(e){}
+  }
+};
+
+/* ---------- Gespeicherte Verknüpfung je Projekt (Browser-Ordnerzugriff liegt in IndexedDB) ---------- */
+async function teamLoc(p){
+  if(!p.team) return null;
+  if(p.team.path) return {path:p.team.path, label:p.team.label};
+  let h = TEAM.handles[p.id];
+  if(!h){ h = await idbReq('suite', 'readonly', st=>st.get('teamh:' + p.id)); if(h) TEAM.handles[p.id] = h; }
+  if(!h) return null;
+  return {handle:h, label:p.team.label};
+}
+async function teamPermission(loc, ask){
+  if(!loc || !loc.handle || !loc.handle.queryPermission) return !!loc;
+  let s = await loc.handle.queryPermission({mode:'readwrite'});
+  if(s!=='granted' && ask) s = await loc.handle.requestPermission({mode:'readwrite'});
+  return s==='granted';
+}
+function teamClient(){
+  if(TEAM.clientId) return TEAM.clientId;
+  try{ TEAM.clientId = localStorage.getItem('vf-client') || ''; }catch(e){}
+  if(!TEAM.clientId){ TEAM.clientId = uid('cl'); try{ localStorage.setItem('vf-client', TEAM.clientId); }catch(e){} }
+  return TEAM.clientId;
+}
+const teamUser = () => S.settings.userName || t('tm.someone');
+
+/* ---------- Projekt ⇄ Einzeldateien ---------- */
+const recRel = key => 'records/' + key + '.json';
+const relKey = rel => rel.startsWith('records/') && rel.endsWith('.json') ? rel.slice(8, -5) : null;
+function teamRecords(p){
+  const R = {}, put = (k, o) => { R[k] = JSON.stringify(o); };
+  const {phases, boards, shots, chapters, lore, team, updatedAt, ...meta} = p;
+  put('meta', Object.assign({}, meta, {phaseOrder:phases.map(x=>x.id), boardOrder:boards.map(b=>b.id), shotOrder:shots.map(s=>s.uid), chapterOrder:chapters.map(c=>c.id), loreOrder:lore.map(l=>l.id)}));
+  phases.forEach(ph=>{ const {tasks, collapsed, ...r} = ph; put('ph/' + ph.id, Object.assign(r, {taskOrder:tasks.map(x=>x.id)})); tasks.forEach(x=>put('tk/' + x.id, Object.assign({}, x, {phase:ph.id}))); });
+  boards.forEach(b=>{ const {nodes, connections, cam, ...r} = b; put('bd/' + b.id, Object.assign(r, {nodeOrder:nodes.map(n=>n.id)})); nodes.forEach(n=>put('nd/' + n.id, Object.assign({}, n, {board:b.id}))); connections.forEach(c=>put('cn/' + c.id, Object.assign({}, c, {board:b.id}))); });
+  shots.forEach(s=>put('sh/' + s.uid, s)); chapters.forEach(c=>put('ch/' + c.id, c)); lore.forEach(l=>put('lr/' + l.id, l));
+  return R;
+}
+function teamBuild(R, local){
+  const all = pre => Object.keys(R).filter(k=>k.startsWith(pre)).map(k=>JSON.parse(R[k]));
+  const order = (ids, items, idf) => { const m = new Map(items.map(x=>[idf(x), x])), out = []; (ids || []).forEach(id=>{ if(m.has(id)){ out.push(m.get(id)); m.delete(id); } }); return out.concat([...m.values()]); };
+  const meta = R.meta ? JSON.parse(R.meta) : {};
+  const tasks = all('tk/'), nodes = all('nd/'), conns = all('cn/');
+  const phases = order(meta.phaseOrder, all('ph/'), x=>x.id).map(ph=>{
+    const lp = local && local.phases.find(x=>x.id===ph.id);
+    return Object.assign(ph, {collapsed:lp ? lp.collapsed : false, tasks:order(ph.taskOrder, tasks.filter(x=>x.phase===ph.id), x=>x.id)});
+  });
+  const orphanT = tasks.filter(x=>!phases.some(ph=>ph.id===x.phase));
+  if(orphanT.length && phases.length) phases[phases.length-1].tasks.push(...orphanT);
+  const boards = order(meta.boardOrder, all('bd/'), x=>x.id).map(b=>{
+    const lb = local && local.boards.find(x=>x.id===b.id);
+    return Object.assign(b, {cam:lb ? lb.cam : undefined, nodes:order(b.nodeOrder, nodes.filter(n=>n.board===b.id), n=>n.id), connections:conns.filter(c=>c.board===b.id)});
+  });
+  const p = Object.assign({}, meta, {phases, boards, shots:order(meta.shotOrder, all('sh/'), s=>s.uid), chapters:order(meta.chapterOrder, all('ch/'), c=>c.id), lore:order(meta.loreOrder, all('lr/'), l=>l.id)});
+  const out = normalizeProject(p, assetCtx());
+  out.id = local ? local.id : out.id; out.team = local ? local.team : null; out.updatedAt = Date.now();
+  return out;
+}
+const recName = (key, json) => { try{ const d = JSON.parse(json); return d.title || d.text || d.name || d.code || d.cat || key; }catch(e){ return key; } };
+const assetIds = s => [...String(s).matchAll(/"asset:([\w-]{1,40})"/g)].map(m=>m[1]);
+
+/* ---------- Basisstand (zuletzt abgeglichen) — lokal gespeichert, damit Neustarts nichts verwechseln ---------- */
+async function teamBase(pid){
+  if(TEAM.state[pid]) return TEAM.state[pid];
+  const saved = await idbReq('suite', 'readonly', st=>st.get('teamb:' + pid));
+  TEAM.state[pid] = saved && saved.recs ? saved : {recs:{}, mtimes:{}, assets:{}};
+  return TEAM.state[pid];
+}
+function teamSaveBase(pid){ const b = TEAM.state[pid]; if(b) idbReq('suite', 'readwrite', st=>st.put(b, 'teamb:' + pid)); }
+
+/* ---------- Abgleich ---------- */
+async function teamSync(p, opts={}){
+  if(!p || !p.team) return;
+  if(TEAM.busy){ TEAM.pending = true; return; }       // läuft gerade ein Abgleich: danach sofort noch einmal
+  const loc = await teamLoc(p);
+  if(!loc || !(await teamPermission(loc, !!opts.ask))){ teamStatus(p, 'locked'); return; }
+  TEAM.busy = true;
+  try{
+    const base = await teamBase(p.id), me = teamUser(), now = Date.now();
+    const files = await TFS.scan(loc);
+    const fileMap = Object.fromEntries(files.map(f=>[f.rel, f]));
+    if(!fileMap[TEAM_MANIFEST]){ teamStatus(p, 'missing'); return; }
+    // Geänderte Dateien lesen (nur, was sich seit dem letzten Abgleich verändert hat)
+    const recFiles = files.filter(f=>relKey(f.rel));
+    const toRead = recFiles.filter(f=>base.mtimes[f.rel]!==f.mtime).map(f=>f.rel);
+    const raw = await TFS.read(loc, toRead);
+    const remote = {}, remoteBy = {};
+    recFiles.forEach(f=>{
+      const k = relKey(f.rel);
+      if(raw[f.rel]!=null){ try{ const env = JSON.parse(raw[f.rel]); remote[k] = JSON.stringify(env.d); remoteBy[k] = env.by; }catch(e){ remote[k] = base.recs[k]; } }
+      else remote[k] = base.recs[k];
+    });
+    const local = teamRecords(p);
+    const keys = new Set([...Object.keys(local), ...Object.keys(remote), ...Object.keys(base.recs)]);
+    const result = {}, writes = [], deletes = [], conflicts = [], incoming = [];
+    for(const k of keys){
+      const L = local[k], R = remote[k], B = base.recs[k];
+      if(L===R){ if(L!==undefined) result[k] = L; continue; }
+      if(L===B){ if(R!==undefined){ result[k] = R; incoming.push([k, remoteBy[k]]); } else incoming.push([k, '']); continue; }   // nur dort geändert
+      if(R===B){ if(L!==undefined){ result[k] = L; writes.push(k); } else deletes.push(k); continue; }                           // nur hier geändert
+      // beide geändert
+      if(L===undefined){ result[k] = R; incoming.push([k, remoteBy[k]]); continue; }       // hier gelöscht, dort bearbeitet → behalten
+      result[k] = L; writes.push(k);
+      if(R!==undefined){ conflicts.push({k, by:remoteBy[k], data:R}); }
+    }
+    // Bilder: fehlende hochladen bzw. herunterladen
+    const needAssets = new Set(Object.values(result).flatMap(assetIds));
+    for(const id of needAssets){
+      const rel = 'assets/' + id + '.txt';
+      if(S.assets[id] && !fileMap[rel] && !base.assets[id]){ await TFS.write(loc, rel, S.assets[id]); base.assets[id] = 1; }
+      else if(!S.assets[id] && fileMap[rel]){ const r = await TFS.read(loc, [rel]); if(r[rel] && isDataImg(r[rel])){ S.assets[id] = r[rel]; base.assets[id] = 1; } }
+      else if(fileMap[rel]) base.assets[id] = 1;
+    }
+    // Direkt vor dem Schreiben: hat jemand die Datei seit eben verändert? Dann dessen Stand als Konflikt sichern.
+    if(writes.length){
+      const cur = await TFS.read(loc, writes.map(recRel));
+      writes.forEach(k=>{ const raw = cur[recRel(k)]; if(raw==null) return; try{ const env = JSON.parse(raw), d = JSON.stringify(env.d); if(d!==base.recs[k] && d!==result[k] && d!==remote[k]) conflicts.push({k, by:env.by, data:d}); }catch(e){} });
+    }
+    for(const c of conflicts) await TFS.write(loc, `conflicts/${c.k.replace('/','-')}-${now}.json`, JSON.stringify({by:c.by, at:now, d:JSON.parse(c.data)}));
+    for(const k of writes) await TFS.write(loc, recRel(k), JSON.stringify({by:me, at:now, d:JSON.parse(result[k])}));
+    for(const k of deletes) await TFS.remove(loc, recRel(k));
+    // Übernehmen
+    if(incoming.length){
+      const idx = S.projects.findIndex(x=>x.id===p.id);
+      const merged = teamBuild(result, p);
+      if(idx >= 0){ S.projects[idx] = merged; histCommit(); persistSoon(); if(S.activeProjectId===p.id) teamRerender(); }
+      const names = [...new Set(incoming.map(([,by])=>by).filter(Boolean))];
+      if(!opts.quiet) toast(names.length ? t('tm.updatedBy', {names:names.join(', '), n:incoming.length}) : t('tm.updated', {n:incoming.length}));
+    }
+    if(conflicts.length) toast(t('tm.conflict', {name:recName(conflicts[0].k, conflicts[0].data), by:conflicts[0].by || t('tm.someone')}), true);
+    // Neuer Basisstand
+    // Basis: Zeitstempel aus dem Scan *vor* dem Schreiben. Selbst geschriebene Dateien werden beim nächsten Mal
+    // noch einmal gelesen – so kann eine zeitgleiche Änderung von jemand anderem nicht unbemerkt bleiben.
+    const written = new Set(writes);
+    base.recs = result; base.mtimes = {};
+    Object.keys(result).forEach(k=>{ const r = recRel(k); if(!written.has(k) && fileMap[r]) base.mtimes[r] = fileMap[r].mtime; });
+    teamSaveBase(p.id);
+    await teamPresence(loc, files);
+    TEAM.lastSync = Date.now(); teamStatus(p, 'ok');
+  }catch(e){
+    console.error('team sync', e); teamStatus(p, 'error');
+  }finally{
+    TEAM.busy = false;
+    if(TEAM.pending){ TEAM.pending = false; setTimeout(()=>{ const a = activeProject(); if(a && a.team) teamSync(a); }, 250); }
+  }
+}
+function teamRerender(){
+  // Eingabe nicht unterbrechen: läuft gerade eine Texteingabe, wird nur still neu gezeichnet, wenn sie endet
+  if(isTyping(document.activeElement)){ ui.teamDirtyView = true; return; }
+  render();
+}
+document.addEventListener('focusout', ()=>{ if(ui.teamDirtyView){ ui.teamDirtyView = false; setTimeout(()=>{ if(!isTyping(document.activeElement)) render(); }, 50); } });
+
+/* Wer arbeitet gerade mit? (Lebenszeichen alle paar Sekunden) */
+async function teamPresence(loc, files){
+  const me = teamClient(), now = Date.now();
+  if(!TEAM.lastPresence || now - TEAM.lastPresence > 20000){
+    TEAM.lastPresence = now;
+    await TFS.write(loc, `presence/${me}.json`, JSON.stringify({name:teamUser(), at:now, module:S.activeModule}));
+  }
+  const others = files.filter(f=>f.rel.startsWith('presence/') && !f.rel.includes(me) && now - f.mtime < 90000).map(f=>f.rel);
+  const r = await TFS.read(loc, others);
+  TEAM.online = Object.values(r).map(x=>{ try{ return JSON.parse(x); }catch(e){ return null; } }).filter(x=>x && now - x.at < 90000);
+}
+
+/* ---------- Status in der Titelleiste ---------- */
+function teamStatus(p, st){
+  if(p.id!==S.activeProjectId) return;
+  TEAM.status = st; TEAM.statusPid = p.id; renderTeamBadge();
+}
+function renderTeamBadge(){
+  const el = document.getElementById('teamBadge'); if(!el) return;
+  const p = activeProject();
+  if(!p || !p.team){ el.hidden = true; return; }
+  el.hidden = false;
+  const mine = TEAM.statusPid===p.id, st = mine ? (TEAM.status || 'ok') : 'sync', online = mine ? (TEAM.online || []) : [];
+  el.className = 'team-badge st-' + st;
+  const av = online.slice(0,3).map(o=>`<i title="${esc(o.name)}" style="--h:${[...o.name].reduce((a,c)=>a + c.charCodeAt(0), 0) % 360}">${esc(o.name.trim().slice(0,1).toUpperCase())}</i>`).join('');
+  el.innerHTML = `${ic('users',14)}<span class="tb-lbl">${st==='locked' ? t('tm.connect') : st==='error' || st==='missing' ? t('tm.offline') : t('tm.team')}</span>${av ? `<span class="tb-av">${av}</span>` : ''}`;
+  el.title = [p.team.label, st==='ok' ? (TEAM.lastSync ? t('tm.synced', {time:new Date(TEAM.lastSync).toLocaleTimeString(locale(), {hour:'2-digit', minute:'2-digit', second:'2-digit'})}) : '') : t('tm.st.' + st),
+    online.length ? t('tm.online', {names:online.map(o=>o.name).join(', ')}) : t('tm.alone')].filter(Boolean).join('\n');
+}
+
+/* ---------- Teilen, Öffnen, Beenden ---------- */
+async function teamAskName(){
+  if(S.settings.userName) return true;
+  let def = '';
+  try{ def = IS_DESKTOP ? ((await window.vfInfo()) || {}).user || '' : ''; }catch(e){}
+  const n = await dialog({title:t('tm.nameQ'), text:t('tm.nameText'), input:def, buttons:[{label:t('g.cancel'), value:null},{label:t('g.apply'), value:true, primary:true}]});
+  if(!n || !n.trim()) return false;
+  S.settings.userName = n.trim().slice(0,40); persistSoon(); return true;
+}
+async function teamShare(){
+  const p = activeProject();
+  if(!TEAM_OK){ dialog({title:t('tm.title'), text:t('tm.unsupported')}); return; }
+  if(p.team){ teamMenuInfo(); return; }
+  const ok = await dialog({title:t('tm.shareQ', {name:projectName(p)}), text:t('tm.shareText'), buttons:[{label:t('g.cancel'), value:false},{label:t('tm.pickFolder'), value:true, primary:true}]});
+  if(!ok || !(await teamAskName())) return;
+  const parent = await TFS.pick(); if(!parent) return;
+  const name = (projectName(p).replace(/[^\p{L}\p{N} _-]+/gu, '').trim() || 'Project').slice(0, 60) + TEAM_EXT;
+  const loc = await TFS.mkdir(parent, name);
+  const existing = await TFS.scan(loc);
+  if(existing.some(f=>f.rel===TEAM_MANIFEST)){ toast(t('tm.exists'), true); return; }
+  await TFS.write(loc, TEAM_MANIFEST, JSON.stringify({app:'VertexForge Studio', format:1, project:p.id, name:projectName(p), created:Date.now(), by:teamUser()}, null, 2));
+  await TFS.write(loc, 'README.txt', t('tm.readme'));
+  await teamLink(p, loc);
+  TEAM.state[p.id] = {recs:{}, mtimes:{}, assets:{}};
+  await teamSync(p, {quiet:true});
+  toast(t('tm.shared', {folder:loc.label}));
+}
+async function teamLink(p, loc){
+  p.team = {label:loc.label, path:loc.path || ''};
+  if(loc.handle){ TEAM.handles[p.id] = loc.handle; await idbReq('suite', 'readwrite', st=>st.put(loc.handle, 'teamh:' + p.id)); }
+  changed(); renderChrome(); teamStart();
+}
+async function teamOpen(){
+  if(!TEAM_OK){ dialog({title:t('tm.title'), text:t('tm.unsupported')}); return; }
+  if(!(await teamAskName())) return;
+  const loc = await TFS.pick(); if(!loc) return;
+  const files = await TFS.scan(loc);
+  const man = (await TFS.read(loc, [TEAM_MANIFEST]))[TEAM_MANIFEST];
+  if(!man){ dialog({title:t('tm.title'), text:t('tm.notTeam')}); return; }
+  let info = {}; try{ info = JSON.parse(man); }catch(e){}
+  const raw = await TFS.read(loc, files.filter(f=>relKey(f.rel)).map(f=>f.rel));
+  const R = {}; Object.entries(raw).forEach(([rel, s])=>{ try{ R[relKey(rel)] = JSON.stringify(JSON.parse(s).d); }catch(e){} });
+  for(const id of new Set(Object.values(R).flatMap(assetIds))){ const rel = 'assets/' + id + '.txt'; if(!S.assets[id]){ const r = await TFS.read(loc, [rel]); if(r[rel] && isDataImg(r[rel])) S.assets[id] = r[rel]; } }
+  const pid = info.project || (R.meta && JSON.parse(R.meta).id);
+  let p = S.projects.find(x=>x.id===pid);
+  const built = teamBuild(R, p || {id:pid, phases:[], boards:[], team:null});
+  if(p){ const i = S.projects.indexOf(p); built.team = p.team; S.projects[i] = built; p = built; }
+  else { S.projects.unshift(built); p = built; }
+  TEAM.state[p.id] = {recs:R, mtimes:Object.fromEntries(files.filter(f=>relKey(f.rel)).map(f=>[f.rel, f.mtime])), assets:{}};
+  teamSaveBase(p.id);
+  await teamLink(p, loc);
+  openProject(p.id);
+  toast(t('tm.opened', {name:projectName(p)}));
+}
+async function teamStop(){
+  const p = activeProject(); if(!p.team) return;
+  const ok = await dialog({title:t('tm.stopQ'), text:t('tm.stopText'), buttons:[{label:t('g.cancel'), value:false},{label:t('tm.stop'), value:true, primary:true}]});
+  if(!ok) return;
+  p.team = null; delete TEAM.handles[p.id]; delete TEAM.state[p.id];
+  idbReq('suite', 'readwrite', st=>st.delete('teamh:' + p.id)); idbReq('suite', 'readwrite', st=>st.delete('teamb:' + p.id));
+  changed(); renderChrome();
+}
+function teamMenuInfo(){
+  const p = activeProject(), el = document.getElementById('teamBadge');
+  const r = el ? el.getBoundingClientRect() : {left:innerWidth/2, bottom:60};
+  const online = TEAM.statusPid===p.id ? (TEAM.online || []) : [];
+  openMenu(r.left, r.bottom + 6, [
+    ...(TEAM.status==='locked' ? [{label:t('tm.connect'), icon:'link', run:()=>teamSync(p, {ask:true})}] : []),
+    {label:t('tm.syncNow'), icon:'refresh', run:()=>teamSync(p)},
+    {label:t('tm.myName', {name:teamUser()}), icon:'users', run:async()=>{ const n = await askText(t('tm.nameQ'), S.settings.userName || ''); if(n && n.trim()){ S.settings.userName = n.trim().slice(0,40); persistSoon(); TEAM.lastPresence = 0; } }},
+    {sep:1},
+    {label:t('tm.stop'), icon:'unlink', run:teamStop}
+  ], `${p.team.label}${online.length ? ' · ' + online.map(o=>o.name).join(', ') : ''}`);
+}
+
+/* ---------- Taktgeber ---------- */
+let teamDebounce = null;
+function teamStart(){
+  if(!TEAM_OK) return;
+  clearInterval(TEAM.timer);
+  let tick = 0;
+  TEAM.timer = setInterval(()=>{ tick++; if(document.hidden && tick % 6) return; const p = activeProject(); if(p && p.team) teamSync(p); }, TEAM_INTERVAL);   // im Hintergrund seltener
+  const p = activeProject(); if(p && p.team) teamSync(p, {quiet:true});
+}
+/* Nach lokalen Änderungen zügig hochladen */
+function teamPoke(){ const p = activeProject(); if(!p || !p.team) return; clearTimeout(teamDebounce); teamDebounce = setTimeout(()=>teamSync(p), 1500); }
+
+/* ============================================================================
    MODUL 4 — SHOTLIST
    ============================================================================ */
 function timecode(frames, fps){ const s = Math.floor(frames/fps); return `${pad(Math.floor(s/60))}:${pad(s%60)}:${pad(frames%fps)}`; }
@@ -6429,7 +6861,7 @@ function renderShots(){
   const total = p.shots.reduce((a,s)=>a+s.frames, 0), rendered = p.shots.filter(s=>s.status.render==='done').length;
   const rows = p.shots.map((s,i)=>`<tr data-shot="${i}">
     <td><input class="inp mono" style="width:92px;font-weight:600;color:var(--accent)" value="${esc(s.code)}" data-sf="code"></td>
-    <td><div class="thumb" data-sact="thumb" title="${esc(t('sh.upload'))}">${s.thumb ? `<img src="${esc(assetSrc(s.thumb))}" alt="">` : ic('image',15) + t('sh.image')}</div></td>
+    <td><div class="thumb ${s.thumb?'has':''}" data-sact="${s.thumb?'view':'thumb'}" title="${esc(t(s.thumb?'sh.view':'sh.upload'))}">${s.thumb ? `<img src="${esc(assetSrc(s.thumb))}" alt=""><button class="thumb-swap" data-sact="thumb" title="${esc(t('sh.replace'))}">${ic('image',13)}</button>` : ic('image',15) + t('sh.image')}</div></td>
     <td style="min-width:290px"><input class="inp" style="margin-bottom:4px;font-weight:600" value="${esc(s.seq)}" placeholder="${esc(t('sh.seq'))}" data-sf="seq"><input class="inp" style="color:var(--text-2)" value="${esc(s.desc)}" placeholder="${esc(t('sh.desc'))}" data-sf="desc"></td>
     <td><input class="inp mono" type="number" min="1" style="width:80px" value="${s.frames}" data-sf="frames"></td>
     <td class="mono" style="color:var(--text-2);white-space:nowrap">${(s.frames/fps).toLocaleString(locale(),{minimumFractionDigits:2, maximumFractionDigits:2})} s</td>
@@ -6470,12 +6902,22 @@ function renderShots(){
     const el = v.querySelector(`[data-shot="${j}"] [data-sf="${f}"]`); if(el) el.focus();
   };
   v.onchange = e => { const f = e.target.dataset.sf; if(!f) return; const s = p.shots[+e.target.closest('[data-shot]').dataset.shot]; if(!s) return; s[f] = f==='frames' ? Math.max(1, parseInt(e.target.value,10) || 1) : e.target.value; changed(); renderShots(); };
+  // Bild direkt auf ein Shot-Feld ziehen
+  v.ondragover = e => { const th = e.target.closest('.thumb'); if(!th || ![...e.dataTransfer.types].includes('Files')) return; e.preventDefault(); v.querySelectorAll('.thumb.drop').forEach(x=>x!==th && x.classList.remove('drop')); th.classList.add('drop'); };
+  v.ondragleave = e => { const th = e.target.closest('.thumb'); if(th) th.classList.remove('drop'); };
+  v.ondrop = async e => {
+    const th = e.target.closest('.thumb'); if(!th) return; e.preventDefault(); th.classList.remove('drop');
+    const f = [...e.dataTransfer.files].find(x=>x.type.startsWith('image/')); if(!f) return;
+    const i = +th.closest('[data-shot]').dataset.shot, s = p.shots[i]; if(!s) return;
+    s.thumb = addAsset(await compressImage(f, 1800)); changed(); renderShots();
+  };
   v.onclick = async e => {
     const row = e.target.closest('[data-shot]'); if(!row) return;
     const i = +row.dataset.shot, s = p.shots[i];
     const d = e.target.closest('[data-dept]'); if(d){ const o = ['todo','wip','done'], k = d.dataset.dept; s.status[k] = o[(o.indexOf(s.status[k])+1) % 3]; changed(); renderShots(); return; }
     const a = e.target.closest('[data-sact]'); if(!a) return;
-    if(a.dataset.sact==='thumb'){ const [f] = await pickFiles('image/*'); if(!f) return; s.thumb = addAsset(await compressImage(f, 640)); changed(); renderShots(); }
+    if(a.dataset.sact==='thumb'){ const [f] = await pickFiles('image/*'); if(!f) return; s.thumb = addAsset(await compressImage(f, 1800)); changed(); renderShots(); }
+    if(a.dataset.sact==='view'){ openShotImage(i); return; }
     if(a.dataset.sact==='del'){ if(await softDelete(s.code)){ p.shots.splice(i,1); changed(); renderShots(); } }
   };
 }
@@ -6678,6 +7120,7 @@ async function init(){
   applyUiZoom();
   initWindowChrome();
   verInit();
+  teamStart();
   window.vfZoomKey = d => stepUiZoom(d);
   if(!S.settings.tourDone) setTimeout(()=>{ if(!TOUR.on && !$('dialog').classList.contains('open')) startTour(); }, 500);
   if(!db) toast(t('ts.idbFail'), true);
@@ -6701,6 +7144,34 @@ async function init(){
   };
 }
 init();
+
+/* Shot-Bild groß ansehen, ersetzen oder entfernen (Pfeiltasten: vorheriger/nächster Shot mit Bild) */
+function openShotImage(i){
+  const p = activeProject();
+  const lb = document.createElement('div'); lb.className = 'lightbox shot-lb';
+  const draw = () => {
+    const s = p.shots[i]; if(!s || !s.thumb){ close(); return; }
+    lb.innerHTML = `<div class="lb-stage"><img src="${esc(assetSrc(s.thumb))}" alt=""></div>
+      <div class="lb-cap"><b class="mono">${esc(s.code)}</b>${s.desc ? ' · ' + esc(s.desc) : ''}</div>
+      <div class="lb-actions"><button class="btn" data-lb="replace">${ic('image',14)} ${t('sh.replace')}</button><button class="btn" data-lb="remove">${ic('trash',14)} ${t('sh.removeImg')}</button><button class="btn" data-lb="close">${ic('x',14)} Esc</button></div>`;
+  };
+  const withImg = dir => { for(let j = i + dir; j >= 0 && j < p.shots.length; j += dir) if(p.shots[j].thumb) return j; return -1; };
+  const close = () => { lb.classList.remove('open'); document.removeEventListener('keydown', kd, true); setTimeout(()=>lb.remove(), 200); };
+  const kd = e => {
+    if(e.key==='Escape'){ e.stopImmediatePropagation(); e.preventDefault(); close(); }
+    else if(e.key==='ArrowRight' || e.key==='ArrowLeft'){ const j = withImg(e.key==='ArrowRight' ? 1 : -1); if(j>=0){ i = j; draw(); } e.preventDefault(); e.stopImmediatePropagation(); }
+  };
+  draw(); document.body.appendChild(lb); requestAnimationFrame(()=>lb.classList.add('open'));
+  document.addEventListener('keydown', kd, true);
+  lb.addEventListener('click', async e=>{
+    const b = e.target.closest('[data-lb]');
+    if(!b){ if(!e.target.closest('img')) close(); return; }
+    const s = p.shots[i];
+    if(b.dataset.lb==='replace'){ const [f] = await pickFiles('image/*'); if(!f) return; s.thumb = addAsset(await compressImage(f, 1800)); changed(); renderShots(); draw(); }
+    else if(b.dataset.lb==='remove'){ s.thumb = ''; changed(); renderShots(); close(); undoToast(t('ts.deletedNamed',{name:s.code + ' · ' + t('sh.image')})); }
+    else close();
+  });
+}
 
 </script>
 </body>

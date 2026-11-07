@@ -67,6 +67,13 @@ de: [
   <li><b>Versionen</b> (Uhr-Symbol, <kbd>Strg</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): automatisch alle 10 Minuten, bei jedem Speichern, vor dem Öffnen, Wiederherstellen und vor jedem Update. Benannte Version mit <kbd>Strg</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. Wiederherstellen, als Kopie öffnen, exportieren oder behalten.</li>
   <li><b>PC ↔ Laptop:</b> .vforge-Datei in einen Cloud-Ordner legen und dort öffnen oder importieren.</li></ul>
   <div class="tip">Im Browser gehen die Daten verloren, wenn du die Browser-Daten löschst – sichere wichtige Stände als .vforge-Datei.</div>`],
+ ['team','users','Im Team arbeiten',`
+  <p>Mehrere Personen – oder du an mehreren Computern – arbeiten am selben Projekt, <b>ohne Server und ohne Konto</b>. Das Projekt liegt dazu in einem Ordner, den ihr ohnehin teilt: OneDrive, Dropbox, Google Drive, Nextcloud oder ein Netzlaufwerk.</p>
+  <ol><li><b>Datei ▸ Im Team-Ordner teilen …</b> – geteilten Ordner wählen. Darin entsteht „Projektname.vforge-team“.</li>
+  <li>Alle anderen: <b>Datei ▸ Team-Projekt öffnen …</b> und genau diesen Ordner wählen.</li>
+  <li>Oben neben dem Projektnamen zeigt <b>Team</b> den Status und wer gerade mitarbeitet.</li></ol>
+  <p>Jede Aufgabe, Karte, jeder Shot und jedes Kapitel ist eine eigene kleine Datei. Ändern zwei Leute <i>verschiedene</i> Dinge, wird alles automatisch zusammengeführt. Ändern beide <i>dasselbe</i> gleichzeitig, gilt deine Fassung – die andere bleibt im Unterordner „conflicts“ erhalten. Abgeglichen wird alle paar Sekunden; wie schnell es bei den anderen ankommt, hängt vom Cloud-Dienst ab.</p>
+  <div class="tip">Ist der Ordner kurz nicht erreichbar (offline, Laptop unterwegs), arbeitest du einfach lokal weiter – beim nächsten Kontakt wird abgeglichen. Team-Ordner funktionieren in der Windows-App sowie in Chrome und Edge am Computer.</div>`],
  ['install','download','Installation & Updates',`
   <ul><li><b>Installieren:</b> „VertexForge Studio Setup.exe“ starten, Sprache und Zielordner wählen – Desktop- und Startmenü-Verknüpfung werden angelegt.</li>
   <li><b>Updates:</b> einfach das neue Setup ausführen. Deine Projekte liegen getrennt vom Programm in deinem Benutzerprofil und werden <b>nie überschrieben</b>; vor jedem Update entsteht automatisch eine Sicherheits-Version, und ältere Daten werden verlustfrei übernommen.</li>
@@ -146,6 +153,13 @@ en: [
   <li><b>Versions</b> (clock icon, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): automatically every 10 minutes, on every save, before opening, restoring and before every update. Named version with <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. Restore, open as a copy, export or keep.</li>
   <li><b>PC ↔ laptop:</b> keep the .vforge file in a cloud folder and open or import it there.</li></ul>
   <div class="tip">In the browser, clearing browser data deletes your data – keep important states as .vforge files.</div>`],
+ ['team','users','Working as a team',`
+  <p>Several people – or you on several computers – work on the same project <b>without a server or an account</b>. The project lives in a folder you already share: OneDrive, Dropbox, Google Drive, Nextcloud or a network drive.</p>
+  <ol><li><b>File ▸ Share in a team folder…</b> – choose the shared folder. A “Project name.vforge-team” folder is created inside.</li>
+  <li>Everyone else: <b>File ▸ Open team project…</b> and choose exactly that folder.</li>
+  <li><b>Team</b> next to the project name shows the status and who is working right now.</li></ol>
+  <p>Every task, card, shot and chapter is its own small file. When two people change <i>different</i> things, everything is merged automatically. When both change <i>the same</i> thing at the same moment, your version wins – the other one is kept in the “conflicts” subfolder. Syncing happens every few seconds; how fast it reaches the others depends on the cloud service.</p>
+  <div class="tip">If the folder is briefly unreachable (offline, laptop on the road), just keep working locally – it syncs on the next contact. Team folders work in the Windows app and in Chrome or Edge on a computer.</div>`],
  ['install','download','Installation & updates',`
   <ul><li><b>Install:</b> run “VertexForge Studio Setup.exe”, choose language and folder – desktop and Start menu shortcuts are created.</li>
   <li><b>Updates:</b> just run the new setup. Your projects live separately from the program in your user profile and are <b>never overwritten</b>; a safety version is created before every update and older data is migrated without loss.</li>
@@ -222,6 +236,10 @@ fr: [
   <li><b>Fichier projet (.vforge) :</b> disquette en haut à droite ou <kbd>Ctrl</kbd>+<kbd>S</kbd> ; <kbd>Ctrl</kbd>+<kbd>Maj</kbd>+<kbd>S</kbd> sous un autre nom ; <b>incrémental</b> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Maj</kbd>+<kbd>S</kbd>) crée <i>_v02</i>, <i>_v03</i> …</li>
   <li><b>Versions</b> (icône horloge, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>) : toutes les 10 minutes, à chaque enregistrement, avant ouverture, restauration et mise à jour. Version nommée : <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>.</li></ul>
   <div class="tip">Dans le navigateur, effacer les données du navigateur supprime vos données – gardez des fichiers .vforge.</div>`],
+ ['team','users','Travailler en équipe',`
+  <p>Plusieurs personnes – ou vous sur plusieurs ordinateurs – travaillent sur le même projet, <b>sans serveur ni compte</b>, via un dossier déjà partagé (OneDrive, Dropbox, Google Drive, Nextcloud, lecteur réseau).</p>
+  <ol><li><b>Fichier ▸ Partager dans un dossier d’équipe…</b></li><li>Les autres : <b>Fichier ▸ Ouvrir un projet d’équipe…</b> et choisir le dossier « .vforge-team ».</li><li><b>Équipe</b> à côté du nom du projet montre l’état et qui travaille.</li></ol>
+  <p>Les modifications d’éléments différents sont fusionnées automatiquement. Si le même élément change en même temps, votre version est gardée et l’autre est conservée dans « conflicts ».</p>`],
  ['install','download','Installation & mises à jour',`
   <ul><li><b>Installer :</b> lancez « VertexForge Studio Setup.exe », choisissez langue et dossier – raccourcis bureau et menu Démarrer inclus.</li>
   <li><b>Mises à jour :</b> lancez simplement le nouveau setup. Vos projets sont stockés à part dans votre profil et ne sont <b>jamais écrasés</b> ; une version de sécurité est créée avant chaque mise à jour.</li>
@@ -297,6 +315,10 @@ es: [
   <li><b>Archivo de proyecto (.vforge):</b> disquete arriba a la derecha o <kbd>Ctrl</kbd>+<kbd>S</kbd>; <kbd>Ctrl</kbd>+<kbd>Mayús</kbd>+<kbd>S</kbd> con otro nombre; <b>incremental</b> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Mayús</kbd>+<kbd>S</kbd>) crea <i>_v02</i>, <i>_v03</i> …</li>
   <li><b>Versiones</b> (icono de reloj, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): cada 10 minutos, al guardar, antes de abrir, restaurar y actualizar. Versión con nombre: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>.</li></ul>
   <div class="tip">En el navegador, borrar sus datos elimina tus proyectos: guarda archivos .vforge.</div>`],
+ ['team','users','Trabajar en equipo',`
+  <p>Varias personas – o tú en varios ordenadores – trabajan en el mismo proyecto <b>sin servidor ni cuenta</b>, mediante una carpeta ya compartida (OneDrive, Dropbox, Google Drive, Nextcloud, unidad de red).</p>
+  <ol><li><b>Archivo ▸ Compartir en carpeta de equipo…</b></li><li>Los demás: <b>Archivo ▸ Abrir proyecto de equipo…</b> y elegir la carpeta «.vforge-team».</li><li><b>Equipo</b> junto al nombre del proyecto muestra el estado y quién trabaja.</li></ol>
+  <p>Los cambios en elementos distintos se combinan solos. Si el mismo elemento cambia a la vez, se mantiene tu versión y la otra se guarda en «conflicts».</p>`],
  ['install','download','Instalación y actualizaciones',`
   <ul><li><b>Instalar:</b> ejecuta «VertexForge Studio Setup.exe», elige idioma y carpeta; se crean accesos directos en el escritorio y el menú Inicio.</li>
   <li><b>Actualizar:</b> ejecuta el nuevo instalador. Tus proyectos se guardan aparte en tu perfil y <b>nunca se sobrescriben</b>; antes de cada actualización se crea una versión de seguridad.</li>
@@ -372,6 +394,10 @@ it: [
   <li><b>File progetto (.vforge):</b> dischetto in alto a destra o <kbd>Ctrl</kbd>+<kbd>S</kbd>; <kbd>Ctrl</kbd>+<kbd>Maiusc</kbd>+<kbd>S</kbd> con nuovo nome; <b>incrementale</b> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Maiusc</kbd>+<kbd>S</kbd>) crea <i>_v02</i>, <i>_v03</i> …</li>
   <li><b>Versioni</b> (icona orologio, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): ogni 10 minuti, a ogni salvataggio, prima di aprire, ripristinare e aggiornare. Versione con nome: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>.</li></ul>
   <div class="tip">Nel browser, cancellare i dati del browser elimina i progetti – conserva file .vforge.</div>`],
+ ['team','users','Lavorare in team',`
+  <p>Più persone – o tu su più computer – lavorano sullo stesso progetto <b>senza server né account</b>, tramite una cartella già condivisa (OneDrive, Dropbox, Google Drive, Nextcloud, unità di rete).</p>
+  <ol><li><b>File ▸ Condividi in una cartella del team…</b></li><li>Gli altri: <b>File ▸ Apri progetto del team…</b> e scegliere la cartella «.vforge-team».</li><li><b>Team</b> accanto al nome del progetto mostra lo stato e chi sta lavorando.</li></ol>
+  <p>Le modifiche a elementi diversi vengono unite automaticamente. Se lo stesso elemento cambia insieme, vale la tua versione e l’altra resta in «conflicts».</p>`],
  ['install','download','Installazione e aggiornamenti',`
   <ul><li><b>Installare:</b> avvia «VertexForge Studio Setup.exe», scegli lingua e cartella – vengono create le scorciatoie su desktop e menu Start.</li>
   <li><b>Aggiornare:</b> avvia il nuovo setup. I progetti sono salvati a parte nel tuo profilo e <b>non vengono mai sovrascritti</b>; prima di ogni aggiornamento si crea una versione di sicurezza.</li>
@@ -447,6 +473,10 @@ pt: [
   <li><b>Arquivo de projeto (.vforge):</b> disquete no canto superior direito ou <kbd>Ctrl</kbd>+<kbd>S</kbd>; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> com outro nome; <b>incremental</b> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>) cria <i>_v02</i>, <i>_v03</i> …</li>
   <li><b>Versões</b> (ícone de relógio, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>): a cada 10 minutos, ao salvar, antes de abrir, restaurar e atualizar. Versão com nome: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>.</li></ul>
   <div class="tip">No navegador, limpar os dados do navegador apaga seus projetos – guarde arquivos .vforge.</div>`],
+ ['team','users','Trabalhar em equipe',`
+  <p>Várias pessoas – ou você em vários computadores – trabalham no mesmo projeto <b>sem servidor nem conta</b>, por uma pasta já compartilhada (OneDrive, Dropbox, Google Drive, Nextcloud, rede).</p>
+  <ol><li><b>Arquivo ▸ Compartilhar numa pasta de equipe…</b></li><li>Os outros: <b>Arquivo ▸ Abrir projeto de equipe…</b> e escolher a pasta “.vforge-team”.</li><li><b>Equipe</b> ao lado do nome do projeto mostra o estado e quem está trabalhando.</li></ol>
+  <p>Alterações em elementos diferentes são unidas automaticamente. Se o mesmo elemento muda ao mesmo tempo, vale a sua versão e a outra fica em “conflicts”.</p>`],
  ['install','download','Instalação e atualizações',`
   <ul><li><b>Instalar:</b> execute «VertexForge Studio Setup.exe», escolha idioma e pasta – atalhos na área de trabalho e no menu Iniciar são criados.</li>
   <li><b>Atualizar:</b> basta executar o novo instalador. Seus projetos ficam separados no seu perfil e <b>nunca são sobrescritos</b>; antes de cada atualização é criada uma versão de segurança.</li>

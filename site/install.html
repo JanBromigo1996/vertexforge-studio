@@ -441,6 +441,24 @@ footer .small{color:var(--muted)}
 @media (max-width:860px){.touchsec{grid-template-columns:1fr;padding:24px}.ts-devices{height:330px}.dev.tablet{width:220px;height:295px;left:2%}.dev.phone{width:126px;height:250px;right:4%}}
 @media (prefers-reduced-motion: reduce){.sc-track,.dev.tablet,.dev.phone{animation:none}}
 
+/* Teamarbeit */
+.teamsec{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center}
+.teamsec h2{margin:6px 0 14px}
+.ts-visual{position:relative;height:340px;border-radius:18px;border:1px solid var(--line);background:radial-gradient(ellipse at 50% 55%,color-mix(in srgb,var(--brass) 14%,transparent),transparent 65%),var(--panel)}
+.tv-folder{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--brass);z-index:2;animation:tvFloat 5s ease-in-out infinite}
+.tv-folder span{font:600 .72rem var(--mono);color:var(--fg-2)}
+.tv-person{position:absolute;display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;background:var(--bg);border:1px solid var(--line);box-shadow:var(--shadow);font-size:.8rem;color:var(--fg-2);z-index:2}
+.tv-person i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;color:#fff}
+.p1{left:6%;top:12%}.p1 i{background:#7c5cc4}
+.p2{right:5%;top:16%}.p2 i{background:#3f9c97}
+.p3{left:50%;bottom:7%;transform:translateX(-50%)}.p3 i{background:#c4553f}
+.tv-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.tv-lines path{fill:none;stroke:var(--brass);stroke-width:2;stroke-dasharray:6 8;opacity:.6;animation:tvFlow 1.6s linear infinite}
+@keyframes tvFlow{to{stroke-dashoffset:-28}}
+@keyframes tvFloat{50%{transform:translate(-50%,-56%)}}
+@media (max-width:860px){.teamsec{grid-template-columns:1fr;gap:28px}.ts-visual{height:280px}}
+@media (prefers-reduced-motion: reduce){.tv-lines path,.tv-folder{animation:none}}
+
 </style>
 
 <header class="top">
@@ -465,7 +483,7 @@ footer .small{color:var(--muted)}
 <section class="hero guide-hero">
   <div class="wrap">
     <a class="back rise" href="index.html" style="--d:0">← <span data-en>Back to the homepage</span><span data-de>Zurück zur Startseite</span></a>
-    <div class="eyebrow rise" style="--d:1;margin-top:20px"><span data-en>Installation guide · v2.5.0</span><span data-de>Installationsanleitung · v2.5.0</span></div>
+    <div class="eyebrow rise" style="--d:1;margin-top:20px"><span data-en>Installation guide · v2.6.0</span><span data-de>Installationsanleitung · v2.6.0</span></div>
     <h1 class="rise" style="--d:2;margin-top:12px"><span data-en>From download to your <em>first project</em></span><span data-de>Vom Download zum <em>ersten Projekt</em></span></h1>
     <p class="lead rise" style="--d:3"><span data-en>About three minutes. Pick your system, follow the steps, and the guided tour takes over on the first start.</span><span data-de>Etwa drei Minuten. Wähle dein System, folge den Schritten, und beim ersten Start übernimmt die geführte Tour.</span></p>
     <div class="pick rise" style="--d:4">
@@ -617,7 +635,7 @@ footer .small{color:var(--muted)}
 <footer>
   <div class="wrap">
     <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="24" height="24">VertexForge Studio</a>
-    <span>v2.5.0 · MIT License</span>
+    <span>v2.6.0 · MIT License</span>
     <span><span data-en>Made by Jan with Claude. No AI in your art.</span><span data-de>Von Jan mit Claude gemacht. Keine KI in deiner Kunst.</span></span>
     <a href="index.html"><span data-en>Homepage</span><span data-de>Startseite</span></a>
     <a data-gh="" href="#">GitHub</a>

@@ -3,7 +3,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.5.0';
+const APP_VERSION = '2.6.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -66,6 +66,8 @@ const L = (de, en) => currentLang()==='de' ? de : en;
    B. ICONS (eigene Linien-Icons, offline)
    ============================================================================ */
 const ICONS = {
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c1.9.7 3.1 2.5 3.5 5.2"/>',
+  refresh:'<path d="M20 11a8 8 0 0 0-14.7-4.3L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.7 4.3L20 16"/><path d="M20 21v-5h-5"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/>',
   paw:'<circle cx="6" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="18" cy="10" r="2"/><path d="M8.5 15.5c1-2.3 2.2-3.5 3.5-3.5s2.5 1.2 3.5 3.5c.8 1.9-.3 4-2.3 4h-2.4c-2 0-3.1-2.1-2.3-4z"/>',
   cube:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',
@@ -679,6 +681,7 @@ function normalizeProject(p, A){
     boards:arr(p.boards).map(b=>normalizeBoard(b, A)),
     shots:arr(p.shots).map(s=>({uid:sid(s.uid,'sh'), code:str(s.code ?? s.id,'SH_010'), seq:str(s.seq), desc:str(s.desc), frames:Math.round(num(s.frames,48,1,1e6)), lens:str(s.lens,'35mm'), vfx:str(s.vfx), thumb:A.ref(s.thumb), status:Object.fromEntries(DEPTS.map(([k])=>[k, st(s.status && s.status[k])]))})),
     chapters:arr(p.chapters).map(c=>({id:sid(c.id,'ch'), title:str(c.title,'Szene'), body:str(c.body)})),
+    team:p.team && typeof p.team==='object' && p.team.label ? {label:str(p.team.label).slice(0,200), path:str(p.team.path).slice(0,1000)} : null,
     lore:arr(p.lore).map(l=>({id:sid(l.id,'lr'), name:str(l.name,'Asset'), category:str(l.category), polyTarget:str(l.polyTarget), shader:str(l.shader), notes:str(l.notes), stage:Math.round(num(l.stage,0,0,STAGES-1)), links:normLinks(l.links)}))
   };
   if(!proj.boards.length) proj.boards.push(newBoard('Board'));
@@ -695,6 +698,7 @@ function normalizeSettings(s){
     cardSize:num(s.cardSize,240,160,380), titleScale:num(s.titleScale,1,.6,1.6),
     hubSort:['recent','name','progress','deadline'].includes(s.hubSort) ? s.hubSort : 'recent',
     hubStyle:LIB_STYLES.includes(s.hubStyle) ? s.hubStyle : 'studio',
+    userName:str(s.userName).slice(0,40),
     taskFilter:['all','open','overdue','critical'].includes(s.taskFilter) ? s.taskFilter : 'all',
     sortByDate:!!s.sortByDate, pipeView:s.pipeView==='kanban' ? 'kanban' : 'list',
     leftDrag:s.leftDrag==='pan' ? 'pan' : 'select', snap:s.snap!==false, grid:s.grid!==false, sysIcons:s.sysIcons!==false,
@@ -777,6 +781,7 @@ function changed(){
   if(!ui.fileDirty && S.file && S.file.name){ ui.fileDirty = true; renderSavePill(); }
   persistSoon();
   clearTimeout(histTimer); histTimer = setTimeout(histCommit, 450);
+  if(typeof teamPoke==='function') teamPoke();
 }
 async function saveNow(){
   clearTimeout(saveTimer); saveTimer = 0;
@@ -836,6 +841,7 @@ function serialize(projects){
   projects = projects || S.projects;
   const refs = collectRefs(projects), assets = {};
   refs.forEach(id=>{ if(S.assets[id]) assets[id] = S.assets[id]; });
+  projects = projects.map(p=>p.team ? Object.assign({}, p, {team:null}) : p);   // Team-Verknüpfung ist gerätebezogen
   return JSON.stringify({app:'VertexForge Studio', schema:SCHEMA, version:APP_VERSION, exportedAt:new Date().toISOString(), data:{activeProjectId:S.activeProjectId, projects, assets}});
 }
 function stamp(){ const d = new Date(); return `${isoLocal(d)}_${pad(d.getHours())}${pad(d.getMinutes())}`; }
@@ -1148,6 +1154,7 @@ function renderChrome(){
       <button class="brand" data-act="home" title="VertexForge Studio · ${esc(t('mod.projects'))}">${LOGO_SVG}</button>
       <nav class="menubar">${['file','edit','view','help'].map(m=>`<button data-menu="${m}">${t('menu.'+m)}</button>`).join('')}</nav>
       <button class="proj-crumb" id="projCrumb" title="${esc(t('pal.project'))}"><span class="pc-dot"></span><span class="pc-name">${esc(projectName(p))}</span>${ic('chevron',13)}</button>
+      <button class="team-badge" id="teamBadge" hidden></button>
     </div>
     <nav class="tabs" id="tabs" role="tablist"><span class="tab-ink" id="tabInk"></span>${MODULES.map((m,i)=>`<button role="tab" data-mod="${m}" class="${S.activeModule===m?'active':''}" title="${esc(t('mod.'+m))} · Alt+${i+1}">${ic(MOD_ICONS[m],15)}<span>${t('mod.'+m)}</span></button>`).join('')}</nav>
     <div class="tb-right">
@@ -1173,6 +1180,8 @@ function renderChrome(){
   const fs = tb.querySelector('[data-act=fullscreen]'); if(fs) fs.onclick = toggleFullscreen;
   tb.querySelectorAll('[data-win]').forEach(b=>b.onclick = () => winAction(b.dataset.win));
   $('projCrumb').onclick = e => openProjectMenu(e.currentTarget);
+  $('teamBadge').onclick = () => { const p = activeProject(); if(TEAM.status==='locked') teamSync(p, {ask:true}); else teamMenuInfo(); };
+  renderTeamBadge();
   $('savePill').onclick = () => saveFile();
   renderSavePill(); renderStatus(); updateTitle();
   requestAnimationFrame(()=>moveTabInk(true));
@@ -1273,6 +1282,9 @@ function openMainMenu(btn){
     {sep:1},
     {label:t('ver.save'), icon:'flag', kbd:'Ctrl+Alt+S', run:()=>saveVersionPrompt()},
     {label:t('ver.title'), icon:'history', kbd:'Ctrl+Alt+H', run:openVersions},
+    {sep:1},
+    {label:t(activeProject().team ? 'tm.manage' : 'f.teamShare'), icon:'users', run:teamShare},
+    {label:t('f.teamOpen'), icon:'folder', run:teamOpen},
     {sep:1},
     {label:t('f.exportProject'), icon:'download', run:()=>exportProject(S.activeProjectId)},
     {label:t('f.backup'), icon:'download', run:exportBackup},

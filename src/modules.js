@@ -266,6 +266,7 @@ async function init(){
   applyUiZoom();
   initWindowChrome();
   verInit();
+  teamStart();
   window.vfZoomKey = d => stepUiZoom(d);
   if(!S.settings.tourDone) setTimeout(()=>{ if(!TOUR.on && !$('dialog').classList.contains('open')) startTour(); }, 500);
   if(!db) toast(t('ts.idbFail'), true);

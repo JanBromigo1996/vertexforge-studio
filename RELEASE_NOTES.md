@@ -1,3 +1,21 @@
+## VertexForge Studio 2.6.0
+
+### New: team folders – work together without a server
+- **File ▸ Share in a team folder…** puts the project into a folder your team already syncs
+  (OneDrive, Dropbox, Google Drive, Nextcloud or a network drive). Others use **File ▸ Open team project…**.
+- Every task, card, shot and chapter is its own small file. Changes to different things are merged automatically
+  every few seconds; if two people change the same thing at once, your version wins and the other is kept in `conflicts/`.
+- The **Team** badge next to the project name shows the sync status and who is working right now.
+- Works offline – syncs again when the folder is reachable. Windows app, Chrome and Edge on a computer.
+- Still no server, no account, no internet connection from VertexForge itself; your cloud service does the syncing.
+
+### Shot list
+- Click a shot image to see it large; replace or remove it there (←/→ for the next shot). Drop images onto a shot.
+
+**VirusTotal (2.6.0):** results for these exact files are linked on the website and will be added here.
+
+---
+
 ## VertexForge Studio 2.5.0
 
 ### New
@@ -14,8 +32,6 @@
 - Cover and title size moved from the library header into “View”, next to the library style.
 - Images and videos share one “Images & videos” button on the board.
 - Compact design buttons in pipeline and shot list; tabs show labels only for the active area on smaller screens.
-
-**VirusTotal (2.5.0):** results for these exact files are linked on the website and will be added here.
 
 ---
 
