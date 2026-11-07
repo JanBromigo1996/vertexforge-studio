@@ -459,6 +459,67 @@ footer .small{color:var(--muted)}
 @media (max-width:860px){.teamsec{grid-template-columns:1fr;gap:28px}.ts-visual{height:280px}}
 @media (prefers-reduced-motion: reduce){.tv-lines path,.tv-folder{animation:none}}
 
+/* ---------- Trailer: schnelle Schnitte ---------- */
+.show-img{transition:none;transform:none}
+.show-img.on{opacity:1;transform:none}
+.show-img.leave{opacity:1;z-index:1}
+.show-img.enter{z-index:2;opacity:1}
+.show-img.tr-wipe{animation:trWipe .48s cubic-bezier(.7,0,.2,1)}
+.show-img.tr-iris{animation:trIris .5s cubic-bezier(.6,0,.2,1)}
+.show-img.tr-zoom{animation:trZoom .45s cubic-bezier(.2,.7,.2,1)}
+.show-img.tr-slide{animation:trSlide .46s cubic-bezier(.7,0,.2,1)}
+.show-img.tr-split{animation:trSplit .5s cubic-bezier(.7,0,.2,1)}
+.show-img.tr-tilt{animation:trTilt .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes trWipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes trIris{from{clip-path:circle(0% at 50% 50%)}to{clip-path:circle(75% at 50% 50%)}}
+@keyframes trZoom{from{opacity:0;transform:scale(1.18);filter:blur(10px) brightness(1.4)}to{opacity:1;transform:none;filter:none}}
+@keyframes trSlide{from{transform:translateX(100%)}to{transform:none}}
+@keyframes trSplit{from{clip-path:polygon(50% 0,50% 0,50% 100%,50% 100%)}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+@keyframes trTilt{from{opacity:0;transform:perspective(1200px) rotateY(-24deg) scale(.92)}to{opacity:1;transform:none}}
+.show-img.leave{animation:trOut .5s ease-in forwards}
+@keyframes trOut{to{filter:brightness(.55)}}
+.tr-title{position:absolute;inset:0;z-index:5;display:grid;place-items:center;pointer-events:none;font:700 clamp(28px,6vw,72px)/1 var(--display);color:#fff;text-transform:uppercase;letter-spacing:.5em;opacity:0;text-shadow:0 6px 40px rgba(0,0,0,.6)}
+.tr-title.go{animation:trTitle .95s cubic-bezier(.2,.7,.2,1)}
+@keyframes trTitle{0%{opacity:0;letter-spacing:.8em;transform:scale(1.08)}25%{opacity:1}70%{opacity:1;letter-spacing:.22em;transform:none}100%{opacity:0;letter-spacing:.18em}}
+.tr-flash{position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,236,190,.55),rgba(0,0,0,.35) 70%);opacity:0}
+.tr-flash.go{animation:trFlash .6s ease-out}
+@keyframes trFlash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+.show-bar i.run{animation-duration:1.5s}
+.show-stage.paused .show-bar i{animation-play-state:paused}
+
+/* ---------- Sammelkarten auf der Hand ---------- */
+#cards{overflow:hidden}
+.cardsec{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:center}
+.cardsec h2{margin:6px 0 14px}
+.rarity{list-style:none;padding:0;margin:18px 0 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rarity li{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-size:.88rem;color:var(--fg-2)}
+.rarity b{color:#f2c94c;letter-spacing:.06em;font-size:.9rem;min-width:52px}
+.rarity li.foil{background:linear-gradient(115deg,var(--panel) 30%,color-mix(in srgb,#cfd8e6 22%,var(--panel)) 50%,var(--panel) 70%) 0 0/250% 100%;animation:foilRun 3.2s linear infinite}
+.rarity li.holo{border-color:transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(110deg,#ff6fd8,#ffd36f,#6fffb5,#6fd3ff,#b86fff,#ff6fd8) 0 0/300% 100% border-box;animation:foilRun 4s linear infinite}
+@keyframes foilRun{to{background-position:250% 0,300% 0}}
+.hand{position:relative;height:420px;perspective:1600px;max-width:560px;margin-left:auto;width:100%}
+.hcard{position:absolute;left:50%;bottom:24px;width:200px;aspect-ratio:460/643;padding:0;border:0;background:none;cursor:pointer;
+  transform-origin:50% 130%;transform:translateX(calc(-50% + var(--x))) rotate(var(--r));transition:transform .45s cubic-bezier(.2,.8,.2,1),filter .3s;z-index:var(--i);
+  opacity:0;translate:0 120px}
+.hand.dealt .hcard{animation:deal .7s cubic-bezier(.2,.9,.25,1.1) both;animation-delay:calc(var(--i) * 110ms)}
+@keyframes deal{from{opacity:0;translate:0 160px;rotate:-25deg}to{opacity:1;translate:0 0;rotate:0deg}}
+.hand.dealt .hcard{opacity:1;translate:0 0}
+.hcard:hover,.hcard:focus-visible,.hcard.tease{transform:translateX(calc(-50% + var(--x))) translateY(-34px) rotate(0deg) scale(1.08);z-index:10}
+.hand:hover .hcard:not(:hover){filter:brightness(.8) saturate(.85)}
+.hc-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.75,.2,1);transform:rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg))}
+.hcard:hover .hc-in{transition:transform .12s ease-out}
+.hcard.flip .hc-in{transform:rotateX(var(--tx,0deg)) rotateY(calc(180deg - var(--ty,0deg)));transition:transform .7s cubic-bezier(.3,.75,.2,1)}
+.hc-in img{position:absolute;inset:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;filter:drop-shadow(0 22px 26px rgba(0,0,0,.55))}
+.hc-b{transform:rotateY(180deg)}
+.hc-shine{position:absolute;inset:0;border-radius:4.6%/3.3%;pointer-events:none;opacity:0;transition:opacity .3s;mix-blend-mode:soft-light;background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.75),transparent 45%)}
+.hcard:hover .hc-shine{opacity:1}
+.hcard.r4 .hc-shine{mix-blend-mode:color-dodge;opacity:.25;background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.5),transparent 40%),linear-gradient(125deg,rgba(255,111,216,.6),rgba(255,211,111,.6),rgba(111,255,181,.6),rgba(111,211,255,.6),rgba(184,111,255,.6)) calc(var(--mx,50%) * 1.5) calc(var(--my,50%) * 1.2)/250% 250%}
+.hcard.r4:hover .hc-shine{opacity:.5}
+.hcard.flip .hc-shine{opacity:0}
+@media (max-width:980px){.cardsec{grid-template-columns:1fr}.hand{height:400px}}
+@media (max-width:560px){.hand{height:330px}.hcard{width:150px}.hcard:nth-child(1){--x:-120px!important}.hcard:nth-child(2){--x:-42px!important}.hcard:nth-child(3){--x:42px!important}.hcard:nth-child(4){--x:120px!important}.rarity{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.hcard,.hand.dealt .hcard{animation:none;opacity:1;translate:0 0}.rarity li{animation:none}.show-img[class*="tr-"]{animation:none}}
+
 </style>
 
 <header class="top">

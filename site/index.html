@@ -459,6 +459,67 @@ footer .small{color:var(--muted)}
 @media (max-width:860px){.teamsec{grid-template-columns:1fr;gap:28px}.ts-visual{height:280px}}
 @media (prefers-reduced-motion: reduce){.tv-lines path,.tv-folder{animation:none}}
 
+/* ---------- Trailer: schnelle Schnitte ---------- */
+.show-img{transition:none;transform:none}
+.show-img.on{opacity:1;transform:none}
+.show-img.leave{opacity:1;z-index:1}
+.show-img.enter{z-index:2;opacity:1}
+.show-img.tr-wipe{animation:trWipe .48s cubic-bezier(.7,0,.2,1)}
+.show-img.tr-iris{animation:trIris .5s cubic-bezier(.6,0,.2,1)}
+.show-img.tr-zoom{animation:trZoom .45s cubic-bezier(.2,.7,.2,1)}
+.show-img.tr-slide{animation:trSlide .46s cubic-bezier(.7,0,.2,1)}
+.show-img.tr-split{animation:trSplit .5s cubic-bezier(.7,0,.2,1)}
+.show-img.tr-tilt{animation:trTilt .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes trWipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes trIris{from{clip-path:circle(0% at 50% 50%)}to{clip-path:circle(75% at 50% 50%)}}
+@keyframes trZoom{from{opacity:0;transform:scale(1.18);filter:blur(10px) brightness(1.4)}to{opacity:1;transform:none;filter:none}}
+@keyframes trSlide{from{transform:translateX(100%)}to{transform:none}}
+@keyframes trSplit{from{clip-path:polygon(50% 0,50% 0,50% 100%,50% 100%)}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+@keyframes trTilt{from{opacity:0;transform:perspective(1200px) rotateY(-24deg) scale(.92)}to{opacity:1;transform:none}}
+.show-img.leave{animation:trOut .5s ease-in forwards}
+@keyframes trOut{to{filter:brightness(.55)}}
+.tr-title{position:absolute;inset:0;z-index:5;display:grid;place-items:center;pointer-events:none;font:700 clamp(28px,6vw,72px)/1 var(--display);color:#fff;text-transform:uppercase;letter-spacing:.5em;opacity:0;text-shadow:0 6px 40px rgba(0,0,0,.6)}
+.tr-title.go{animation:trTitle .95s cubic-bezier(.2,.7,.2,1)}
+@keyframes trTitle{0%{opacity:0;letter-spacing:.8em;transform:scale(1.08)}25%{opacity:1}70%{opacity:1;letter-spacing:.22em;transform:none}100%{opacity:0;letter-spacing:.18em}}
+.tr-flash{position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,236,190,.55),rgba(0,0,0,.35) 70%);opacity:0}
+.tr-flash.go{animation:trFlash .6s ease-out}
+@keyframes trFlash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+.show-bar i.run{animation-duration:1.5s}
+.show-stage.paused .show-bar i{animation-play-state:paused}
+
+/* ---------- Sammelkarten auf der Hand ---------- */
+#cards{overflow:hidden}
+.cardsec{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:center}
+.cardsec h2{margin:6px 0 14px}
+.rarity{list-style:none;padding:0;margin:18px 0 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rarity li{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-size:.88rem;color:var(--fg-2)}
+.rarity b{color:#f2c94c;letter-spacing:.06em;font-size:.9rem;min-width:52px}
+.rarity li.foil{background:linear-gradient(115deg,var(--panel) 30%,color-mix(in srgb,#cfd8e6 22%,var(--panel)) 50%,var(--panel) 70%) 0 0/250% 100%;animation:foilRun 3.2s linear infinite}
+.rarity li.holo{border-color:transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(110deg,#ff6fd8,#ffd36f,#6fffb5,#6fd3ff,#b86fff,#ff6fd8) 0 0/300% 100% border-box;animation:foilRun 4s linear infinite}
+@keyframes foilRun{to{background-position:250% 0,300% 0}}
+.hand{position:relative;height:420px;perspective:1600px;max-width:560px;margin-left:auto;width:100%}
+.hcard{position:absolute;left:50%;bottom:24px;width:200px;aspect-ratio:460/643;padding:0;border:0;background:none;cursor:pointer;
+  transform-origin:50% 130%;transform:translateX(calc(-50% + var(--x))) rotate(var(--r));transition:transform .45s cubic-bezier(.2,.8,.2,1),filter .3s;z-index:var(--i);
+  opacity:0;translate:0 120px}
+.hand.dealt .hcard{animation:deal .7s cubic-bezier(.2,.9,.25,1.1) both;animation-delay:calc(var(--i) * 110ms)}
+@keyframes deal{from{opacity:0;translate:0 160px;rotate:-25deg}to{opacity:1;translate:0 0;rotate:0deg}}
+.hand.dealt .hcard{opacity:1;translate:0 0}
+.hcard:hover,.hcard:focus-visible,.hcard.tease{transform:translateX(calc(-50% + var(--x))) translateY(-34px) rotate(0deg) scale(1.08);z-index:10}
+.hand:hover .hcard:not(:hover){filter:brightness(.8) saturate(.85)}
+.hc-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.75,.2,1);transform:rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg))}
+.hcard:hover .hc-in{transition:transform .12s ease-out}
+.hcard.flip .hc-in{transform:rotateX(var(--tx,0deg)) rotateY(calc(180deg - var(--ty,0deg)));transition:transform .7s cubic-bezier(.3,.75,.2,1)}
+.hc-in img{position:absolute;inset:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;filter:drop-shadow(0 22px 26px rgba(0,0,0,.55))}
+.hc-b{transform:rotateY(180deg)}
+.hc-shine{position:absolute;inset:0;border-radius:4.6%/3.3%;pointer-events:none;opacity:0;transition:opacity .3s;mix-blend-mode:soft-light;background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.75),transparent 45%)}
+.hcard:hover .hc-shine{opacity:1}
+.hcard.r4 .hc-shine{mix-blend-mode:color-dodge;opacity:.25;background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.5),transparent 40%),linear-gradient(125deg,rgba(255,111,216,.6),rgba(255,211,111,.6),rgba(111,255,181,.6),rgba(111,211,255,.6),rgba(184,111,255,.6)) calc(var(--mx,50%) * 1.5) calc(var(--my,50%) * 1.2)/250% 250%}
+.hcard.r4:hover .hc-shine{opacity:.5}
+.hcard.flip .hc-shine{opacity:0}
+@media (max-width:980px){.cardsec{grid-template-columns:1fr}.hand{height:400px}}
+@media (max-width:560px){.hand{height:330px}.hcard{width:150px}.hcard:nth-child(1){--x:-120px!important}.hcard:nth-child(2){--x:-42px!important}.hcard:nth-child(3){--x:42px!important}.hcard:nth-child(4){--x:120px!important}.rarity{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.hcard,.hand.dealt .hcard{animation:none;opacity:1;translate:0 0}.rarity li{animation:none}.show-img[class*="tr-"]{animation:none}}
+
 </style>
 
 
@@ -569,6 +630,8 @@ footer .small{color:var(--muted)}
         <img class="show-img" src="" alt="" width="1360" height="820">
         <div class="show-tag"><span class="show-kind" id="showKind"></span><span class="show-name" id="showName"></span></div>
         <div class="show-bar"><i id="showBar"></i></div>
+        <div class="tr-title" id="trTitle" aria-hidden="true"></div>
+        <div class="tr-flash" id="trFlash" aria-hidden="true"></div>
       </div>
       <div class="sc-strip" aria-hidden="true"><div class="sc-track" id="scTrack"><img src="assets/custom-lib-books-t.webp" alt="" width="136" height="82" data-k="lib-books" loading="lazy"><img src="assets/custom-lib-dvd-t.webp" alt="" width="136" height="82" data-k="lib-dvd" loading="lazy"><img src="assets/custom-lib-posters-t.webp" alt="" width="136" height="82" data-k="lib-posters" loading="lazy"><img src="assets/custom-lib-gallery-t.webp" alt="" width="136" height="82" data-k="lib-gallery" loading="lazy"><img src="assets/custom-pipeline-blueprint-t.webp" alt="" width="136" height="82" data-k="pipeline-blueprint" loading="lazy"><img src="assets/custom-pipeline-paper-t.webp" alt="" width="136" height="82" data-k="pipeline-paper" loading="lazy"><img src="assets/custom-pipeline-kraft-t.webp" alt="" width="136" height="82" data-k="pipeline-kraft" loading="lazy"><img src="assets/custom-cards-board-t.webp" alt="" width="136" height="82" data-k="cards-board" loading="lazy"><img src="assets/custom-cards-deck-t.webp" alt="" width="136" height="82" data-k="cards-deck" loading="lazy"><img src="assets/custom-board-desk-t.webp" alt="" width="136" height="82" data-k="board-desk" loading="lazy"><img src="assets/custom-board-workshop-t.webp" alt="" width="136" height="82" data-k="board-workshop" loading="lazy"><img src="assets/custom-board-felt-t.webp" alt="" width="136" height="82" data-k="board-felt" loading="lazy"><img src="assets/custom-board-pinboard-t.webp" alt="" width="136" height="82" data-k="board-pinboard" loading="lazy"><img src="assets/custom-board-blueprint-t.webp" alt="" width="136" height="82" data-k="board-blueprint" loading="lazy"><img src="assets/custom-board-chalk-t.webp" alt="" width="136" height="82" data-k="board-chalk" loading="lazy"><img src="assets/custom-board-glass-t.webp" alt="" width="136" height="82" data-k="board-glass" loading="lazy"><img src="assets/custom-shots-film-t.webp" alt="" width="136" height="82" data-k="shots-film" loading="lazy"><img src="assets/custom-shots-paper-t.webp" alt="" width="136" height="82" data-k="shots-paper" loading="lazy"><img src="assets/custom-story-typewriter-t.webp" alt="" width="136" height="82" data-k="story-typewriter" loading="lazy"><img src="assets/custom-story-parchment-t.webp" alt="" width="136" height="82" data-k="story-parchment" loading="lazy"><img src="assets/custom-story-night-t.webp" alt="" width="136" height="82" data-k="story-night" loading="lazy"><img src="assets/custom-designer-t.webp" alt="" width="136" height="82" data-k="designer" loading="lazy"><img src="assets/custom-lib-books-t.webp" alt="" width="136" height="82" data-k="lib-books" loading="lazy"><img src="assets/custom-lib-dvd-t.webp" alt="" width="136" height="82" data-k="lib-dvd" loading="lazy"><img src="assets/custom-lib-posters-t.webp" alt="" width="136" height="82" data-k="lib-posters" loading="lazy"><img src="assets/custom-lib-gallery-t.webp" alt="" width="136" height="82" data-k="lib-gallery" loading="lazy"><img src="assets/custom-pipeline-blueprint-t.webp" alt="" width="136" height="82" data-k="pipeline-blueprint" loading="lazy"><img src="assets/custom-pipeline-paper-t.webp" alt="" width="136" height="82" data-k="pipeline-paper" loading="lazy"><img src="assets/custom-pipeline-kraft-t.webp" alt="" width="136" height="82" data-k="pipeline-kraft" loading="lazy"><img src="assets/custom-cards-board-t.webp" alt="" width="136" height="82" data-k="cards-board" loading="lazy"><img src="assets/custom-cards-deck-t.webp" alt="" width="136" height="82" data-k="cards-deck" loading="lazy"><img src="assets/custom-board-desk-t.webp" alt="" width="136" height="82" data-k="board-desk" loading="lazy"><img src="assets/custom-board-workshop-t.webp" alt="" width="136" height="82" data-k="board-workshop" loading="lazy"><img src="assets/custom-board-felt-t.webp" alt="" width="136" height="82" data-k="board-felt" loading="lazy"><img src="assets/custom-board-pinboard-t.webp" alt="" width="136" height="82" data-k="board-pinboard" loading="lazy"><img src="assets/custom-board-blueprint-t.webp" alt="" width="136" height="82" data-k="board-blueprint" loading="lazy"><img src="assets/custom-board-chalk-t.webp" alt="" width="136" height="82" data-k="board-chalk" loading="lazy"><img src="assets/custom-board-glass-t.webp" alt="" width="136" height="82" data-k="board-glass" loading="lazy"><img src="assets/custom-shots-film-t.webp" alt="" width="136" height="82" data-k="shots-film" loading="lazy"><img src="assets/custom-shots-paper-t.webp" alt="" width="136" height="82" data-k="shots-paper" loading="lazy"><img src="assets/custom-story-typewriter-t.webp" alt="" width="136" height="82" data-k="story-typewriter" loading="lazy"><img src="assets/custom-story-parchment-t.webp" alt="" width="136" height="82" data-k="story-parchment" loading="lazy"><img src="assets/custom-story-night-t.webp" alt="" width="136" height="82" data-k="story-night" loading="lazy"><img src="assets/custom-designer-t.webp" alt="" width="136" height="82" data-k="designer" loading="lazy"></div></div>
     </figure>
@@ -591,6 +654,26 @@ footer .small{color:var(--muted)}
         <div class="dev tablet"><img src="assets/touch-tablet.webp" alt="" width="810" height="1080" loading="lazy"></div>
         <div class="dev phone"><img src="assets/touch-phone.webp" alt="" width="585" height="996" loading="lazy"></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="cards">
+  <div class="wrap">
+    <div class="cardsec">
+      <div class="ts-text reveal">
+        <div class="eyebrow"><span data-en>Collectible cards</span><span data-de>Sammelkarten</span></div>
+        <h2><span data-en>Every asset gets its own card</span><span data-de>Jedes Asset bekommt seine Karte</span></h2>
+        <p class="lead"><span data-en>Characters, creatures, props, vehicles and environments live on the mind board as trading cards: artwork, role, progress per discipline and the programs you use. Click a card to turn it over for notes, facts and files.</span><span data-de>Charaktere, Kreaturen, Props, Fahrzeuge und Umgebungen liegen als Sammelkarten auf dem Denkbrett: Artwork, Rolle, Fortschritt je Disziplin und die Programme, mit denen du arbeitest. Ein Klick dreht die Karte um, hinten stehen Notizen, Fakten und Dateien.</span></p>
+        <ol class="rarity">
+          <li><b>★</b><span><span data-en>Just started</span><span data-de>Gerade begonnen</span></span></li>
+          <li><b>★★</b><span><span data-en>Well under way</span><span data-de>Gut unterwegs</span></span></li>
+          <li class="foil"><b>★★★</b><span><span data-en>Nearly done: silver foil</span><span data-de>Fast fertig: Silberfolie</span></span></li>
+          <li class="holo"><b>★★★★</b><span><span data-en>Finished: holographic</span><span data-de>Fertig: holografisch</span></span></li>
+        </ol>
+        <p class="small"><span data-en>Try it: move over the cards, click to flip.</span><span data-de>Probier es aus: mit der Maus über die Karten fahren, klicken zum Umdrehen.</span></p>
+      </div>
+      <div class="hand" id="hand"><button type="button" class="hcard r3" style="--r:-14deg;--x:-160px;--i:0" aria-label="Flip card"><span class="hc-in"><img class="hc-f" src="assets/tcard-croak-front.webp" alt="" width="460" height="643" loading="lazy"><img class="hc-b" src="assets/tcard-croak-back.webp" alt="" width="460" height="643" loading="lazy"></span><i class="hc-shine"></i></button><button type="button" class="hcard r2" style="--r:-5deg;--x:-54px;--i:1" aria-label="Flip card"><span class="hc-in"><img class="hc-f" src="assets/tcard-staff-front.webp" alt="" width="460" height="643" loading="lazy"><img class="hc-b" src="assets/tcard-staff-back.webp" alt="" width="460" height="643" loading="lazy"></span><i class="hc-shine"></i></button><button type="button" class="hcard r4" style="--r:5deg;--x:54px;--i:2" aria-label="Flip card"><span class="hc-in"><img class="hc-f" src="assets/tcard-swamp-front.webp" alt="" width="460" height="643" loading="lazy"><img class="hc-b" src="assets/tcard-swamp-back.webp" alt="" width="460" height="643" loading="lazy"></span><i class="hc-shine"></i></button><button type="button" class="hcard r2" style="--r:14deg;--x:160px;--i:3" aria-label="Flip card"><span class="hc-in"><img class="hc-f" src="assets/tcard-leech-front.webp" alt="" width="460" height="643" loading="lazy"><img class="hc-b" src="assets/tcard-leech-back.webp" alt="" width="460" height="643" loading="lazy"></span><i class="hc-shine"></i></button></div>
     </div>
   </div>
 </section>
@@ -693,10 +776,10 @@ footer .small{color:var(--muted)}
           <p><span data-en>The window library used by the app hid a small Microsoft file (<code>WebView2Loader.dll</code>) inside the program and loaded it straight from memory. Malware uses the same trick, so scanners react to it (hence “FakeMsApp”). The setup also carried the app as an uncompressed embedded program and copied itself into the install folder.</span><span data-de>Die Fenster-Bibliothek der App hat eine kleine Microsoft-Datei (<code>WebView2Loader.dll</code>) im Programm versteckt und direkt aus dem Arbeitsspeicher geladen. Schadsoftware nutzt denselben Trick, deshalb reagieren Scanner darauf (daher „FakeMsApp“). Außerdem trug das Setup die App als unkomprimiertes eingebettetes Programm und kopierte sich selbst in den Installationsordner.</span></p></div></li>
         <li><span class="dot ok"></span><div><b><span data-en>Fixed for this release</span><span data-de>Für dieses Release behoben</span></b>
           <p><span data-en>The DLL is now a normal, Microsoft-signed file next to the program, loaded the ordinary way. The setup unpacks a compressed package like other installers, uses a separate uninstaller and no longer copies itself. Debug information stays in the program. All changes are in the <a data-gh="commits/main" href="#security">commit history</a>.</span><span data-de>Die DLL ist jetzt eine normale, von Microsoft signierte Datei neben dem Programm und wird ganz normal geladen. Das Setup entpackt ein komprimiertes Paket wie andere Installer, nutzt ein eigenes Deinstallationsprogramm und kopiert sich nicht mehr selbst. Debug-Informationen bleiben im Programm. Alle Änderungen stehen in der <a data-gh="commits/main" href="#security">Commit-Historie</a>.</span></p></div></li>
-        <li><span class="dot live"></span><div><b><span data-en>Version 2.3.1: 2 of about 70 scanners</span><span data-de>Version 2.3.1: 2 von rund 70 Scannern</span></b><span class="when">2026-11-07</span>
+        <li><span class="dot live"></span><div><b><span data-en>Current release 2.7.0: 2 of about 70 scanners</span><span data-de>Aktuelles Release 2.7.0: 2 von rund 70 Scannern</span></b><span class="when">2026-11-07</span>
           <p><span data-en>After the fix, all large vendors (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, Avast, Norton and many more) report the files as clean. Two smaller engines still raise a generic guess. Neither names a real virus. Both have been reported as false positives.</span><span data-de>Nach der Korrektur melden alle großen Hersteller (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, Avast, Norton und viele mehr) die Dateien als sauber. Zwei kleinere Scanner äußern noch eine allgemeine Vermutung. Keiner nennt einen echten Virus. Beide wurden als Fehlalarm gemeldet.</span></p>
-          <ul class="det"><li><b>Bkav Pro</b><code>W32.Malware.B4D2B4A6 (generic)</code></li><li><b>Trapmine</b><code>Malicious.moderate.ml.score</code></li></ul>
-          <p><span data-en>Version 2.7.0 brings realistic library looks, new board surfaces and refined cards; its own results are linked live in the table above and will be listed here. Version 2.3.0 showed exactly the same two guesses (Bkav Pro <code>W32.Malware.69DD7DC0</code>, Trapmine). Bkav’s name is just a number that changes with every file.</span><span data-de>Version 2.7.0 bringt realistische Bibliotheks-Looks, neue Denkbrett-Untergründe und verfeinerte Karten; ihre eigenen Ergebnisse sind oben live verlinkt und werden hier ergänzt. Version 2.3.0 zeigte genau dieselben zwei Vermutungen (Bkav Pro <code>W32.Malware.69DD7DC0</code>, Trapmine). Bkavs Name ist nur eine Nummer, die sich mit jeder Datei ändert.</span></p>
+          <ul class="det"><li><b>Bkav Pro</b><code>W32.Malware.D919540 (generic)</code></li><li><b>Trapmine</b><code>Malicious.moderate.ml.score</code></li></ul>
+          <p><span data-en>Every version since 2.3.1 has shown exactly these two generic guesses and nothing else. Bkav’s name is just a number that changes with every file.</span><span data-de>Jede Version seit 2.3.1 zeigte genau diese zwei allgemeinen Vermutungen und sonst nichts. Bkavs Name ist nur eine Nummer, die sich mit jeder Datei ändert.</span></p>
           <p><span data-en>The “Report” links above always show the live VirusTotal result of each exact file. Changes are tracked in the <a data-gh="issues?q=label%3Afalse-positive" href="#security">issues</a>.</span><span data-de>Die „Bericht“-Links oben zeigen immer das aktuelle VirusTotal-Ergebnis jeder einzelnen Datei. Änderungen werden in den <a data-gh="issues?q=label%3Afalse-positive" href="#security">Issues</a> verfolgt.</span></p></div></li>
       </ol>
     </div>
@@ -939,22 +1022,63 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
   const label = () => { const d = SHOW[si], de = VF.lang==='de'; kind.textContent = de ? d[2] : d[1]; nm.textContent = de ? d[4] : d[3]; imgs[front].alt = kind.textContent + ': ' + nm.textContent;
     document.querySelectorAll('.sc-areas li').forEach(li=>li.classList.toggle('on', li.dataset.area===d[5]));
     document.querySelectorAll('#scTrack img').forEach(im=>im.classList.toggle('on', im.dataset.k===d[0])); };
+  /* Trailer: schnelle Schnitte, jeder Übergang anders; beim Bereichswechsel blitzt der Bereichsname auf */
+  const TRANS = ['wipe','zoom','iris','slide','split','tilt'], AREA = {library:['Library','Bibliothek'], pipeline:['Pipeline','Pipeline'], board:['Mind board','Denkbrett'], shots:['Shot list','Shotlist'], story:['Story','Story']};
+  const stage = document.getElementById('show'), trTitle = document.getElementById('trTitle'), trFlash = document.getElementById('trFlash');
+  let ti = 0, SCENE = 1500;
   function nextShow(){
+    const prevArea = SHOW[si][5];
     si = (si + 1) % SHOW.length;
-    const back = imgs[1 - front], pre = new Image();
-    pre.onload = () => { back.src = pre.src; back.classList.add('on'); imgs[front].classList.remove('on'); front = 1 - front; label(); document.getElementById('show').classList.remove('flip'); void back.offsetWidth; document.getElementById('show').classList.add('flip'); };
+    const inc = imgs[1 - front], out = imgs[front], pre = new Image(), tr = TRANS[ti++ % TRANS.length];
+    pre.onload = () => {
+      inc.className = 'show-img'; inc.src = pre.src; void inc.offsetWidth;
+      inc.classList.add('on', 'enter', 'tr-' + tr); out.classList.add('leave');
+      setTimeout(()=>{ out.className = 'show-img'; inc.classList.remove('enter', 'tr-' + tr); }, 520);
+      front = 1 - front; label();
+      stage.classList.remove('flip'); void stage.offsetWidth; stage.classList.add('flip');
+      if(SHOW[si][5]!==prevArea){
+        trTitle.textContent = AREA[SHOW[si][5]][VF.lang==='de'?1:0];
+        trTitle.classList.remove('go'); trFlash.classList.remove('go'); void trTitle.offsetWidth; trTitle.classList.add('go'); trFlash.classList.add('go');
+      }
+    };
     pre.src = 'assets/custom-' + SHOW[si][0] + '.webp';
   }
   function runShow(){
     clearInterval(showT); bar.classList.remove('run');
-    if(VF.still || !showVis || document.hidden) return;
+    if(VF.still || !showVis || document.hidden || stage.classList.contains('paused')) return;
     void bar.offsetWidth; bar.classList.add('run');
-    showT = setInterval(()=>{ nextShow(); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); }, 3600);
+    showT = setInterval(()=>{ nextShow(); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); }, SCENE);
   }
+  stage.addEventListener('mouseenter', ()=>{ stage.classList.add('paused'); runShow(); });
+  stage.addEventListener('mouseleave', ()=>{ stage.classList.remove('paused'); runShow(); });
   if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{ showVis = e.isIntersecting; runShow(); }), {threshold:.3}).observe(document.getElementById('show'));
   document.addEventListener('visibilitychange', runShow);
   SHOW.forEach(d=>{ const i = new Image(); i.src = 'assets/custom-' + d[0] + '.webp'; });
   VF.onLang.push(label); label();
+
+  /* Sammelkarten: austeilen, Licht folgt der Maus, Klick dreht um */
+  const hand = document.getElementById('hand');
+  if(hand){
+    const cards = [...hand.querySelectorAll('.hcard')];
+    hand.addEventListener('pointermove', e=>{
+      const c = e.target.closest('.hcard'); if(!c || e.pointerType==='touch') return;
+      const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      c.style.setProperty('--mx', (x*100).toFixed(1)+'%'); c.style.setProperty('--my', (y*100).toFixed(1)+'%');
+      c.style.setProperty('--tx', ((.5-y)*16).toFixed(2)+'deg'); c.style.setProperty('--ty', ((x-.5)*20).toFixed(2)+'deg');
+    });
+    hand.addEventListener('pointerout', e=>{ const c = e.target.closest('.hcard'); if(c && !c.contains(e.relatedTarget)){ c.style.removeProperty('--tx'); c.style.removeProperty('--ty'); } });
+    hand.addEventListener('click', e=>{ const c = e.target.closest('.hcard'); if(c) c.classList.toggle('flip'); });
+    let dealt = false;
+    if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(en=>{
+      if(!en.isIntersecting || dealt) return; dealt = true; hand.classList.add('dealt');
+      if(VF.still) return;
+      // kleine Vorführung: die holografische Karte dreht sich einmal um
+      setTimeout(()=>cards[2].classList.add('flip', 'tease'), 1500);
+      setTimeout(()=>cards[2].classList.remove('flip'), 3200);
+      setTimeout(()=>cards[2].classList.remove('tease'), 4000);
+    }), {threshold:.35}).observe(hand);
+    else hand.classList.add('dealt');
+  }
   caption();
 })();
 </script>

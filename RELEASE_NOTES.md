@@ -23,7 +23,9 @@
   someone else is saved to `conflicts/` instead of disappearing.
 - Clicking a card's progress bars no longer hits the hidden back side.
 
-**VirusTotal (2.7.0):** results for these exact files are linked on the website and will be added here.
+**VirusTotal (2.7.0):** 2 of about 70 engines – **Bkav Pro** `W32.Malware.D919540` (generic) and **Trapmine**
+`Malicious.moderate.ml.score` (machine-learning guess), the same two as in every version since 2.3.1. All large vendors
+(Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, …) report it clean.
 
 ---
 
