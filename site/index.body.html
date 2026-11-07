@@ -1,0 +1,267 @@
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/logo.svg" alt="" width="30" height="30">VertexForge Studio</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#views"><span data-en>Tour</span><span data-de>Einblick</span></a>
+      <a href="#features"><span data-en>Features</span><span data-de>Funktionen</span></a>
+      <a href="#download">Download</a>
+      <a href="install.html"><span data-en>Install guide</span><span data-de>Anleitung</span></a>
+      <a href="#security"><span data-en>Security</span><span data-de>Sicherheit</span></a>
+      <a href="#open-source">Open Source</a>
+      <a href="#about"><span data-en>About</span><span data-de>Über</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="langEn" data-setlang="en" aria-pressed="true">EN</button>
+      <button type="button" id="langDe" data-setlang="de" aria-pressed="false">DE</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow rise" style="--d:0"><span data-en>Free · open source · for 3D artists</span><span data-de>Kostenlos · Open Source · für 3D-Artists</span></div>
+      <h1 class="rise" style="margin-top:14px;--d:1"><span data-en>Plan your 3D project like a <em>production</em>.</span><span data-de>Plane dein 3D-Projekt wie eine <em>Produktion</em>.</span></h1>
+      <p class="lead rise" style="--d:2"><span data-en>VertexForge Studio keeps pipeline, deadlines, references, shots and story of a personal 3D project in one calm place – next to Blender, ZBrush, Substance and the rest of your tools.</span><span data-de>VertexForge Studio hält Pipeline, Deadlines, Referenzen, Shots und Story eines persönlichen 3D-Projekts an einem ruhigen Ort zusammen – neben Blender, ZBrush, Substance und deinen anderen Programmen.</span></p>
+      <div class="ctas rise" style="--d:3">
+        <a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#download">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg>
+          <span><span data-en>Download for Windows</span><span data-de>Für Windows laden</span><small>Setup · 10.7 MB · v2.3.0</small></span>
+        </a>
+        <a class="btn" href="app/">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          <span><span data-en>Open in browser</span><span data-de>Im Browser öffnen</span><small>macOS · Linux · Windows</small></span>
+        </a>
+      </div>
+      <div class="meta rise" style="--d:4"><span>MIT License</span><span data-en>No account · no cloud</span><span data-de>Kein Konto · keine Cloud</span><span data-en>6 languages</span><span data-de>6 Sprachen</span><a href="install.html" class="meta-link"><span data-en>Installation guide →</span><span data-de>Installationsanleitung →</span></a></div>
+    </div>
+    <div class="screen-wrap rise" style="--d:2"><div class="screen" id="heroScreen"><img src="assets/shot-hero.webp" alt="VertexForge Studio mind board in pinboard style with pinned asset cards, notes and red string connections" width="1480" height="1110"><span class="glare"></span></div></div>
+  </div>
+  <div class="wrap">
+    <div class="stages rise" style="--d:5" id="stages" aria-label="Asset stages in VertexForge">
+      <span class="st">Concept</span><i></i><span class="st">Blockout</span><i></i><span class="st on">Sculpt</span><i></i><span class="st">Retopo</span><i></i><span class="st">UV</span><i></i><span class="st">Texture</span><i></i><span class="st">Rig</span><i></i><span class="st">Final</span>
+    </div>
+    <div class="notice reveal" role="note">
+      <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.2v.3"/></svg></span>
+      <p><span data-en><b>Built entirely with Claude.</b> The code of this tool was written with Claude, an AI assistant by Anthropic, guided by me. It can contain mistakes and bugs. That is exactly why it is open source: everyone is welcome to read the code, report problems and make it better. The tool itself contains no generative AI and never creates art.</span><span data-de><b>Komplett mit Claude gebaut.</b> Der Code dieses Programms wurde mit Claude, einem KI-Assistenten von Anthropic, unter meiner Anleitung geschrieben. Er kann Fehler und Bugs enthalten. Genau deshalb ist es Open Source: Jede und jeder darf den Code lesen, Probleme melden und es verbessern. Das Programm selbst enthält keine generative KI und erzeugt niemals Kunst.</span></p>
+    </div>
+  </div>
+</section>
+
+<section id="views" class="alt">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span data-en>A look inside</span><span data-de>Ein Blick hinein</span></div>
+      <h2><span data-en>Five workspaces, one project</span><span data-de>Fünf Arbeitsbereiche, ein Projekt</span></h2>
+    </div>
+    <div class="tabs reveal" role="tablist" aria-label="Screens" id="tabs"><span class="tab-ink" id="tabInk"></span>
+      <button type="button" role="tab" id="tab-projects" data-shot="projects" aria-selected="true"><span data-en>Projects</span><span data-de>Projekte</span></button>
+      <button type="button" role="tab" id="tab-pipeline" data-shot="pipeline" aria-selected="false">Pipeline</button>
+      <button type="button" role="tab" id="tab-board" data-shot="board-studio" aria-selected="false"><span data-en>Mind board</span><span data-de>Denkbrett</span></button>
+      <button type="button" role="tab" id="tab-shots" data-shot="shots" aria-selected="false"><span data-en>Shot list</span><span data-de>Shotlist</span></button>
+      <button type="button" role="tab" id="tab-story" data-shot="story" aria-selected="false">Story &amp; Lore</button>
+      <button type="button" role="tab" id="tab-light" data-shot="pipeline-light" aria-selected="false"><span data-en>Light mode</span><span data-de>Heller Modus</span></button>
+    </div>
+    <div class="view reveal" id="view"><img id="shotImg" src="assets/shot-projects.webp" alt="" width="1800" height="1075"></div>
+    <p class="caption" id="shotCap"></p>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span data-en>What it does</span><span data-de>Was es kann</span></div>
+      <h2><span data-en>Built around how a 3D project actually runs</span><span data-de>Gebaut für den echten Ablauf eines 3D-Projekts</span></h2>
+    </div>
+    <div class="features reveal-stagger">
+      <div class="feat"><h3><span data-en>Project library</span><span data-de>Projektbibliothek</span></h3><p><span data-en>Every project gets a 2:3 poster cover with a title designer: 50+ fonts, 3D extrusion, gold leaf, chrome or neon.</span><span data-de>Jedes Projekt bekommt ein 2:3-Plakat-Cover mit Titel-Designer: über 50 Schriften, 3D-Extrusion, Blattgold, Chrom oder Neon.</span></p><span class="tag">Ctrl+N</span></div>
+      <div class="feat"><h3><span data-en>Pipeline & deadlines</span><span data-de>Pipeline & Deadlines</span></h3><p><span data-en>Phases, tasks, priorities from Low to Critical, effort in hours, a timeline and live countdowns. List or kanban.</span><span data-de>Phasen, Aufgaben, Prioritäten von Low bis Critical, Aufwand in Stunden, Zeitachse und Live-Countdowns. Als Liste oder Kanban.</span></p><span class="tag"><span data-en>Templates: character · environment · hard surface · motion · short film</span><span data-de>Vorlagen: Charakter · Environment · Hard-Surface · Motion · Kurzfilm</span></span></div>
+      <div class="feat"><h3><span data-en>Mind board</span><span data-de>Denkbrett</span></h3><p><span data-en>An infinite canvas like PureRef: asset cards, notes, styled titles, images, videos and linked files. Docking, wires, Blender shortcuts.</span><span data-de>Eine unendliche Fläche wie PureRef: Asset-Karten, Notizen, gestaltete Titel, Bilder, Videos und verknüpfte Dateien. Andocken, Verbindungen, Blender-Kürzel.</span></p><span class="tag"><kbd>Shift</kbd>+<kbd>A</kbd> · <kbd>G</kbd> · <kbd>S</kbd> · <kbd>X</kbd></span></div>
+      <div class="feat"><h3><span data-en>Your files, one click away</span><span data-de>Deine Dateien, einen Klick entfernt</span></h3><p><span data-en>Link working files to cards. The desktop app opens them in the right program and shows missing files in red.</span><span data-de>Arbeitsdateien an Karten hängen. Die Desktop-App öffnet sie im passenden Programm und zeigt fehlende Dateien rot an.</span></p><div class="exts"><span>.blend</span><span>.ztl</span><span>.spp</span><span>.sbs</span><span>.zprj</span><span>.psd</span><span>.aep</span><span>.drp</span></div></div>
+      <div class="feat"><h3><span data-en>Shot list & story</span><span data-de>Shotlist & Story</span></h3><p><span data-en>Shots with frames, lens and department status, runtime as timecode. A writing desk with a world bible that recognises your assets in the text.</span><span data-de>Shots mit Frames, Linse und Department-Status, Laufzeit als Timecode. Ein Schreibtisch mit Welt-Bibel, die deine Assets im Text erkennt.</span></p><span class="tag">24 fps · 00:12:00 · mm:ss:ff</span></div>
+      <div class="feat"><h3><span data-en>Safe saving & versions</span><span data-de>Sicheres Speichern & Versionen</span></h3><p><span data-en>Autosave, .vforge project files, incremental saves like Blender, restore points every 10 minutes and before every update.</span><span data-de>Automatisches Sichern, .vforge-Projektdateien, inkrementelles Speichern wie in Blender, Sicherungspunkte alle 10 Minuten und vor jedem Update.</span></p><span class="tag">project_v02.vforge · _v03 …</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="download" class="alt">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Download · v2.3.0</div>
+      <h2><span data-en>Get VertexForge Studio</span><span data-de>VertexForge Studio holen</span></h2>
+      <p class="lead"><span data-en>Free for everyone. Your projects stay on your own computer, and updates never overwrite them.</span><span data-de>Kostenlos für alle. Deine Projekte bleiben auf deinem Computer, und Updates überschreiben sie nie.</span></p>
+    </div>
+    <div class="dl reveal-stagger">
+      <div class="card main">
+        <div class="os"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg><div><h3>Windows 10 / 11</h3><span class="small"><span data-en>Desktop app with installer</span><span data-de>Desktop-App mit Installer</span></span></div></div>
+        <ul>
+          <li><span data-en>Setup wizard in 6 languages, Start menu and desktop shortcuts, clean uninstall</span><span data-de>Setup-Assistent in 6 Sprachen, Startmenü- und Desktop-Verknüpfung, sauberes Deinstallieren</span></li>
+          <li><span data-en>Opens linked files in Blender, ZBrush & co., shows your installed program icons</span><span data-de>Öffnet verknüpfte Dateien in Blender, ZBrush & Co., zeigt deine installierten Programm-Icons</span></li>
+          <li><span data-en>Needs the Microsoft Edge WebView2 Runtime (already on most PCs)</span><span data-de>Benötigt die Microsoft Edge WebView2 Runtime (auf den meisten PCs vorhanden)</span></li>
+        </ul>
+        <div class="btns"><a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#download"><span><span data-en>Download Setup</span><span data-de>Setup laden</span><small>.exe · 10.7 MB</small></span></a><a class="btn" data-gh="releases" href="#download"><span><span data-en>All releases</span><span data-de>Alle Versionen</span><small>GitHub</small></span></a></div>
+      </div>
+      <div class="card">
+        <div class="os"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><div><h3>macOS · Linux</h3><span class="small"><span data-en>Browser version</span><span data-de>Browser-Version</span></span></div></div>
+        <ul>
+          <li><span data-en>The full app in Safari, Chrome, Firefox or Edge, nothing to install</span><span data-de>Die komplette App in Safari, Chrome, Firefox oder Edge, ohne Installation</span></li>
+          <li><span data-en>Saves locally in your browser; export .vforge files as backups</span><span data-de>Speichert lokal im Browser; .vforge-Dateien als Backup exportieren</span></li>
+          <li><span data-en>A native macOS app is not available yet. Help is welcome!</span><span data-de>Eine native macOS-App gibt es noch nicht. Hilfe ist willkommen!</span></li>
+        </ul>
+        <div class="btns"><a class="btn primary" href="app/"><span><span data-en>Open in browser</span><span data-de>Im Browser öffnen</span><small><span data-en>runs on this site</span><span data-de>läuft auf dieser Seite</span></small></span></a><a class="btn" data-gh="releases/latest/download/VertexForge-Studio-Browser.html" href="#download"><span><span data-en>Download as file</span><span data-de>Als Datei laden</span><small>.html · 0.6 MB</small></span></a></div>
+      </div>
+    </div>
+    <a class="guide-link reveal" href="install.html"><span class="gl-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5v-17M8.5 7h7M8.5 11h5"/></svg></span><span><b><span data-en>Step-by-step installation guide</span><span data-de>Installationsanleitung Schritt für Schritt</span></b><span class="small"><span data-en>Setup, first start, updates, uninstalling, macOS & Linux, troubleshooting</span><span data-de>Setup, erster Start, Updates, Deinstallation, macOS & Linux, Problemlösungen</span></span></span><span class="gl-arrow">→</span></a>
+    <p class="small" style="margin-top:16px"><span data-en>Windows SmartScreen may warn because the app is not code-signed (signing certificates cost money). Choose “More info → Run anyway”, or check the file first with the hashes below.</span><span data-de>Windows SmartScreen kann warnen, weil die App nicht signiert ist (Zertifikate kosten Geld). Wähle „Weitere Informationen → Trotzdem ausführen“ oder prüfe die Datei vorher mit den Prüfsummen unten.</span></p>
+  </div>
+</section>
+
+<section id="security">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span data-en>Security</span><span data-de>Sicherheit</span></div>
+      <h2><span data-en>Scanned, checksummed, readable</span><span data-de>Geprüft, mit Prüfsumme, nachlesbar</span></h2>
+      <p class="lead"><span data-en>Every release file is scanned for malware before it is published. You can also check the files yourself.</span><span data-de>Jede veröffentlichte Datei wird vorher auf Schadsoftware geprüft. Du kannst die Dateien auch selbst prüfen.</span></p>
+    </div>
+    <div class="sheet reveal">
+      <div class="sheet-head"><span><span data-en>Scanner</span><span data-de>Scanner</span>: <b>ClamAV 1.5.4</b></span><span><span data-en>Signatures</span><span data-de>Signaturen</span>: <b data-count="3628245">3,628,245</b> (daily 28171, 2026-11-01)</span><span><span data-en>Scanned</span><span data-de>Geprüft</span>: <b>2026-11-07</b></span><span><a href="security/clamscan-2.3.0.txt"><span data-en>Full scan log</span><span data-de>Vollständiges Protokoll</span></a></span></div>
+      <div class="tbl"><table>
+        <thead><tr><th><span data-en>File</span><span data-de>Datei</span></th><th><span data-en>Result</span><span data-de>Ergebnis</span></th><th>SHA-256</th><th>VirusTotal</th></tr></thead>
+        <tbody>
+          <tr><td>VertexForge-Studio-Setup.exe</td><td><span class="pill"><span data-en>Clean</span><span data-de>Sauber</span></span></td><td class="hash"><span>031e91e0cd2c4a4c7fd0f30c7ab04cab361a1e7d19234a00f6c7e580ae635717</span><button type="button" class="copy" id="copy1">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/031e91e0cd2c4a4c7fd0f30c7ab04cab361a1e7d19234a00f6c7e580ae635717" target="_blank" rel="noopener"><span data-en>Look up ↗</span><span data-de>Nachsehen ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio.exe <span class="small"><span data-en>(inside the setup)</span><span data-de>(im Setup enthalten)</span></span></td><td><span class="pill"><span data-en>Clean</span><span data-de>Sauber</span></span></td><td class="hash"><span>a081f73989c9dcbae06161db12a5b9b0e5a52a10e89445286bfbffdfbbc87273</span><button type="button" class="copy" id="copy2">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/a081f73989c9dcbae06161db12a5b9b0e5a52a10e89445286bfbffdfbbc87273" target="_blank" rel="noopener"><span data-en>Look up ↗</span><span data-de>Nachsehen ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio-Browser.html</td><td><span class="pill"><span data-en>Clean</span><span data-de>Sauber</span></span></td><td class="hash"><span>420a28b339844147aa556742a0206100c9490c16b46fc99572f83a2af311c123</span><button type="button" class="copy" id="copy3">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/420a28b339844147aa556742a0206100c9490c16b46fc99572f83a2af311c123" target="_blank" rel="noopener"><span data-en>Look up ↗</span><span data-de>Nachsehen ↗</span></a></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sec-notes reveal-stagger">
+      <div><h3><span data-en>No hidden helpers</span><span data-de>Keine versteckten Helfer</span></h3><p><span data-en>The app and installer start no scripts or command shells. Everything uses plain Windows functions, and the source shows it.</span><span data-de>App und Installer starten keine Skripte oder Kommandozeilen. Alles läuft über normale Windows-Funktionen, und der Quellcode zeigt es.</span></p></div>
+      <div><h3><span data-en>Offline by design</span><span data-de>Bewusst offline</span></h3><p><span data-en>No account, no tracking, no telemetry. Projects are stored only on your device.</span><span data-de>Kein Konto, kein Tracking, keine Telemetrie. Projekte liegen nur auf deinem Gerät.</span></p></div>
+      <div><h3><span data-en>Check it yourself</span><span data-de>Selbst prüfen</span></h3><p><span data-en>On Windows: <kbd>certutil -hashfile VertexForge-Studio-Setup.exe SHA256</kbd> must match the table. VirusTotal shows a report once the file has been uploaded there.</span><span data-de>Unter Windows: <kbd>certutil -hashfile VertexForge-Studio-Setup.exe SHA256</kbd> muss mit der Tabelle übereinstimmen. VirusTotal zeigt einen Bericht, sobald die Datei dort hochgeladen wurde.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="open-source" class="alt">
+  <div class="wrap os-grid">
+    <div>
+      <div class="eyebrow">Open Source · MIT</div>
+      <h2 style="margin-top:12px"><span data-en>Make it better with us</span><span data-de>Mach es mit uns besser</span></h2>
+      <p class="lead" style="margin-top:14px"><span data-en>VertexForge Studio is free and open source under the MIT license. You can use it, change it, share it and build on it. Because it was written with an AI assistant, careful human eyes on the code are especially welcome.</span><span data-de>VertexForge Studio ist kostenlos und Open Source unter der MIT-Lizenz. Du darfst es nutzen, verändern, teilen und darauf aufbauen. Weil es mit einem KI-Assistenten geschrieben wurde, sind aufmerksame menschliche Augen auf dem Code besonders willkommen.</span></p>
+      <div class="help"><span><span data-en>Native macOS app</span><span data-de>Native macOS-App</span></span><span><span data-en>More languages</span><span data-de>Mehr Sprachen</span></span><span><span data-en>Bug reports</span><span data-de>Fehlerberichte</span></span><span><span data-en>Code review</span><span data-de>Code-Review</span></span><span><span data-en>Accessibility</span><span data-de>Barrierefreiheit</span></span></div>
+      <div class="ctas"><a class="btn primary" data-gh="" href="#open-source"><span><span data-en>Source code on GitHub</span><span data-de>Quellcode auf GitHub</span><small>MIT License</small></span></a><a class="btn" data-gh="issues/new" href="#open-source"><span><span data-en>Report a bug</span><span data-de>Fehler melden</span><small>Issues</small></span></a></div>
+    </div>
+    <ol class="steps reveal-stagger">
+      <li><div><h3><span data-en>Fork & clone</span><span data-de>Forken & klonen</span></h3><p><span data-en>Everything lives in one repository: app, installer and this website.</span><span data-de>Alles liegt in einem Repository: App, Installer und diese Website.</span></p></div></li>
+      <li><div><h3><span data-en>Build</span><span data-de>Bauen</span></h3><p><span data-en>Python builds the single-file app, Go builds the Windows wrapper.</span><span data-de>Python baut die Ein-Datei-App, Go die Windows-Hülle.</span></p>
+        <pre>python3 build.py --desktop
+GOOS=windows go build -o dist/ .
+GOOS=windows go build -o dist/ ./installer</pre></div></li>
+      <li><div><h3><span data-en>Open a pull request</span><span data-de>Pull Request öffnen</span></h3><p><span data-en>Describe what you changed and how you tested it. Small, focused changes are easiest to review.</span><span data-de>Beschreibe, was du geändert und wie du es getestet hast. Kleine, gezielte Änderungen lassen sich am leichtesten prüfen.</span></p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about reveal">
+    <div class="who">
+      <div class="avatar" aria-hidden="true">J</div>
+      <div class="eyebrow"><span data-en>About the maker</span><span data-de>Über den Macher</span></div>
+      <h2><span data-en>Hi, I’m Jan.</span><span data-de>Hi, ich bin Jan.</span></h2>
+      <p><span data-en>I’m an intermediate hobby 3D artist and I mostly work in Blender. My projects jump between sculpting, retopology, texturing and rendering, and I kept losing track of files, references and deadlines across all those programs.</span><span data-de>Ich bin ein fortgeschrittener Hobby-3D-Artist und arbeite hauptsächlich in Blender. Meine Projekte springen zwischen Sculpting, Retopology, Texturing und Rendering, und ich habe über all die Programme hinweg ständig den Überblick über Dateien, Referenzen und Deadlines verloren.</span></p>
+      <p><span data-en>So I built the tool I wanted: one place to plan and organise a 3D project. It’s a small, personal project, and I think it might be helpful for others too.</span><span data-de>Also habe ich das Werkzeug gebaut, das ich mir gewünscht habe: einen Ort, um ein 3D-Projekt zu planen und zu organisieren. Es ist ein kleines, persönliches Projekt, und ich denke, es könnte auch für andere hilfreich sein.</span></p>
+    </div>
+    <div class="stance">
+      <div class="eyebrow"><span data-en>My position on AI</span><span data-de>Mein Standpunkt zu KI</span></div>
+      <blockquote><span data-en>AI has no place in the final product of art and media. Human-made art, programs and tools always come first.</span><span data-de>KI hat im finalen Produkt von Kunst und Medien nichts zu suchen. Von Menschen gemachte Kunst, Programme und Werkzeuge stehen immer an erster Stelle.</span></blockquote>
+      <p><span data-en>I used Claude to write the code for this planning tool because I’m an artist, not a programmer. The tool itself only helps with planning and organisation. It never generates images, models, textures or stories, and it is not meant to replace anyone. The art you plan with it is made by you.</span><span data-de>Ich habe Claude genutzt, um den Code für dieses Planungswerkzeug zu schreiben, weil ich Künstler bin und kein Programmierer. Das Programm selbst hilft nur beim Planen und Organisieren. Es erzeugt niemals Bilder, Modelle, Texturen oder Geschichten und soll niemanden ersetzen. Die Kunst, die du damit planst, machst du selbst.</span></p>
+      <div class="split">
+        <div class="yes"><b><span data-en>What VertexForge does</span><span data-de>Was VertexForge tut</span></b><p><span data-en>Plans phases and deadlines, organises references and files, tracks shots and story.</span><span data-de>Plant Phasen und Deadlines, ordnet Referenzen und Dateien, verfolgt Shots und Story.</span></p></div>
+        <div class="no"><b><span data-en>What it never does</span><span data-de>Was es nie tut</span></b><p><span data-en>Generate art, write your story, upload your work or train on it.</span><span data-de>Kunst generieren, deine Story schreiben, deine Arbeit hochladen oder damit trainieren.</span></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="faq">
+  <div class="wrap">
+    <div class="head reveal"><div class="eyebrow">FAQ</div><h2><span data-en>Good to know</span><span data-de>Gut zu wissen</span></h2></div>
+    <div class="faq reveal-stagger">
+      <details><summary><span data-en>Is it really free?</span><span data-de>Ist es wirklich kostenlos?</span></summary><p><span data-en>Yes. No subscription, no account, no ads. The MIT license allows personal and commercial use.</span><span data-de>Ja. Kein Abo, kein Konto, keine Werbung. Die MIT-Lizenz erlaubt private und kommerzielle Nutzung.</span></p></details>
+      <details><summary><span data-en>Where are my projects stored?</span><span data-de>Wo werden meine Projekte gespeichert?</span></summary><p><span data-en>Desktop app: in your user profile (%LOCALAPPDATA%\VertexForge Studio). Browser: in the browser’s local storage. Export .vforge files for backups or to move between computers.</span><span data-de>Desktop-App: in deinem Benutzerprofil (%LOCALAPPDATA%\VertexForge Studio). Browser: im lokalen Speicher des Browsers. Exportiere .vforge-Dateien als Backup oder zum Umziehen.</span></p></details>
+      <details><summary><span data-en>Will an update delete my work?</span><span data-de>Löscht ein Update meine Arbeit?</span></summary><p><span data-en>No. Projects are stored apart from the program. Before every update the app saves a safety version that you can restore.</span><span data-de>Nein. Projekte liegen getrennt vom Programm. Vor jedem Update legt die App eine Sicherheits-Version an, die du wiederherstellen kannst.</span></p></details>
+      <details><summary><span data-en>Is there a Mac app?</span><span data-de>Gibt es eine Mac-App?</span></summary><p><span data-en>Not yet. On macOS, use the browser version, which has all features except opening linked files directly in other programs.</span><span data-de>Noch nicht. Auf dem Mac nutzt du die Browser-Version; sie kann alles außer verknüpfte Dateien direkt in anderen Programmen zu öffnen.</span></p></details>
+      <details><summary><span data-en>Which languages are supported?</span><span data-de>Welche Sprachen gibt es?</span></summary><p>English, Deutsch, Français, Español, Italiano, Português.</p></details>
+      <details><summary><span data-en>I found a bug. What now?</span><span data-de>Ich habe einen Fehler gefunden. Was nun?</span></summary><p><span data-en>Please open an issue on GitHub with what you did, what you expected and what happened. Screenshots help a lot.</span><span data-de>Bitte öffne ein Issue auf GitHub: was du gemacht hast, was du erwartet hast und was passiert ist. Screenshots helfen sehr.</span></p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/logo.svg" alt="" width="24" height="24">VertexForge Studio</a>
+    <span>v2.3.0 · MIT License</span>
+    <span><span data-en>Made by Jan with Claude. No AI in your art.</span><span data-de>Von Jan mit Claude gemacht. Keine KI in deiner Kunst.</span></span>
+    <a href="install.html"><span data-en>Install guide</span><span data-de>Anleitung</span></a>
+    <a data-gh="" href="#open-source">GitHub</a>
+  </div>
+</footer>
+
+<script>
+/*@COMMONJS*/
+
+(function(){
+  const caps = {
+    projects:['Your project library: poster covers with progress and the next deadline at a glance.','Deine Projektbibliothek: Plakat-Cover mit Fortschritt und nächster Deadline auf einen Blick.'],
+    pipeline:['The pipeline: key figures, a timeline and phases with prioritised tasks and live countdowns.','Die Pipeline: Kennzahlen, Zeitachse und Phasen mit priorisierten Aufgaben und Live-Countdowns.'],
+    'board-studio':['The mind board in studio style: asset cards with stages, linked Blender and ZBrush files, and connections.','Das Denkbrett im Studio-Stil: Asset-Karten mit Stufen, verknüpfte Blender- und ZBrush-Dateien und Verbindungen.'],
+    shots:['The shot list: frames, lens, VFX notes and department status from layout to render.','Die Shotlist: Frames, Linse, VFX-Notizen und Department-Status von Layout bis Render.'],
+    story:['Story & lore: a writing desk with a world bible that recognises your assets in the text.','Story & Lore: ein Schreibtisch mit Welt-Bibel, die deine Assets im Text erkennt.'],
+    'pipeline-light':['Papyrus light mode: warm paper tones that are easy on the eyes.','Papyrus-Hellmodus: warme Papiertöne, die die Augen schonen.']
+  };
+  let shot = 'projects';
+  const img = document.getElementById('shotImg'), cap = document.getElementById('shotCap'), ink = document.getElementById('tabInk');
+  const order = Object.keys(caps);
+  function caption(){ cap.textContent = caps[shot][VF.lang==='de'?1:0]; img.alt = cap.textContent; }
+  function moveInk(){ const a = document.querySelector('[data-shot][aria-selected="true"]'); if(!a || !ink) return; ink.style.width = a.offsetWidth + 'px'; ink.style.height = a.offsetHeight + 'px'; ink.style.transform = `translate(${a.offsetLeft}px,${a.offsetTop}px)`; }
+  function setShot(k){
+    const dir = order.indexOf(k) > order.indexOf(shot) ? 1 : -1; shot = k;
+    document.querySelectorAll('[data-shot]').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.shot===k)));
+    moveInk();
+    const next = new Image();
+    next.onload = () => { img.classList.remove('in'); img.style.setProperty('--dir', dir); void img.offsetWidth; img.src = next.src; img.classList.add('in'); };
+    next.src = 'assets/shot-' + k + '.webp'; caption();
+  }
+  document.querySelectorAll('[data-shot]').forEach(b=>b.addEventListener('click', ()=>setShot(b.dataset.shot)));
+  order.forEach(k=>{ const i = new Image(); i.src = 'assets/shot-' + k + '.webp'; });
+  VF.onLang.push(()=>{ caption(); requestAnimationFrame(moveInk); });
+  addEventListener('resize', moveInk); setTimeout(moveInk, 300);
+
+  /* Hero: Bildschirm folgt leicht der Maus, Lichtreflex wandert mit */
+  const hero = document.querySelector('.hero'), scr = document.getElementById('heroScreen');
+  if(hero && scr && !VF.still) hero.addEventListener('pointermove', e=>{
+    if(e.pointerType==='touch') return;
+    const r = scr.getBoundingClientRect(), x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
+    scr.style.setProperty('--ry', (-6 + x*8).toFixed(2) + 'deg'); scr.style.setProperty('--rx', (2 - y*6).toFixed(2) + 'deg');
+    scr.style.setProperty('--gx', ((x+.5)*100).toFixed(1) + '%'); scr.style.setProperty('--gy', ((y+.5)*100).toFixed(1) + '%');
+  });
+  if(hero && scr) hero.addEventListener('pointerleave', ()=>{ scr.style.removeProperty('--rx'); scr.style.removeProperty('--ry'); });
+
+  /* Asset-Stufen laufen wie ein Fortschritt durch */
+  const st = [...document.querySelectorAll('#stages .st')];
+  if(st.length && !VF.still){ let i = 2; setInterval(()=>{ if(document.hidden) return; i = (i+1) % st.length; st.forEach((s,j)=>{ s.classList.toggle('on', j===i); s.classList.toggle('done', j<i); }); }, 1400); }
+
+  /* Kopieren der Prüfsummen */
+  document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click', ()=>{
+    const el = b.previousElementSibling, t = el.textContent;
+    const done = () => { b.textContent = '✓'; setTimeout(()=>b.textContent = 'copy', 1200); };
+    const sel = () => { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+    try{ navigator.clipboard.writeText(t).then(done, sel); }catch(e){ sel(); }
+  }));
+  caption();
+})();
+</script>

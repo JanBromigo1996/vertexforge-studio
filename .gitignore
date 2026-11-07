@@ -1,0 +1,5 @@
+dist/
+app/
+installer/payload/*.exe
+*.syso
+.DS_Store

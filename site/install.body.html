@@ -1,0 +1,182 @@
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="30" height="30">VertexForge Studio</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#windows">Windows</a>
+      <a href="#mac-linux">macOS · Linux</a>
+      <a href="#updates">Updates</a>
+      <a href="#data"><span data-en>Your data</span><span data-de>Deine Daten</span></a>
+      <a href="#trouble"><span data-en>Troubleshooting</span><span data-de>Probleme</span></a>
+      <a href="index.html#download">Download</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="langEn" data-setlang="en" aria-pressed="true">EN</button>
+      <button type="button" id="langDe" data-setlang="de" aria-pressed="false">DE</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero guide-hero">
+  <div class="wrap">
+    <a class="back rise" href="index.html" style="--d:0">← <span data-en>Back to the homepage</span><span data-de>Zurück zur Startseite</span></a>
+    <div class="eyebrow rise" style="--d:1;margin-top:20px"><span data-en>Installation guide · v2.3.0</span><span data-de>Installationsanleitung · v2.3.0</span></div>
+    <h1 class="rise" style="--d:2;margin-top:12px"><span data-en>From download to your <em>first project</em></span><span data-de>Vom Download zum <em>ersten Projekt</em></span></h1>
+    <p class="lead rise" style="--d:3"><span data-en>About three minutes. Pick your system, follow the steps, and the guided tour takes over on the first start.</span><span data-de>Etwa drei Minuten. Wähle dein System, folge den Schritten, und beim ersten Start übernimmt die geführte Tour.</span></p>
+    <div class="pick rise" style="--d:4">
+      <a class="pick-card" href="#windows"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg><span><b>Windows 10 / 11</b><span class="small"><span data-en>Desktop app with installer</span><span data-de>Desktop-App mit Installer</span></span></span><i>→</i></a>
+      <a class="pick-card" href="#mac-linux"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span><b>macOS · Linux</b><span class="small"><span data-en>Browser version, no install</span><span data-de>Browser-Version, ohne Installation</span></span></span><i>→</i></a>
+    </div>
+    <div class="req rise" style="--d:5">
+      <div><span class="k"><span data-en>System</span><span data-de>System</span></span><span>Windows 10 / 11 (64-bit) · <span data-en>any current browser</span><span data-de>jeder aktuelle Browser</span></span></div>
+      <div><span class="k"><span data-en>Disk space</span><span data-de>Speicher</span></span><span>~25 MB + <span data-en>your projects</span><span data-de>deine Projekte</span></span></div>
+      <div><span class="k"><span data-en>Needs</span><span data-de>Benötigt</span></span><span>Microsoft Edge WebView2 Runtime (<span data-en>preinstalled on most PCs</span><span data-de>auf den meisten PCs vorinstalliert</span>)</span></div>
+      <div><span class="k"><span data-en>Cost</span><span data-de>Kosten</span></span><span><span data-en>Free, MIT license, no account</span><span data-de>Kostenlos, MIT-Lizenz, kein Konto</span></span></div>
+    </div>
+  </div>
+</section>
+
+<section id="windows" class="alt">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Windows</div>
+      <h2><span data-en>Install the desktop app</span><span data-de>Desktop-App installieren</span></h2>
+    </div>
+    <ol class="timeline">
+      <li class="step-card reveal">
+        <div class="tl-n">1</div>
+        <div class="tl-body">
+          <h3><span data-en>Download the setup</span><span data-de>Setup herunterladen</span></h3>
+          <p><span data-en>Get <code>VertexForge-Studio-Setup.exe</code> from the latest GitHub release. Optional but recommended: check that the file is genuine by comparing its SHA-256 checksum.</span><span data-de>Lade <code>VertexForge-Studio-Setup.exe</code> aus dem neuesten GitHub-Release. Optional, aber empfohlen: Prüfe mit der SHA-256-Prüfsumme, ob die Datei echt ist.</span></p>
+          <div class="ctas"><a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#windows"><span><span data-en>Download Setup</span><span data-de>Setup laden</span><small>.exe · 10.7 MB</small></span></a></div>
+          <pre>certutil -hashfile VertexForge-Studio-Setup.exe SHA256
+<span class="cmt"># <span data-en>must print</span><span data-de>muss ausgeben</span>:</span>
+031e91e0cd2c4a4c7fd0f30c7ab04cab361a1e7d19234a00f6c7e580ae635717</pre>
+        </div>
+      </li>
+      <li class="step-card reveal">
+        <div class="tl-n">2</div>
+        <div class="tl-body">
+          <h3><span data-en>Get past SmartScreen and allow the install</span><span data-de>SmartScreen und Installation erlauben</span></h3>
+          <p><span data-en>VertexForge is not code-signed (certificates cost a few hundred euros per year), so Windows may show “Windows protected your PC”. Click <b>More info</b>, then <b>Run anyway</b>. Then confirm the administrator prompt – the setup needs it to install into “Program Files”.</span><span data-de>VertexForge ist nicht signiert (Zertifikate kosten einige hundert Euro im Jahr), daher zeigt Windows eventuell „Der Computer wurde durch Windows geschützt“. Klicke auf <b>Weitere Informationen</b> und dann auf <b>Trotzdem ausführen</b>. Bestätige danach die Administrator-Abfrage – das Setup braucht sie, um nach „Programme“ zu installieren.</span></p>
+          <div class="mock-dialog" aria-hidden="true"><div class="md-title">Windows protected your PC</div><div class="md-text">Microsoft Defender SmartScreen prevented an unrecognised app from starting.</div><div class="md-link">More info</div><div class="md-btns"><span class="md-btn hl">Run anyway</span><span class="md-btn">Don’t run</span></div></div>
+        </div>
+      </li>
+      <li class="step-card reveal">
+        <div class="tl-n">3</div>
+        <div class="tl-body">
+          <h3><span data-en>Choose your language</span><span data-de>Sprache wählen</span></h3>
+          <p><span data-en>English is preselected. Your choice also becomes the app’s language on the first start – you can change it any time later.</span><span data-de>Englisch ist vorausgewählt. Deine Wahl wird auch die Sprache der App beim ersten Start – du kannst sie später jederzeit ändern.</span></p>
+        </div>
+        <figure class="shot"><img src="assets/setup-language.webp" alt="Setup wizard: language selection with six languages" width="1400" height="921" loading="lazy"></figure>
+      </li>
+      <li class="step-card reveal">
+        <div class="tl-n">4</div>
+        <div class="tl-body">
+          <h3><span data-en>Pick the folder and shortcuts</span><span data-de>Ordner und Verknüpfungen wählen</span></h3>
+          <p><span data-en>The default is <code>C:\Program Files\VertexForge Studio</code>. Keep the desktop shortcut and Start menu entry switched on if you like. If an older version is found, the button says <b>Update</b> instead of Install.</span><span data-de>Standard ist <code>C:\Program Files\VertexForge Studio</code>. Desktop-Verknüpfung und Startmenü-Eintrag kannst du an- oder ausschalten. Wird eine ältere Version gefunden, heißt der Knopf <b>Aktualisieren</b> statt Installieren.</span></p>
+        </div>
+        <figure class="shot"><img src="assets/setup-options.webp" alt="Setup wizard: destination folder and shortcut options" width="1400" height="921" loading="lazy"></figure>
+      </li>
+      <li class="step-card reveal">
+        <div class="tl-n">5</div>
+        <div class="tl-body">
+          <h3><span data-en>Let it install</span><span data-de>Installieren lassen</span></h3>
+          <p><span data-en>Copying files, creating shortcuts and registering with Windows takes a few seconds.</span><span data-de>Dateien kopieren, Verknüpfungen anlegen und bei Windows registrieren dauert ein paar Sekunden.</span></p>
+        </div>
+        <figure class="shot"><img src="assets/setup-progress.webp" alt="Setup wizard: installation progress" width="1400" height="921" loading="lazy"></figure>
+      </li>
+      <li class="step-card reveal">
+        <div class="tl-n">6</div>
+        <div class="tl-body">
+          <h3><span data-en>Start and take the tour</span><span data-de>Starten und Tour machen</span></h3>
+          <p><span data-en>Leave “Launch VertexForge Studio now” on and click <b>Finish</b>. On the first start a guided tour shows you every area in about a minute – skip it with <kbd>Esc</kbd> and replay it any time under <b>Help ▸ Guided tour</b>.</span><span data-de>Lass „VertexForge Studio jetzt starten“ an und klicke auf <b>Fertigstellen</b>. Beim ersten Start zeigt dir eine geführte Tour in etwa einer Minute alle Bereiche – überspringen mit <kbd>Esc</kbd>, wiederholen jederzeit unter <b>Hilfe ▸ Geführte Tour</b>.</span></p>
+        </div>
+        <figure class="shot wide"><img src="assets/first-start-tour.webp" alt="First start of VertexForge Studio with the guided tour" width="1400" height="836" loading="lazy"></figure>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="mac-linux">
+  <div class="wrap two">
+    <div class="reveal">
+      <div class="eyebrow">macOS · Linux</div>
+      <h2 style="margin-top:12px"><span data-en>Use the browser version</span><span data-de>Die Browser-Version nutzen</span></h2>
+      <p class="lead" style="margin-top:14px"><span data-en>There is no native Mac or Linux app yet. The browser version has every feature except opening linked files directly in other programs (it copies the path instead).</span><span data-de>Eine native Mac- oder Linux-App gibt es noch nicht. Die Browser-Version kann alles außer verknüpfte Dateien direkt in anderen Programmen zu öffnen (sie kopiert stattdessen den Pfad).</span></p>
+      <div class="ctas"><a class="btn primary" href="app/"><span><span data-en>Open in browser</span><span data-de>Im Browser öffnen</span><small><span data-en>runs on this website</span><span data-de>läuft auf dieser Website</span></small></span></a><a class="btn" data-gh="releases/latest/download/VertexForge-Studio-Browser.html" href="#mac-linux"><span><span data-en>Download as file</span><span data-de>Als Datei laden</span><small>.html · 0.6 MB</small></span></a></div>
+    </div>
+    <ol class="mini-steps reveal-stagger">
+      <li><b><span data-en>Online:</span><span data-de>Online:</span></b> <span data-en>click “Open in browser” and bookmark the page. Your projects are stored in this browser on this computer.</span><span data-de>Klicke auf „Im Browser öffnen“ und setze ein Lesezeichen. Deine Projekte werden in diesem Browser auf diesem Computer gespeichert.</span></li>
+      <li><b><span data-en>Offline:</span><span data-de>Offline:</span></b> <span data-en>download the .html file, put it somewhere permanent (e.g. Documents) and double-click it. Always open the same file, because the browser stores data per file location.</span><span data-de>Lade die .html-Datei, lege sie an einen festen Ort (z. B. Dokumente) und öffne sie per Doppelklick. Öffne immer dieselbe Datei, denn der Browser speichert die Daten pro Dateiort.</span></li>
+      <li><b>Safari:</b> <span data-en>with macOS Sonoma or newer you can use <b>File ▸ Add to Dock</b> to get an app-like window.</span><span data-de>Ab macOS Sonoma kannst du mit <b>Ablage ▸ Zum Dock hinzufügen</b> ein app-ähnliches Fenster bekommen.</span></li>
+      <li><b><span data-en>Back up regularly:</span><span data-de>Regelmäßig sichern:</span></b> <span data-en>browsers can delete stored data when you clear history or site data. Use <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>S</kbd> to save a .vforge project file.</span><span data-de>Browser können gespeicherte Daten löschen, wenn du Verlauf oder Website-Daten leerst. Speichere mit <kbd>Strg</kbd>/<kbd>⌘</kbd>+<kbd>S</kbd> eine .vforge-Projektdatei.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="updates" class="alt">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span data-en>Updating & uninstalling</span><span data-de>Aktualisieren & Deinstallieren</span></div>
+      <h2><span data-en>Your projects survive every update</span><span data-de>Deine Projekte überstehen jedes Update</span></h2>
+    </div>
+    <div class="trio reveal-stagger">
+      <div class="step-card plain"><h3><span data-en>Update</span><span data-de>Aktualisieren</span></h3><p><span data-en>Close VertexForge, download the new setup and run it. It recognises the existing installation and replaces only the program. Before the first start of a new version, the app saves a safety version of all your projects.</span><span data-de>Schließe VertexForge, lade das neue Setup und führe es aus. Es erkennt die vorhandene Installation und ersetzt nur das Programm. Beim ersten Start einer neuen Version legt die App eine Sicherheits-Version aller Projekte an.</span></p></div>
+      <div class="step-card plain"><h3><span data-en>Uninstall</span><span data-de>Deinstallieren</span></h3><p><span data-en>Windows Settings ▸ Apps ▸ Installed apps ▸ VertexForge Studio ▸ Uninstall. Your projects stay on your PC unless you tick “Also delete my local projects and settings”.</span><span data-de>Windows-Einstellungen ▸ Apps ▸ Installierte Apps ▸ VertexForge Studio ▸ Deinstallieren. Deine Projekte bleiben auf dem PC, außer du setzt den Haken bei „Auch meine lokalen Projekte und Einstellungen löschen“.</span></p></div>
+      <div class="step-card plain"><h3><span data-en>Move to another PC</span><span data-de>Auf einen anderen PC umziehen</span></h3><p><span data-en>In the app choose File ▸ Backup all projects. On the new computer install VertexForge and open the backup with File ▸ Open.</span><span data-de>Wähle in der App Datei ▸ Backup aller Projekte. Installiere VertexForge auf dem neuen Computer und öffne das Backup mit Datei ▸ Öffnen.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="data">
+  <div class="wrap two">
+    <div class="reveal">
+      <div class="eyebrow"><span data-en>Your data</span><span data-de>Deine Daten</span></div>
+      <h2 style="margin-top:12px"><span data-en>Where everything lives</span><span data-de>Wo alles liegt</span></h2>
+      <p class="lead" style="margin-top:14px"><span data-en>Nothing leaves your computer. There is no account, no cloud and no telemetry.</span><span data-de>Nichts verlässt deinen Computer. Es gibt kein Konto, keine Cloud und keine Telemetrie.</span></p>
+      <figure class="shot" style="margin-top:22px"><img src="assets/versions.webp" alt="The versions panel with automatic and named restore points" width="1400" height="836" loading="lazy"></figure>
+    </div>
+    <div class="paths reveal-stagger">
+      <div><span class="k"><span data-en>Program</span><span data-de>Programm</span></span><code>C:\Program Files\VertexForge Studio</code></div>
+      <div><span class="k"><span data-en>Projects & settings</span><span data-de>Projekte & Einstellungen</span></span><code>%LOCALAPPDATA%\VertexForge Studio\WebView2</code></div>
+      <div><span class="k"><span data-en>Log file</span><span data-de>Protokoll</span></span><code>%LOCALAPPDATA%\VertexForge Studio\vertexforge.log</code></div>
+      <div><span class="k"><span data-en>Project files</span><span data-de>Projektdateien</span></span><code><span data-en>wherever you save .vforge files</span><span data-de>wo du .vforge-Dateien speicherst</span></code></div>
+      <div><span class="k"><span data-en>Restore points</span><span data-de>Sicherungspunkte</span></span><span><span data-en>clock icon at the top right, or</span><span data-de>Uhr-Symbol oben rechts oder</span> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd></span></div>
+    </div>
+  </div>
+</section>
+
+<section id="trouble" class="alt">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span data-en>Troubleshooting</span><span data-de>Problemlösungen</span></div>
+      <h2><span data-en>If something goes wrong</span><span data-de>Wenn etwas nicht klappt</span></h2>
+    </div>
+    <div class="faq reveal-stagger">
+      <details><summary><span data-en>“WebView2 Runtime is missing”</span><span data-de>„WebView2 Runtime fehlt“</span></summary><p><span data-en>Install the free Microsoft Edge WebView2 Runtime (Evergreen) from <a href="https://developer.microsoft.com/microsoft-edge/webview2/" target="_blank" rel="noopener">developer.microsoft.com/microsoft-edge/webview2</a>, then start VertexForge again.</span><span data-de>Installiere die kostenlose Microsoft Edge WebView2 Runtime (Evergreen) von <a href="https://developer.microsoft.com/microsoft-edge/webview2/" target="_blank" rel="noopener">developer.microsoft.com/microsoft-edge/webview2</a> und starte VertexForge erneut.</span></p></details>
+      <details><summary><span data-en>My antivirus blocks the setup</span><span data-de>Mein Virenscanner blockiert das Setup</span></summary><p><span data-en>New, unsigned programs are sometimes flagged by mistake. Compare the SHA-256 checksum with the one on the homepage. If it matches, the file is the published one. Please report the false alarm in a GitHub issue (with the scanner’s name) so it can be submitted to the vendor.</span><span data-de>Neue, nicht signierte Programme werden manchmal fälschlich markiert. Vergleiche die SHA-256-Prüfsumme mit der auf der Startseite. Stimmt sie, ist es die veröffentlichte Datei. Bitte melde den Fehlalarm in einem GitHub-Issue (mit Namen des Scanners), damit er beim Hersteller gemeldet werden kann.</span></p></details>
+      <details><summary><span data-en>“VertexForge Studio is still running”</span><span data-de>„VertexForge Studio läuft noch“</span></summary><p><span data-en>Close the app (also check the taskbar) and click Back, then Install again.</span><span data-de>Schließe die App (auch in der Taskleiste nachsehen) und klicke auf Zurück und dann erneut auf Installieren.</span></p></details>
+      <details><summary><span data-en>The window or text is too small or too big</span><span data-de>Fenster oder Schrift zu klein oder zu groß</span></summary><p><span data-en>Use <kbd>Ctrl</kbd> + mouse wheel or <kbd>Ctrl</kbd>+<kbd>+</kbd>/<kbd>−</kbd>. <kbd>Ctrl</kbd>+<kbd>0</kbd> resets the size.</span><span data-de>Nutze <kbd>Strg</kbd> + Mausrad oder <kbd>Strg</kbd>+<kbd>+</kbd>/<kbd>−</kbd>. <kbd>Strg</kbd>+<kbd>0</kbd> setzt die Größe zurück.</span></p></details>
+      <details><summary><span data-en>Linked videos show no preview</span><span data-de>Verknüpfte Videos zeigen keine Vorschau</span></summary><p><span data-en>Previews of files on your disk only work in the Windows app. Check that the file still exists – missing files are shown in red.</span><span data-de>Vorschauen von Dateien auf der Festplatte gibt es nur in der Windows-App. Prüfe, ob die Datei noch existiert – fehlende Dateien werden rot angezeigt.</span></p></details>
+      <details><summary><span data-en>I want to start completely fresh</span><span data-de>Ich möchte ganz neu anfangen</span></summary><p><span data-en>Settings ▸ Data ▸ Reset everything. Export a backup first if you want to keep anything.</span><span data-de>Einstellungen ▸ Daten ▸ Alles zurücksetzen. Exportiere vorher ein Backup, wenn du etwas behalten willst.</span></p></details>
+    </div>
+    <a class="guide-link reveal" data-gh="issues/new" href="#trouble"><span class="gl-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.2v.3"/></svg></span><span><b><span data-en>Still stuck? Open an issue on GitHub</span><span data-de>Immer noch Probleme? Öffne ein Issue auf GitHub</span></b><span class="small"><span data-en>Describe what you did, what you expected and what happened. This tool was built with Claude and may have bugs – every report helps.</span><span data-de>Beschreibe, was du gemacht hast, was du erwartet hast und was passiert ist. Das Programm wurde mit Claude gebaut und kann Fehler haben – jeder Bericht hilft.</span></span></span><span class="gl-arrow">→</span></a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="24" height="24">VertexForge Studio</a>
+    <span>v2.3.0 · MIT License</span>
+    <span><span data-en>Made by Jan with Claude. No AI in your art.</span><span data-de>Von Jan mit Claude gemacht. Keine KI in deiner Kunst.</span></span>
+    <a href="index.html"><span data-en>Homepage</span><span data-de>Startseite</span></a>
+    <a data-gh="" href="#">GitHub</a>
+  </div>
+</footer>
+
+<script>
+/*@COMMONJS*/
+</script>

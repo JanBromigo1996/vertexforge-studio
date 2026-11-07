@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de" data-mode="dark" data-theme="fantasy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17161a">
+<title>VertexForge Studio</title>
+<!--
+  VERTEXFORGE STUDIO 2 — visuelles Pipeline- & Planungstool für 3D-Artists
+  Projekte · Pipeline (Liste/Kanban/Zeitachse) · Denkbrett · Shotlist · Story & Lore
+  Eine Datei · lokal gespeichert (IndexedDB) · .vforge-Projektdateien · 6 Sprachen
+-->
+<link rel="icon" href="/*@ICON*/">
+<!--@FONTS-->
+<style>
+/*@CSS*/
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar" id="topbar"></header>
+  <main class="main">
+    <section class="view" id="view-projects"></section>
+    <section class="view" id="view-pipeline"></section>
+    <section class="view fill" id="view-board">
+      <div class="board-layout">
+        <aside class="board-side" id="boardSide"></aside>
+        <div class="board-stage">
+          <div class="board-toolbar" id="boardToolbar"></div>
+          <div class="viewport" id="viewport" tabindex="0">
+            <div class="world" id="world">
+              <svg class="wires" id="wires"></svg>
+              <div id="dockBar" class="dock-bar"></div>
+              <div id="nodes"></div>
+              <div id="wireLabels"></div>
+            </div>
+            <div class="box-sel" id="boxSel"></div>
+            <div class="node-inspector" id="nodeInspector"></div>
+            <div class="zoom-hud" id="zoomHud"></div>
+            <div class="xf-hint" id="xfHint"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="view" id="view-shots"></section>
+    <section class="view fill" id="view-story"></section>
+    <section class="view" id="view-guide"></section>
+  </main>
+  <footer class="statusbar" id="statusbar"></footer>
+</div>
+<div class="modal" id="designer"></div>
+<div class="modal" id="modal2"></div>
+<div class="modal" id="dialog"></div>
+<div id="menuLayer"></div>
+<div id="toasts"></div>
+<script>
+/*@JS*/
+</script>
+</body>
+</html>

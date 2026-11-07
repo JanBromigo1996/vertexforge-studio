@@ -1,0 +1,19 @@
+{
+  "RT_GROUP_ICON": { "#1": { "0000": "icon.ico" } },
+  "RT_MANIFEST": { "#1": { "0409": {
+      "identity": { "name": "VertexForge.Studio", "version": "2.3.0.0" },
+      "description": "VertexForge Studio",
+      "minimum-os": "win10",
+      "execution-level": "as invoker",
+      "dpi-awareness": "per monitor v2",
+      "use-common-controls-v6": true,
+      "long-path-aware": true
+  } } },
+  "RT_VERSION": { "#1": { "0000": {
+      "fixed": { "file_version": "2.3.0.0", "product_version": "2.3.0.0" },
+      "info": { "0409": {
+        "CompanyName": "VertexForge", "FileDescription": "VertexForge Studio – 3D Pipeline & Planning",
+        "FileVersion": "2.3.0", "ProductName": "VertexForge Studio", "ProductVersion": "2.3.0",
+        "OriginalFilename": "VertexForge Studio.exe", "LegalCopyright": "VertexForge Studio"
+      } } } } }
+}

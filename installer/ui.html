@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>VertexForge Studio Setup</title>
+<style>
+:root{
+  --bg:#151418; --panel:#1c1b20; --panel-2:#24232a; --line:#2e2d34; --line-2:#3e3c45;
+  --text:#ece6da; --text-2:#aaa397; --muted:#7a746c; --gold:#d8b56c; --gold-2:#a77c34; --ok:#6fae7c; --danger:#d0574b;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font:13px/1.5 "Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased;user-select:none}
+button{font:inherit;color:inherit}
+.shell{display:grid;grid-template-columns:300px 1fr;height:100%;border:1px solid #2a2930}
+/* Linke Bühne */
+.art{position:relative;overflow:hidden;padding:34px 30px 26px;display:flex;flex-direction:column;
+  background:radial-gradient(120% 70% at 30% 0%,rgba(216,181,108,.20),transparent 60%),radial-gradient(90% 60% at 100% 100%,rgba(120,90,40,.18),transparent 60%),linear-gradient(170deg,#1d1a15,#0f0e11 70%)}
+.art::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(216,181,108,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(216,181,108,.06) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(180deg,#000 10%,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000 10%,transparent 85%)}
+.art > *{position:relative}
+.logo{width:68px;height:68px;border-radius:17px;box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 0 1px rgba(216,181,108,.25);animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-4px)}}
+.brand{margin-top:22px;font-family:Georgia,"Times New Roman",serif;font-size:25px;letter-spacing:1.2px;line-height:1.1;color:#e9bb5c}
+.tag{margin-top:6px;font-family:Consolas,monospace;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:#9b8a6a}
+.feats{margin-top:30px;display:flex;flex-direction:column;gap:14px}
+.feat{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.feat i{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:rgba(216,181,108,.10);color:var(--gold);border:1px solid rgba(216,181,108,.18)}
+.feat b{display:block;font-weight:600;font-size:12.5px}
+.feat span{color:var(--text-2);font-size:11.5px}
+.art-foot{margin-top:auto;color:var(--muted);font-size:11px;font-family:Consolas,monospace}
+/* Rechte Seite */
+.main{display:flex;flex-direction:column;min-width:0;background:var(--panel)}
+.titlebar{height:40px;display:flex;align-items:center;justify-content:space-between;padding-left:22px;flex-shrink:0}
+.steps{display:flex;gap:6px;align-items:center;font-size:11px;color:var(--muted)}
+.steps span{display:flex;align-items:center;gap:6px;transition:color .2s}
+.steps span::before{content:attr(data-n);width:18px;height:18px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-2);font-size:10px;font-family:Consolas,monospace;transition:all .25s var(--ease)}
+.steps span.on{color:var(--text)}
+.steps span:not(.on){font-size:0;gap:0}
+.steps span::before{font-size:10px}
+.steps span.on::before{background:var(--gold);border-color:var(--gold);color:#1a150c}
+.steps span.done::before{content:"✓";background:transparent;border-color:var(--gold-2);color:var(--gold)}
+.steps em{width:16px;height:1px;background:var(--line-2)}
+.wc{display:flex;align-self:stretch}
+.wc button{width:46px;border:none;background:transparent;display:grid;place-items:center;color:var(--text-2);transition:background .1s}
+.wc button:hover{background:#2c2b31;color:var(--text)}
+.wc button.x:hover{background:#c42b1c;color:#fff}
+.pages{position:relative;flex:1;overflow:hidden}
+.page{position:absolute;inset:0;padding:26px 34px 0;display:flex;flex-direction:column;opacity:0;transform:translateX(30px);pointer-events:none;transition:opacity .22s var(--ease),transform .26s var(--ease)}
+.page.on{opacity:1;transform:none;pointer-events:auto}
+.page.past{transform:translateX(-30px)}
+h1{font-family:Georgia,serif;font-weight:400;font-size:26px;letter-spacing:.3px;margin-bottom:10px}
+p.lead{color:var(--text-2);font-size:13.5px;max-width:420px}
+.note{margin-top:18px;display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:9px;background:var(--panel-2);border:1px solid var(--line);color:var(--text-2);font-size:12px;max-width:440px}
+.note b{color:var(--text);font-weight:600}
+.note.warn{border-color:rgba(208,87,75,.35);background:rgba(208,87,75,.08)}
+.field{margin-top:6px}
+.label{font-family:Consolas,monospace;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.path{display:flex;gap:8px}
+.path input{flex:1;min-width:0;height:34px;padding:0 11px;border-radius:7px;border:1px solid var(--line-2);background:#141317;color:var(--text);font:12px Consolas,monospace;outline:none;transition:border-color .15s}
+.path input:focus{border-color:var(--gold)}
+.opt{display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.opt:last-of-type{border-bottom:none}
+.opt div{flex:1}
+.opt b{display:block;font-weight:600;font-size:12.5px}
+.opt span{color:var(--muted);font-size:11.5px}
+.sw{position:relative;width:36px;height:20px;flex-shrink:0}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.sw i{position:absolute;inset:0;pointer-events:none;border-radius:99px;background:var(--line-2);transition:background .2s}
+.sw i::after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#eee6d6;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:transform .2s var(--ease)}
+.sw input:checked + i{background:var(--gold)}
+.sw input:checked + i::after{transform:translateX(16px)}
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding:16px 0 20px;border-top:1px solid var(--line)}
+.foot .r{display:flex;gap:8px}
+.btn{height:34px;padding:0 16px;border-radius:7px;border:1px solid var(--line-2);background:var(--panel-2);font-size:12.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .12s,filter .12s,transform .08s}
+.btn:hover{background:#2d2c33}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:linear-gradient(180deg,#e2c27e,#c99f52);border-color:#c99f52;color:#1b160d;font-weight:600}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.danger{background:var(--danger);border-color:var(--danger);color:#fff;font-weight:600}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--text-2)}
+.btn.ghost:hover{background:var(--panel-2);color:var(--text)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.btn:focus{outline:none}
+.btn:focus-visible{outline:2px solid rgba(216,181,108,.55);outline-offset:2px}
+.bar{margin-top:26px;height:8px;border-radius:99px;background:#141317;border:1px solid var(--line);overflow:hidden}
+.bar div{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#a77c34,#e8c983,#a77c34);background-size:200% 100%;animation:sheen 1.4s linear infinite;transition:width .25s var(--ease)}
+@keyframes sheen{to{background-position:-200% 0}}
+.pct{margin-top:8px;font-family:Consolas,monospace;font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+.tasks{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+.task{display:flex;align-items:center;gap:10px;color:var(--muted);transition:color .2s}
+.task i{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;font-style:normal;font-size:10px;transition:all .25s var(--ease)}
+.task.run{color:var(--text)}
+.task.run i{border-color:var(--gold);border-top-color:transparent;animation:spin .7s linear infinite}
+.task.ok{color:var(--text-2)}
+.task.ok i{border-color:var(--ok);background:var(--ok);color:#10200f}
+.task.ok i::after{content:"✓"}
+@keyframes spin{to{transform:rotate(360deg)}}
+.done-ic{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:rgba(111,174,124,.12);border:1px solid rgba(111,174,124,.35);margin-bottom:18px}
+.done-ic svg path{stroke-dasharray:30;stroke-dashoffset:30}
+.page.on .done-ic svg path{animation:draw .5s .15s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.note.soft{margin-top:10px;background:transparent;border-style:dashed;color:var(--muted)}
+.langs{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:440px}
+.lang{display:flex;align-items:center;gap:10px;height:42px;padding:0 12px;border-radius:9px;border:1px solid var(--line-2);background:var(--panel-2);font-size:13px;cursor:pointer;text-align:left;transition:border-color .15s,background .15s,transform .1s}
+.lang:hover{border-color:#5a5660}
+.lang:active{transform:scale(.98)}
+.lang .lk{font-family:Consolas,monospace;font-size:10px;color:var(--muted);width:20px}
+.lang i{margin-left:auto;font-style:normal;color:var(--gold);opacity:0;transform:scale(.6);transition:all .2s var(--ease)}
+.lang.on{border-color:var(--gold);background:rgba(216,181,108,.08)}
+.lang.on i{opacity:1;transform:none}
+.mini-langs{margin-top:14px;display:flex;gap:4px}
+.mini-langs button{height:24px;padding:0 8px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);font:11px Consolas,monospace;cursor:pointer}
+.mini-langs button.on{border-color:var(--gold);color:var(--gold)}
+.page.instant{transition:none}
+.err{margin-top:16px;color:#f0a59c;font-size:12px;display:none}
+.err.on{display:block}
+a{color:var(--gold);cursor:pointer;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="art">
+    <img class="logo" id="logo" alt="">
+    <div class="brand">VertexForge<br>Studio</div>
+    <div class="tag" data-t="tag">3D pipeline · planning</div>
+    <div class="feats">
+      <div class="feat"><i><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg></i><div><b data-t="f1">Pipeline & Deadlines</b><span data-t="f1d">Phasen, Aufgaben, Countdown</span></div></div>
+      <div class="feat"><i><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5.5" cy="6" r="2.5"/><circle cx="18.5" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.4 7.8l3.4 7.8M16.6 7.8l-3.4 7.8M8 6h8"/></svg></i><div><b data-t="f2">Denkbrett</b><span data-t="f2d">Referenzen, Assets, Verbindungen</span></div></div>
+      <div class="feat"><i><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7.5 4l-2 5M12.5 4l-2 5M17.5 4l-2 5"/></svg></i><div><b data-t="f3">Shotlist & Story</b><span data-t="f3d">Shots, Lore, Drehbuch</span></div></div>
+    </div>
+    <div class="art-foot" id="ver">v2.2.0</div>
+  </aside>
+  <main class="main">
+    <div class="titlebar" id="tb">
+      <div class="steps" id="steps"></div>
+      <div class="wc"><button onclick="setupWin('min')" aria-label="min"><svg width="10" height="10"><path d="M0 5.5h10" stroke="currentColor"/></svg></button><button class="x" id="xBtn" aria-label="close"><svg width="10" height="10"><path d="M.5.5l9 9M9.5.5l-9 9" stroke="currentColor" stroke-width="1.1"/></svg></button></div>
+    </div>
+    <div class="pages" id="pages"></div>
+  </main>
+</div>
+<script>
+const LANGS = [['en','English'],['de','Deutsch'],['fr','Français'],['es','Español'],['it','Italiano'],['pt','Português']];
+const I18N = {
+en:{ f1:'Pipeline & deadlines', f1d:'Phases, tasks, live countdown', f2:'Board', f2d:'References, media, asset cards', f3:'Shot list & story', f3d:'Shots, lore, script', tag:'3D pipeline · planning',
+  s0:'Language', s1:'Welcome', s2:'Options', s3:'Install', s4:'Done', u1:'Remove', u2:'Progress', u3:'Done',
+  lTitle:'Choose your language', lText:'The setup and VertexForge Studio will use this language. You can change it any time in the app.',
+  wTitle:'Welcome', wText:'This wizard installs VertexForge Studio – a visual pipeline and planning tool for 3D artists.',
+  wUpd:'<b>Update:</b> An existing installation will be updated. Your projects and settings are kept – a safety version is created automatically.',
+  wNew:'Your projects are stored locally in your user profile – never in the program folder, so updates can’t touch them.',
+  noAi:'No generative AI – VertexForge only helps you plan and organise. Your art stays yours.',
+  cancel:'Cancel', next:'Next', back:'Back', install:'Install', update:'Update',
+  oTitle:'Where should it go?', target:'Destination folder', browse:'Browse…', desk:'Desktop shortcut', deskD:'Icon on the desktop for all users',
+  start:'Start menu entry', startD:'Find it under “All apps” and pin it to Start', space:'Space required: about {mb} MB',
+  iTitle:'Installing …', iUpd:'Updating …', tFiles:'Copy program files', tShort:'Create shortcuts', tReg:'Register with Windows',
+  dTitle:'All set.', dText:'VertexForge Studio is installed. You’ll find it on the desktop and in the Start menu.', launch:'Launch VertexForge Studio now', launchD:'The guided tour shows you the essentials on first start.', finish:'Finish',
+  running:'VertexForge Studio is still running. Please close it and try again.', fail:'Error: ',
+  uTitle:'Remove VertexForge Studio?', uText:'The program, its shortcuts and the “Apps & features” entry will be removed.',
+  uData:'Also delete my local projects and settings', uDataD:'Cannot be undone – export a backup first (File ▸ Backup all projects).', remove:'Remove',
+  rTitle:'Removing …', tData:'Delete local data', rdTitle:'Removed.', rdText:'VertexForge Studio has been removed from this PC. Thanks for using it!', close:'Close' },
+de:{ f1:'Pipeline & Deadlines', f1d:'Phasen, Aufgaben, Live-Countdown', f2:'Denkbrett', f2d:'Referenzen, Medien, Asset-Karten', f3:'Shotlist & Story', f3d:'Shots, Lore, Drehbuch', tag:'3D-Pipeline · Planung',
+  s0:'Sprache', s1:'Willkommen', s2:'Optionen', s3:'Installation', s4:'Fertig', u1:'Entfernen', u2:'Fortschritt', u3:'Fertig',
+  lTitle:'Sprache wählen', lText:'Setup und VertexForge Studio verwenden diese Sprache. Du kannst sie in der App jederzeit ändern.',
+  wTitle:'Willkommen', wText:'Dieser Assistent installiert VertexForge Studio – ein visuelles Pipeline- und Planungstool für 3D-Artists.',
+  wUpd:'<b>Update:</b> Eine vorhandene Installation wird aktualisiert. Projekte und Einstellungen bleiben erhalten – eine Sicherheits-Version wird automatisch angelegt.',
+  wNew:'Deine Projekte werden lokal in deinem Benutzerprofil gespeichert – nie im Programmordner, Updates können sie also nicht berühren.',
+  noAi:'Keine generative KI – VertexForge hilft nur beim Planen und Organisieren. Deine Kunst bleibt deine.',
+  cancel:'Abbrechen', next:'Weiter', back:'Zurück', install:'Installieren', update:'Aktualisieren',
+  oTitle:'Wo soll es hin?', target:'Zielordner', browse:'Durchsuchen…', desk:'Desktop-Verknüpfung', deskD:'Symbol auf dem Desktop für alle Benutzer',
+  start:'Startmenü-Eintrag', startD:'Unter „Alle Apps“ auffindbar und an Start anheftbar', space:'Benötigter Speicherplatz: ca. {mb} MB',
+  iTitle:'Wird installiert …', iUpd:'Wird aktualisiert …', tFiles:'Programmdateien kopieren', tShort:'Verknüpfungen anlegen', tReg:'Bei Windows registrieren',
+  dTitle:'Alles bereit.', dText:'VertexForge Studio wurde installiert. Du findest es auf dem Desktop und im Startmenü.', launch:'VertexForge Studio jetzt starten', launchD:'Die geführte Tour zeigt dir beim ersten Start alles Wichtige.', finish:'Fertigstellen',
+  running:'VertexForge Studio läuft noch. Bitte schließe das Programm und versuche es erneut.', fail:'Fehler: ',
+  uTitle:'VertexForge Studio entfernen?', uText:'Das Programm, seine Verknüpfungen und der Eintrag in „Apps & Features“ werden entfernt.',
+  uData:'Auch meine lokalen Projekte und Einstellungen löschen', uDataD:'Nicht rückgängig zu machen – exportiere vorher ein Backup (Datei ▸ Backup aller Projekte).', remove:'Entfernen',
+  rTitle:'Wird entfernt …', tData:'Lokale Daten löschen', rdTitle:'Entfernt.', rdText:'VertexForge Studio wurde von diesem PC entfernt. Danke fürs Benutzen!', close:'Schließen' },
+fr:{ f1:'Pipeline & échéances', f1d:'Phases, tâches, compte à rebours', f2:'Tableau', f2d:'Références, médias, cartes d’asset', f3:'Plans & histoire', f3d:'Plans, lore, scénario', tag:'Pipeline 3D · planification',
+  s0:'Langue', s1:'Bienvenue', s2:'Options', s3:'Installation', s4:'Terminé', u1:'Désinstaller', u2:'Progression', u3:'Terminé',
+  lTitle:'Choisissez votre langue', lText:'Le setup et VertexForge Studio utiliseront cette langue. Vous pouvez la changer à tout moment dans l’app.',
+  wTitle:'Bienvenue', wText:'Cet assistant installe VertexForge Studio – un outil visuel de pipeline et de planification pour artistes 3D.',
+  wUpd:'<b>Mise à jour :</b> l’installation existante sera mise à jour. Projets et réglages sont conservés – une version de sécurité est créée automatiquement.',
+  wNew:'Vos projets sont stockés localement dans votre profil – jamais dans le dossier du programme, les mises à jour n’y touchent donc pas.',
+  noAi:'Aucune IA générative – VertexForge vous aide seulement à planifier et organiser. Votre art reste le vôtre.',
+  cancel:'Annuler', next:'Suivant', back:'Retour', install:'Installer', update:'Mettre à jour',
+  oTitle:'Où l’installer ?', target:'Dossier de destination', browse:'Parcourir…', desk:'Raccourci sur le bureau', deskD:'Icône sur le bureau pour tous les utilisateurs',
+  start:'Entrée du menu Démarrer', startD:'Dans « Toutes les applications », épinglable à Démarrer', space:'Espace requis : environ {mb} Mo',
+  iTitle:'Installation …', iUpd:'Mise à jour …', tFiles:'Copier les fichiers', tShort:'Créer les raccourcis', tReg:'Enregistrer dans Windows',
+  dTitle:'C’est prêt.', dText:'VertexForge Studio est installé. Vous le trouverez sur le bureau et dans le menu Démarrer.', launch:'Lancer VertexForge Studio maintenant', launchD:'La visite guidée vous montre l’essentiel au premier démarrage.', finish:'Terminer',
+  running:'VertexForge Studio est encore ouvert. Fermez-le puis réessayez.', fail:'Erreur : ',
+  uTitle:'Désinstaller VertexForge Studio ?', uText:'Le programme, ses raccourcis et l’entrée « Applications » seront supprimés.',
+  uData:'Supprimer aussi mes projets et réglages locaux', uDataD:'Irréversible – exportez d’abord une sauvegarde (Fichier ▸ Sauvegarde de tous les projets).', remove:'Désinstaller',
+  rTitle:'Suppression …', tData:'Supprimer les données locales', rdTitle:'Désinstallé.', rdText:'VertexForge Studio a été supprimé de ce PC. Merci de l’avoir utilisé !', close:'Fermer' },
+es:{ f1:'Pipeline y plazos', f1d:'Fases, tareas, cuenta atrás', f2:'Tablero', f2d:'Referencias, medios, tarjetas de asset', f3:'Planos e historia', f3d:'Planos, lore, guion', tag:'Pipeline 3D · planificación',
+  s0:'Idioma', s1:'Bienvenida', s2:'Opciones', s3:'Instalación', s4:'Listo', u1:'Desinstalar', u2:'Progreso', u3:'Listo',
+  lTitle:'Elige tu idioma', lText:'El instalador y VertexForge Studio usarán este idioma. Puedes cambiarlo en la app cuando quieras.',
+  wTitle:'Bienvenido', wText:'Este asistente instala VertexForge Studio, una herramienta visual de pipeline y planificación para artistas 3D.',
+  wUpd:'<b>Actualización:</b> se actualizará la instalación existente. Proyectos y ajustes se conservan; se crea una versión de seguridad automáticamente.',
+  wNew:'Tus proyectos se guardan localmente en tu perfil, nunca en la carpeta del programa, así que las actualizaciones no los tocan.',
+  noAi:'Sin IA generativa: VertexForge solo te ayuda a planificar y organizar. Tu arte sigue siendo tuyo.',
+  cancel:'Cancelar', next:'Siguiente', back:'Atrás', install:'Instalar', update:'Actualizar',
+  oTitle:'¿Dónde instalarlo?', target:'Carpeta de destino', browse:'Examinar…', desk:'Acceso directo en el escritorio', deskD:'Icono en el escritorio para todos los usuarios',
+  start:'Entrada en el menú Inicio', startD:'En «Todas las aplicaciones», se puede anclar a Inicio', space:'Espacio necesario: unos {mb} MB',
+  iTitle:'Instalando …', iUpd:'Actualizando …', tFiles:'Copiar archivos del programa', tShort:'Crear accesos directos', tReg:'Registrar en Windows',
+  dTitle:'Todo listo.', dText:'VertexForge Studio está instalado. Lo encontrarás en el escritorio y en el menú Inicio.', launch:'Iniciar VertexForge Studio ahora', launchD:'El tour guiado te muestra lo esencial en el primer inicio.', finish:'Finalizar',
+  running:'VertexForge Studio sigue abierto. Ciérralo e inténtalo de nuevo.', fail:'Error: ',
+  uTitle:'¿Desinstalar VertexForge Studio?', uText:'Se eliminarán el programa, sus accesos directos y la entrada de «Aplicaciones».',
+  uData:'Eliminar también mis proyectos y ajustes locales', uDataD:'No se puede deshacer: exporta antes una copia (Archivo ▸ Copia de todos los proyectos).', remove:'Desinstalar',
+  rTitle:'Eliminando …', tData:'Eliminar datos locales', rdTitle:'Desinstalado.', rdText:'VertexForge Studio se ha eliminado de este PC. ¡Gracias por usarlo!', close:'Cerrar' },
+it:{ f1:'Pipeline e scadenze', f1d:'Fasi, attività, conto alla rovescia', f2:'Lavagna', f2d:'Reference, media, schede asset', f3:'Inquadrature e storia', f3d:'Inquadrature, lore, sceneggiatura', tag:'Pipeline 3D · pianificazione',
+  s0:'Lingua', s1:'Benvenuto', s2:'Opzioni', s3:'Installazione', s4:'Fine', u1:'Disinstalla', u2:'Avanzamento', u3:'Fine',
+  lTitle:'Scegli la lingua', lText:'Il setup e VertexForge Studio useranno questa lingua. Puoi cambiarla in qualsiasi momento nell’app.',
+  wTitle:'Benvenuto', wText:'Questa procedura installa VertexForge Studio – uno strumento visivo di pipeline e pianificazione per artisti 3D.',
+  wUpd:'<b>Aggiornamento:</b> l’installazione esistente verrà aggiornata. Progetti e impostazioni restano – viene creata automaticamente una versione di sicurezza.',
+  wNew:'I progetti sono salvati in locale nel tuo profilo – mai nella cartella del programma, quindi gli aggiornamenti non li toccano.',
+  noAi:'Nessuna IA generativa – VertexForge ti aiuta solo a pianificare e organizzare. La tua arte resta tua.',
+  cancel:'Annulla', next:'Avanti', back:'Indietro', install:'Installa', update:'Aggiorna',
+  oTitle:'Dove installarlo?', target:'Cartella di destinazione', browse:'Sfoglia…', desk:'Collegamento sul desktop', deskD:'Icona sul desktop per tutti gli utenti',
+  start:'Voce nel menu Start', startD:'In «Tutte le app», da aggiungere a Start', space:'Spazio richiesto: circa {mb} MB',
+  iTitle:'Installazione …', iUpd:'Aggiornamento …', tFiles:'Copia dei file', tShort:'Creazione collegamenti', tReg:'Registrazione in Windows',
+  dTitle:'Tutto pronto.', dText:'VertexForge Studio è installato. Lo trovi sul desktop e nel menu Start.', launch:'Avvia VertexForge Studio ora', launchD:'Il tour guidato ti mostra l’essenziale al primo avvio.', finish:'Fine',
+  running:'VertexForge Studio è ancora aperto. Chiudilo e riprova.', fail:'Errore: ',
+  uTitle:'Disinstallare VertexForge Studio?', uText:'Verranno rimossi il programma, i collegamenti e la voce in «App».',
+  uData:'Elimina anche i miei progetti e le impostazioni locali', uDataD:'Irreversibile – esporta prima un backup (File ▸ Backup di tutti i progetti).', remove:'Disinstalla',
+  rTitle:'Rimozione …', tData:'Elimina dati locali', rdTitle:'Disinstallato.', rdText:'VertexForge Studio è stato rimosso da questo PC. Grazie per averlo usato!', close:'Chiudi' },
+pt:{ f1:'Pipeline e prazos', f1d:'Fases, tarefas, contagem regressiva', f2:'Quadro', f2d:'Referências, mídias, cartões de asset', f3:'Planos e história', f3d:'Planos, lore, roteiro', tag:'Pipeline 3D · planejamento',
+  s0:'Idioma', s1:'Boas-vindas', s2:'Opções', s3:'Instalação', s4:'Pronto', u1:'Desinstalar', u2:'Progresso', u3:'Pronto',
+  lTitle:'Escolha o idioma', lText:'O instalador e o VertexForge Studio usarão este idioma. Você pode mudá-lo a qualquer momento no app.',
+  wTitle:'Bem-vindo', wText:'Este assistente instala o VertexForge Studio – uma ferramenta visual de pipeline e planejamento para artistas 3D.',
+  wUpd:'<b>Atualização:</b> a instalação existente será atualizada. Projetos e ajustes são mantidos – uma versão de segurança é criada automaticamente.',
+  wNew:'Seus projetos ficam salvos localmente no seu perfil – nunca na pasta do programa, então as atualizações não os afetam.',
+  noAi:'Sem IA generativa – o VertexForge só ajuda a planejar e organizar. Sua arte continua sua.',
+  cancel:'Cancelar', next:'Avançar', back:'Voltar', install:'Instalar', update:'Atualizar',
+  oTitle:'Onde instalar?', target:'Pasta de destino', browse:'Procurar…', desk:'Atalho na área de trabalho', deskD:'Ícone na área de trabalho para todos os usuários',
+  start:'Entrada no menu Iniciar', startD:'Em «Todos os aplicativos», pode ser fixado no Iniciar', space:'Espaço necessário: cerca de {mb} MB',
+  iTitle:'Instalando …', iUpd:'Atualizando …', tFiles:'Copiar arquivos do programa', tShort:'Criar atalhos', tReg:'Registrar no Windows',
+  dTitle:'Tudo pronto.', dText:'O VertexForge Studio está instalado. Você o encontra na área de trabalho e no menu Iniciar.', launch:'Abrir o VertexForge Studio agora', launchD:'O tour guiado mostra o essencial na primeira execução.', finish:'Concluir',
+  running:'O VertexForge Studio ainda está aberto. Feche-o e tente novamente.', fail:'Erro: ',
+  uTitle:'Desinstalar o VertexForge Studio?', uText:'O programa, seus atalhos e a entrada em «Aplicativos» serão removidos.',
+  uData:'Excluir também meus projetos e ajustes locais', uDataD:'Não pode ser desfeito – exporte um backup antes (Arquivo ▸ Backup de todos os projetos).', remove:'Desinstalar',
+  rTitle:'Removendo …', tData:'Excluir dados locais', rdTitle:'Removido.', rdText:'O VertexForge Studio foi removido deste PC. Obrigado por usá-lo!', close:'Fechar' }
+};
+let lang = 'en', L = I18N.en;
+function setLang(l){ lang = I18N[l] ? l : 'en'; L = I18N[lang]; document.documentElement.lang = lang; document.querySelectorAll('[data-t]').forEach(e=>e.textContent = L[e.dataset.t]); }
+const $ = id => document.getElementById(id);
+let info = {mode:'install', dir:'', existing:false, sizeMB:6, version:''}, step = 0, busy = false;
+
+/* Titelleiste ziehen */
+let armed = null;
+$('tb').addEventListener('pointerdown', e=>{ if(!e.target.closest('button')) armed = {x:e.clientX, y:e.clientY}; });
+$('tb').addEventListener('pointermove', e=>{ if(armed && e.buttons===1 && Math.hypot(e.clientX-armed.x, e.clientY-armed.y) > 2){ armed = null; setupWin('drag'); } });
+addEventListener('pointerup', ()=>armed = null);
+$('xBtn').onclick = () => { if(!busy) setupWin('close'); };
+addEventListener('contextmenu', e=>e.preventDefault());
+addEventListener('keydown', e=>{
+  if(e.key==='Escape' && !busy && step < pagesCount()-1) setupWin('close');
+  if(e.key==='Enter'){ const b = document.querySelector('.page.on .btn.primary, .page.on .btn.danger'); if(b && document.activeElement.tagName!=='INPUT') b.click(); }
+  if(step===0 && info.mode!=='uninstall' && (e.key==='ArrowDown' || e.key==='ArrowUp')){ e.preventDefault(); const i = LANGS.findIndex(x=>x[0]===lang), j = (i + (e.key==='ArrowDown'?1:-1) + LANGS.length) % LANGS.length; pickLang(LANGS[j][0]); }
+});
+
+function pagesCount(){ return document.querySelectorAll('.page').length; }
+function show(i){
+  step = i;
+  document.querySelectorAll('.page').forEach((p,j)=>{ p.classList.toggle('on', j===i); p.classList.toggle('past', j<i); });
+  document.querySelectorAll('#steps span').forEach((s,j)=>{ s.classList.toggle('on', j===i); s.classList.toggle('done', j<i); });
+  setTimeout(()=>{ const b = document.querySelector('.page.on .btn.primary, .page.on .btn.danger'); if(b) b.focus(); }, 60);
+}
+const check = (id, title, desc, on) => `<label class="opt"><div><b>${title}</b><span>${desc}</span></div><span class="sw"><input type="checkbox" id="${id}" ${on?'checked':''}><i></i></span></label>`;
+const task = (id, label) => `<div class="task" id="${id}"><i></i><span>${label}</span></div>`;
+const doneIcon = `<div class="done-ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6fae7c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></div>`;
+/* Sprachwahl: Assistent wird sofort in der gewählten Sprache neu aufgebaut */
+function pickLang(l){
+  const keep = {dir:$('dir') && $('dir').value, desk:$('optDesk') && $('optDesk').checked, start:$('optStart') && $('optStart').checked};
+  setLang(l); info.mode==='uninstall' ? buildUninstall() : buildInstall();
+  if(keep.dir) $('dir').value = keep.dir;
+  if($('optDesk') && keep.desk!=null){ $('optDesk').checked = keep.desk; $('optStart').checked = keep.start; }
+  document.querySelectorAll('.page').forEach((p,j)=>{ p.classList.add('instant'); p.classList.toggle('on', j===step); p.classList.toggle('past', j<step); });
+  requestAnimationFrame(()=>document.querySelectorAll('.page.instant').forEach(p=>p.classList.remove('instant')));
+  document.querySelectorAll('#steps span').forEach((s,j)=>{ s.classList.toggle('on', j===step); s.classList.toggle('done', j<step); });
+}
+const langList = () => `<div class="langs">${LANGS.map(([k,n])=>`<button class="lang ${k===lang?'on':''}" onclick="pickLang('${k}')"><span class="lk">${k.toUpperCase()}</span>${n}<i>✓</i></button>`).join('')}</div>`;
+
+function buildInstall(){
+  $('steps').innerHTML = [L.s0,L.s1,L.s2,L.s3,L.s4].map((s,i)=>`${i?'<em></em>':''}<span data-n="${i+1}">${s}</span>`).join('');
+  $('pages').innerHTML = `
+  <section class="page"><h1>${L.lTitle}</h1><p class="lead">${L.lText}</p>${langList()}
+    <div class="foot"><button class="btn ghost" onclick="setupWin('close')">${L.cancel}</button><div class="r"><button class="btn primary" onclick="show(1)">${L.next} →</button></div></div></section>
+  <section class="page"><h1>${L.wTitle}</h1><p class="lead">${L.wText}</p>
+    <div class="note">${info.existing ? L.wUpd : L.wNew}</div>
+    <div class="note soft">${L.noAi}</div>
+    <div class="foot"><button class="btn ghost" onclick="show(0)">← ${L.back}</button><div class="r"><button class="btn primary" onclick="show(2)">${L.next} →</button></div></div></section>
+  <section class="page"><h1>${L.oTitle}</h1>
+    <div class="field"><div class="label">${L.target}</div><div class="path"><input id="dir" spellcheck="false" value=""><button class="btn" id="browse">${L.browse}</button></div></div>
+    <div style="margin-top:16px">${check('optDesk', L.desk, L.deskD, true)}${check('optStart', L.start, L.startD, true)}</div>
+    <div class="pct" style="margin-top:6px"><span>${L.space.replace('{mb}', Math.ceil(info.sizeMB*2))}</span></div>
+    <div class="foot"><button class="btn ghost" onclick="show(1)">← ${L.back}</button><div class="r"><button class="btn primary" id="goInstall"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/></svg>${info.existing ? L.update : L.install}</button></div></div></section>
+  <section class="page"><h1>${info.existing ? L.iUpd : L.iTitle}</h1>
+    <div class="bar"><div id="bar"></div></div><div class="pct"><span id="pctLabel"></span><span id="pct">0 %</span></div>
+    <div class="tasks">${task('t-files', L.tFiles)}${task('t-shortcuts', L.tShort)}${task('t-register', L.tReg)}</div>
+    <div class="err" id="err"></div>
+    <div class="foot"><span></span><div class="r"><button class="btn" id="retry" style="display:none" onclick="show(2)">← ${L.back}</button></div></div></section>
+  <section class="page">${doneIcon}<h1>${L.dTitle}</h1><p class="lead">${L.dText}</p>
+    <div style="margin-top:18px;max-width:440px">${check('optLaunch', L.launch, L.launchD, true)}</div>
+    <div class="foot"><span></span><div class="r"><button class="btn primary" id="finish">${L.finish}</button></div></div></section>`;
+  $('dir').value = info.dir;
+  $('browse').onclick = () => setupBrowse(L.target);
+  window.onBrowse = p => { if(p) $('dir').value = p; };
+  $('goInstall').onclick = startInstall;
+  $('finish').onclick = () => { if($('optLaunch').checked) setupLaunch($('dir').value); setTimeout(()=>setupWin('close'), 150); };
+}
+function buildUninstall(){
+  $('steps').innerHTML = [L.u1,L.u2,L.u3].map((s,i)=>`${i?'<em></em>':''}<span data-n="${i+1}">${s}</span>`).join('');
+  $('pages').innerHTML = `
+  <section class="page"><h1>${L.uTitle}</h1><p class="lead">${L.uText}</p>
+    <div style="margin-top:16px;max-width:460px">${check('optData', L.uData, L.uDataD, false)}</div>
+    <div class="mini-langs">${LANGS.map(([k])=>`<button class="${k===lang?'on':''}" onclick="pickLang('${k}')">${k.toUpperCase()}</button>`).join('')}</div>
+    <div class="foot"><button class="btn ghost" onclick="setupWin('close')">${L.cancel}</button><div class="r"><button class="btn danger" id="goRemove">${L.remove}</button></div></div></section>
+  <section class="page"><h1>${L.rTitle}</h1>
+    <div class="bar"><div id="bar"></div></div><div class="pct"><span id="pctLabel"></span><span id="pct">0 %</span></div>
+    <div class="tasks">${task('t-shortcuts', L.tShort)}${task('t-files', L.tFiles)}${task('t-register', L.tReg)}${task('t-data', L.tData)}</div>
+    <div class="err" id="err"></div><div class="foot"><span></span><div class="r"><button class="btn" id="retry" style="display:none" onclick="show(0)">← ${L.back}</button></div></div></section>
+  <section class="page">${doneIcon}<h1>${L.rdTitle}</h1><p class="lead">${L.rdText}</p>
+    <div class="foot"><span></span><div class="r"><button class="btn primary" onclick="setupWin('close')">${L.close}</button></div></div></section>`;
+  $('optData').onchange = e => e.target.closest('.opt').parentElement.classList.toggle('note', e.target.checked);
+  $('goRemove').onclick = () => { busy = true; show(1); if(!$('optData').checked) $('t-data').style.display = 'none'; setupUninstall($('optData').checked); };
+}
+function startInstall(){
+  busy = true; $('err').classList.remove('on'); $('retry').style.display = 'none';
+  document.querySelectorAll('.task').forEach(t=>t.className = 'task');
+  show(3);
+  setupInstall({dir:$('dir').value, desktop:$('optDesk').checked, startMenu:$('optStart').checked, lang});
+}
+const ORDER = ['files','shortcuts','register','data'];
+window.onProgress = (p, s) => {
+  $('bar').style.width = Math.round(p*100) + '%'; $('pct').textContent = Math.round(p*100) + ' %';
+  const i = ORDER.indexOf(s);
+  ORDER.forEach((k,j)=>{ const el = $('t-'+k); if(!el) return; el.className = 'task' + (s==='done' || j < i ? ' ok' : j===i ? ' run' : ''); });
+};
+window.onDone = () => { busy = false; setTimeout(()=>show(info.mode==='uninstall' ? 2 : 4), 380); };
+window.onError = msg => { busy = false; const e = $('err'); e.textContent = msg==='running' ? L.running : L.fail + msg; e.classList.add('on'); $('retry').style.display = ''; document.querySelectorAll('.task.run').forEach(t=>t.className = 'task'); };
+
+(async ()=>{
+  try{ info = await setupInfo(); }catch(e){}
+  setLang(I18N[info.lang] ? info.lang : 'en');
+  $('logo').src = info.logo || ''; $('ver').textContent = 'Version ' + (info.version || '');
+  info.mode==='uninstall' ? buildUninstall() : buildInstall();
+  requestAnimationFrame(()=>show(0));
+})();
+</script>
+</body>
+</html>
