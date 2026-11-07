@@ -152,8 +152,13 @@ async function teamSync(p, opts={}){
     const result = {}, writes = [], deletes = [], conflicts = [], incoming = [];
     for(const k of keys){
       const L = local[k], R = remote[k], B = base.recs[k];
+      if(TEAM.debug && L!==R) TEAM.debug(k, L===B ? 'take' : R===B ? 'write' : 'both', remoteBy[k]);
       if(L===R){ if(L!==undefined) result[k] = L; continue; }
-      if(L===B){ if(R!==undefined){ result[k] = R; incoming.push([k, remoteBy[k]]); } else incoming.push([k, '']); continue; }   // nur dort geändert
+      if(L===B){
+        // Hatte ich das gerade erst geschrieben und jemand hat es im selben Moment überschrieben? Dann meine Fassung sichern.
+        if(base.mine && base.mine[k] && L!==undefined && R!==undefined) conflicts.push({k, by:me, data:L, lost:true});
+        if(R!==undefined){ result[k] = R; incoming.push([k, remoteBy[k]]); } else incoming.push([k, '']); continue;
+      }   // nur dort geändert
       if(R===B){ if(L!==undefined){ result[k] = L; writes.push(k); } else deletes.push(k); continue; }                           // nur hier geändert
       // beide geändert
       if(L===undefined){ result[k] = R; incoming.push([k, remoteBy[k]]); continue; }       // hier gelöscht, dort bearbeitet → behalten
@@ -176,20 +181,27 @@ async function teamSync(p, opts={}){
     for(const c of conflicts) await TFS.write(loc, `conflicts/${c.k.replace('/','-')}-${now}.json`, JSON.stringify({by:c.by, at:now, d:JSON.parse(c.data)}));
     for(const k of writes) await TFS.write(loc, recRel(k), JSON.stringify({by:me, at:now, d:JSON.parse(result[k])}));
     for(const k of deletes) await TFS.remove(loc, recRel(k));
+    // Was wurde lokal geändert, während wir auf den Ordner gewartet haben? Das hat Vorrang und wird beim nächsten Mal geschrieben.
+    const cur = S.projects.find(x=>x.id===p.id) || p, nowRecs = teamRecords(cur), during = new Set();
+    for(const k of new Set([...Object.keys(nowRecs), ...Object.keys(local)])) if(nowRecs[k]!==local[k]){ during.add(k); if(nowRecs[k]===undefined) delete result[k]; else result[k] = nowRecs[k]; }
     // Übernehmen
     if(incoming.length){
       const idx = S.projects.findIndex(x=>x.id===p.id);
-      const merged = teamBuild(result, p);
+      const merged = teamBuild(result, cur);
       if(idx >= 0){ S.projects[idx] = merged; histCommit(); persistSoon(); if(S.activeProjectId===p.id) teamRerender(); }
       const names = [...new Set(incoming.map(([,by])=>by).filter(Boolean))];
       if(!opts.quiet) toast(names.length ? t('tm.updatedBy', {names:names.join(', '), n:incoming.length}) : t('tm.updated', {n:incoming.length}));
     }
-    if(conflicts.length) toast(t('tm.conflict', {name:recName(conflicts[0].k, conflicts[0].data), by:conflicts[0].by || t('tm.someone')}), true);
+    if(conflicts.length){ const c0 = conflicts[0], other = c0.lost ? (incoming.find(([k])=>k===c0.k) || [])[1] : c0.by; toast(t(c0.lost ? 'tm.conflictLost' : 'tm.conflict', {name:recName(c0.k, c0.data), by:other || t('tm.someone')}), true); }
     // Neuer Basisstand
     // Basis: Zeitstempel aus dem Scan *vor* dem Schreiben. Selbst geschriebene Dateien werden beim nächsten Mal
     // noch einmal gelesen – so kann eine zeitgleiche Änderung von jemand anderem nicht unbemerkt bleiben.
-    const written = new Set(writes);
-    base.recs = result; base.mtimes = {};
+    const written = new Set(writes), oldBase = base.recs;
+    base.recs = Object.assign({}, result);
+    during.forEach(k=>{ if(oldBase[k]===undefined) delete base.recs[k]; else base.recs[k] = oldBase[k]; written.add(k); });
+    if(during.size) TEAM.pending = true;
+    base.mine = Object.fromEntries(writes.map(k=>[k, 1]));
+    base.mtimes = {};
     Object.keys(result).forEach(k=>{ const r = recRel(k); if(!written.has(k) && fileMap[r]) base.mtimes[r] = fileMap[r].mtime; });
     teamSaveBase(p.id);
     await teamPresence(loc, files);

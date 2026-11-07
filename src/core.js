@@ -3,7 +3,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.6.0';
+const APP_VERSION = '2.7.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -25,9 +25,9 @@ function nativeAsync(name, ...args){ return new Promise((res, rej)=>{ const id =
 const DOCK_TYPES = new Set(['image','text','video','file']);
 const MEDIA_TYPES = new Set(['image','video','file']);
 /* Design je Bereich: Denkbrett (Hintergrund + Knoten-Stil, je Brett) und Story (Papier, je Projekt) */
-const BOARD_BGS = ['dots','grid','plain','cork','blueprint','paper','chalk'];
-const NODE_STYLES = ['studio','sticky','index','blueprint','chalk','glass'];
-const BOARD_PRESETS = {studio:['dots','studio'], pinboard:['cork','sticky'], sketch:['paper','index'], blueprint:['blueprint','blueprint'], chalk:['chalk','chalk'], glass:['plain','glass']};
+const BOARD_BGS = ['dots','grid','plain','cork','wood','walnut','felt','concrete','blueprint','paper','chalk'];
+const NODE_STYLES = ['studio','sticky','index','blueprint','chalk','glass','polaroid','kraft'];
+const BOARD_PRESETS = {studio:['dots','studio'], desk:['wood','polaroid'], pinboard:['cork','sticky'], workshop:['walnut','kraft'], felt:['felt','polaroid'], concrete:['concrete','index'], sketch:['paper','index'], blueprint:['blueprint','blueprint'], chalk:['chalk','chalk'], glass:['plain','glass']};
 const STORY_PAPERS = ['parchment','clean','manuscript','typewriter','night'];
 /* Projektbibliothek: Darstellung der Projekte (global) · Pipeline/Shotlist: Oberfläche (pro Projekt) */
 const LIB_STYLES = ['studio','dvd','posters','books','gallery'];
@@ -66,6 +66,7 @@ const L = (de, en) => currentLang()==='de' ? de : en;
    B. ICONS (eigene Linien-Icons, offline)
    ============================================================================ */
 const ICONS = {
+  brush:'<path d="M18.5 3.5l2 2-9 9-2.5-.5-.5-2.5z"/><path d="M8.5 14.5c-2 0-3.5 1.5-3.5 3.5 0 1-.7 2-2 2 4 1.5 7.5-.5 7.5-3.5z"/>',
   users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c1.9.7 3.1 2.5 3.5 5.2"/>',
   refresh:'<path d="M20 11a8 8 0 0 0-14.7-4.3L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.7 4.3L20 16"/><path d="M20 21v-5h-5"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/>',
@@ -533,10 +534,10 @@ function demoProjects(){
         {id:'nd_staff', type:'mindmap', x:480, y:40, w:250, h:110, cat:L('Hero-Prop · Emission','Hero prop · emission'), title:L('Wurzelstab des Ahnen','Root staff of the elder'), desc:L('Knorriges Wurzelholz mit eingeschlossenem Leuchtkäfer im Bernstein.','Gnarled root wood with a firefly trapped in amber.'), color:''},
         {id:'nd_bag', type:'card', x:480, y:220, w:260, h:140, cat:'Marvelous · Substance', title:L('Alchemie-Ledertasche','Alchemy leather bag'), desc:L('Vernähtes Leder, Messingschnallen, Schlaufen für sechs Phiolen.','Stitched leather, brass buckles, loops for six vials.'), stage:1, color:'#c07a4f', links:[{sw:'marvelous', path:P+'cloth\\tasche_gurte.zprj'}]},
         {id:'nd_note', type:'note', x:800, y:40, w:220, h:150, text:L('Look: feuchte Haut, warmes Bernsteinlicht, kühler Nebel. Referenz: Laubfrosch-Makrofotos.','Look: wet skin, warm amber light, cool fog. Reference: tree-frog macro photos.'), color:''},
-        {id:'nd_cc1', type:'char', x:70, y:430, w:250, h:350, kind:'character', title:L('Meister Quak','Master Croak'), sub:L('Sumpfmagier · Protagonist','Swamp mage · protagonist'), art:'ink', stats:[90,70,35,20,0],
+        {id:'nd_cc1', type:'char', x:70, y:430, w:250, h:350, kind:'character', title:L('Meister Quak','Master Croak'), artist:'Jan', links:[{sw:'zbrush', path:P+'sculpt\\quak_body_v07.ztl'},{sw:'blender', path:P+'quak_master.blend'}], sub:L('Sumpfmagier · Protagonist','Swamp mage · protagonist'), art:'ink', stats:[90,70,35,20,0],
           desc:L('142 Jahre alt, gemächlich, aber gefährlich, wenn der Kehlsack zu leuchten beginnt. Silhouette: runder Körper, lange Finger, schwerer Umhang.','142 years old, unhurried, but dangerous once the throat sac starts to glow. Silhouette: round body, long fingers, heavy cloak.'),
           facts:[{k:'Polycount',v:'48k tris'},{k:L('Texturen','Textures'),v:'4× 4K UDIM'},{k:L('Größe','Height'),v:'1.10 m'}]},
-        {id:'nd_cc2', type:'char', x:350, y:430, w:250, h:350, kind:'prop', title:L('Wurzelstab','Root staff'), sub:L('Hero-Prop · Emission','Hero prop · emission'), art:'brass', stats:[100,85,60,40,0],
+        {id:'nd_cc2', type:'char', x:350, y:430, w:250, h:350, kind:'prop', title:L('Wurzelstab','Root staff'), artist:'Jan', sub:L('Hero-Prop · Emission','Hero prop · emission'), links:[{sw:'blender', path:P+'props\\root_staff.blend'},{sw:'substance', path:P+'props\\root_staff.spp'}], art:'brass', stats:[100,85,60,40,0],
           desc:L('Knorriges Wurzelholz mit einem Glühwürmchen in Bernstein. Der Bernstein bekommt Emission und Subsurface.','Gnarled root wood with a firefly trapped in amber. The amber gets emission and subsurface.'), facts:[{k:'Polycount',v:'9k tris'},{k:L('Material','Material'),v:'Wood, amber'}]},
         {id:'nd_cc3', type:'char', x:630, y:430, w:250, h:350, kind:'environment', title:L('Nebelsumpf','Fog swamp'), sub:L('Hauptschauplatz','Main location'), art:'storm', stats:[40,10,20,0,0],
           desc:L('Zypressenwurzeln, Bodennebel, Glühwürmchen. Fokus auf Lichtstimmung statt Detail.','Cypress roots, ground fog, fireflies. Focus on lighting mood rather than detail.'), facts:[{k:L('Fläche','Area'),v:'40 × 40 m'}], flip:false}
@@ -646,7 +647,7 @@ function normalizeNode(n, seen, A){
   if(type==='note') return Object.assign(base, {text:str(n.text)});
   if(type==='char'){
     const st = arr(n.stats); delete base.color;
-    return Object.assign(base, {w:num(n.w,250,150,900), h:num(n.h,350,210,1260), kind:CHAR_KINDS.includes(n.kind) ? n.kind : 'character', title:str(n.title).slice(0,80), sub:str(n.sub).slice(0,80), desc:str(n.desc),
+    return Object.assign(base, {w:num(n.w,250,150,900), h:num(n.h,350,210,1260), kind:CHAR_KINDS.includes(n.kind) ? n.kind : 'character', artist:str(n.artist).slice(0,40), title:str(n.title).slice(0,80), sub:str(n.sub).slice(0,80), desc:str(n.desc),
       src:A.ref(n.src), art:/^[a-z]{2,12}$/.test(n.art||'') ? n.art : '', stats:CHAR_STATS.map((_,i)=>Math.round(num(st[i],0,0,100))), facts:arr(n.facts).slice(0,8).map(f=>({k:str(f && f.k).slice(0,40), v:str(f && f.v).slice(0,80)})), links:normLinks(n.links), flip:!!n.flip});
   }
   return Object.assign(base, {cat:str(n.cat), title:str(n.title), desc:str(n.desc), links:normLinks(n.links), stage:Math.round(num(n.stage,0,0,STAGES-1))});
@@ -1229,6 +1230,7 @@ async function syncWinState(){
   if(!HAS_WINCTL) return;
   try{ const st = await window.vfWinState(); const was = !!ui.winMax + ':' + !!ui.fullscreen; ui.winMax = !!st.max; ui.fullscreen = !!st.full;
     document.documentElement.classList.toggle('win-max', ui.winMax || ui.fullscreen);
+    document.documentElement.classList.toggle('is-fs', !!ui.fullscreen);
     if(was !== ui.winMax + ':' + ui.fullscreen){ const b = document.querySelector('[data-win=max]'); if(b){ b.innerHTML = (ui.winMax||ui.fullscreen) ? WIN_GLYPH.restore : WIN_GLYPH.max; b.title = t((ui.winMax||ui.fullscreen) ? 'win.restore' : 'win.max'); } }
   }catch(e){}
 }
@@ -1362,7 +1364,17 @@ async function toggleFullscreen(){
   if(IS_DESKTOP){ try{ ui.fullscreen = await window.vfFullscreen(); }catch(e){} }
   else{ try{ if(document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen({navigationUI:'hide'}); }catch(e){} ui.fullscreen = !!document.fullscreenElement; }
   const b = document.querySelector('[data-act=fullscreen]'); if(b) b.classList.toggle('on', !!ui.fullscreen);
+  applyFsClass();
 }
+/* Randloses Vollbild: Titel- und Statusleiste blenden sich aus und erscheinen, wenn die Maus an den Rand fährt */
+function applyFsClass(){ document.documentElement.classList.toggle('is-fs', !!ui.fullscreen); setTimeout(syncWinState, 150); }
+document.addEventListener('fullscreenchange', ()=>{ if(!IS_DESKTOP){ ui.fullscreen = !!document.fullscreenElement; applyFsClass(); } });
+document.addEventListener('mousemove', e=>{
+  if(!ui.fullscreen) return;
+  const el = document.documentElement, top = e.clientY < 8 || (el.classList.contains('fs-peek') && e.clientY < 60);
+  const bottom = e.clientY > innerHeight - 8 || (el.classList.contains('fs-peek-b') && e.clientY > innerHeight - 40);
+  el.classList.toggle('fs-peek', top); el.classList.toggle('fs-peek-b', bottom);
+});
 function toggleMode(){
   S.settings.mode = S.settings.mode==='dark' ? 'light' : 'dark';
   document.documentElement.classList.add('mode-swap'); setTimeout(()=>document.documentElement.classList.remove('mode-swap'), 260);

@@ -41,7 +41,7 @@ import (
 
 const (
 	appName    = "VertexForge Studio"
-	appVersion = "2.6.0"
+	appVersion = "2.7.0"
 	virtHost   = "vertexforge.example"
 )
 
@@ -118,14 +118,20 @@ func toggleFullscreen(hwnd uintptr) bool {
 		mi := monitorInfo{}
 		mi.cbSize = uint32(unsafe.Sizeof(mi))
 		_, _, _ = procGetMonitorInf.Call(mon, uintptr(unsafe.Pointer(&mi)))
+		// Maximierte Fenster erst normal stellen – sonst bleibt der Maximier-Rand (ein paar Pixel) sichtbar.
+		// Die gespeicherte Platzierung merkt sich „maximiert“, damit es beim Verlassen wieder so ist.
+		if z, _, _ := procIsZoomed.Call(hwnd); z != 0 {
+			_, _, _ = procShowWindowM.Call(hwnd, 9) // SW_RESTORE
+		}
 		_, _, _ = procSetWindowLong.Call(hwnd, gwlStyle, fsState.style&^wsOverlappedWin)
 		r := mi.rcMonitor
-		_, _, _ = procSetWindowPos.Call(hwnd, 0, uintptr(r.L), uintptr(r.T), uintptr(r.R-r.L), uintptr(r.B-r.T), swpNoOwnerZOrder|swpFrameChanged)
+		// HWND_TOP, ganzer Monitor inkl. Taskleiste
+		_, _, _ = procSetWindowPos.Call(hwnd, 0, uintptr(r.L), uintptr(r.T), uintptr(r.R-r.L), uintptr(r.B-r.T), swpNoOwnerZOrder|swpFrameChanged|0x0040)
 		fsState.on = true
 	} else {
 		_, _, _ = procSetWindowLong.Call(hwnd, gwlStyle, fsState.style)
-		_, _, _ = procSetPlacement.Call(hwnd, uintptr(unsafe.Pointer(&fsState.wp)))
 		_, _, _ = procSetWindowPos.Call(hwnd, 0, 0, 0, 0, 0, swpNoMove|swpNoSize|swpNoZOrder|swpNoOwnerZOrder|swpFrameChanged)
+		_, _, _ = procSetPlacement.Call(hwnd, uintptr(unsafe.Pointer(&fsState.wp)))
 		fsState.on = false
 	}
 	return fsState.on

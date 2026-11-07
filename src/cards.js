@@ -10,6 +10,13 @@ const CHAR_ICONS = {character:'user', creature:'paw', prop:'cube', vehicle:'whee
 const CHAR_STATS = ['model','sculpt','texture','rig','anim'];
 
 function charPct(n){ return Math.round(n.stats.reduce((a,b)=>a+b,0) / n.stats.length); }
+/* Seltenheit wächst mit dem Fortschritt: 0–39 ★ · 40–69 ★★ · 70–94 ★★★ (Folie) · 95+ ★★★★ (Holo) */
+function charRarity(pct){ return pct >= 95 ? 4 : pct >= 70 ? 3 : pct >= 40 ? 2 : 1; }
+function charSoftware(n){
+  const seen = new Set(), out = [];
+  (n.links || []).forEach(l=>{ const sw = l.sw==='other' ? detectSoftware(l.path) : l.sw; if(!sw || sw==='other' || sw==='folder' || seen.has(sw)) return; seen.add(sw); out.push(sw); });
+  return out.slice(0,4);
+}
 function charNumber(n){
   const p = activeProject(); let i = 0, found = 0;
   p.boards.forEach(b=>b.nodes.forEach(x=>{ if(x.type==='char'){ i++; if(x.id===n.id) found = i; } }));
@@ -23,22 +30,27 @@ function charCardHTML(n, edit){
     ? `<input class="${cls}" data-field="${f}" value="${esc(n[f])}" placeholder="${esc(ph)}" spellcheck="false">`
     : `<span class="${cls}">${esc(n[f] || ph)}</span>`;
   const stats = CHAR_STATS.map((k,i)=>`<div class="tc-stat"><span class="tc-sl">${t('cc.s.'+k)}</span><span class="tc-bar" ${edit?`data-stat="${i}"`:''} title="${t('cc.s.'+k)} · ${n.stats[i]}%"><i style="width:${n.stats[i]}%"></i></span><b>${n.stats[i]}</b></div>`).join('');
-  const facts = n.facts.filter(f=>f.k || f.v);
-  return `<div class="tc ${n.flip?'flip':''}" style="--kc:${col}" data-kind="${kind}">
+  const facts = n.facts.filter(f=>f.k || f.v), rar = charRarity(pct);
+  const stars = `<span class="tc-stars" title="${esc(t('cc.rarity'+rar))}">${'★'.repeat(rar)}<i>${'★'.repeat(4-rar)}</i></span>`;
+  const sw = charSoftware(n).map(k=>{ const i = swInfo(k); return `<b style="--sw:${i.color};color:${i.text||'#fff'}" title="${esc(i.name)}">${esc(i.code)}</b>`; }).join('');
+  const credit = n.artist ? `<span class="tc-credit">${ic('brush',10)}${esc(n.artist)}</span>` : '';
+  return `<div class="tc ${n.flip?'flip':''} r${rar}" style="--kc:${col}" data-kind="${kind}">
     <div class="tc-inner">
       <div class="tc-face tc-front">
         <div class="tc-top">${field('title','tc-name',t('cc.name'))}<span class="tc-hp" title="${t('cc.overall')}">${pct}<small>%</small></span></div>
-        <div class="tc-art ${img?'':'empty'}" ${edit?'data-act="move"':''}>${img ? `<img src="${esc(img)}" alt="" draggable="false">` : `<span>${ic('image',22)}<em>${t('cc.dropImg')}</em></span>`}<span class="tc-shine"></span></div>
+        <div class="tc-art ${img?'':'empty'}" ${edit?'data-act="move"':''}>${img ? `<img src="${esc(img)}" alt="" draggable="false">` : `<span>${ic('image',22)}<em>${t('cc.dropImg')}</em></span>`}<span class="tc-shine"></span><i class="tc-orn o1"></i><i class="tc-orn o2"></i><i class="tc-orn o3"></i><i class="tc-orn o4"></i>${sw ? `<span class="tc-sw">${sw}</span>` : ''}</div>
         <div class="tc-type"><span class="tc-kind">${ic(CHAR_ICONS[kind],12)}${t('cc.k.'+kind)}</span>${field('sub','tc-sub',t('cc.role'))}</div>
         <div class="tc-stats">${stats}</div>
-        <div class="tc-foot"><span class="tc-no">#${no}</span><button class="tc-flip" data-act="flip" title="${esc(t('cc.flip'))}">${ic('rotate',13)}</button></div>
+        <div class="tc-foot"><span class="tc-no">#${no}</span>${stars}${credit}<button class="tc-flip" data-act="flip" title="${esc(t('cc.flip'))}">${ic('rotate',13)}</button></div>
+        <span class="tc-holo"></span>
       </div>
       <div class="tc-face tc-back">
+        <span class="tc-crest">${LOGO_SVG}</span>
         <div class="tc-top"><span class="tc-name">${esc(n.title || t('cc.name'))}</span><span class="tc-kind">${ic(CHAR_ICONS[kind],12)}</span></div>
         ${edit ? `<textarea class="tc-desc" data-field="desc" placeholder="${esc(t('cc.descPh'))}">${esc(n.desc)}</textarea>` : `<p class="tc-desc">${esc(n.desc || t('cc.descPh'))}</p>`}
         ${facts.length ? `<dl class="tc-facts">${facts.map(f=>`<div><dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd></div>`).join('')}</dl>` : (edit ? `<div class="tc-hint">${t('cc.factsHint')}</div>` : '')}
         ${edit ? `<div class="n-links">${linksHTML(n.links,'node',n.id)}</div>` : (n.links.length ? `<div class="tc-files">${ic('link',11)} ${n.links.length} ${t('cc.files')}</div>` : '')}
-        <div class="tc-foot"><span class="tc-no">#${no}</span><button class="tc-flip" data-act="flip" title="${esc(t('cc.flip'))}">${ic('rotate',13)}</button></div>
+        <div class="tc-foot"><span class="tc-no">#${no}</span>${stars}${credit}<button class="tc-flip" data-act="flip" title="${esc(t('cc.flip'))}">${ic('rotate',13)}</button></div>
       </div>
     </div>
   </div>`;
@@ -46,8 +58,24 @@ function charCardHTML(n, edit){
 function flipCard(id){
   const n = nodeById(id); if(!n) return;
   n.flip = !n.flip; changed();
-  const el = nodeEl(id), tc = el && el.querySelector('.tc'); if(tc) tc.classList.toggle('flip', n.flip);
+  const el = nodeEl(id), tc = el && el.querySelector('.tc'); if(tc) flipAnim(tc, n.flip);
 }
+/* Umdrehen mit kurzem Anheben – wie eine echte Karte, die man in die Hand nimmt */
+function flipAnim(tc, on){ tc.classList.remove('lift'); void tc.offsetWidth; tc.classList.add('lift'); tc.classList.toggle('flip', on); clearTimeout(tc._lt); tc._lt = setTimeout(()=>tc.classList.remove('lift'), 760); }
+/* Licht und Holofolie folgen der Maus */
+function cardTilt(e){
+  const tc = e.target.closest && e.target.closest('.tc'); if(!tc || e.pointerType==='touch') return;
+  if(CV && CV.drag && CV.drag.moved) return;
+  const r = tc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+  // Auf dem Denkbrett nur dezent (Knöpfe sollen nicht unter dem Zeiger wegwandern), im Deck voll; über Bedienelementen ruhig
+  const k = tc.closest('.deck-card') ? 1 : e.target.closest('button, input, textarea, .tc-bar, .n-links') ? 0 : .3;
+  tc.style.setProperty('--mx', (x*100).toFixed(1) + '%'); tc.style.setProperty('--my', (y*100).toFixed(1) + '%');
+  tc.style.setProperty('--tx', ((.5 - y) * 10 * k).toFixed(2) + 'deg'); tc.style.setProperty('--ty', ((x - .5) * 12 * k).toFixed(2) + 'deg');
+  tc.classList.add('hover');
+}
+function cardTiltOut(e){ const tc = e.target.closest && e.target.closest('.tc'); if(tc && !tc.contains(e.relatedTarget)){ tc.classList.remove('hover'); tc.style.removeProperty('--tx'); tc.style.removeProperty('--ty'); } }
+document.addEventListener('pointermove', cardTilt, {passive:true});
+document.addEventListener('pointerout', cardTiltOut, {passive:true});
 /* Klick auf einen Balken setzt den Wert (wie bei einer Bewertung) */
 function setCardStat(n, i, e, bar){
   const r = bar.getBoundingClientRect(), v = Math.round(clamp((e.clientX - r.left) / r.width, 0, 1) * 20) * 5;
@@ -63,7 +91,8 @@ async function dropCardImage(id, file){
   n.src = addAsset(await compressImage(file, 1400)); n.art = ''; changed(); updateNodeEl(n); renderInspector();
 }
 function charInspectorHTML(n){
-  return `<label class="f"><span class="f-l">${t('cc.kind')}</span><select class="sel" data-cf="kind">${CHAR_KINDS.map(k=>`<option value="${k}" ${k===n.kind?'selected':''}>${t('cc.k.'+k)}</option>`).join('')}</select></label>
+  return `<label class="f"><span class="f-l">${t('cc.artist')}</span><input class="inp" data-cf="artist" value="${esc(n.artist||'')}" placeholder="${esc(S.settings.userName || t('cc.artistPh'))}"></label>
+    <label class="f"><span class="f-l">${t('cc.kind')}</span><select class="sel" data-cf="kind">${CHAR_KINDS.map(k=>`<option value="${k}" ${k===n.kind?'selected':''}>${t('cc.k.'+k)}</option>`).join('')}</select></label>
     <div class="f"><span class="f-l">${t('cc.image')}</span><div class="row-btns"><button class="btn btn-xs" data-cact="img">${ic('image',13)} ${t(n.src||n.art?'cc.imgChange':'cc.imgPick')}</button>${n.src||n.art?`<button class="btn btn-xs" data-cact="noimg">${ic('x',13)} ${t('cc.imgRemove')}</button>`:''}</div></div>
     <div class="subhead"><span>${t('cc.progress')}</span></div>
     ${CHAR_STATS.map((k,i)=>`<label class="f f-range"><span class="f-l">${t('cc.s.'+k)}</span><input type="range" min="0" max="100" step="5" value="${n.stats[i]}" data-cstat="${i}"><b class="mono">${n.stats[i]}</b></label>`).join('')}
@@ -77,6 +106,7 @@ function charInspectorEvent(n, e){
   if(e.type==='input' || e.type==='change'){
     if(tg.dataset.cstat!=null){ n.stats[+tg.dataset.cstat] = +tg.value; tg.nextElementSibling.textContent = tg.value; changed(); updateNodeEl(n); return true; }
     if(tg.dataset.cf==='kind'){ n.kind = tg.value; changed(); updateNodeEl(n); return true; }
+    if(tg.dataset.cf==='artist'){ n.artist = tg.value.slice(0,40); changed(); updateNodeEl(n); return true; }
     if(tg.dataset.fk!=null){ n.facts[+tg.dataset.fk].k = tg.value; changed(); updateNodeEl(n); return true; }
     if(tg.dataset.fv!=null){ n.facts[+tg.dataset.fv].v = tg.value; changed(); updateNodeEl(n); return true; }
     return false;
@@ -128,7 +158,7 @@ function openDeck(){
       return;
     }
     const card = e.target.closest('.deck-card');
-    if(card){ const n = allCards().find(c=>c.n.id===card.dataset.cid); if(n){ card.querySelector('.tc').classList.toggle('flip'); } return; }
+    if(card){ const tc = card.querySelector('.tc'); flipAnim(tc, !tc.classList.contains('flip')); return; }
     if(e.target===el || e.target.classList.contains('deck-grid')) closeDeck();
   });
 }

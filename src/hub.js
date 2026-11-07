@@ -36,7 +36,7 @@ function renderProjects(){
     const active = p.id===S.activeProjectId;
     return `<article class="pcard ${active?'active':''}" data-pid="${p.id}">
       <div class="pcard-cover" tabindex="0" data-open="${p.id}" title="${esc(t('act.open'))}">
-        <i class="lib-deco lib-a" aria-hidden="true"></i><i class="lib-deco lib-b" aria-hidden="true"></i>
+        <i class="lib-deco lib-a" aria-hidden="true"><span>${esc(projectName(p))}</span></i><i class="lib-deco lib-b" aria-hidden="true"></i><i class="lib-deco lib-c" aria-hidden="true"></i>
         ${coverHTML(p.cover)}
         <div class="pcard-progress"><div style="width:${s.pct}%"></div></div>
         ${active ? `<span class="pcard-active">${t('hub.active')}</span>` : ''}

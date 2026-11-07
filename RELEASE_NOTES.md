@@ -1,3 +1,32 @@
+## VertexForge Studio 2.7.0
+
+### Project library that looks like the real thing
+- **Books:** bound books with a leather spine (raised bands, gold title), linen-textured cover and page block.
+- **DVD shelf:** real cases with black plastic, clear sleeve, hinge and the title on the spine.
+- **Poster wall:** printed posters with fold lines, gentle waves, torn-edge tape and a lifted corner.
+- **Gallery:** moulded frames, bevel-cut mats, glass reflections and brass picture lights.
+- Hover a book or DVD and it turns towards you.
+
+### Mind board
+- New surfaces: wooden desk, walnut workbench, felt game table, concrete; new note styles: polaroid and kraft paper.
+- New presets: Desk, Workshop, Game table, Studio wall (10 presets, 88 combinations).
+
+### Collectible cards with more care
+- Rarity grows with progress (★ to ★★★★): silver foil from three stars, holographic foil for finished assets.
+- Light and foil follow the mouse; cards lift slightly when flipped. Software badges from linked files,
+  artist credit, ornate frame and a designed back side.
+
+### Fixes
+- **Borderless fullscreen (F11)** now really covers the whole screen, also from a maximised window; title and
+  status bar slide in when the mouse touches the screen edge.
+- Team folders: edits made while a sync is running are kept; a version overwritten at the very same moment by
+  someone else is saved to `conflicts/` instead of disappearing.
+- Clicking a card's progress bars no longer hits the hidden back side.
+
+**VirusTotal (2.7.0):** results for these exact files are linked on the website and will be added here.
+
+---
+
 ## VertexForge Studio 2.6.0
 
 ### New: team folders – work together without a server
@@ -11,8 +40,6 @@
 
 ### Shot list
 - Click a shot image to see it large; replace or remove it there (←/→ for the next shot). Drop images onto a shot.
-
-**VirusTotal (2.6.0):** results for these exact files are linked on the website and will be added here.
 
 ---
 
