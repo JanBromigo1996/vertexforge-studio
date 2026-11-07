@@ -21,9 +21,16 @@ import zipfile
 with zipfile.ZipFile('payload/app.zip', 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     z.write('../dist/VertexForge-Studio.exe', 'VertexForge Studio.exe')
     z.write('../dist/Uninstall-VertexForge-Studio.exe', 'Uninstall VertexForge Studio.exe')
+    z.write('../winres/webview2/WebView2Loader.dll', 'WebView2Loader.dll')
 PY
 go-winres make --in winres/winres.json --arch amd64
 go build -trimpath -ldflags "$LDFLAGS" -o "../dist/VertexForge-Studio-Setup.exe" .
 cd ..
 cp dist/vertexforge_studio.html dist/VertexForge-Studio-Browser.html
+cp winres/webview2/WebView2Loader.dll dist/WebView2Loader.dll
+# Portable Version: App + DLL in einem Ordner, ohne Installation
+rm -rf dist/portable && mkdir -p "dist/portable/VertexForge Studio"
+cp dist/VertexForge-Studio.exe "dist/portable/VertexForge Studio/VertexForge Studio.exe"
+cp winres/webview2/WebView2Loader.dll "dist/portable/VertexForge Studio/"
+(cd dist/portable && python3 -c "import shutil; shutil.make_archive('../VertexForge-Studio-Portable', 'zip', '.', 'VertexForge Studio')")
 ls -la dist

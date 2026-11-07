@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/JanBromigo1996/vertexforge-studio/security/advisories/new
+    about: Please don't post security problems publicly before they are fixed.
+  - name: Installation guide & FAQ
+    url: https://janbromigo1996.github.io/vertexforge-studio/install.html
+    about: Many common problems are answered here.

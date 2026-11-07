@@ -5,9 +5,7 @@
 <meta property="og:description" content="VertexForge Studio – a free, open-source planning tool for 3D artists: pipeline, deadlines, mind board, shot list and story in one place.">
 <meta property="og:image" content="assets/shot-hero.webp">
 <link rel="icon" href="assets/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site-fonts.css">
 <style>
 
 /* Layout: one centered column (max 1120px); hero is a split of copy + framed app screen,
@@ -228,7 +226,7 @@ footer a{color:var(--fg-2)}
 .stages .st{transition:background .35s,border-color .35s,color .35s,transform .35s cubic-bezier(.2,.7,.2,1)}
 .stages .st.on{transform:translateY(-2px)}
 .stages .st.done{border-color:color-mix(in srgb,var(--brass) 60%,var(--line-2));color:var(--brass)}
-.reveal,.reveal-stagger > *{transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0) * 70ms)}
+.reveal,.reveal-stagger > *{transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(min(var(--i,0), 6) * 70ms)}
 .pre{opacity:0;transform:translateY(26px)}
 .tabs{position:relative}
 .tab-ink{position:absolute;left:0;top:0;border-radius:9px;background:var(--panel);border:1px solid var(--brass);transition:transform .35s cubic-bezier(.2,.7,.2,1),width .35s cubic-bezier(.2,.7,.2,1);pointer-events:none;z-index:0}
@@ -318,6 +316,83 @@ code{font:.86em var(--mono);padding:1px 6px;border-radius:5px;background:var(--b
 details a{color:var(--brass)}
 @media (prefers-reduced-motion:reduce){ .md-btn.hl{animation:none} }
 
+/* ---------- Make it yours: Stil-Vorschau ---------- */
+.cz{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;align-items:start}
+.cz-side{display:flex;flex-direction:column;gap:20px;position:sticky;top:88px}
+.cz-label{font:600 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.cz-chips{display:flex;flex-wrap:wrap;gap:6px}
+.cz-chips button{display:inline-flex;align-items:center;gap:8px;font:500 .86rem var(--body);padding:7px 12px 7px 8px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--fg-2);cursor:pointer;transition:border-color .15s,color .15s,transform .15s,box-shadow .2s}
+.cz-chips button:hover{color:var(--fg);border-color:var(--line-2);transform:translateY(-1px)}
+.cz-chips button[aria-selected="true"]{color:var(--fg);border-color:var(--brass);box-shadow:0 0 0 3px color-mix(in srgb,var(--brass) 18%,transparent)}
+.sw{width:18px;height:18px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--a) 0 55%,var(--b) 55% 100%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);transition:transform .25s}
+.cz-chips button[aria-selected="true"] .sw{transform:rotate(180deg) scale(1.1)}
+.cz-main{margin:0;min-width:0}
+.cz-view{position:relative}
+.cz-view img{aspect-ratio:1360/820;width:100%;height:auto;object-fit:cover}
+.cz-view img.swap{animation:czIn .55s cubic-bezier(.2,.7,.2,1)}
+@keyframes czIn{from{opacity:0;transform:scale(1.025);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.cz-progress{position:absolute;left:0;bottom:0;height:3px;width:100%;transform-origin:left;transform:scaleX(0);background:var(--brass);opacity:.9}
+.cz-progress.run{animation:czBar 4.2s linear forwards}
+@keyframes czBar{to{transform:scaleX(1)}}
+.cz-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:34px}
+.cz-facts>div{border-top:1px solid var(--line-2);padding-top:14px;min-width:0}
+.cz-facts .num{display:block;font:600 2rem/1 var(--display);color:var(--brass);margin-bottom:8px}
+.cz-facts p{color:var(--fg-2);font-size:.92rem;margin:6px 0 0}
+@media (max-width:900px){
+  .cz{grid-template-columns:1fr}
+  .cz-side{position:static;order:2}
+  .cz-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){ .cz-facts{grid-template-columns:1fr} }
+
+/* ---------- Sicherheit: ehrlicher Bericht ---------- */
+.pill.sig{background:color-mix(in srgb,var(--brass) 14%,transparent);color:var(--brass)}
+.pill.sig::before{animation:none}
+td .pill+.pill{margin-top:4px}
+.av{margin-top:26px;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:22px 24px}
+.av-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+.av-head .ic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;background:color-mix(in srgb,var(--brass) 16%,transparent);color:var(--brass)}
+.av-head p{margin:2px 0 0}
+.av-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.av-steps>li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;position:relative;padding-bottom:18px}
+.av-steps>li:last-child{padding-bottom:0}
+.av-steps>li::before{content:"";position:absolute;left:10px;top:18px;bottom:-2px;width:2px;background:var(--line)}
+.av-steps>li:last-child::before{display:none}
+.av-steps .dot{width:14px;height:14px;margin:5px 4px 0;border-radius:50%;background:var(--line-2);box-shadow:0 0 0 4px var(--panel);position:relative;z-index:1}
+.av-steps .dot.warn{background:var(--warn)}
+.av-steps .dot.ok{background:var(--ok)}
+.av-steps .dot.live{background:var(--brass);animation:pulse 2.4s ease-in-out infinite}
+.av-steps b{font-weight:600}
+.av-steps .when{margin-left:10px;font:.72rem var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px;white-space:nowrap}
+.av-steps p{color:var(--fg-2);font-size:.93rem;margin:6px 0 0}
+.av-steps a,.pc-card a,.sec-notes a{color:var(--brass)}
+.det{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px}
+.det li{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line);font-size:.82rem;min-width:0}
+.det code{font:.76rem var(--mono);color:var(--warn);overflow-wrap:anywhere}
+.pc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+.pc-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;min-width:0}
+.pc-card ul{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.pc-card li{font-size:.9rem;color:var(--fg-2);padding-left:16px;position:relative}
+.pc-card li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:2px;background:var(--brass);transform:rotate(45deg)}
+.pc-card li code{display:block;font:.76rem var(--mono);color:var(--fg);overflow-wrap:anywhere;margin-bottom:2px}
+@media (max-width:900px){ .pc{grid-template-columns:1fr} }
+
+/* ---------- Probleme melden ---------- */
+.report{margin-top:40px;border:1px solid var(--line);border-radius:16px;padding:24px;background:linear-gradient(160deg,color-mix(in srgb,var(--brass) 7%,var(--panel)),var(--panel) 60%)}
+.rp-head p{margin:6px 0 0}
+.rp-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.rp{position:relative;display:flex;flex-direction:column;gap:6px;padding:16px 16px 18px;border-radius:12px;border:1px solid var(--line);background:var(--bg);text-decoration:none;min-width:0;transition:border-color .2s,transform .2s,box-shadow .2s}
+.rp:hover{border-color:var(--brass);transform:translateY(-3px);box-shadow:var(--shadow)}
+.rp-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--brass) 15%,transparent);color:var(--brass);margin-bottom:4px;transition:transform .3s}
+.rp:hover .rp-ic{transform:rotate(-8deg) scale(1.08)}
+.rp .small{color:var(--fg-2)}
+.rp-go{position:absolute;top:16px;right:16px;color:var(--muted);transition:transform .2s,color .2s}
+.rp:hover .rp-go{transform:translateX(3px);color:var(--brass)}
+@media (max-width:900px){ .rp-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:480px){ .rp-grid{grid-template-columns:1fr} }
+footer .small{color:var(--muted)}
+@media (prefers-reduced-motion: reduce){ .cz-view img.swap,.cz-progress.run,.av-steps .dot.live{animation:none} }
+
 </style>
 
 
@@ -327,10 +402,11 @@ details a{color:var(--brass)}
     <nav class="nav" aria-label="Sections">
       <a href="#views"><span data-en>Tour</span><span data-de>Einblick</span></a>
       <a href="#features"><span data-en>Features</span><span data-de>Funktionen</span></a>
+      <a href="#customize"><span data-en>Make it yours</span><span data-de>Anpassen</span></a>
       <a href="#download">Download</a>
       <a href="install.html"><span data-en>Install guide</span><span data-de>Anleitung</span></a>
       <a href="#security"><span data-en>Security</span><span data-de>Sicherheit</span></a>
-      <a href="#open-source">Open Source</a>
+      <a href="#faq">FAQ</a>
       <a href="#about"><span data-en>About</span><span data-de>Über</span></a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
@@ -408,7 +484,54 @@ details a{color:var(--brass)}
   </div>
 </section>
 
-<section id="download" class="alt">
+<section id="customize" class="alt">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span data-en>Make it yours</span><span data-de>Mach es zu deinem</span></div>
+      <h2><span data-en>Every project gets its own look</span><span data-de>Jedes Projekt bekommt seinen eigenen Look</span></h2>
+      <p class="lead"><span data-en>A cork pinboard for character ideas, a blueprint for hard surface, a typewriter page for your script. Each board, each story and each project cover has its own style: one click for a preset, or mix your own.</span><span data-de>Eine Kork-Pinnwand für Charakterideen, ein Blaupausen-Plan für Hard-Surface, eine Schreibmaschinenseite für dein Skript. Jedes Denkbrett, jede Story und jedes Projekt-Cover hat seinen eigenen Stil: ein Klick für eine Vorlage, oder du mischst deinen eigenen.</span></p>
+    </div>
+    <div class="cz reveal">
+      <div class="cz-side" role="tablist" aria-label="Styles">
+        <div class="cz-group"><div class="cz-label"><span data-en>Mind board</span><span data-de>Denkbrett</span></div>
+          <div class="cz-chips">
+            <button type="button" role="tab" data-cz="board-studio" aria-selected="false"><i class="sw" style="--a:#2a2930;--b:#55525e"></i>Studio</button>
+            <button type="button" role="tab" data-cz="board-pinboard" aria-selected="true"><i class="sw" style="--a:#b07a45;--b:#f3d66b"></i><span data-en>Pinboard</span><span data-de>Pinnwand</span></button>
+            <button type="button" role="tab" data-cz="board-sketch" aria-selected="false"><i class="sw" style="--a:#efe8d8;--b:#c9bfa9"></i><span data-en>Sketchbook</span><span data-de>Skizzenbuch</span></button>
+            <button type="button" role="tab" data-cz="board-blueprint" aria-selected="false"><i class="sw" style="--a:#1d4f8f;--b:#cfe0f5"></i><span data-en>Blueprint</span><span data-de>Blaupause</span></button>
+            <button type="button" role="tab" data-cz="board-chalk" aria-selected="false"><i class="sw" style="--a:#26332c;--b:#e8e4d6"></i><span data-en>Chalkboard</span><span data-de>Tafel</span></button>
+            <button type="button" role="tab" data-cz="board-glass" aria-selected="false"><i class="sw" style="--a:#3b4a6b;--b:#b9c6e6"></i><span data-en>Glass</span><span data-de>Glas</span></button>
+          </div></div>
+        <div class="cz-group"><div class="cz-label"><span data-en>Story paper</span><span data-de>Story-Papier</span></div>
+          <div class="cz-chips">
+            <button type="button" role="tab" data-cz="story-parchment" aria-selected="false"><i class="sw" style="--a:#efe3c4;--b:#b08a4a"></i><span data-en>Parchment</span><span data-de>Pergament</span></button>
+            <button type="button" role="tab" data-cz="story-typewriter" aria-selected="false"><i class="sw" style="--a:#f3efe6;--b:#2b2b2b"></i><span data-en>Typewriter</span><span data-de>Schreibmaschine</span></button>
+            <button type="button" role="tab" data-cz="story-manuscript" aria-selected="false"><i class="sw" style="--a:#e8dcc2;--b:#6b4b2a"></i><span data-en>Manuscript</span><span data-de>Manuskript</span></button>
+            <button type="button" role="tab" data-cz="story-clean" aria-selected="false"><i class="sw" style="--a:#fafafa;--b:#9aa0a6"></i><span data-en>Clean</span><span data-de>Schlicht</span></button>
+            <button type="button" role="tab" data-cz="story-night" aria-selected="false"><i class="sw" style="--a:#1b1d26;--b:#8f9bc7"></i><span data-en>Night</span><span data-de>Nacht</span></button>
+          </div></div>
+        <div class="cz-group"><div class="cz-label"><span data-en>Project library</span><span data-de>Projektbibliothek</span></div>
+          <div class="cz-chips">
+            <button type="button" role="tab" data-cz="designer" aria-selected="false"><i class="sw" style="--a:#1d2b22;--b:#e9bb5c"></i><span data-en>Cover designer</span><span data-de>Cover-Designer</span></button>
+            <button type="button" role="tab" data-cz="hub-large" aria-selected="false"><i class="sw" style="--a:#131215;--b:#d8b56c"></i><span data-en>Large covers</span><span data-de>Große Cover</span></button>
+            <button type="button" role="tab" data-cz="hub-light" aria-selected="false"><i class="sw" style="--a:#f3eee4;--b:#8d6224"></i><span data-en>Light mode</span><span data-de>Hell</span></button>
+          </div></div>
+      </div>
+      <figure class="cz-main">
+        <div class="view cz-view"><img id="czImg" src="assets/custom-board-pinboard.webp" alt="" width="1360" height="820"><div class="cz-progress" id="czProg"></div></div>
+        <figcaption class="caption" id="czCap"></figcaption>
+      </figure>
+    </div>
+    <div class="cz-facts reveal-stagger">
+      <div><b class="num">6</b><h3><span data-en>Board presets</span><span data-de>Denkbrett-Vorlagen</span></h3><p><span data-en>Or combine 7 backgrounds with 6 note styles: 42 looks. Every board in a project can have its own.</span><span data-de>Oder kombiniere 7 Hintergründe mit 6 Notiz-Stilen: 42 Looks. Jedes Denkbrett eines Projekts kann seinen eigenen haben.</span></p></div>
+      <div><b class="num">5</b><h3><span data-en>Story papers</span><span data-de>Story-Papiere</span></h3><p><span data-en>From aged parchment to a dark night mode for late writing sessions, chosen per project.</span><span data-de>Von altem Pergament bis zum dunklen Nachtmodus für späte Schreibsessions, pro Projekt wählbar.</span></p></div>
+      <div><b class="num">50+</b><h3><span data-en>Cover fonts</span><span data-de>Cover-Schriften</span></h3><p><span data-en>Poster covers with title and banner, style presets, a top ribbon and your own artwork. Cover and title size adjust live in the library.</span><span data-de>Plakat-Cover mit Titel und Banner, Stil-Vorlagen, Banderole und deinem eigenen Artwork. Cover- und Titelgröße stellst du live in der Bibliothek ein.</span></p></div>
+      <div><b class="num">∞</b><h3><span data-en>Your workspace</span><span data-de>Dein Arbeitsplatz</span></h3><p><span data-en>Light and dark mode, interface zoom with <kbd>Ctrl</kbd> + mouse wheel, fullscreen for board and story, six languages.</span><span data-de>Heller und dunkler Modus, Oberflächen-Zoom mit <kbd>Strg</kbd> + Mausrad, Vollbild für Denkbrett und Story, sechs Sprachen.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
   <div class="wrap">
     <div class="head reveal">
       <div class="eyebrow">Download · v2.3.0</div>
@@ -423,7 +546,8 @@ details a{color:var(--brass)}
           <li><span data-en>Opens linked files in Blender, ZBrush & co., shows your installed program icons</span><span data-de>Öffnet verknüpfte Dateien in Blender, ZBrush & Co., zeigt deine installierten Programm-Icons</span></li>
           <li><span data-en>Needs the Microsoft Edge WebView2 Runtime (already on most PCs)</span><span data-de>Benötigt die Microsoft Edge WebView2 Runtime (auf den meisten PCs vorhanden)</span></li>
         </ul>
-        <div class="btns"><a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#download"><span><span data-en>Download Setup</span><span data-de>Setup laden</span><small>.exe · 14 MB</small></span></a><a class="btn" data-gh="releases" href="#download"><span><span data-en>All releases</span><span data-de>Alle Versionen</span><small>GitHub</small></span></a></div>
+        <div class="btns"><a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#download"><span><span data-en>Download Setup</span><span data-de>Setup laden</span><small>.exe · 14 MB</small></span></a><a class="btn" data-gh="releases/latest/download/VertexForge-Studio-Portable.zip" href="#download"><span><span data-en>Portable</span><span data-de>Portabel</span><small><span data-en>.zip · no install</span><span data-de>.zip · ohne Installation</span></small></span></a></div>
+        <p class="small"><span data-en>Older versions and release notes:</span><span data-de>Ältere Versionen und Versionshinweise:</span> <a data-gh="releases" href="#download"><span data-en>all releases on GitHub</span><span data-de>alle Releases auf GitHub</span></a></p>
       </div>
       <div class="card">
         <div class="os"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><div><h3>macOS · Linux</h3><span class="small"><span data-en>Browser version</span><span data-de>Browser-Version</span></span></div></div>
@@ -431,44 +555,79 @@ details a{color:var(--brass)}
           <li><span data-en>The full app in Safari, Chrome, Firefox or Edge, nothing to install</span><span data-de>Die komplette App in Safari, Chrome, Firefox oder Edge, ohne Installation</span></li>
           <li><span data-en>Saves locally in your browser; export .vforge files as backups</span><span data-de>Speichert lokal im Browser; .vforge-Dateien als Backup exportieren</span></li>
           <li><span data-en>A native macOS app is not available yet. Help is welcome!</span><span data-de>Eine native macOS-App gibt es noch nicht. Hilfe ist willkommen!</span></li>
+          <li><span data-en>Good to know: the downloadable .html file loads its fonts from Google Fonts when you are online. The version on this website does not.</span><span data-de>Gut zu wissen: Die herunterladbare .html-Datei lädt ihre Schriften von Google Fonts, wenn du online bist. Die Version auf dieser Website nicht.</span></li>
         </ul>
         <div class="btns"><a class="btn primary" href="app/"><span><span data-en>Open in browser</span><span data-de>Im Browser öffnen</span><small><span data-en>runs on this site</span><span data-de>läuft auf dieser Seite</span></small></span></a><a class="btn" data-gh="releases/latest/download/VertexForge-Studio-Browser.html" href="#download"><span><span data-en>Download as file</span><span data-de>Als Datei laden</span><small>.html · 0.6 MB</small></span></a></div>
       </div>
     </div>
     <a class="guide-link reveal" href="install.html"><span class="gl-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5v-17M8.5 7h7M8.5 11h5"/></svg></span><span><b><span data-en>Step-by-step installation guide</span><span data-de>Installationsanleitung Schritt für Schritt</span></b><span class="small"><span data-en>Setup, first start, updates, uninstalling, macOS & Linux, troubleshooting</span><span data-de>Setup, erster Start, Updates, Deinstallation, macOS & Linux, Problemlösungen</span></span></span><span class="gl-arrow">→</span></a>
-    <p class="small" style="margin-top:16px"><span data-en>Windows SmartScreen may warn because the app is not code-signed (signing certificates cost money). Choose “More info → Run anyway”, or check the file first with the hashes below.</span><span data-de>Windows SmartScreen kann warnen, weil die App nicht signiert ist (Zertifikate kosten Geld). Wähle „Weitere Informationen → Trotzdem ausführen“ oder prüfe die Datei vorher mit den Prüfsummen unten.</span></p>
+    <p class="small" style="margin-top:16px"><span data-en>Windows SmartScreen may warn because the app is not code-signed (signing certificates cost money). Choose “More info → Run anyway”, or check the file first with the hashes below. <a href="#security">Everything about security and antivirus results</a>.</span><span data-de>Windows SmartScreen kann warnen, weil die App nicht signiert ist (Zertifikate kosten Geld). Wähle „Weitere Informationen → Trotzdem ausführen“ oder prüfe die Datei vorher mit den Prüfsummen unten. <a href="#security">Alles zu Sicherheit und Virenscanner-Ergebnissen</a>.</span></p>
   </div>
 </section>
 
-<section id="security">
+<section id="security" class="alt">
   <div class="wrap">
     <div class="head reveal">
-      <div class="eyebrow"><span data-en>Security</span><span data-de>Sicherheit</span></div>
-      <h2><span data-en>Scanned, checksummed, readable</span><span data-de>Geprüft, mit Prüfsumme, nachlesbar</span></h2>
-      <p class="lead"><span data-en>Every release file is scanned for malware before it is published. You can also check the files yourself.</span><span data-de>Jede veröffentlichte Datei wird vorher auf Schadsoftware geprüft. Du kannst die Dateien auch selbst prüfen.</span></p>
+      <div class="eyebrow"><span data-en>Security &amp; transparency</span><span data-de>Sicherheit &amp; Transparenz</span></div>
+      <h2><span data-en>No secrets</span><span data-de>Keine Geheimnisse</span></h2>
+      <p class="lead"><span data-en>Every file is scanned before release and every result is published here, including false alarms. Below is exactly what VertexForge does on your computer.</span><span data-de>Jede Datei wird vor der Veröffentlichung geprüft, und jedes Ergebnis steht hier, auch Fehlalarme. Darunter steht genau, was VertexForge auf deinem Computer tut.</span></p>
     </div>
     <div class="sheet reveal">
-      <div class="sheet-head"><span><span data-en>Scanner</span><span data-de>Scanner</span>: <b>ClamAV 1.5.4</b></span><span><span data-en>Signatures</span><span data-de>Signaturen</span>: <b data-count="3628245">3,628,245</b> (daily 28171, 2026-11-01)</span><span><span data-en>Scanned</span><span data-de>Geprüft</span>: <b>2026-11-07</b></span><span><a href="security/clamscan-2.3.0.txt"><span data-en>Full scan log</span><span data-de>Vollständiges Protokoll</span></a></span></div>
+      <div class="sheet-head"><span><span data-en>Scanner</span><span data-de>Scanner</span>: <b>ClamAV 1.5.4</b></span><span><span data-en>Signatures</span><span data-de>Signaturen</span>: <b data-count="3628245">3,628,245</b></span><span><span data-en>Scanned</span><span data-de>Geprüft</span>: <b>2026-11-07</b></span><span><a href="security/clamscan-2.3.0.txt"><span data-en>Full scan log</span><span data-de>Vollständiges Protokoll</span></a> · <a href="security/sha256-2.3.0.txt">SHA256SUMS</a></span></div>
       <div class="tbl"><table>
         <thead><tr><th><span data-en>File</span><span data-de>Datei</span></th><th><span data-en>Result</span><span data-de>Ergebnis</span></th><th>SHA-256</th><th>VirusTotal</th></tr></thead>
         <tbody>
-          <tr><td>VertexForge-Studio-Setup.exe</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>8f41c2caf6b71ba593d90d6aa8908788e1a8edcbd95963bae3208f9fa0989b1f</span><button type="button" class="copy" id="copy1">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/8f41c2caf6b71ba593d90d6aa8908788e1a8edcbd95963bae3208f9fa0989b1f" target="_blank" rel="noopener"><span data-en>Look up ↗</span><span data-de>Nachsehen ↗</span></a></td></tr>
-          <tr><td>VertexForge-Studio.exe <span class="small"><span data-en>(inside the setup)</span><span data-de>(im Setup enthalten)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>dfcf0a82706414aa72c05d0fd8626a481e245996c0a1dd0ea45abfe84278fc77</span><button type="button" class="copy" id="copy2">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/dfcf0a82706414aa72c05d0fd8626a481e245996c0a1dd0ea45abfe84278fc77" target="_blank" rel="noopener"><span data-en>Look up ↗</span><span data-de>Nachsehen ↗</span></a></td></tr>
-          <tr><td>Uninstall VertexForge Studio.exe <span class="small"><span data-en>(inside the setup)</span><span data-de>(im Setup enthalten)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>fb5d0adf6cd72a4d85d604ca1db886c2a3c742761b44c307ae5b46ded099b4e9</span><button type="button" class="copy" id="copy4">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/fb5d0adf6cd72a4d85d604ca1db886c2a3c742761b44c307ae5b46ded099b4e9" target="_blank" rel="noopener"><span data-en>Look up ↗</span><span data-de>Nachsehen ↗</span></a></td></tr>
-          <tr><td>VertexForge-Studio-Browser.html</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>420a28b339844147aa556742a0206100c9490c16b46fc99572f83a2af311c123</span><button type="button" class="copy" id="copy3">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/420a28b339844147aa556742a0206100c9490c16b46fc99572f83a2af311c123" target="_blank" rel="noopener"><span data-en>Look up ↗</span><span data-de>Nachsehen ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio-Setup.exe</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>5e3ebbb15a8cd004a50ad2156ba8498408892d6b67615a127b245ce12caefd1b</span><button type="button" class="copy" id="copy1">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/5e3ebbb15a8cd004a50ad2156ba8498408892d6b67615a127b245ce12caefd1b" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio.exe <span class="small"><span data-en>(inside setup &amp; portable)</span><span data-de>(in Setup &amp; Portabel)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>d1ce2ff30fe16e90ce078619cf23eaa6c403e7527f57d8dc1c64d86d49958adc</span><button type="button" class="copy" id="copy2">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/d1ce2ff30fe16e90ce078619cf23eaa6c403e7527f57d8dc1c64d86d49958adc" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>Uninstall VertexForge Studio.exe <span class="small"><span data-en>(inside the setup)</span><span data-de>(im Setup enthalten)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>c9b679b731fb2208c227184a46ea26e54e2cde018ebc1cad1e91c96cff2f2c9d</span><button type="button" class="copy" id="copy3">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/c9b679b731fb2208c227184a46ea26e54e2cde018ebc1cad1e91c96cff2f2c9d" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>WebView2Loader.dll <span class="small"><span data-en>(Microsoft, unchanged)</span><span data-de>(Microsoft, unverändert)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span> <span class="pill sig"><span data-en>Signed by Microsoft</span><span data-de>Von Microsoft signiert</span></span></td><td class="hash"><span>c4674acf95f0800793a4a6d61132adf5dfa694c218e482d86093494c4e84100a</span><button type="button" class="copy" id="copy4">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/c4674acf95f0800793a4a6d61132adf5dfa694c218e482d86093494c4e84100a" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio-Portable.zip</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>45056e23c9d694361a7f29518c72bd322b5c0704bb4f873c860321c13e41d6a7</span><button type="button" class="copy" id="copy5">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/45056e23c9d694361a7f29518c72bd322b5c0704bb4f873c860321c13e41d6a7" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio-Browser.html</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>420a28b339844147aa556742a0206100c9490c16b46fc99572f83a2af311c123</span><button type="button" class="copy" id="copy6">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/420a28b339844147aa556742a0206100c9490c16b46fc99572f83a2af311c123" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
         </tbody>
       </table></div>
     </div>
+
+    <div class="av reveal">
+      <div class="av-head"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 8v5M12 16v.3"/></svg></span><div><h3><span data-en>Antivirus results, honestly</span><span data-de>Virenscanner-Ergebnisse, ehrlich</span></h3><p class="small"><span data-en>What happened while preparing version 2.3.0, and what was changed.</span><span data-de>Was bei der Vorbereitung von Version 2.3.0 passiert ist und was geändert wurde.</span></p></div></div>
+      <ol class="av-steps">
+        <li><span class="dot warn"></span><div><b><span data-en>A test build was flagged</span><span data-de>Ein Test-Build wurde markiert</span></b><span class="when"><span data-en>not published</span><span data-de>nicht veröffentlicht</span></span>
+          <p><span data-en>On VirusTotal, a few engines flagged the first test build: the setup with 3 of 68, the app with 4 of 71. All of them are automatic guesses (machine learning or heuristics, see the confidence labels). No scanner found any known malware.</span><span data-de>Auf VirusTotal haben einige Scanner den ersten Test-Build markiert: das Setup mit 3 von 68, die App mit 4 von 71. Alles automatische Schätzungen (Machine Learning oder Heuristik, siehe die Konfidenz-Angaben). Kein Scanner hat bekannte Schadsoftware gefunden.</span></p>
+          <ul class="det"><li><b>Microsoft</b><code>Program:Win32/Wacapew.C!ml</code></li><li><b>Elastic</b><code>Malicious (moderate confidence)</code></li><li><b>CrowdStrike</b><code>Win/malicious_confidence_60%</code></li><li><b>Huorong</b><code>HEUR:Trojan/FakeMsApp.a</code></li><li><b>Bkav Pro</b><code>W32.Malware (generic)</code></li></ul></div></li>
+        <li><span class="dot"></span><div><b><span data-en>The cause was found</span><span data-de>Die Ursache wurde gefunden</span></b>
+          <p><span data-en>The window library used by the app hid a small Microsoft file (<code>WebView2Loader.dll</code>) inside the program and loaded it straight from memory. Malware uses the same trick, so scanners react to it (hence “FakeMsApp”). The setup also carried the app as an uncompressed embedded program and copied itself into the install folder.</span><span data-de>Die Fenster-Bibliothek der App hat eine kleine Microsoft-Datei (<code>WebView2Loader.dll</code>) im Programm versteckt und direkt aus dem Arbeitsspeicher geladen. Schadsoftware nutzt denselben Trick, deshalb reagieren Scanner darauf (daher „FakeMsApp“). Außerdem trug das Setup die App als unkomprimiertes eingebettetes Programm und kopierte sich selbst in den Installationsordner.</span></p></div></li>
+        <li><span class="dot ok"></span><div><b><span data-en>Fixed for this release</span><span data-de>Für dieses Release behoben</span></b>
+          <p><span data-en>The DLL is now a normal, Microsoft-signed file next to the program, loaded the ordinary way. The setup unpacks a compressed package like other installers, uses a separate uninstaller and no longer copies itself. Debug information stays in the program. All changes are in the <a data-gh="commits/main" href="#security">commit history</a>.</span><span data-de>Die DLL ist jetzt eine normale, von Microsoft signierte Datei neben dem Programm und wird ganz normal geladen. Das Setup entpackt ein komprimiertes Paket wie andere Installer, nutzt ein eigenes Deinstallationsprogramm und kopiert sich nicht mehr selbst. Debug-Informationen bleiben im Programm. Alle Änderungen stehen in der <a data-gh="commits/main" href="#security">Commit-Historie</a>.</span></p></div></li>
+        <li><span class="dot live"></span><div><b><span data-en>Current results: always public</span><span data-de>Aktuelle Ergebnisse: immer öffentlich</span></b>
+          <p><span data-en>The “Report” links above show the live VirusTotal result of each exact file. If any scanner still flags a release, it is listed in the <a data-gh="releases" href="#security">release notes</a> and reported to the vendor as a false positive. You can follow that in the <a data-gh="issues?q=label%3Afalse-positive" href="#security">issues</a>.</span><span data-de>Die „Bericht“-Links oben zeigen das aktuelle VirusTotal-Ergebnis jeder einzelnen Datei. Markiert ein Scanner ein Release weiterhin, steht das in den <a data-gh="releases" href="#security">Versionshinweisen</a> und wird beim Hersteller als Fehlalarm gemeldet. Das kannst du in den <a data-gh="issues?q=label%3Afalse-positive" href="#security">Issues</a> verfolgen.</span></p></div></li>
+      </ol>
+    </div>
+
+    <div class="pc reveal-stagger">
+      <div class="pc-card"><h3><span data-en>What the setup changes</span><span data-de>Was das Setup verändert</span></h3><ul>
+        <li><code>C:\Program Files\VertexForge Studio\</code><span data-en>three files: the app, the uninstaller and <code>WebView2Loader.dll</code></span><span data-de>drei Dateien: App, Deinstallationsprogramm und <code>WebView2Loader.dll</code></span></li>
+        <li><span data-en>Desktop and Start menu shortcuts</span><span data-de>Desktop- und Startmenü-Verknüpfung</span> <span class="small"><span data-en>(optional)</span><span data-de>(optional)</span></span></li>
+        <li><span data-en>An entry under Settings → Apps, so you can uninstall normally</span><span data-de>Ein Eintrag unter Einstellungen → Apps, damit du normal deinstallieren kannst</span></li>
+        <li><code>%TEMP%\VertexForgeSetup\</code><span data-en>setup log and temporary files</span><span data-de>Setup-Protokoll und temporäre Dateien</span></li></ul></div>
+      <div class="pc-card"><h3><span data-en>What the app stores</span><span data-de>Was die App speichert</span></h3><ul>
+        <li><code>%LOCALAPPDATA%\VertexForge Studio\</code><span data-en>your projects, versions and settings, plus the app’s interface files</span><span data-de>deine Projekte, Versionen und Einstellungen sowie die Oberflächen-Dateien der App</span></li>
+        <li><span data-en>Files you link are only read, to show previews and icons. They are never changed or uploaded.</span><span data-de>Verknüpfte Dateien werden nur gelesen, für Vorschauen und Icons. Sie werden nie verändert oder hochgeladen.</span></li>
+        <li><span data-en>Uninstalling asks whether your projects should be kept.</span><span data-de>Beim Deinstallieren wirst du gefragt, ob deine Projekte bleiben sollen.</span></li></ul></div>
+      <div class="pc-card"><h3><span data-en>Internet &amp; rights</span><span data-de>Internet &amp; Rechte</span></h3><ul>
+        <li><span data-en>The app makes no internet connections: no telemetry, no tracking, no update check, no account.</span><span data-de>Die App baut keine Internetverbindungen auf: keine Telemetrie, kein Tracking, keine Update-Prüfung, kein Konto.</span></li>
+        <li><span data-en>Web links only open in your browser when you click them.</span><span data-de>Web-Links öffnen sich nur in deinem Browser, wenn du sie anklickst.</span></li>
+        <li><span data-en>Administrator rights are needed only by the setup (Program Files, Apps entry). The app runs as a normal user.</span><span data-de>Administratorrechte braucht nur das Setup (Programme-Ordner, Apps-Eintrag). Die App läuft als normaler Benutzer.</span></li>
+        <li><span data-en>Not code-signed yet: certificates cost money. That is why SmartScreen may warn.</span><span data-de>Noch nicht signiert: Zertifikate kosten Geld. Deshalb kann SmartScreen warnen.</span></li></ul></div>
+    </div>
+
     <div class="sec-notes reveal-stagger">
-      <div><h3><span data-en>No hidden helpers</span><span data-de>Keine versteckten Helfer</span></h3><p><span data-en>The app and installer start no scripts or command shells. Everything uses plain Windows functions, and the source shows it.</span><span data-de>App und Installer starten keine Skripte oder Kommandozeilen. Alles läuft über normale Windows-Funktionen, und der Quellcode zeigt es.</span></p></div>
-      <div><h3><span data-en>Offline by design</span><span data-de>Bewusst offline</span></h3><p><span data-en>No account, no tracking, no telemetry. Projects are stored only on your device.</span><span data-de>Kein Konto, kein Tracking, keine Telemetrie. Projekte liegen nur auf deinem Gerät.</span></p></div>
-      <div><h3><span data-en>About “AI/ML” detections</span><span data-de>Zu „KI/ML“-Treffern</span></h3><p><span data-en>A few scanners use machine-learning guesses (names ending in <code>!ml</code> or “moderate confidence”) that often misjudge new, unsigned programs written in Go. Version 2.3.0 was rebuilt to avoid the patterns they react to: compressed files instead of an embedded program, a separate uninstaller, debug symbols kept. Remaining false alarms are reported to the vendors. If you see one, please open an issue.</span><span data-de>Einige Scanner arbeiten mit Machine-Learning-Schätzungen (Namen mit <code>!ml</code> oder „moderate Confidence“), die neue, nicht signierte Go-Programme oft falsch einordnen. Version 2.3.0 wurde so umgebaut, dass sie die typischen Auslöser vermeidet: komprimierte Dateien statt eingebettetem Programm, eigenes Deinstallationsprogramm, Debug-Symbole bleiben erhalten. Verbleibende Fehlalarme werden beim Hersteller gemeldet. Falls du einen siehst, eröffne bitte ein Issue.</span></p></div>
-      <div><h3><span data-en>Check it yourself</span><span data-de>Selbst prüfen</span></h3><p><span data-en>On Windows: <kbd>certutil -hashfile VertexForge-Studio-Setup.exe SHA256</kbd> must match the table. VirusTotal shows a report once the file has been uploaded there.</span><span data-de>Unter Windows: <kbd>certutil -hashfile VertexForge-Studio-Setup.exe SHA256</kbd> muss mit der Tabelle übereinstimmen. VirusTotal zeigt einen Bericht, sobald die Datei dort hochgeladen wurde.</span></p></div>
+      <div><h3><span data-en>Check it yourself</span><span data-de>Selbst prüfen</span></h3><p><span data-en>On Windows: <kbd>certutil -hashfile VertexForge-Studio-Setup.exe SHA256</kbd> must match the table above.</span><span data-de>Unter Windows: <kbd>certutil -hashfile VertexForge-Studio-Setup.exe SHA256</kbd> muss mit der Tabelle oben übereinstimmen.</span></p></div>
+      <div><h3><span data-en>Read the code</span><span data-de>Den Code lesen</span></h3><p><span data-en>Everything is open: the app, the installer, the build script and the automated release. Nothing is built outside the public repository.</span><span data-de>Alles ist offen: App, Installer, Build-Skript und das automatische Release. Nichts wird außerhalb des öffentlichen Repositorys gebaut.</span></p></div>
+      <div><h3><span data-en>Found a problem?</span><span data-de>Ein Problem gefunden?</span></h3><p><span data-en>Security issues can be reported privately via a <a data-gh="security/advisories/new" href="#security">GitHub security advisory</a>. Everything else: <a href="#report">open an issue</a>.</span><span data-de>Sicherheitslücken kannst du vertraulich über ein <a data-gh="security/advisories/new" href="#security">GitHub Security Advisory</a> melden. Alles andere: <a href="#report">Issue öffnen</a>.</span></p></div>
     </div>
   </div>
 </section>
 
-<section id="open-source" class="alt">
+<section id="open-source">
   <div class="wrap os-grid">
     <div>
       <div class="eyebrow">Open Source · MIT</div>
@@ -487,7 +646,7 @@ details a{color:var(--brass)}
   </div>
 </section>
 
-<section id="about">
+<section id="about" class="alt">
   <div class="wrap about reveal">
     <div class="who">
       <div class="avatar" aria-hidden="true">J</div>
@@ -508,16 +667,33 @@ details a{color:var(--brass)}
   </div>
 </section>
 
-<section class="alt" id="faq">
+<section id="faq">
   <div class="wrap">
-    <div class="head reveal"><div class="eyebrow">FAQ</div><h2><span data-en>Good to know</span><span data-de>Gut zu wissen</span></h2></div>
+    <div class="head reveal"><div class="eyebrow">FAQ</div><h2><span data-en>Questions &amp; answers</span><span data-de>Fragen &amp; Antworten</span></h2></div>
     <div class="faq reveal-stagger">
+      <details><summary><span data-en>Is VertexForge safe to use?</span><span data-de>Ist VertexForge sicher?</span></summary><p><span data-en>Yes, as far as anyone can check: the code is open, every release is scanned and checksummed, and the app works completely offline. All scanner results, including false alarms, are published in the <a href="#security">security section</a>.</span><span data-de>Ja, soweit man das prüfen kann: Der Code ist offen, jedes Release wird geprüft und mit Prüfsummen versehen, und die App arbeitet komplett offline. Alle Scanner-Ergebnisse, auch Fehlalarme, stehen im <a href="#security">Sicherheitsbereich</a>.</span></p></details>
+      <details><summary><span data-en>Why does Windows or my antivirus warn me?</span><span data-de>Warum warnt Windows oder mein Virenscanner?</span></summary><p><span data-en>VertexForge is new and not code-signed, so Windows does not “know” it yet. Some antivirus engines also guess based on patterns. Compare the SHA-256 checksum with the table above. If it matches, the file is the published one. Please report the warning with the <a data-gh="issues/new?template=false_positive.md" href="#report">false alarm form</a>.</span><span data-de>VertexForge ist neu und nicht signiert, deshalb „kennt“ Windows es noch nicht. Manche Virenscanner schätzen außerdem anhand von Mustern. Vergleiche die SHA-256-Prüfsumme mit der Tabelle oben. Stimmt sie, ist es die veröffentlichte Datei. Bitte melde die Warnung über das <a data-gh="issues/new?template=false_positive.md" href="#report">Fehlalarm-Formular</a>.</span></p></details>
       <details><summary><span data-en>Is it really free?</span><span data-de>Ist es wirklich kostenlos?</span></summary><p><span data-en>Yes. No subscription, no account, no ads. The MIT license allows personal and commercial use.</span><span data-de>Ja. Kein Abo, kein Konto, keine Werbung. Die MIT-Lizenz erlaubt private und kommerzielle Nutzung.</span></p></details>
+      <details><summary><span data-en>Does VertexForge use AI?</span><span data-de>Nutzt VertexForge KI?</span></summary><p><span data-en>The tool itself contains no AI at all and never creates images, models, textures or text. Its code was written with the help of Claude, an AI assistant, which is why it may contain bugs. More about this in <a href="#about">About</a>.</span><span data-de>Das Programm selbst enthält keinerlei KI und erzeugt niemals Bilder, Modelle, Texturen oder Texte. Sein Code wurde mit Hilfe von Claude, einem KI-Assistenten, geschrieben. Deshalb kann er Fehler enthalten. Mehr dazu unter <a href="#about">Über</a>.</span></p></details>
+      <details><summary><span data-en>Does it need the internet?</span><span data-de>Braucht es Internet?</span></summary><p><span data-en>No. The desktop app works fully offline and sends nothing anywhere.</span><span data-de>Nein. Die Desktop-App funktioniert komplett offline und sendet nichts irgendwohin.</span></p></details>
       <details><summary><span data-en>Where are my projects stored?</span><span data-de>Wo werden meine Projekte gespeichert?</span></summary><p><span data-en>Desktop app: in your user profile (%LOCALAPPDATA%\VertexForge Studio). Browser: in the browser’s local storage. Export .vforge files for backups or to move between computers.</span><span data-de>Desktop-App: in deinem Benutzerprofil (%LOCALAPPDATA%\VertexForge Studio). Browser: im lokalen Speicher des Browsers. Exportiere .vforge-Dateien als Backup oder zum Umziehen.</span></p></details>
       <details><summary><span data-en>Will an update delete my work?</span><span data-de>Löscht ein Update meine Arbeit?</span></summary><p><span data-en>No. Projects are stored apart from the program. Before every update the app saves a safety version that you can restore.</span><span data-de>Nein. Projekte liegen getrennt vom Programm. Vor jedem Update legt die App eine Sicherheits-Version an, die du wiederherstellen kannst.</span></p></details>
-      <details><summary><span data-en>Is there a Mac app?</span><span data-de>Gibt es eine Mac-App?</span></summary><p><span data-en>Not yet. On macOS, use the browser version, which has all features except opening linked files directly in other programs.</span><span data-de>Noch nicht. Auf dem Mac nutzt du die Browser-Version; sie kann alles außer verknüpfte Dateien direkt in anderen Programmen zu öffnen.</span></p></details>
-      <details><summary><span data-en>Which languages are supported?</span><span data-de>Welche Sprachen gibt es?</span></summary><p>English, Deutsch, Français, Español, Italiano, Português.</p></details>
-      <details><summary><span data-en>I found a bug. What now?</span><span data-de>Ich habe einen Fehler gefunden. Was nun?</span></summary><p><span data-en>Please open an issue on GitHub with what you did, what you expected and what happened. Screenshots help a lot.</span><span data-de>Bitte öffne ein Issue auf GitHub: was du gemacht hast, was du erwartet hast und was passiert ist. Screenshots helfen sehr.</span></p></details>
+      <details><summary><span data-en>Can I change how it looks?</span><span data-de>Kann ich das Aussehen ändern?</span></summary><p><span data-en>Yes, a lot: board styles, note styles, story papers, cover designs, light and dark mode and interface zoom. See <a href="#customize">Make it yours</a>.</span><span data-de>Ja, sehr viel: Denkbrett- und Notiz-Stile, Story-Papiere, Cover-Designs, heller und dunkler Modus und Oberflächen-Zoom. Siehe <a href="#customize">Anpassen</a>.</span></p></details>
+      <details><summary><span data-en>Is there a portable version?</span><span data-de>Gibt es eine portable Version?</span></summary><p><span data-en>Yes. Unpack VertexForge-Studio-Portable.zip anywhere and start “VertexForge Studio.exe”. Keep WebView2Loader.dll in the same folder.</span><span data-de>Ja. Entpacke VertexForge-Studio-Portable.zip an einen beliebigen Ort und starte „VertexForge Studio.exe“. WebView2Loader.dll muss im selben Ordner bleiben.</span></p></details>
+      <details><summary><span data-en>Is there a Mac app?</span><span data-de>Gibt es eine Mac-App?</span></summary><p><span data-en>Not yet. On macOS, use the browser version. It has all features except opening linked files directly in other programs.</span><span data-de>Noch nicht. Auf dem Mac nutzt du die Browser-Version. Sie kann alles außer verknüpfte Dateien direkt in anderen Programmen zu öffnen.</span></p></details>
+      <details><summary><span data-en>Which languages are supported?</span><span data-de>Welche Sprachen gibt es?</span></summary><p><span data-en>English, Deutsch, Français, Español, Italiano, Português. Translations by native speakers are very welcome.</span><span data-de>English, Deutsch, Français, Español, Italiano, Português. Übersetzungen von Muttersprachlern sind sehr willkommen.</span></p></details>
+      <details><summary><span data-en>How do I remove it completely?</span><span data-de>Wie entferne ich es vollständig?</span></summary><p><span data-en>Settings → Apps → VertexForge Studio → Uninstall. Tick “Also delete my local projects and settings” if you want everything gone. The <a href="install.html#data">install guide</a> lists every folder.</span><span data-de>Einstellungen → Apps → VertexForge Studio → Deinstallieren. Setze den Haken bei „Auch meine lokalen Projekte und Einstellungen löschen“, wenn alles weg soll. Die <a href="install.html#data">Anleitung</a> listet jeden Ordner auf.</span></p></details>
+      <details><summary><span data-en>Does this website track me?</span><span data-de>Verfolgt mich diese Website?</span></summary><p><span data-en>No cookies, no analytics, no external fonts or scripts. The site is hosted on GitHub Pages; GitHub processes your IP address to deliver it (<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub privacy statement</a>). Your language choice is remembered only in your browser.</span><span data-de>Keine Cookies, keine Analyse, keine externen Schriften oder Skripte. Die Seite liegt auf GitHub Pages; GitHub verarbeitet dabei deine IP-Adresse, um sie auszuliefern (<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">Datenschutzerklärung von GitHub</a>). Deine Sprachwahl wird nur in deinem Browser gespeichert.</span></p></details>
+      <details><summary><span data-en>Can I help?</span><span data-de>Kann ich helfen?</span></summary><p><span data-en>Gladly! Bug reports, ideas, translations, code reviews and pull requests are all welcome. See <a href="#open-source">Open source</a>.</span><span data-de>Sehr gern! Fehlerberichte, Ideen, Übersetzungen, Code-Reviews und Pull Requests sind alle willkommen. Siehe <a href="#open-source">Open Source</a>.</span></p></details>
+    </div>
+    <div class="report reveal" id="report">
+      <div class="rp-head"><h3><span data-en>Something not right? Tell me.</span><span data-de>Etwas stimmt nicht? Sag Bescheid.</span></h3><p class="small"><span data-en>Each button opens a short form on GitHub (free account needed). Please add your version (Help → About) and Windows version or browser.</span><span data-de>Jeder Knopf öffnet ein kurzes Formular auf GitHub (kostenloses Konto nötig). Bitte gib deine Version (Hilfe → Über) und Windows-Version oder Browser an.</span></p></div>
+      <div class="rp-grid">
+        <a class="rp" data-gh="issues/new?template=bug_report.md" href="#report"><span class="rp-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8h8v8a4 4 0 0 1-8 0z"/><path d="M9 8V6a3 3 0 0 1 6 0v2M4 12h4M16 12h4M5 7l3 2M19 7l-3 2M5 18l3-2M19 18l-3-2"/></svg></span><b><span data-en>Report a bug</span><span data-de>Fehler melden</span></b><span class="small"><span data-en>Something broke or behaves oddly</span><span data-de>Etwas ist kaputt oder verhält sich seltsam</span></span><span class="rp-go">→</span></a>
+        <a class="rp" data-gh="issues/new?template=feature_request.md" href="#report"><span class="rp-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></span><b><span data-en>Suggest an idea</span><span data-de>Idee vorschlagen</span></b><span class="small"><span data-en>A feature or a design you would like</span><span data-de>Eine Funktion oder ein Design, das du dir wünschst</span></span><span class="rp-go">→</span></a>
+        <a class="rp" data-gh="issues/new?template=false_positive.md" href="#report"><span class="rp-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span><b><span data-en>Antivirus alarm</span><span data-de>Virenscanner-Alarm</span></b><span class="small"><span data-en>A scanner or SmartScreen blocks the file</span><span data-de>Ein Scanner oder SmartScreen blockiert die Datei</span></span><span class="rp-go">→</span></a>
+        <a class="rp" data-gh="issues/new?template=question.md" href="#report"><span class="rp-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.4M12 17v.3"/></svg></span><b><span data-en>Ask a question</span><span data-de>Frage stellen</span></b><span class="small"><span data-en>Not sure how something works</span><span data-de>Unsicher, wie etwas funktioniert</span></span><span class="rp-go">→</span></a>
+      </div>
     </div>
   </div>
 </section>
@@ -530,6 +706,8 @@ details a{color:var(--brass)}
     <span><span data-en>Made by Jan with Claude. No AI in your art.</span><span data-de>Von Jan mit Claude gemacht. Keine KI in deiner Kunst.</span></span>
     <a href="install.html"><span data-en>Install guide</span><span data-de>Anleitung</span></a>
     <a data-gh="" href="#open-source">GitHub</a>
+    <a href="#report"><span data-en>Report an issue</span><span data-de>Problem melden</span></a>
+    <span class="small"><span data-en>No cookies · no tracking · no external requests</span><span data-de>Keine Cookies · kein Tracking · keine externen Anfragen</span></span>
   </div>
 </footer>
 
@@ -628,6 +806,47 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
     const sel = () => { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
     try{ navigator.clipboard.writeText(t).then(done, sel); }catch(e){ sel(); }
   }));
+
+  /* „Mach es zu deinem“: Stil-Vorschau; läuft automatisch durch, bis man selbst klickt */
+  const czCaps = {
+    'board-studio':['Studio: the calm default with a dot grid and dark cards.','Studio: der ruhige Standard mit Punktraster und dunklen Karten.'],
+    'board-pinboard':['Pinboard: cork, pinned sticky notes and red string, like a real wall of ideas.','Pinnwand: Kork, angepinnte Notizzettel und roter Faden, wie eine echte Ideenwand.'],
+    'board-sketch':['Sketchbook: index cards on warm paper.','Skizzenbuch: Karteikarten auf warmem Papier.'],
+    'board-blueprint':['Blueprint: technical cards on a blue grid, made for hard surface and props.','Blaupause: technische Karten auf blauem Raster, gemacht für Hard-Surface und Props.'],
+    'board-chalk':['Chalkboard: hand-drawn notes on a dark green board.','Tafel: handgeschriebene Notizen auf dunkelgrüner Tafel.'],
+    'board-glass':['Glass: translucent cards for a modern, quiet look.','Glas: durchscheinende Karten für einen modernen, ruhigen Look.'],
+    'story-parchment':['Story on parchment: the classic writing desk.','Story auf Pergament: der klassische Schreibtisch.'],
+    'story-typewriter':['Typewriter: a script page with monospaced type.','Schreibmaschine: eine Skriptseite in Schreibmaschinenschrift.'],
+    'story-manuscript':['Manuscript: aged paper for lore and world-building.','Manuskript: gealtertes Papier für Lore und Weltenbau.'],
+    'story-clean':['Clean: plain white paper without distractions.','Schlicht: weißes Papier ohne Ablenkung.'],
+    'story-night':['Night: a dark page for late writing sessions.','Nacht: eine dunkle Seite für späte Schreibsessions.'],
+    'designer':['Cover designer: fonts, style presets, banner, ribbon and your own artwork with live preview.','Cover-Designer: Schriften, Stil-Vorlagen, Banner, Banderole und eigenes Artwork mit Live-Vorschau.'],
+    'hub-large':['Library with large covers: cover and title size adjust live with the sliders.','Bibliothek mit großen Covern: Cover- und Titelgröße stellst du live mit den Reglern ein.'],
+    'hub-light':['The same library in the warm light mode.','Dieselbe Bibliothek im warmen hellen Modus.']
+  };
+  const czKeys = Object.keys(czCaps), czImg = document.getElementById('czImg'), czCap = document.getElementById('czCap'), czProg = document.getElementById('czProg');
+  let cz = 'board-pinboard', czAuto = !VF.still, czTimer = null, czVisible = false;
+  const czCaption = () => { czCap.textContent = czCaps[cz][VF.lang==='de'?1:0]; czImg.alt = czCap.textContent; };
+  function setCz(k){
+    cz = k;
+    document.querySelectorAll('[data-cz]').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.cz===k)));
+    const next = new Image();
+    next.onload = () => { czImg.classList.remove('swap'); void czImg.offsetWidth; czImg.src = next.src; czImg.classList.add('swap'); };
+    next.src = 'assets/custom-' + k + '.webp'; czCaption();
+  }
+  function czTick(){
+    clearTimeout(czTimer);
+    if(!czAuto || !czVisible || document.hidden){ czProg.classList.remove('run'); return; }
+    czProg.classList.remove('run'); void czProg.offsetWidth; czProg.classList.add('run');
+    czTimer = setTimeout(()=>{ setCz(czKeys[(czKeys.indexOf(cz)+1) % czKeys.length]); czTick(); }, 4200);
+  }
+  document.querySelectorAll('[data-cz]').forEach(b=>b.addEventListener('click', ()=>{ czAuto = false; czProg.classList.remove('run'); clearTimeout(czTimer); setCz(b.dataset.cz); }));
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(es=>es.forEach(e=>{ czVisible = e.isIntersecting; czTick(); }), {threshold:.35}).observe(czImg);
+    czKeys.forEach(k=>{ const i = new Image(); i.loading = 'lazy'; i.src = 'assets/custom-' + k + '.webp'; });
+  }
+  document.addEventListener('visibilitychange', czTick);
+  VF.onLang.push(czCaption); czCaption();
   caption();
 })();
 </script>

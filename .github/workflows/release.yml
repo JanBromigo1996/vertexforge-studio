@@ -37,15 +37,30 @@ jobs:
           sudo apt-get update -q && sudo apt-get install -y -q clamav
           sudo systemctl stop clamav-freshclam || true
           sudo freshclam
+          cd dist
           clamscan --scan-pe=yes --heuristic-alerts=yes --alert-broken=yes \
-            dist/VertexForge-Studio-Setup.exe dist/VertexForge-Studio.exe dist/Uninstall-VertexForge-Studio.exe dist/VertexForge-Studio-Browser.html | tee dist/clamscan.txt
-          grep -q "Infected files: 0" dist/clamscan.txt
+            VertexForge-Studio-Setup.exe VertexForge-Studio.exe Uninstall-VertexForge-Studio.exe \
+            WebView2Loader.dll VertexForge-Studio-Portable.zip VertexForge-Studio-Browser.html | tee clamscan.txt
+          grep -q "Infected files: 0" clamscan.txt
 
       - name: Checksums
         run: |
           cd dist
-          sha256sum VertexForge-Studio-Setup.exe VertexForge-Studio.exe VertexForge-Studio-Browser.html | tee SHA256SUMS.txt
+          sha256sum VertexForge-Studio-Setup.exe VertexForge-Studio.exe Uninstall-VertexForge-Studio.exe \
+            WebView2Loader.dll VertexForge-Studio-Portable.zip VertexForge-Studio-Browser.html | tee SHA256SUMS.txt
 
+      - name: Publish release (notes from RELEASE_NOTES.md)
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          files: |
+            dist/VertexForge-Studio-Setup.exe
+            dist/VertexForge-Studio-Portable.zip
+            dist/VertexForge-Studio-Browser.html
+            dist/SHA256SUMS.txt
+            dist/clamscan.txt
+
+      # VirusTotal: every result (including false alarms) is appended to the release notes.
       - name: VirusTotal scan (optional, needs the VT_API_KEY secret)
         if: env.VT_API_KEY != ''
         uses: crazy-max/ghaction-virustotal@v4
@@ -55,12 +70,5 @@ jobs:
           files: |
             dist/VertexForge-Studio-Setup.exe
             dist/VertexForge-Studio.exe
-
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            dist/VertexForge-Studio-Setup.exe
-            dist/VertexForge-Studio-Browser.html
-            dist/SHA256SUMS.txt
-            dist/clamscan.txt
+            dist/Uninstall-VertexForge-Studio.exe
+            dist/VertexForge-Studio-Portable.zip

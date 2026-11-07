@@ -5,7 +5,7 @@ import os
 H = os.path.dirname(os.path.abspath(__file__)); D = os.path.join(H, '..', 'docs')
 css = open(os.path.join(H,'common.css'), encoding='utf-8').read()
 js = open(os.path.join(H,'common.js'), encoding='utf-8').read()
-FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">'
+FONTS = '<link rel="stylesheet" href="assets/site-fonts.css">'
 PAGES = {
   'index': ('VertexForge Studio', 'VertexForge Studio – a free, open-source planning tool for 3D artists: pipeline, deadlines, mind board, shot list and story in one place.'),
   'install': ('VertexForge Install Guide', 'Step-by-step installation guide for VertexForge Studio on Windows, macOS and Linux.'),
@@ -18,3 +18,12 @@ for name, (title, desc) in PAGES.items():
     full = '<!doctype html>\n<html lang="en" data-l="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n' + head + '</head>\n<body>\n' + body + '\n</body>\n</html>\n'
     open(os.path.join(D, name + '.html'), 'w', encoding='utf-8').write(full)
     print(name, len(full))
+
+# Browser-Version für die Website: die Variante mit lokal abgelegten Schriften (keine Anfragen an Google).
+import shutil
+APP = os.path.join(H, '..', 'app')
+if os.path.exists(os.path.join(APP, 'index.html')):
+    dst = os.path.join(D, 'app')
+    shutil.rmtree(dst, ignore_errors=True)
+    shutil.copytree(APP, dst)
+    print('app copied (self-hosted fonts)')

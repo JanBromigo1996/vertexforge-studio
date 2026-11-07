@@ -1,16 +1,18 @@
 dist/VertexForge-Studio-Setup.exe: OK
 dist/VertexForge-Studio.exe: OK
 dist/Uninstall-VertexForge-Studio.exe: OK
+dist/WebView2Loader.dll: OK
+dist/VertexForge-Studio-Portable.zip: OK
 dist/VertexForge-Studio-Browser.html: OK
 
 ----------- SCAN SUMMARY -----------
 Known viruses: 3628245
 Engine version: 1.5.4
 Scanned directories: 0
-Scanned files: 4
+Scanned files: 6
 Infected files: 0
-Data scanned: 53.91 MiB
-Data read: 27.11 MiB (ratio 1.99:1)
-Time: 38.850 sec (0 m 38 s)
-Start Date: 2026:11:07 02:45:45
-End Date:   2026:11:07 02:46:23
+Data scanned: 44.77 MiB
+Data read: 32.71 MiB (ratio 1.37:1)
+Time: 34.826 sec (0 m 34 s)
+Start Date: 2026:11:07 02:55:58
+End Date:   2026:11:07 02:56:33

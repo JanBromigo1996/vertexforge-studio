@@ -10,9 +10,7 @@
 <meta property="og:description" content="Step-by-step installation guide for VertexForge Studio on Windows, macOS and Linux.">
 <meta property="og:image" content="assets/shot-hero.webp">
 <link rel="icon" href="assets/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site-fonts.css">
 <style>
 
 /* Layout: one centered column (max 1120px); hero is a split of copy + framed app screen,
@@ -233,7 +231,7 @@ footer a{color:var(--fg-2)}
 .stages .st{transition:background .35s,border-color .35s,color .35s,transform .35s cubic-bezier(.2,.7,.2,1)}
 .stages .st.on{transform:translateY(-2px)}
 .stages .st.done{border-color:color-mix(in srgb,var(--brass) 60%,var(--line-2));color:var(--brass)}
-.reveal,.reveal-stagger > *{transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0) * 70ms)}
+.reveal,.reveal-stagger > *{transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(min(var(--i,0), 6) * 70ms)}
 .pre{opacity:0;transform:translateY(26px)}
 .tabs{position:relative}
 .tab-ink{position:absolute;left:0;top:0;border-radius:9px;background:var(--panel);border:1px solid var(--brass);transition:transform .35s cubic-bezier(.2,.7,.2,1),width .35s cubic-bezier(.2,.7,.2,1);pointer-events:none;z-index:0}
@@ -322,6 +320,83 @@ code{font:.86em var(--mono);padding:1px 6px;border-radius:5px;background:var(--b
 #trouble .guide-link{margin-top:28px}
 details a{color:var(--brass)}
 @media (prefers-reduced-motion:reduce){ .md-btn.hl{animation:none} }
+
+/* ---------- Make it yours: Stil-Vorschau ---------- */
+.cz{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;align-items:start}
+.cz-side{display:flex;flex-direction:column;gap:20px;position:sticky;top:88px}
+.cz-label{font:600 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.cz-chips{display:flex;flex-wrap:wrap;gap:6px}
+.cz-chips button{display:inline-flex;align-items:center;gap:8px;font:500 .86rem var(--body);padding:7px 12px 7px 8px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--fg-2);cursor:pointer;transition:border-color .15s,color .15s,transform .15s,box-shadow .2s}
+.cz-chips button:hover{color:var(--fg);border-color:var(--line-2);transform:translateY(-1px)}
+.cz-chips button[aria-selected="true"]{color:var(--fg);border-color:var(--brass);box-shadow:0 0 0 3px color-mix(in srgb,var(--brass) 18%,transparent)}
+.sw{width:18px;height:18px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--a) 0 55%,var(--b) 55% 100%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);transition:transform .25s}
+.cz-chips button[aria-selected="true"] .sw{transform:rotate(180deg) scale(1.1)}
+.cz-main{margin:0;min-width:0}
+.cz-view{position:relative}
+.cz-view img{aspect-ratio:1360/820;width:100%;height:auto;object-fit:cover}
+.cz-view img.swap{animation:czIn .55s cubic-bezier(.2,.7,.2,1)}
+@keyframes czIn{from{opacity:0;transform:scale(1.025);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.cz-progress{position:absolute;left:0;bottom:0;height:3px;width:100%;transform-origin:left;transform:scaleX(0);background:var(--brass);opacity:.9}
+.cz-progress.run{animation:czBar 4.2s linear forwards}
+@keyframes czBar{to{transform:scaleX(1)}}
+.cz-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:34px}
+.cz-facts>div{border-top:1px solid var(--line-2);padding-top:14px;min-width:0}
+.cz-facts .num{display:block;font:600 2rem/1 var(--display);color:var(--brass);margin-bottom:8px}
+.cz-facts p{color:var(--fg-2);font-size:.92rem;margin:6px 0 0}
+@media (max-width:900px){
+  .cz{grid-template-columns:1fr}
+  .cz-side{position:static;order:2}
+  .cz-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){ .cz-facts{grid-template-columns:1fr} }
+
+/* ---------- Sicherheit: ehrlicher Bericht ---------- */
+.pill.sig{background:color-mix(in srgb,var(--brass) 14%,transparent);color:var(--brass)}
+.pill.sig::before{animation:none}
+td .pill+.pill{margin-top:4px}
+.av{margin-top:26px;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:22px 24px}
+.av-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+.av-head .ic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;background:color-mix(in srgb,var(--brass) 16%,transparent);color:var(--brass)}
+.av-head p{margin:2px 0 0}
+.av-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.av-steps>li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;position:relative;padding-bottom:18px}
+.av-steps>li:last-child{padding-bottom:0}
+.av-steps>li::before{content:"";position:absolute;left:10px;top:18px;bottom:-2px;width:2px;background:var(--line)}
+.av-steps>li:last-child::before{display:none}
+.av-steps .dot{width:14px;height:14px;margin:5px 4px 0;border-radius:50%;background:var(--line-2);box-shadow:0 0 0 4px var(--panel);position:relative;z-index:1}
+.av-steps .dot.warn{background:var(--warn)}
+.av-steps .dot.ok{background:var(--ok)}
+.av-steps .dot.live{background:var(--brass);animation:pulse 2.4s ease-in-out infinite}
+.av-steps b{font-weight:600}
+.av-steps .when{margin-left:10px;font:.72rem var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px;white-space:nowrap}
+.av-steps p{color:var(--fg-2);font-size:.93rem;margin:6px 0 0}
+.av-steps a,.pc-card a,.sec-notes a{color:var(--brass)}
+.det{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px}
+.det li{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line);font-size:.82rem;min-width:0}
+.det code{font:.76rem var(--mono);color:var(--warn);overflow-wrap:anywhere}
+.pc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+.pc-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;min-width:0}
+.pc-card ul{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.pc-card li{font-size:.9rem;color:var(--fg-2);padding-left:16px;position:relative}
+.pc-card li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:2px;background:var(--brass);transform:rotate(45deg)}
+.pc-card li code{display:block;font:.76rem var(--mono);color:var(--fg);overflow-wrap:anywhere;margin-bottom:2px}
+@media (max-width:900px){ .pc{grid-template-columns:1fr} }
+
+/* ---------- Probleme melden ---------- */
+.report{margin-top:40px;border:1px solid var(--line);border-radius:16px;padding:24px;background:linear-gradient(160deg,color-mix(in srgb,var(--brass) 7%,var(--panel)),var(--panel) 60%)}
+.rp-head p{margin:6px 0 0}
+.rp-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.rp{position:relative;display:flex;flex-direction:column;gap:6px;padding:16px 16px 18px;border-radius:12px;border:1px solid var(--line);background:var(--bg);text-decoration:none;min-width:0;transition:border-color .2s,transform .2s,box-shadow .2s}
+.rp:hover{border-color:var(--brass);transform:translateY(-3px);box-shadow:var(--shadow)}
+.rp-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--brass) 15%,transparent);color:var(--brass);margin-bottom:4px;transition:transform .3s}
+.rp:hover .rp-ic{transform:rotate(-8deg) scale(1.08)}
+.rp .small{color:var(--fg-2)}
+.rp-go{position:absolute;top:16px;right:16px;color:var(--muted);transition:transform .2s,color .2s}
+.rp:hover .rp-go{transform:translateX(3px);color:var(--brass)}
+@media (max-width:900px){ .rp-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:480px){ .rp-grid{grid-template-columns:1fr} }
+footer .small{color:var(--muted)}
+@media (prefers-reduced-motion: reduce){ .cz-view img.swap,.cz-progress.run,.av-steps .dot.live{animation:none} }
 
 </style>
 </head>
@@ -467,8 +542,10 @@ details a{color:var(--brass)}
       <figure class="shot" style="margin-top:22px"><img src="assets/versions.webp" alt="The versions panel with automatic and named restore points" width="1400" height="836" loading="lazy"></figure>
     </div>
     <div class="paths reveal-stagger">
-      <div><span class="k"><span data-en>Program</span><span data-de>Programm</span></span><code>C:\Program Files\VertexForge Studio</code></div>
+      <div><span class="k"><span data-en>Program</span><span data-de>Programm</span></span><code>C:\Program Files\VertexForge Studio</code><span class="small"><span data-en>VertexForge Studio.exe, Uninstall VertexForge Studio.exe, WebView2Loader.dll (by Microsoft)</span><span data-de>VertexForge Studio.exe, Uninstall VertexForge Studio.exe, WebView2Loader.dll (von Microsoft)</span></span></div>
+      <div><span class="k"><span data-en>Shortcuts &amp; Apps entry</span><span data-de>Verknüpfungen &amp; Apps-Eintrag</span></span><span><span data-en>Desktop, Start menu, Settings ▸ Apps</span><span data-de>Desktop, Startmenü, Einstellungen ▸ Apps</span></span></div>
       <div><span class="k"><span data-en>Projects & settings</span><span data-de>Projekte & Einstellungen</span></span><code>%LOCALAPPDATA%\VertexForge Studio\WebView2</code></div>
+      <div><span class="k"><span data-en>Setup log</span><span data-de>Setup-Protokoll</span></span><code>%TEMP%\VertexForgeSetup</code></div>
       <div><span class="k"><span data-en>Log file</span><span data-de>Protokoll</span></span><code>%LOCALAPPDATA%\VertexForge Studio\vertexforge.log</code></div>
       <div><span class="k"><span data-en>Project files</span><span data-de>Projektdateien</span></span><code><span data-en>wherever you save .vforge files</span><span data-de>wo du .vforge-Dateien speicherst</span></code></div>
       <div><span class="k"><span data-en>Restore points</span><span data-de>Sicherungspunkte</span></span><span><span data-en>clock icon at the top right, or</span><span data-de>Uhr-Symbol oben rechts oder</span> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd></span></div>
@@ -484,13 +561,14 @@ details a{color:var(--brass)}
     </div>
     <div class="faq reveal-stagger">
       <details><summary><span data-en>“WebView2 Runtime is missing”</span><span data-de>„WebView2 Runtime fehlt“</span></summary><p><span data-en>Install the free Microsoft Edge WebView2 Runtime (Evergreen) from <a href="https://developer.microsoft.com/microsoft-edge/webview2/" target="_blank" rel="noopener">developer.microsoft.com/microsoft-edge/webview2</a>, then start VertexForge again.</span><span data-de>Installiere die kostenlose Microsoft Edge WebView2 Runtime (Evergreen) von <a href="https://developer.microsoft.com/microsoft-edge/webview2/" target="_blank" rel="noopener">developer.microsoft.com/microsoft-edge/webview2</a> und starte VertexForge erneut.</span></p></details>
-      <details><summary><span data-en>My antivirus blocks the setup</span><span data-de>Mein Virenscanner blockiert das Setup</span></summary><p><span data-en>New, unsigned programs are sometimes flagged by mistake. Compare the SHA-256 checksum with the one on the homepage. If it matches, the file is the published one. Please report the false alarm in a GitHub issue (with the scanner’s name) so it can be submitted to the vendor.</span><span data-de>Neue, nicht signierte Programme werden manchmal fälschlich markiert. Vergleiche die SHA-256-Prüfsumme mit der auf der Startseite. Stimmt sie, ist es die veröffentlichte Datei. Bitte melde den Fehlalarm in einem GitHub-Issue (mit Namen des Scanners), damit er beim Hersteller gemeldet werden kann.</span></p></details>
+      <details><summary><span data-en>My antivirus blocks the setup</span><span data-de>Mein Virenscanner blockiert das Setup</span></summary><p><span data-en>New, unsigned programs are sometimes flagged by mistake. Compare the SHA-256 checksum with the one on the homepage. If it matches, the file is the published one. All known scanner results are listed openly in the <a href="index.html#security">security section</a>. Please report the alarm with the <a data-gh="issues/new?template=false_positive.md" href="#trouble">false alarm form</a> (scanner name and detection name), so it can be sent to the vendor.</span><span data-de>Neue, nicht signierte Programme werden manchmal fälschlich markiert. Vergleiche die SHA-256-Prüfsumme mit der auf der Startseite. Stimmt sie, ist es die veröffentlichte Datei. Alle bekannten Scanner-Ergebnisse stehen offen im <a href="index.html#security">Sicherheitsbereich</a>. Bitte melde den Alarm über das <a data-gh="issues/new?template=false_positive.md" href="#trouble">Fehlalarm-Formular</a> (Name des Scanners und der Erkennung), damit er an den Hersteller gehen kann.</span></p></details>
+      <details><summary><span data-en>I want to use it without installing</span><span data-de>Ich möchte es ohne Installation nutzen</span></summary><p><span data-en>Download VertexForge-Studio-Portable.zip, unpack it anywhere (for example a USB stick) and start “VertexForge Studio.exe”. Keep WebView2Loader.dll in the same folder. Your projects are still stored in %LOCALAPPDATA%\VertexForge Studio.</span><span data-de>Lade VertexForge-Studio-Portable.zip, entpacke es an einen beliebigen Ort (zum Beispiel einen USB-Stick) und starte „VertexForge Studio.exe“. WebView2Loader.dll muss im selben Ordner bleiben. Deine Projekte liegen trotzdem in %LOCALAPPDATA%\VertexForge Studio.</span></p></details>
       <details><summary><span data-en>“VertexForge Studio is still running”</span><span data-de>„VertexForge Studio läuft noch“</span></summary><p><span data-en>Close the app (also check the taskbar) and click Back, then Install again.</span><span data-de>Schließe die App (auch in der Taskleiste nachsehen) und klicke auf Zurück und dann erneut auf Installieren.</span></p></details>
       <details><summary><span data-en>The window or text is too small or too big</span><span data-de>Fenster oder Schrift zu klein oder zu groß</span></summary><p><span data-en>Use <kbd>Ctrl</kbd> + mouse wheel or <kbd>Ctrl</kbd>+<kbd>+</kbd>/<kbd>−</kbd>. <kbd>Ctrl</kbd>+<kbd>0</kbd> resets the size.</span><span data-de>Nutze <kbd>Strg</kbd> + Mausrad oder <kbd>Strg</kbd>+<kbd>+</kbd>/<kbd>−</kbd>. <kbd>Strg</kbd>+<kbd>0</kbd> setzt die Größe zurück.</span></p></details>
       <details><summary><span data-en>Linked videos show no preview</span><span data-de>Verknüpfte Videos zeigen keine Vorschau</span></summary><p><span data-en>Previews of files on your disk only work in the Windows app. Check that the file still exists – missing files are shown in red.</span><span data-de>Vorschauen von Dateien auf der Festplatte gibt es nur in der Windows-App. Prüfe, ob die Datei noch existiert – fehlende Dateien werden rot angezeigt.</span></p></details>
       <details><summary><span data-en>I want to start completely fresh</span><span data-de>Ich möchte ganz neu anfangen</span></summary><p><span data-en>Settings ▸ Data ▸ Reset everything. Export a backup first if you want to keep anything.</span><span data-de>Einstellungen ▸ Daten ▸ Alles zurücksetzen. Exportiere vorher ein Backup, wenn du etwas behalten willst.</span></p></details>
     </div>
-    <a class="guide-link reveal" data-gh="issues/new" href="#trouble"><span class="gl-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.2v.3"/></svg></span><span><b><span data-en>Still stuck? Open an issue on GitHub</span><span data-de>Immer noch Probleme? Öffne ein Issue auf GitHub</span></b><span class="small"><span data-en>Describe what you did, what you expected and what happened. This tool was built with Claude and may have bugs – every report helps.</span><span data-de>Beschreibe, was du gemacht hast, was du erwartet hast und was passiert ist. Das Programm wurde mit Claude gebaut und kann Fehler haben – jeder Bericht hilft.</span></span></span><span class="gl-arrow">→</span></a>
+    <a class="guide-link reveal" href="index.html#report"><span class="gl-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.2v.3"/></svg></span><span><b><span data-en>Still stuck? Open an issue on GitHub</span><span data-de>Immer noch Probleme? Öffne ein Issue auf GitHub</span></b><span class="small"><span data-en>Describe what you did, what you expected and what happened. This tool was built with Claude and may have bugs – every report helps.</span><span data-de>Beschreibe, was du gemacht hast, was du erwartet hast und was passiert ist. Das Programm wurde mit Claude gebaut und kann Fehler haben – jeder Bericht hilft.</span></span></span><span class="gl-arrow">→</span></a>
   </div>
 </section>
 </main>

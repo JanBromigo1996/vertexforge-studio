@@ -25,6 +25,7 @@ import (
 
 	webview2 "github.com/jchv/go-webview2"
 	"github.com/jchv/go-webview2/pkg/edge"
+	"github.com/jchv/go-webview2/webviewloader"
 	"golang.org/x/sys/windows/registry"
 	"vertexforge/winutil"
 )
@@ -35,6 +36,7 @@ const (
 	publisher  = "VertexForge"
 	exeName    = "VertexForge Studio.exe"
 	uninstName = "Uninstall VertexForge Studio.exe"
+	loaderDLL  = "WebView2Loader.dll" // von Microsoft signiert, aus dem WebView2 SDK
 	regKey     = `Software\Microsoft\Windows\CurrentVersion\Uninstall\VertexForgeStudio`
 )
 
@@ -242,6 +244,28 @@ func extractFile(zf *zip.File, dst string, step func(int)) error {
 	return os.Rename(tmp, dst)
 }
 
+// extractLoader entpackt WebView2Loader.dll aus dem Paket in dir und gibt den Pfad zurück.
+func extractLoader(dir string) string {
+	zr, err := zip.NewReader(bytes.NewReader(payload), int64(len(payload)))
+	if err != nil {
+		return ""
+	}
+	for _, zf := range zr.File {
+		if filepath.Base(zf.Name) == loaderDLL {
+			dst := filepath.Join(dir, loaderDLL)
+			if err := extractFile(zf, dst, func(int) {}); err != nil {
+				log.Printf("loader: %v", err)
+				if _, e := os.Stat(dst); e == nil {
+					return dst // schon vorhanden (z. B. noch geladen)
+				}
+				return ""
+			}
+			return dst
+		}
+	}
+	return ""
+}
+
 // Unkomprimierte Größe des Pakets (für Anzeige und "Apps & Features")
 func payloadSize() uint64 {
 	zr, err := zip.NewReader(bytes.NewReader(payload), int64(len(payload)))
@@ -267,6 +291,9 @@ func uninstall(removeData bool, progress func(p float64, step string)) error {
 	_ = os.Remove(start)
 	progress(0.45, "files")
 	_ = os.Remove(filepath.Join(dir, exeName))
+	// WebView2Loader.dll wird vom laufenden Deinstallationsprogramm selbst benutzt –
+	// sie wird deshalb (wie das Deinstallationsprogramm) beim nächsten Neustart entfernt.
+	_ = os.Remove(filepath.Join(dir, loaderDLL))
 	progress(0.65, "register")
 	_ = registry.DeleteKey(registry.LOCAL_MACHINE, regKey)
 	if removeData {
@@ -278,7 +305,7 @@ func uninstall(removeData bool, progress func(p float64, step string)) error {
 	progress(1, "done")
 	// Das laufende Deinstallationsprogramm und den (dann leeren) Ordner beim nächsten Neustart entfernen –
 	// der übliche Windows-Weg (MoveFileEx, MOVEFILE_DELAY_UNTIL_REBOOT), ohne Hilfsprozesse.
-	for _, p := range []string{filepath.Join(dir, uninstName), dir} {
+	for _, p := range []string{filepath.Join(dir, uninstName), filepath.Join(dir, loaderDLL), dir} {
 		if pp, err := syscall.UTF16PtrFromString(p); err == nil {
 			_, _, _ = procMoveFileEx.Call(uintptr(unsafe.Pointer(pp)), 0, 4)
 		}
@@ -331,6 +358,14 @@ func main() {
 			}
 		}
 		return
+	}
+
+	// Das Setup-Fenster braucht Microsofts WebView2Loader.dll. Sie liegt komprimiert im Paket und wird
+	// offen in den Temp-Ordner des Setups entpackt und von dort ganz normal geladen.
+	if !isUninstaller {
+		if p := extractLoader(tmpBase); p != "" {
+			webviewloader.SetDLLPath(p)
+		}
 	}
 
 	webview2.Frameless = true
