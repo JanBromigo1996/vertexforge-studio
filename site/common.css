@@ -383,3 +383,24 @@ td .pill+.pill{margin-top:4px}
 @media (max-width:480px){ .rp-grid{grid-template-columns:1fr} }
 footer .small{color:var(--muted)}
 @media (prefers-reduced-motion: reduce){ .cz-view img.swap,.cz-progress.run,.av-steps .dot.live{animation:none} }
+
+/* Design-Vorstellung (automatische Überblendung) */
+.show{margin:0}
+.show-stage{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line-2);box-shadow:var(--shadow);background:#141316;aspect-ratio:1360/820}
+.show-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity 1s ease,transform 4.6s ease-out}
+.show-img.on{opacity:1;transform:scale(1)}
+.show-tag{position:absolute;left:18px;bottom:20px;display:flex;flex-direction:column;gap:2px;padding:10px 16px 11px;border-radius:12px;background:rgba(18,17,20,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#f3ecdf;border:1px solid rgba(255,255,255,.12)}
+.show-kind{font:600 .66rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#e2bf72}
+.show-name{font:600 1.15rem var(--display);letter-spacing:.03em}
+.show.flip .show-tag,.show-stage.flip .show-tag{animation:tagIn .7s cubic-bezier(.2,.7,.2,1)}
+@keyframes tagIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.show-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.08)}
+.show-bar i{display:block;height:100%;width:100%;background:var(--brass);transform-origin:left;transform:scaleX(0)}
+.show-bar i.run{animation:czBar 3.6s linear forwards}
+@media (max-width:520px){ .show-tag{left:10px;bottom:12px;padding:7px 11px} .show-name{font-size:.95rem} }
+@media (prefers-reduced-motion: reduce){ .show-img{transition:none} .show-bar i.run{animation:none} }
+.safe{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;padding:22px 24px;margin-bottom:22px;border-radius:14px;border:1px solid color-mix(in srgb,var(--ok) 45%,var(--line));background:linear-gradient(150deg,color-mix(in srgb,var(--ok) 10%,var(--panel)),var(--panel) 70%)}
+.safe-ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.safe h3{font-size:1.1rem}
+.safe p{color:var(--fg-2);font-size:.95rem;margin:8px 0 0}
+.safe a{color:var(--brass)}

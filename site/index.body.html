@@ -6,11 +6,10 @@
     <nav class="nav" aria-label="Sections">
       <a href="#views"><span data-en>Tour</span><span data-de>Einblick</span></a>
       <a href="#features"><span data-en>Features</span><span data-de>Funktionen</span></a>
-      <a href="#customize"><span data-en>Make it yours</span><span data-de>Anpassen</span></a>
       <a href="#download">Download</a>
       <a href="install.html"><span data-en>Install guide</span><span data-de>Anleitung</span></a>
       <a href="#security"><span data-en>Security</span><span data-de>Sicherheit</span></a>
-      <a href="#faq">FAQ</a>
+      <a href="#open-source">Open Source</a>
       <a href="#about"><span data-en>About</span><span data-de>Über</span></a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
@@ -95,37 +94,14 @@
       <h2><span data-en>Every project gets its own look</span><span data-de>Jedes Projekt bekommt seinen eigenen Look</span></h2>
       <p class="lead"><span data-en>A cork pinboard for character ideas, a blueprint for hard surface, a typewriter page for your script. Each board, each story and each project cover has its own style: one click for a preset, or mix your own.</span><span data-de>Eine Kork-Pinnwand für Charakterideen, ein Blaupausen-Plan für Hard-Surface, eine Schreibmaschinenseite für dein Skript. Jedes Denkbrett, jede Story und jedes Projekt-Cover hat seinen eigenen Stil: ein Klick für eine Vorlage, oder du mischst deinen eigenen.</span></p>
     </div>
-    <div class="cz reveal">
-      <div class="cz-side" role="tablist" aria-label="Styles">
-        <div class="cz-group"><div class="cz-label"><span data-en>Mind board</span><span data-de>Denkbrett</span></div>
-          <div class="cz-chips">
-            <button type="button" role="tab" data-cz="board-studio" aria-selected="false"><i class="sw" style="--a:#2a2930;--b:#55525e"></i>Studio</button>
-            <button type="button" role="tab" data-cz="board-pinboard" aria-selected="true"><i class="sw" style="--a:#b07a45;--b:#f3d66b"></i><span data-en>Pinboard</span><span data-de>Pinnwand</span></button>
-            <button type="button" role="tab" data-cz="board-sketch" aria-selected="false"><i class="sw" style="--a:#efe8d8;--b:#c9bfa9"></i><span data-en>Sketchbook</span><span data-de>Skizzenbuch</span></button>
-            <button type="button" role="tab" data-cz="board-blueprint" aria-selected="false"><i class="sw" style="--a:#1d4f8f;--b:#cfe0f5"></i><span data-en>Blueprint</span><span data-de>Blaupause</span></button>
-            <button type="button" role="tab" data-cz="board-chalk" aria-selected="false"><i class="sw" style="--a:#26332c;--b:#e8e4d6"></i><span data-en>Chalkboard</span><span data-de>Tafel</span></button>
-            <button type="button" role="tab" data-cz="board-glass" aria-selected="false"><i class="sw" style="--a:#3b4a6b;--b:#b9c6e6"></i><span data-en>Glass</span><span data-de>Glas</span></button>
-          </div></div>
-        <div class="cz-group"><div class="cz-label"><span data-en>Story paper</span><span data-de>Story-Papier</span></div>
-          <div class="cz-chips">
-            <button type="button" role="tab" data-cz="story-parchment" aria-selected="false"><i class="sw" style="--a:#efe3c4;--b:#b08a4a"></i><span data-en>Parchment</span><span data-de>Pergament</span></button>
-            <button type="button" role="tab" data-cz="story-typewriter" aria-selected="false"><i class="sw" style="--a:#f3efe6;--b:#2b2b2b"></i><span data-en>Typewriter</span><span data-de>Schreibmaschine</span></button>
-            <button type="button" role="tab" data-cz="story-manuscript" aria-selected="false"><i class="sw" style="--a:#e8dcc2;--b:#6b4b2a"></i><span data-en>Manuscript</span><span data-de>Manuskript</span></button>
-            <button type="button" role="tab" data-cz="story-clean" aria-selected="false"><i class="sw" style="--a:#fafafa;--b:#9aa0a6"></i><span data-en>Clean</span><span data-de>Schlicht</span></button>
-            <button type="button" role="tab" data-cz="story-night" aria-selected="false"><i class="sw" style="--a:#1b1d26;--b:#8f9bc7"></i><span data-en>Night</span><span data-de>Nacht</span></button>
-          </div></div>
-        <div class="cz-group"><div class="cz-label"><span data-en>Project library</span><span data-de>Projektbibliothek</span></div>
-          <div class="cz-chips">
-            <button type="button" role="tab" data-cz="designer" aria-selected="false"><i class="sw" style="--a:#1d2b22;--b:#e9bb5c"></i><span data-en>Cover designer</span><span data-de>Cover-Designer</span></button>
-            <button type="button" role="tab" data-cz="hub-large" aria-selected="false"><i class="sw" style="--a:#131215;--b:#d8b56c"></i><span data-en>Large covers</span><span data-de>Große Cover</span></button>
-            <button type="button" role="tab" data-cz="hub-light" aria-selected="false"><i class="sw" style="--a:#f3eee4;--b:#8d6224"></i><span data-en>Light mode</span><span data-de>Hell</span></button>
-          </div></div>
+    <figure class="show reveal" aria-label="Design styles of VertexForge Studio">
+      <div class="show-stage" id="show">
+        <img class="show-img on" src="assets/custom-board-pinboard.webp" alt="" width="1360" height="820">
+        <img class="show-img" src="" alt="" width="1360" height="820">
+        <div class="show-tag"><span class="show-kind" id="showKind"></span><span class="show-name" id="showName"></span></div>
+        <div class="show-bar"><i id="showBar"></i></div>
       </div>
-      <figure class="cz-main">
-        <div class="view cz-view"><img id="czImg" src="assets/custom-board-pinboard.webp" alt="" width="1360" height="820"><div class="cz-progress" id="czProg"></div></div>
-        <figcaption class="caption" id="czCap"></figcaption>
-      </figure>
-    </div>
+    </figure>
     <div class="cz-facts reveal-stagger">
       <div><b class="num">6</b><h3><span data-en>Board presets</span><span data-de>Denkbrett-Vorlagen</span></h3><p><span data-en>Or combine 7 backgrounds with 6 note styles: 42 looks. Every board in a project can have its own.</span><span data-de>Oder kombiniere 7 Hintergründe mit 6 Notiz-Stilen: 42 Looks. Jedes Denkbrett eines Projekts kann seinen eigenen haben.</span></p></div>
       <div><b class="num">5</b><h3><span data-en>Story papers</span><span data-de>Story-Papiere</span></h3><p><span data-en>From aged parchment to a dark night mode for late writing sessions, chosen per project.</span><span data-de>Von altem Pergament bis zum dunklen Nachtmodus für späte Schreibsessions, pro Projekt wählbar.</span></p></div>
@@ -176,6 +152,12 @@
       <h2><span data-en>No secrets</span><span data-de>Keine Geheimnisse</span></h2>
       <p class="lead"><span data-en>Every file is scanned before release and every result is published here, including false alarms. Below is exactly what VertexForge does on your computer.</span><span data-de>Jede Datei wird vor der Veröffentlichung geprüft, und jedes Ergebnis steht hier, auch Fehlalarme. Darunter steht genau, was VertexForge auf deinem Computer tut.</span></p>
     </div>
+    <div class="safe reveal">
+      <div class="safe-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div><h3><span data-en>Is it safe to download? In short: yes.</span><span data-de>Kann ich es bedenkenlos laden? Kurz gesagt: ja.</span></h3>
+      <p><span data-en>VertexForge does nothing hidden: no internet connections, no background services, no changes outside its own folders, and every line of code is public. New programs from private developers without a paid signing certificate are often flagged by a few “machine-learning” scanners. These are automatic guesses, not findings. Want to be extra careful? Compare the checksum, read the scan reports yourself, or use the <a href="app/">browser version</a>, which installs nothing at all.</span><span data-de>VertexForge macht nichts im Verborgenen: keine Internetverbindungen, keine Hintergrunddienste, keine Änderungen außerhalb seiner eigenen Ordner, und jede Zeile Code ist öffentlich. Neue Programme von privaten Entwicklern ohne bezahltes Signatur-Zertifikat werden oft von ein paar „Machine-Learning“-Scannern markiert. Das sind automatische Vermutungen, keine Funde. Willst du ganz sicher gehen? Vergleiche die Prüfsumme, lies die Scan-Berichte selbst oder nutze die <a href="app/">Browser-Version</a>, die gar nichts installiert.</span></p></div>
+    </div>
+
     <div class="sheet reveal">
       <div class="sheet-head"><span><span data-en>Scanner</span><span data-de>Scanner</span>: <b>ClamAV 1.5.4</b></span><span><span data-en>Signatures</span><span data-de>Signaturen</span>: <b data-count="3628245">3,628,245</b></span><span><span data-en>Scanned</span><span data-de>Geprüft</span>: <b>2026-11-07</b></span><span><a href="security/clamscan-2.3.0.txt"><span data-en>Full scan log</span><span data-de>Vollständiges Protokoll</span></a> · <a href="security/sha256-2.3.0.txt">SHA256SUMS</a></span></div>
       <div class="tbl"><table>
@@ -192,7 +174,7 @@
     </div>
 
     <div class="av reveal">
-      <div class="av-head"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 8v5M12 16v.3"/></svg></span><div><h3><span data-en>Antivirus results, honestly</span><span data-de>Virenscanner-Ergebnisse, ehrlich</span></h3><p class="small"><span data-en>What happened while preparing version 2.3.0, and what was changed.</span><span data-de>Was bei der Vorbereitung von Version 2.3.0 passiert ist und was geändert wurde.</span></p></div></div>
+      <div class="av-head"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 8v5M12 16v.3"/></svg></span><div><h3><span data-en>Antivirus results, honestly</span><span data-de>Virenscanner-Ergebnisse, ehrlich</span></h3><p class="small"><span data-en>Every result, from the first test build to this release.</span><span data-de>Jedes Ergebnis, vom ersten Test-Build bis zu diesem Release.</span></p></div></div>
       <ol class="av-steps">
         <li><span class="dot warn"></span><div><b><span data-en>A test build was flagged</span><span data-de>Ein Test-Build wurde markiert</span></b><span class="when"><span data-en>not published</span><span data-de>nicht veröffentlicht</span></span>
           <p><span data-en>On VirusTotal, a few engines flagged the first test build: the setup with 3 of 68, the app with 4 of 71. All of them are automatic guesses (machine learning or heuristics, see the confidence labels). No scanner found any known malware.</span><span data-de>Auf VirusTotal haben einige Scanner den ersten Test-Build markiert: das Setup mit 3 von 68, die App mit 4 von 71. Alles automatische Schätzungen (Machine Learning oder Heuristik, siehe die Konfidenz-Angaben). Kein Scanner hat bekannte Schadsoftware gefunden.</span></p>
@@ -201,8 +183,10 @@
           <p><span data-en>The window library used by the app hid a small Microsoft file (<code>WebView2Loader.dll</code>) inside the program and loaded it straight from memory. Malware uses the same trick, so scanners react to it (hence “FakeMsApp”). The setup also carried the app as an uncompressed embedded program and copied itself into the install folder.</span><span data-de>Die Fenster-Bibliothek der App hat eine kleine Microsoft-Datei (<code>WebView2Loader.dll</code>) im Programm versteckt und direkt aus dem Arbeitsspeicher geladen. Schadsoftware nutzt denselben Trick, deshalb reagieren Scanner darauf (daher „FakeMsApp“). Außerdem trug das Setup die App als unkomprimiertes eingebettetes Programm und kopierte sich selbst in den Installationsordner.</span></p></div></li>
         <li><span class="dot ok"></span><div><b><span data-en>Fixed for this release</span><span data-de>Für dieses Release behoben</span></b>
           <p><span data-en>The DLL is now a normal, Microsoft-signed file next to the program, loaded the ordinary way. The setup unpacks a compressed package like other installers, uses a separate uninstaller and no longer copies itself. Debug information stays in the program. All changes are in the <a data-gh="commits/main" href="#security">commit history</a>.</span><span data-de>Die DLL ist jetzt eine normale, von Microsoft signierte Datei neben dem Programm und wird ganz normal geladen. Das Setup entpackt ein komprimiertes Paket wie andere Installer, nutzt ein eigenes Deinstallationsprogramm und kopiert sich nicht mehr selbst. Debug-Informationen bleiben im Programm. Alle Änderungen stehen in der <a data-gh="commits/main" href="#security">Commit-Historie</a>.</span></p></div></li>
-        <li><span class="dot live"></span><div><b><span data-en>Current results: always public</span><span data-de>Aktuelle Ergebnisse: immer öffentlich</span></b>
-          <p><span data-en>The “Report” links above show the live VirusTotal result of each exact file. If any scanner still flags a release, it is listed in the <a data-gh="releases" href="#security">release notes</a> and reported to the vendor as a false positive. You can follow that in the <a data-gh="issues?q=label%3Afalse-positive" href="#security">issues</a>.</span><span data-de>Die „Bericht“-Links oben zeigen das aktuelle VirusTotal-Ergebnis jeder einzelnen Datei. Markiert ein Scanner ein Release weiterhin, steht das in den <a data-gh="releases" href="#security">Versionshinweisen</a> und wird beim Hersteller als Fehlalarm gemeldet. Das kannst du in den <a data-gh="issues?q=label%3Afalse-positive" href="#security">Issues</a> verfolgen.</span></p></div></li>
+        <li><span class="dot live"></span><div><b><span data-en>The current release: 2 of about 70 scanners</span><span data-de>Das aktuelle Release: 2 von rund 70 Scannern</span></b><span class="when">2026-11-07</span>
+          <p><span data-en>After the fix, all large vendors (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, Avast, Norton and many more) report the files as clean. Two smaller engines still raise a generic guess. Neither names a real virus. Both have been reported as false positives.</span><span data-de>Nach der Korrektur melden alle großen Hersteller (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, Avast, Norton und viele mehr) die Dateien als sauber. Zwei kleinere Scanner äußern noch eine allgemeine Vermutung. Keiner nennt einen echten Virus. Beide wurden als Fehlalarm gemeldet.</span></p>
+          <ul class="det"><li><b>Bkav Pro</b><code>W32.Malware.69DD7DC0 (generic)</code></li><li><b>Trapmine</b><code>Malicious.moderate.ml.score</code></li></ul>
+          <p><span data-en>The “Report” links above always show the live VirusTotal result of each exact file. Changes are tracked in the <a data-gh="issues?q=label%3Afalse-positive" href="#security">issues</a>.</span><span data-de>Die „Bericht“-Links oben zeigen immer das aktuelle VirusTotal-Ergebnis jeder einzelnen Datei. Änderungen werden in den <a data-gh="issues?q=label%3Afalse-positive" href="#security">Issues</a> verfolgt.</span></p></div></li>
       </ol>
     </div>
 
@@ -367,46 +351,40 @@
     try{ navigator.clipboard.writeText(t).then(done, sel); }catch(e){ sel(); }
   }));
 
-  /* „Mach es zu deinem“: Stil-Vorschau; läuft automatisch durch, bis man selbst klickt */
-  const czCaps = {
-    'board-studio':['Studio: the calm default with a dot grid and dark cards.','Studio: der ruhige Standard mit Punktraster und dunklen Karten.'],
-    'board-pinboard':['Pinboard: cork, pinned sticky notes and red string, like a real wall of ideas.','Pinnwand: Kork, angepinnte Notizzettel und roter Faden, wie eine echte Ideenwand.'],
-    'board-sketch':['Sketchbook: index cards on warm paper.','Skizzenbuch: Karteikarten auf warmem Papier.'],
-    'board-blueprint':['Blueprint: technical cards on a blue grid, made for hard surface and props.','Blaupause: technische Karten auf blauem Raster, gemacht für Hard-Surface und Props.'],
-    'board-chalk':['Chalkboard: hand-drawn notes on a dark green board.','Tafel: handgeschriebene Notizen auf dunkelgrüner Tafel.'],
-    'board-glass':['Glass: translucent cards for a modern, quiet look.','Glas: durchscheinende Karten für einen modernen, ruhigen Look.'],
-    'story-parchment':['Story on parchment: the classic writing desk.','Story auf Pergament: der klassische Schreibtisch.'],
-    'story-typewriter':['Typewriter: a script page with monospaced type.','Schreibmaschine: eine Skriptseite in Schreibmaschinenschrift.'],
-    'story-manuscript':['Manuscript: aged paper for lore and world-building.','Manuskript: gealtertes Papier für Lore und Weltenbau.'],
-    'story-clean':['Clean: plain white paper without distractions.','Schlicht: weißes Papier ohne Ablenkung.'],
-    'story-night':['Night: a dark page for late writing sessions.','Nacht: eine dunkle Seite für späte Schreibsessions.'],
-    'designer':['Cover designer: fonts, style presets, banner, ribbon and your own artwork with live preview.','Cover-Designer: Schriften, Stil-Vorlagen, Banner, Banderole und eigenes Artwork mit Live-Vorschau.'],
-    'hub-large':['Library with large covers: cover and title size adjust live with the sliders.','Bibliothek mit großen Covern: Cover- und Titelgröße stellst du live mit den Reglern ein.'],
-    'hub-light':['The same library in the warm light mode.','Dieselbe Bibliothek im warmen hellen Modus.']
-  };
-  const czKeys = Object.keys(czCaps), czImg = document.getElementById('czImg'), czCap = document.getElementById('czCap'), czProg = document.getElementById('czProg');
-  let cz = 'board-pinboard', czAuto = !VF.still, czTimer = null, czVisible = false;
-  const czCaption = () => { czCap.textContent = czCaps[cz][VF.lang==='de'?1:0]; czImg.alt = czCap.textContent; };
-  function setCz(k){
-    cz = k;
-    document.querySelectorAll('[data-cz]').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.cz===k)));
-    const next = new Image();
-    next.onload = () => { czImg.classList.remove('swap'); void czImg.offsetWidth; czImg.src = next.src; czImg.classList.add('swap'); };
-    next.src = 'assets/custom-' + k + '.webp'; czCaption();
+  /* Design-Vorstellung: Stile blenden automatisch nacheinander über */
+  const SHOW = [
+    ['board-pinboard','Mind board','Denkbrett','Pinboard','Pinnwand'],
+    ['board-blueprint','Mind board','Denkbrett','Blueprint','Blaupause'],
+    ['board-chalk','Mind board','Denkbrett','Chalkboard','Tafel'],
+    ['board-sketch','Mind board','Denkbrett','Sketchbook','Skizzenbuch'],
+    ['board-glass','Mind board','Denkbrett','Glass','Glas'],
+    ['board-studio','Mind board','Denkbrett','Studio','Studio'],
+    ['story-typewriter','Story','Story','Typewriter','Schreibmaschine'],
+    ['story-parchment','Story','Story','Parchment','Pergament'],
+    ['story-night','Story','Story','Night','Nacht'],
+    ['designer','Covers','Cover','Cover designer','Cover-Designer'],
+    ['hub-large','Library','Bibliothek','Large covers','Große Cover'],
+    ['hub-light','Library','Bibliothek','Light mode','Heller Modus']
+  ];
+  const imgs = [...document.querySelectorAll('.show-img')], kind = document.getElementById('showKind'), nm = document.getElementById('showName'), bar = document.getElementById('showBar');
+  let si = 0, front = 0, showT = null, showVis = false;
+  const label = () => { const d = SHOW[si], de = VF.lang==='de'; kind.textContent = de ? d[2] : d[1]; nm.textContent = de ? d[4] : d[3]; imgs[front].alt = kind.textContent + ': ' + nm.textContent; };
+  function nextShow(){
+    si = (si + 1) % SHOW.length;
+    const back = imgs[1 - front], pre = new Image();
+    pre.onload = () => { back.src = pre.src; back.classList.add('on'); imgs[front].classList.remove('on'); front = 1 - front; label(); document.getElementById('show').classList.remove('flip'); void back.offsetWidth; document.getElementById('show').classList.add('flip'); };
+    pre.src = 'assets/custom-' + SHOW[si][0] + '.webp';
   }
-  function czTick(){
-    clearTimeout(czTimer);
-    if(!czAuto || !czVisible || document.hidden){ czProg.classList.remove('run'); return; }
-    czProg.classList.remove('run'); void czProg.offsetWidth; czProg.classList.add('run');
-    czTimer = setTimeout(()=>{ setCz(czKeys[(czKeys.indexOf(cz)+1) % czKeys.length]); czTick(); }, 4200);
+  function runShow(){
+    clearInterval(showT); bar.classList.remove('run');
+    if(VF.still || !showVis || document.hidden) return;
+    void bar.offsetWidth; bar.classList.add('run');
+    showT = setInterval(()=>{ nextShow(); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); }, 3600);
   }
-  document.querySelectorAll('[data-cz]').forEach(b=>b.addEventListener('click', ()=>{ czAuto = false; czProg.classList.remove('run'); clearTimeout(czTimer); setCz(b.dataset.cz); }));
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(es=>es.forEach(e=>{ czVisible = e.isIntersecting; czTick(); }), {threshold:.35}).observe(czImg);
-    czKeys.forEach(k=>{ const i = new Image(); i.loading = 'lazy'; i.src = 'assets/custom-' + k + '.webp'; });
-  }
-  document.addEventListener('visibilitychange', czTick);
-  VF.onLang.push(czCaption); czCaption();
+  if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{ showVis = e.isIntersecting; runShow(); }), {threshold:.3}).observe(document.getElementById('show'));
+  document.addEventListener('visibilitychange', runShow);
+  SHOW.forEach(d=>{ const i = new Image(); i.src = 'assets/custom-' + d[0] + '.webp'; });
+  VF.onLang.push(label); label();
   caption();
 })();
 </script>
