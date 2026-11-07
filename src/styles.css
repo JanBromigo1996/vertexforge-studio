@@ -1264,3 +1264,16 @@ html.touch .toast.undo button{padding:8px 14px}
 html.touch .btn.btn-icon{width:40px}
 @media (prefers-reduced-motion:reduce){.tc-inner{transition:none}.deck-card{animation:none}}
 @media (max-width:1180px) and (min-width:641px){ .proj-crumb{max-width:130px} .tb-sep{margin:0 2px} }
+/* Shotlist: Bild groß ansehen, ersetzen */
+.thumb{position:relative}
+.thumb.has{cursor:zoom-in}
+.thumb.has img{transition:transform .3s var(--ease)}
+.thumb.has:hover img{transform:scale(1.06)}
+.thumb-swap{position:absolute;right:3px;bottom:3px;width:24px;height:24px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(12,12,14,.72);color:#eee;display:grid;place-items:center;cursor:pointer;opacity:0;transform:translateY(3px);transition:opacity .15s,transform .15s}
+.thumb:hover .thumb-swap,html.touch .thumb-swap{opacity:1;transform:none}
+.thumb-swap:hover{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+html.touch .thumb-swap{width:32px;height:32px}
+.thumb.drop{outline:2px dashed var(--accent);outline-offset:2px}
+.lb-actions{display:flex;gap:8px;margin-top:4px}
+.lb-actions .btn{background:rgba(30,28,32,.85);border-color:rgba(255,255,255,.14);color:#eee}
+.lb-actions .btn:hover{border-color:var(--accent);color:var(--accent)}

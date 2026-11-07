@@ -7,7 +7,7 @@ function renderShots(){
   const total = p.shots.reduce((a,s)=>a+s.frames, 0), rendered = p.shots.filter(s=>s.status.render==='done').length;
   const rows = p.shots.map((s,i)=>`<tr data-shot="${i}">
     <td><input class="inp mono" style="width:92px;font-weight:600;color:var(--accent)" value="${esc(s.code)}" data-sf="code"></td>
-    <td><div class="thumb" data-sact="thumb" title="${esc(t('sh.upload'))}">${s.thumb ? `<img src="${esc(assetSrc(s.thumb))}" alt="">` : ic('image',15) + t('sh.image')}</div></td>
+    <td><div class="thumb ${s.thumb?'has':''}" data-sact="${s.thumb?'view':'thumb'}" title="${esc(t(s.thumb?'sh.view':'sh.upload'))}">${s.thumb ? `<img src="${esc(assetSrc(s.thumb))}" alt=""><button class="thumb-swap" data-sact="thumb" title="${esc(t('sh.replace'))}">${ic('image',13)}</button>` : ic('image',15) + t('sh.image')}</div></td>
     <td style="min-width:290px"><input class="inp" style="margin-bottom:4px;font-weight:600" value="${esc(s.seq)}" placeholder="${esc(t('sh.seq'))}" data-sf="seq"><input class="inp" style="color:var(--text-2)" value="${esc(s.desc)}" placeholder="${esc(t('sh.desc'))}" data-sf="desc"></td>
     <td><input class="inp mono" type="number" min="1" style="width:80px" value="${s.frames}" data-sf="frames"></td>
     <td class="mono" style="color:var(--text-2);white-space:nowrap">${(s.frames/fps).toLocaleString(locale(),{minimumFractionDigits:2, maximumFractionDigits:2})} s</td>
@@ -48,12 +48,22 @@ function renderShots(){
     const el = v.querySelector(`[data-shot="${j}"] [data-sf="${f}"]`); if(el) el.focus();
   };
   v.onchange = e => { const f = e.target.dataset.sf; if(!f) return; const s = p.shots[+e.target.closest('[data-shot]').dataset.shot]; if(!s) return; s[f] = f==='frames' ? Math.max(1, parseInt(e.target.value,10) || 1) : e.target.value; changed(); renderShots(); };
+  // Bild direkt auf ein Shot-Feld ziehen
+  v.ondragover = e => { const th = e.target.closest('.thumb'); if(!th || ![...e.dataTransfer.types].includes('Files')) return; e.preventDefault(); v.querySelectorAll('.thumb.drop').forEach(x=>x!==th && x.classList.remove('drop')); th.classList.add('drop'); };
+  v.ondragleave = e => { const th = e.target.closest('.thumb'); if(th) th.classList.remove('drop'); };
+  v.ondrop = async e => {
+    const th = e.target.closest('.thumb'); if(!th) return; e.preventDefault(); th.classList.remove('drop');
+    const f = [...e.dataTransfer.files].find(x=>x.type.startsWith('image/')); if(!f) return;
+    const i = +th.closest('[data-shot]').dataset.shot, s = p.shots[i]; if(!s) return;
+    s.thumb = addAsset(await compressImage(f, 1800)); changed(); renderShots();
+  };
   v.onclick = async e => {
     const row = e.target.closest('[data-shot]'); if(!row) return;
     const i = +row.dataset.shot, s = p.shots[i];
     const d = e.target.closest('[data-dept]'); if(d){ const o = ['todo','wip','done'], k = d.dataset.dept; s.status[k] = o[(o.indexOf(s.status[k])+1) % 3]; changed(); renderShots(); return; }
     const a = e.target.closest('[data-sact]'); if(!a) return;
-    if(a.dataset.sact==='thumb'){ const [f] = await pickFiles('image/*'); if(!f) return; s.thumb = addAsset(await compressImage(f, 640)); changed(); renderShots(); }
+    if(a.dataset.sact==='thumb'){ const [f] = await pickFiles('image/*'); if(!f) return; s.thumb = addAsset(await compressImage(f, 1800)); changed(); renderShots(); }
+    if(a.dataset.sact==='view'){ openShotImage(i); return; }
     if(a.dataset.sact==='del'){ if(await softDelete(s.code)){ p.shots.splice(i,1); changed(); renderShots(); } }
   };
 }
@@ -279,3 +289,31 @@ async function init(){
   };
 }
 init();
+
+/* Shot-Bild groß ansehen, ersetzen oder entfernen (Pfeiltasten: vorheriger/nächster Shot mit Bild) */
+function openShotImage(i){
+  const p = activeProject();
+  const lb = document.createElement('div'); lb.className = 'lightbox shot-lb';
+  const draw = () => {
+    const s = p.shots[i]; if(!s || !s.thumb){ close(); return; }
+    lb.innerHTML = `<div class="lb-stage"><img src="${esc(assetSrc(s.thumb))}" alt=""></div>
+      <div class="lb-cap"><b class="mono">${esc(s.code)}</b>${s.desc ? ' · ' + esc(s.desc) : ''}</div>
+      <div class="lb-actions"><button class="btn" data-lb="replace">${ic('image',14)} ${t('sh.replace')}</button><button class="btn" data-lb="remove">${ic('trash',14)} ${t('sh.removeImg')}</button><button class="btn" data-lb="close">${ic('x',14)} Esc</button></div>`;
+  };
+  const withImg = dir => { for(let j = i + dir; j >= 0 && j < p.shots.length; j += dir) if(p.shots[j].thumb) return j; return -1; };
+  const close = () => { lb.classList.remove('open'); document.removeEventListener('keydown', kd, true); setTimeout(()=>lb.remove(), 200); };
+  const kd = e => {
+    if(e.key==='Escape'){ e.stopImmediatePropagation(); e.preventDefault(); close(); }
+    else if(e.key==='ArrowRight' || e.key==='ArrowLeft'){ const j = withImg(e.key==='ArrowRight' ? 1 : -1); if(j>=0){ i = j; draw(); } e.preventDefault(); e.stopImmediatePropagation(); }
+  };
+  draw(); document.body.appendChild(lb); requestAnimationFrame(()=>lb.classList.add('open'));
+  document.addEventListener('keydown', kd, true);
+  lb.addEventListener('click', async e=>{
+    const b = e.target.closest('[data-lb]');
+    if(!b){ if(!e.target.closest('img')) close(); return; }
+    const s = p.shots[i];
+    if(b.dataset.lb==='replace'){ const [f] = await pickFiles('image/*'); if(!f) return; s.thumb = addAsset(await compressImage(f, 1800)); changed(); renderShots(); draw(); }
+    else if(b.dataset.lb==='remove'){ s.thumb = ''; changed(); renderShots(); close(); undoToast(t('ts.deletedNamed',{name:s.code + ' · ' + t('sh.image')})); }
+    else close();
+  });
+}
