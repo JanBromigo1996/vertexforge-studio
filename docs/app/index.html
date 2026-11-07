@@ -1004,7 +1004,7 @@ html.area-full .app{border:none}
    ECHTZEIT-ANIMATIONEN
    ============================================================================ */
 /* Cover reagieren live auf die Maus (leichte 3D-Neigung + Lichtreflex) */
-.pcard-cover{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0));transition:transform .45s var(--ease),box-shadow .3s}
+.pcard-cover{transform:perspective(900px) rotateZ(var(--rz,0deg)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0));transition:transform .45s var(--ease),box-shadow .3s}
 .pcard-cover.tilting{transition:transform .08s linear,box-shadow .3s;--ty:-4px;box-shadow:0 26px 50px -12px rgba(0,0,0,.6)}
 .pcard-cover::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;opacity:0;transition:opacity .3s;background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.22),transparent 45%);mix-blend-mode:soft-light}
 .pcard-cover.tilting::after{opacity:1}
@@ -1025,6 +1025,153 @@ html.area-full .app{border:none}
 .meter > div,.pcard-progress > div{transform-origin:left}
 .tl-bar{transform-origin:left}
 @media (prefers-reduced-motion:reduce){.pcard-cover{transform:none!important}.wire.flow,.cd.cd-overdue{animation:none}}
+
+/* ============================================================================
+   PROJEKTBIBLIOTHEK — Darstellungen (nur Optik; Fortschritt, Fristen, Aktionen bleiben)
+   ============================================================================ */
+.view.style-anim > .page{animation:surfIn .5s var(--ease)}
+@keyframes surfIn{from{opacity:.35;transform:scale(.996)}to{opacity:1;transform:none}}
+.lib-deco{display:none;pointer-events:none}
+.view[class*="lib-"]:not(.lib-studio){color:var(--text);background-color:var(--bg)}
+.view[class*="lib-"]:not(.lib-studio) .pcard-cover{outline:none}
+
+/* DVD-Regal: Kunststoffhülle mit Rillenrücken, Glanz, Holzbrett */
+.lib-dvd{--bg:#15110e;--bg-2:#1b1612;--panel:#231d18;--panel-2:#2b241e;--hover:#352c25;--active:#3c322a;--text:#f0e6d6;--text-2:#bcae99;--muted:#8a7d6b;--line:#3a3028;--line-2:#4d4136;--accent:var(--acc-d);--on-accent:#16130e;
+  background:radial-gradient(ellipse at 50% -10%,rgba(255,200,140,.10),transparent 60%),linear-gradient(180deg,#1b1612,#100d0b) fixed}
+.lib-dvd .hub-grid{gap:44px 26px}
+.lib-dvd .pcard-cover{border-radius:6px;padding:5px 5px 5px 14px;background:linear-gradient(90deg,#08080a 0,#1d1d22 3px,#141418 12px,#26262c 13px,#1a1a1f 14px);box-shadow:0 18px 28px -10px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.07)}
+.lib-dvd .pcard-cover .cover{border-radius:2px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.lib-dvd .lib-deco{display:block;position:absolute;z-index:5}
+.lib-dvd .lib-a{left:2px;top:6px;bottom:6px;width:9px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.09) 0 1px,transparent 1px 4px);border-radius:2px}
+.lib-dvd .lib-b{inset:0;border-radius:6px;background:linear-gradient(118deg,rgba(255,255,255,.17) 0,rgba(255,255,255,.04) 26%,transparent 27%,transparent 72%,rgba(255,255,255,.05) 100%)}
+.lib-dvd .pcard-meta{position:relative;padding-top:16px}
+.lib-dvd .pcard-meta::before{content:"";position:absolute;left:-15px;right:-15px;top:0;height:11px;border-radius:2px;background:linear-gradient(180deg,#8a6240,#5d3f27 60%,#3e2a1a);box-shadow:0 10px 16px -6px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,220,180,.25)}
+.lib-dvd .pcard-cover{margin-bottom:-2px}
+.lib-dvd .pcard-new{aspect-ratio:auto;height:calc(var(--card-w,240px) * 1.42);border-radius:6px}
+
+/* Poster-Wand: Beton, schief geklebte Plakate mit Klebeband */
+.lib-posters{--bg:#bdb8ae;--bg-2:#b3ada2;--panel:#e9e5dc;--panel-2:#dfdad0;--hover:#d6d0c4;--active:#cec7b9;--text:#23201b;--text-2:#4b453c;--muted:#6f685c;--line:#a8a194;--line-2:#958d7f;--accent:var(--acc-l);--on-accent:#fff9ee;
+  background-color:#bdb8ae;background-image:radial-gradient(rgba(0,0,0,.06) 1px,transparent 1.4px),radial-gradient(rgba(255,255,255,.18) 1px,transparent 1.6px),radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.35),transparent 60%),radial-gradient(ellipse at 80% 90%,rgba(0,0,0,.12),transparent 55%);background-size:7px 7px,11px 11px,100% 100%,100% 100%;background-attachment:local}
+.lib-posters .hub-grid{gap:46px 30px;padding-top:12px}
+.lib-posters .pcard-cover{overflow:visible;border-radius:0;box-shadow:0 14px 22px -10px rgba(0,0,0,.55),0 2px 4px rgba(0,0,0,.18)}
+.lib-posters .pcard-cover .cover{border-radius:0}
+.lib-posters .pcard:nth-child(4n+1) .pcard-cover{--rz:-1.6deg}
+.lib-posters .pcard:nth-child(4n+2) .pcard-cover{--rz:1.2deg}
+.lib-posters .pcard:nth-child(4n+3) .pcard-cover{--rz:-.6deg}
+.lib-posters .pcard:nth-child(4n) .pcard-cover{--rz:1.9deg}
+.lib-posters .lib-deco{display:block;position:absolute;z-index:8;top:-11px;width:38%;height:22px;background:linear-gradient(180deg,rgba(246,240,220,.78),rgba(226,218,192,.72));box-shadow:0 1px 2px rgba(0,0,0,.18);clip-path:polygon(0 8%,4% 0,8% 10%,12% 0,100% 0,96% 12%,100% 24%,96% 38%,100% 52%,96% 66%,100% 80%,96% 92%,100% 100%,0 100%,4% 86%,0 72%,4% 58%,0 44%,4% 30%,0 18%)}
+.lib-posters .lib-a{left:-7%;transform:rotate(-9deg)}
+.lib-posters .lib-b{right:-7%;transform:rotate(8deg)}
+.lib-posters .pcard-cover::before{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(160deg,rgba(255,255,255,.10),transparent 35%,transparent 80%,rgba(0,0,0,.10))}
+.lib-posters .pcard-meta{background:#f6f2e8;padding:7px 10px;box-shadow:0 3px 8px rgba(0,0,0,.18);transform:rotate(-.6deg);margin-top:4px}
+.lib-posters .pcard-actions{top:30px}
+
+/* Lederbücher: geprägter Ledereinband, Goldrahmen, Bild als eingeklebte Tafel */
+.lib-books{--bg:#1e140e;--bg-2:#24180f;--panel:#2c1f15;--panel-2:#35261a;--hover:#402e20;--active:#4a3626;--text:#f3e5c8;--text-2:#cdb894;--muted:#9b8564;--line:#4a3726;--line-2:#5e4731;--accent:#d9b25e;--on-accent:#24170c;
+  background:repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 2px,transparent 2px 86px),linear-gradient(180deg,#2a1b11,#170f09);background-attachment:local}
+.lib-books .hub-grid{gap:40px 28px}
+.lib-books .pcard-cover{border-radius:3px 9px 9px 3px;padding:11% 9% 12% 15%;background:radial-gradient(ellipse at 30% 25%,rgba(255,255,255,.10),transparent 55%),radial-gradient(circle at 70% 80%,rgba(0,0,0,.25),transparent 50%),radial-gradient(rgba(0,0,0,.12) 1px,transparent 1.5px) 0 0/5px 5px,linear-gradient(135deg,#6b3420,#4b2213 60%,#3a190d);box-shadow:0 18px 30px -12px rgba(0,0,0,.9),inset 0 0 0 1px rgba(255,210,150,.08),inset -6px 0 10px rgba(0,0,0,.35)}
+.lib-books .lib-deco{display:block;position:absolute}
+.lib-books .lib-a{left:0;top:0;bottom:0;width:10%;z-index:5;border-radius:3px 0 0 3px;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(255,255,255,.08) 70%,rgba(0,0,0,.35)),repeating-linear-gradient(180deg,transparent 0 22%,rgba(0,0,0,.35) 22% 23%,rgba(255,220,160,.18) 23% 24%,transparent 24% 26%)}
+.lib-books .lib-b{left:calc(10% + 6px);right:6px;top:6px;bottom:6px;z-index:5;border:1.5px solid rgba(217,178,94,.75);outline:1px solid rgba(217,178,94,.35);outline-offset:3px;border-radius:2px 6px 6px 2px}
+.lib-books .pcard-cover .cover{border-radius:2px;box-shadow:0 0 0 2px #c9a24f,0 0 0 4px rgba(0,0,0,.45),0 6px 14px rgba(0,0,0,.5)}
+.lib-books .pcard-name{font-family:var(--serif);font-size:16px;color:#e8c77e;letter-spacing:.3px}
+.lib-books .pcard-progress{left:15%;right:9%;bottom:5%}
+
+/* Galerie: helle Wand, Spot von oben, Rahmen mit Passepartout, Museumsschild */
+.lib-gallery{--bg:#ecebe6;--bg-2:#e4e2db;--panel:#fafaf7;--panel-2:#f2f1ec;--hover:#e7e5de;--active:#dddad1;--text:#22201c;--text-2:#55514a;--muted:#86817a;--line:#d6d3cb;--line-2:#c4c0b6;--accent:var(--acc-l);--on-accent:#fff9ee;
+  background:linear-gradient(180deg,#f3f2ee,#e6e4dd 85%,#d9d6cd);background-attachment:local}
+.lib-gallery .hub-grid{gap:56px 40px;padding-top:10px}
+.lib-gallery .pcard{position:relative}
+.lib-gallery .pcard::before{content:"";position:absolute;left:-30%;right:-30%;top:-60px;height:115%;z-index:0;pointer-events:none;background:radial-gradient(ellipse 50% 60% at 50% 0,rgba(255,236,196,.75),rgba(255,236,196,.18) 55%,transparent 75%)}
+.lib-gallery .pcard > *{position:relative;z-index:1}
+.lib-gallery .pcard-cover{border-radius:1px;padding:10%;background:#fbfaf6;border:9px solid #2b2724;box-shadow:0 22px 30px -14px rgba(0,0,0,.45),inset 0 0 0 1px rgba(0,0,0,.08),inset 0 3px 8px rgba(0,0,0,.12)}
+.lib-gallery .pcard-cover .cover{border-radius:0;box-shadow:0 0 0 1px rgba(0,0,0,.12),inset 0 0 0 1px rgba(255,255,255,.1)}
+.lib-gallery .pcard-meta{align-self:center;max-width:88%;background:#fff;padding:7px 12px 8px;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.12);text-align:center;margin-top:8px}
+.lib-gallery .pcard-sub{justify-content:center}
+.lib-gallery .pcard-progress{left:9px;right:9px;bottom:9px}
+.lib-gallery .pcard-new,.lib-posters .pcard-new{background:rgba(255,255,255,.45)}
+
+/* Vorschau-Kacheln im Design-Fenster */
+.dp-presets.libs{grid-template-columns:repeat(3,1fr)}
+.lib-prev{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:5px;height:58px;border-radius:6px;padding:8px 6px;overflow:hidden;border:1px solid var(--line)}
+.lib-prev i{width:17px;height:25px;border-radius:2px;background:linear-gradient(160deg,#c49a4f,#5b3c1e)}
+.lib-prev i:nth-child(2){background:linear-gradient(160deg,#5aa0b8,#1d3a55)}
+.lib-prev i:nth-child(3){background:linear-gradient(160deg,#c46a5a,#4a1d1d)}
+.lp-studio{background:#19181c}
+.lp-dvd{background:linear-gradient(180deg,#1b1612 70%,#6b4a2e 70% 82%,#120f0d 82%)}
+.lp-dvd i{border-left:3px solid #111;box-shadow:0 0 0 1px #2a2a30}
+.lp-posters{background:#bdb8ae;align-items:center}
+.lp-posters i{border-radius:0;transform:rotate(-4deg);box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.lp-posters i:nth-child(2){transform:rotate(3deg)}
+.lp-books{background:#24180f}
+.lp-books i{background:linear-gradient(135deg,#7a3c24,#3a190d);box-shadow:inset 0 0 0 2px #24180f,inset 0 0 0 3px #c9a24f}
+.lp-gallery{background:radial-gradient(ellipse at 50% 0,#fff3d6,#ecebe6 70%);align-items:center}
+.lp-gallery i{border:3px solid #2b2724;box-shadow:inset 0 0 0 2px #fbfaf6}
+
+/* ============================================================================
+   PIPELINE & SHOTLIST — Oberflächen (pro Projekt; nur Farben und Material)
+   ============================================================================ */
+.view[class*="surf-"]:not(.surf-studio),.surf-prev{color:var(--text);background-color:var(--bg)}
+.surf-paper{--bg:#f1ecdd;--bg-2:#ebe5d4;--panel:#fffdf6;--panel-2:#f8f4e8;--hover:#efe9da;--active:#e6dfcc;--text:#2b2620;--text-2:#5d5446;--muted:#8d8371;--line:#ddd3bd;--line-2:#cbbfa5;--accent:var(--acc-l);--on-accent:#fff9ee;--shadow:0 14px 34px rgba(80,60,30,.14);--shadow-sm:0 1px 3px rgba(80,60,30,.1);
+  background-image:linear-gradient(90deg,transparent 54px,rgba(200,80,70,.28) 54px 56px,transparent 56px),repeating-linear-gradient(180deg,transparent 0 27px,rgba(70,110,170,.13) 27px 28px);background-attachment:local}
+.surf-blueprint{--bg:#103a6a;--bg-2:#134272;--panel:rgba(22,72,124,.86);--panel-2:#1b5089;--hover:#21599a;--active:#2563a8;--text:#eaf2ff;--text-2:#b9cff0;--muted:#86a6cf;--line:rgba(200,225,255,.20);--line-2:rgba(200,225,255,.34);--accent:#f4c95d;--on-accent:#10233c;--shadow:0 16px 36px rgba(0,10,30,.45);
+  background-image:linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:120px 120px,120px 120px,24px 24px,24px 24px;background-attachment:local}
+.surf-blueprint .page-title{font-family:var(--mono);letter-spacing:1px;text-transform:uppercase}
+.surf-kraft{--bg:#c9a97c;--bg-2:#c1a073;--panel:#fbf7ec;--panel-2:#f3ecdc;--hover:#ece3cf;--active:#e3d8bf;--text:#2a2118;--text-2:#5b4a36;--muted:#86725a;--line:#dccbaa;--line-2:#c8b28a;--accent:#9e3b2c;--on-accent:#fff5ea;--shadow:0 12px 26px rgba(70,45,15,.28);--shadow-sm:0 1px 3px rgba(70,45,15,.18);
+  background-image:radial-gradient(rgba(90,60,25,.16) 1px,transparent 1.4px),radial-gradient(rgba(255,240,210,.25) 1px,transparent 1.6px);background-size:6px 6px,9px 9px;background-attachment:local}
+.surf-kraft .panel,.surf-kraft .phase,.surf-kraft table{box-shadow:var(--shadow-sm)}
+.surf-kraft .page-title{font-family:'Special Elite','Courier Prime',var(--mono);letter-spacing:.5px}
+.surf-film{--bg:#0b0a0c;--bg-2:#121014;--panel:#17151a;--panel-2:#1e1b21;--hover:#262229;--active:#2d2830;--text:#f2ead8;--text-2:#b9ae98;--muted:#7f7666;--line:#2a262d;--line-2:#3a3540;--accent:#e9b34c;--on-accent:#1a1308;
+  background-image:repeating-linear-gradient(180deg,transparent 0 10px,rgba(255,255,255,.10) 10px 20px,transparent 20px 28px),repeating-linear-gradient(180deg,transparent 0 10px,rgba(255,255,255,.10) 10px 20px,transparent 20px 28px),radial-gradient(ellipse at 50% 0,rgba(233,179,76,.10),transparent 60%);background-size:9px 28px,9px 28px,100% 100%;background-position:6px 0,calc(100% - 6px) 0,0 0;background-repeat:repeat-y,repeat-y,no-repeat;background-attachment:local}
+.surf-film .page-title{text-transform:uppercase;letter-spacing:2px}
+.surf-film .page{padding-left:max(28px,4vw);padding-right:max(28px,4vw)}
+.surf-prev{position:relative;display:flex;flex-direction:column;justify-content:center;gap:5px;height:58px;border-radius:6px;padding:9px 12px;overflow:hidden;border:1px solid var(--line-2)}
+.surf-prev b{display:block;height:10px;width:60%;border-radius:2px;background:var(--accent)}
+.surf-prev i{display:block;height:9px;border-radius:2px;background:var(--panel);border:1px solid var(--line)}
+.surf-prev.surf-film{background-size:5px 14px,5px 14px,100% 100%;background-position:2px 0,calc(100% - 2px) 0,0 0}
+
+/* ============================================================================
+   TOUCH (Tablet & Smartphone): größere Ziele, nichts nur per Hover erreichbar
+   ============================================================================ */
+html.touch .btn{height:40px;padding:0 14px;font-size:13px}
+html.touch .icon-btn{min-width:40px;min-height:40px}
+html.touch .tabs button,html.touch .seg button{min-height:38px}
+html.touch .inp,html.touch select.sel,html.touch textarea{min-height:40px;font-size:16px}
+html.touch .menu-item{min-height:44px}
+html.touch .bt-pill{min-height:40px;min-width:40px}
+html.touch input[type=range]{height:30px}
+html.touch .mini-range{min-height:40px}
+html.touch .pcard-actions{opacity:1;transform:none;gap:8px}
+html.touch .pcard-actions button{width:38px;height:38px}
+html.touch .dp-chip,html.touch .dp-preset{min-height:44px}
+html.touch .port{width:24px;height:24px;margin-top:-12px}
+html.touch .port-out{right:-13px}
+html.touch .wire-end{width:26px;height:26px;margin:-13px 0 0 -13px;opacity:.85}
+html.touch .wire-hit{stroke-width:30}
+html.touch .node-resize{width:30px;height:30px;opacity:.75}
+html.touch .node-grip{height:32px;font-size:10.5px}
+html.touch .node.selected .node-del,html.touch .node-text .node-grip{display:flex;opacity:1}
+html.touch .sh-grip{width:40px;opacity:.8}
+html.touch .cd,html.touch .chip{min-height:28px}
+html.touch .design-pop{max-height:70vh;overflow:auto}
+html.touch ::-webkit-scrollbar{width:4px;height:4px}
+@media (max-width:640px){
+  html.touch .head-actions .btn span.hide-sm{display:none}
+  .lib-dvd .pcard-meta::before{left:-8px;right:-8px}
+  .lib-gallery .hub-grid,.lib-posters .hub-grid,.lib-books .hub-grid,.lib-dvd .hub-grid{gap:34px 16px}
+  .lib-gallery .pcard-cover{border-width:6px}
+  .surf-paper{background-image:repeating-linear-gradient(180deg,transparent 0 27px,rgba(70,110,170,.13) 27px 28px)}
+}
+/* Touch: statt fünf Knöpfen ein „Mehr“-Knopf auf dem Cover (öffnet das Menü) */
+.pcard-more{display:none}
+html.touch .pcard-actions{display:none}
+html.touch .pcard-more{display:flex;position:absolute;top:8px;right:8px;z-index:8;width:40px;height:40px;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(14,14,16,.72);color:#f3eee4;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+html.touch .lib-posters .pcard-more{top:18px}
+html.touch .lib-books .pcard-more{top:14%;right:12%}
+html.touch .lib-gallery .pcard-more{top:12%;right:12%}
+html.touch .dept button{min-width:40px;min-height:34px}
+html.touch .menu{min-width:220px}
 
 </style>
 </head>
@@ -1541,6 +1688,23 @@ const T = {
   "set.factoryText":["Alle Projekte, Versionen, Bilder und Einstellungen auf diesem Gerät werden gelöscht. Exportiere vorher ein Backup, wenn du etwas behalten willst.", "All projects, versions, images and settings on this device will be deleted. Export a backup first if you want to keep anything.", "Tous les projets, versions, images et réglages de cet appareil seront supprimés. Exportez d’abord une sauvegarde.", "Se borrarán todos los proyectos, versiones, imágenes y ajustes de este dispositivo. Exporta antes una copia de seguridad.", "Verranno eliminati tutti i progetti, versioni, immagini e impostazioni di questo dispositivo. Esporta prima un backup.", "Todos os projetos, versões, imagens e ajustes deste dispositivo serão excluídos. Exporte um backup antes."],
   "fs.enter":["Vollbild", "Fullscreen", "Plein écran", "Pantalla completa", "Schermo intero", "Tela cheia"],
   "fs.exit":["Vollbild beenden", "Exit fullscreen", "Quitter le plein écran", "Salir de pantalla completa", "Esci da schermo intero", "Sair da tela cheia"],
+  "act.more":["Weitere Aktionen", "More actions", "Plus d’actions", "Más acciones", "Altre azioni", "Mais ações"],
+  "ds.design":["Design", "Design", "Style", "Diseño", "Stile", "Design"],
+  "ds.lib":["Darstellung der Bibliothek", "Library style", "Style de la bibliothèque", "Estilo de la biblioteca", "Stile della libreria", "Estilo da biblioteca"],
+  "ds.lib.studio":["Studio", "Studio", "Studio", "Estudio", "Studio", "Estúdio"],
+  "ds.lib.dvd":["DVD-Regal", "DVD shelf", "Étagère DVD", "Estante de DVD", "Scaffale DVD", "Estante de DVD"],
+  "ds.lib.posters":["Poster-Wand", "Poster wall", "Mur d’affiches", "Pared de pósters", "Parete di poster", "Parede de pôsteres"],
+  "ds.lib.books":["Lederbücher", "Leather books", "Livres reliés", "Libros de cuero", "Libri in pelle", "Livros de couro"],
+  "ds.lib.gallery":["Galerie", "Gallery", "Galerie", "Galería", "Galleria", "Galeria"],
+  "ds.libNote":["Nur die Optik ändert sich – Fortschritt, Fristen und Aktionen bleiben gleich.", "Only the look changes – progress, deadlines and actions stay the same.", "Seul l’aspect change – progression, échéances et actions restent identiques.", "Solo cambia el aspecto: progreso, plazos y acciones siguen igual.", "Cambia solo l’aspetto: avanzamento, scadenze e azioni restano uguali.", "Só a aparência muda – progresso, prazos e ações continuam iguais."],
+  "ds.surfPipe":["Design der Pipeline", "Pipeline design", "Style du pipeline", "Diseño del pipeline", "Stile della pipeline", "Design do pipeline"],
+  "ds.surfShots":["Design der Shotlist", "Shot list design", "Style des plans", "Diseño de los planos", "Stile delle inquadrature", "Design dos planos"],
+  "ds.surf.studio":["Studio", "Studio", "Studio", "Estudio", "Studio", "Estúdio"],
+  "ds.surf.paper":["Notizbuch", "Notebook", "Carnet", "Cuaderno", "Quaderno", "Caderno"],
+  "ds.surf.blueprint":["Blaupause", "Blueprint", "Plan bleu", "Plano azul", "Cianografia", "Planta azul"],
+  "ds.surf.kraft":["Produktionsmappe", "Production folder", "Dossier de production", "Carpeta de producción", "Cartella di produzione", "Pasta de produção"],
+  "ds.surf.film":["Kino", "Cinema", "Cinéma", "Cine", "Cinema", "Cinema"],
+  "ds.surfNote":["Gilt für dieses Projekt. Alle Funktionen bleiben unverändert.", "Applies to this project. All features stay the same.", "S’applique à ce projet. Toutes les fonctions restent identiques.", "Se aplica a este proyecto. Todas las funciones siguen igual.", "Vale per questo progetto. Tutte le funzioni restano uguali.", "Vale para este projeto. Todas as funções continuam iguais."],
   "ds.board":["Design dieses Denkbretts", "Design of this board", "Style de ce tableau", "Diseño de este tablero", "Stile di questa lavagna", "Design deste quadro"],
   "ds.story":["Papier & Schrift", "Paper & type", "Papier & police", "Papel y tipografía", "Carta e carattere", "Papel e fonte"],
   "ds.presets":["Stile", "Styles", "Styles", "Estilos", "Stili", "Estilos"],
@@ -2197,7 +2361,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.3.1';
+const APP_VERSION = '2.4.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -2223,6 +2387,9 @@ const BOARD_BGS = ['dots','grid','plain','cork','blueprint','paper','chalk'];
 const NODE_STYLES = ['studio','sticky','index','blueprint','chalk','glass'];
 const BOARD_PRESETS = {studio:['dots','studio'], pinboard:['cork','sticky'], sketch:['paper','index'], blueprint:['blueprint','blueprint'], chalk:['chalk','chalk'], glass:['plain','glass']};
 const STORY_PAPERS = ['parchment','clean','manuscript','typewriter','night'];
+/* Projektbibliothek: Darstellung der Projekte (global) · Pipeline/Shotlist: Oberfläche (pro Projekt) */
+const LIB_STYLES = ['studio','dvd','posters','books','gallery'];
+const SURF_STYLES = ['studio','paper','blueprint','kraft','film'];
 const DOCK_TARGETS = new Set(['card','mindmap']);
 
 const $ = id => document.getElementById(id);
@@ -2839,6 +3006,8 @@ function normalizeProject(p, A){
   const proj = {
     id:sid(p.id,'proj'), theme:THEMES.includes(p.theme) ? p.theme : 'fantasy', fps:[24,25,30,48,60].includes(+p.fps) ? +p.fps : 24,
     storyStyle:STORY_PAPERS.includes(p.storyStyle) ? p.storyStyle : 'parchment',
+    pipeStyle:SURF_STYLES.includes(p.pipeStyle) ? p.pipeStyle : 'studio',
+    shotStyle:SURF_STYLES.includes(p.shotStyle) ? p.shotStyle : 'studio',
     createdAt:num(p.createdAt, Date.now()), updatedAt:num(p.updatedAt, Date.now()),
     cover:normalizeCover(p.cover, A),
     phases:arr(p.phases).map(ph=>({
@@ -2864,6 +3033,7 @@ function normalizeSettings(s){
     mode:s.mode==='light' ? 'light' : 'dark',
     cardSize:num(s.cardSize,240,160,380), titleScale:num(s.titleScale,1,.6,1.6),
     hubSort:['recent','name','progress','deadline'].includes(s.hubSort) ? s.hubSort : 'recent',
+    hubStyle:LIB_STYLES.includes(s.hubStyle) ? s.hubStyle : 'studio',
     taskFilter:['all','open','overdue','critical'].includes(s.taskFilter) ? s.taskFilter : 'all',
     sortByDate:!!s.sortByDate, pipeView:s.pipeView==='kanban' ? 'kanban' : 'list',
     leftDrag:s.leftDrag==='pan' ? 'pan' : 'select', snap:s.snap!==false, grid:s.grid!==false, sysIcons:s.sysIcons!==false,
@@ -3752,9 +3922,11 @@ function renderProjects(){
     const active = p.id===S.activeProjectId;
     return `<article class="pcard ${active?'active':''}" data-pid="${p.id}">
       <div class="pcard-cover" tabindex="0" data-open="${p.id}" title="${esc(t('act.open'))}">
+        <i class="lib-deco lib-a" aria-hidden="true"></i><i class="lib-deco lib-b" aria-hidden="true"></i>
         ${coverHTML(p.cover)}
         <div class="pcard-progress"><div style="width:${s.pct}%"></div></div>
         ${active ? `<span class="pcard-active">${t('hub.active')}</span>` : ''}
+        <button class="pcard-more" data-pa="more" aria-label="${esc(t('act.more'))}">${ic('dots',18)}</button>
         <div class="pcard-actions">
           <button data-pa="design" title="${esc(t('act.design'))}">${ic('sliders',15)}</button>
           <button data-pa="image" title="${esc(t('act.uploadCover'))}">${ic('image',15)}</button>
@@ -3770,6 +3942,7 @@ function renderProjects(){
     </article>`;
   }).join('');
   const v = $('view-projects');
+  v.className = v.className.replace(/\blib-\w+/g,'').trim(); v.classList.add('lib-' + st.hubStyle);
   v.innerHTML = `<div class="page wide">
     <div class="page-head">
       <div><div class="eyebrow">${t('hub.eyebrow')}</div><h1 class="page-title">${t('mod.projects')}</h1><p class="page-sub">${t('hub.sub',{n:S.projects.length})}</p></div>
@@ -3778,6 +3951,7 @@ function renderProjects(){
         <label class="mini-range" title="${esc(t('hub.sort'))}">${ic('sort',14)}<select class="sel" id="hubSort">${['recent','name','progress','deadline'].map(k=>`<option value="${k}" ${st.hubSort===k?'selected':''}>${t('sort.'+k)}</option>`).join('')}</select></label>
         <label class="mini-range" title="${esc(t('hub.cover'))}">${ic('grid',14)}<span class="hide-sm">${t('hub.cover')}</span><input type="range" min="160" max="380" step="1" value="${st.cardSize}" data-hub="cardSize"></label>
         <label class="mini-range" title="${esc(t('hub.titleSize'))}">${ic('type',14)}<span class="hide-sm">${t('hub.titleSize')}</span><input type="range" min="0.6" max="1.6" step="0.01" value="${st.titleScale}" data-hub="titleScale"></label>
+        <button class="btn" id="hubDesign" title="${esc(t('ds.lib'))}">${ic('palette',15)}<span class="hide-sm">${t('ds.design')}</span></button>
         <button class="btn btn-primary" id="hubNew">${ic('plus',15)}<span>${t('np.title')}</span></button>
       </div>
     </div>
@@ -3786,6 +3960,7 @@ function renderProjects(){
       <div class="pcard"><div class="pcard-new" id="hubNewCard" tabindex="0"><div class="plus">${ic('plus',22)}</div>
         <div style="font-family:var(--display);font-weight:700;font-size:14px">${t('np.title')}</div><div class="note">${t('hub.newDesc')}</div></div></div>
     </div></div>`;
+  $('hubDesign').onclick = e => openDesignPop(e.currentTarget, 'hub');
   $('hubNew').onclick = newProjectDialog; $('hubNewCard').onclick = newProjectDialog;
   $('hubNewCard').onkeydown = e => { if(e.key==='Enter') newProjectDialog(); };
   $('hubSearch').oninput = e => { ui.hubQuery = e.target.value; const pos = e.target.selectionStart; renderProjects(); const s = $('hubSearch'); s.focus(); s.setSelectionRange(pos,pos); };
@@ -3809,14 +3984,18 @@ function renderProjects(){
   grid.onpointerleave = () => grid.querySelectorAll('.pcard-cover.tilting').forEach(x=>{ x.classList.remove('tilting'); x.style.removeProperty('--rx'); x.style.removeProperty('--ry'); });
   grid.onclick = e => {
     const a = e.target.closest('[data-pa]'), card = e.target.closest('[data-pid]');
+    if(a && card && a.dataset.pa==='more'){ e.stopPropagation(); const r = a.getBoundingClientRect(); hubMenu(card.dataset.pid, r.left, r.bottom + 4); return; }
     if(a && card){ e.stopPropagation(); projectAction(card.dataset.pid, a.dataset.pa); return; }
     const o = e.target.closest('[data-open]'); if(o) openProject(o.dataset.open);
   };
   grid.onkeydown = e => { const o = e.target.closest('[data-open]'); if(o && e.key==='Enter') openProject(o.dataset.open); };
   grid.oncontextmenu = e => {
     const card = e.target.closest('[data-pid]'); if(!card) return;
-    e.preventDefault(); const id = card.dataset.pid;
-    openMenu(e.clientX, e.clientY, [
+    e.preventDefault(); hubMenu(card.dataset.pid, e.clientX, e.clientY);
+  };
+}
+function hubMenu(id, x, y){
+    openMenu(x, y, [
       {label:t('act.open'), icon:'chevronR', run:()=>openProject(id)},
       {label:t('act.design'), icon:'sliders', run:()=>openDesigner(id)},
       {label:t('act.uploadCover'), icon:'image', run:()=>projectAction(id,'image')},
@@ -3826,7 +4005,6 @@ function renderProjects(){
       {sep:1},
       {label:t('act.delete'), icon:'trash', danger:true, run:()=>projectAction(id,'delete')}
     ], projectName(S.projects.find(p=>p.id===id)));
-  };
 }
 async function projectAction(id, act){
   const p = S.projects.find(x=>x.id===id); if(!p) return;
@@ -4227,6 +4405,7 @@ function renderPipeline(){
         <div class="seg">${filters.map(k=>`<button data-filter="${k}" class="${st.taskFilter===k?'active':''}">${t('flt.'+k)}</button>`).join('')}</div>
         <button class="btn" id="plSort">${ic('sort',14)}<span>${st.sortByDate ? t('pl.sortDate') : t('pl.sortManual')}</span></button>
         <button class="btn" id="plTpl">${ic('layers',14)}<span class="hide-sm">${t('tpl.insert')}</span></button>
+        <button class="btn" id="plDesign" title="${esc(t('ds.surfPipe'))}">${ic('palette',14)}<span class="hide-sm">${t('ds.design')}</span></button>
         <button class="btn btn-primary" id="plAdd">${ic('plus',14)}<span>${t('pl.addPhase')}</span></button>
       </div>
     </div>
@@ -4281,6 +4460,7 @@ function templateMenu(btn){
 }
 function bindPipeline(v){
   const st = S.settings;
+  applySurf(v, activeProject().pipeStyle); $('plDesign').onclick = e => openDesignPop(e.currentTarget, 'pipeline');
   v.querySelectorAll('[data-view]').forEach(b=>b.onclick = () => { st.pipeView = b.dataset.view; persistSoon(); renderPipeline(); });
   v.querySelectorAll('[data-filter]').forEach(b=>b.onclick = () => { st.taskFilter = b.dataset.filter; persistSoon(); renderPipeline(); });
   $('plSort').onclick = () => { st.sortByDate = !st.sortByDate; persistSoon(); renderPipeline(); };
@@ -5418,6 +5598,17 @@ function applyStoryStyle(){
   root.className = root.className.replace(/\bpaper-\w+/g, '').trim();
   root.classList.add('paper-' + (activeProject().storyStyle || 'parchment'));
 }
+function applySurf(v, k){
+  if(!v) return;
+  v.className = v.className.replace(/\bsurf-\w+/g, '').trim();
+  v.classList.add('surf-' + (k || 'studio'));
+}
+function styleAnim(el){ if(!el) return; el.classList.add('style-anim'); clearTimeout(el._sa); el._sa = setTimeout(()=>el.classList.remove('style-anim'), 520); }
+function setHubStyle(k){ S.settings.hubStyle = k; const v = $('view-projects'); styleAnim(v); v.className = v.className.replace(/\blib-\w+/g,'').trim(); v.classList.add('lib-' + k); persistSoon(); refreshDesignPop(); }
+function setSurfStyle(area, k){
+  const p = activeProject(); p[area==='pipeline' ? 'pipeStyle' : 'shotStyle'] = k;
+  const v = $(area==='pipeline' ? 'view-pipeline' : 'view-shots'); styleAnim(v); applySurf(v, k); changed(); refreshDesignPop();
+}
 function setStoryStyle(v){ activeProject().storyStyle = v; applyStoryStyle(); changed(); refreshDesignPop(); }
 
 let designPop = null;
@@ -5439,6 +5630,8 @@ function openDesignPop(btn, area){
     const bgb = e.target.closest('[data-bg]'); if(bgb){ setBoardStyle({bg:bgb.dataset.bg}); return; }
     const nb = e.target.closest('[data-ns]'); if(nb){ setBoardStyle({node:nb.dataset.ns}); return; }
     const pp = e.target.closest('[data-paper]'); if(pp){ setStoryStyle(pp.dataset.paper); return; }
+    const lb = e.target.closest('[data-lib]'); if(lb){ setHubStyle(lb.dataset.lib); return; }
+    const sf = e.target.closest('[data-surf]'); if(sf){ setSurfStyle(designPop.area, sf.dataset.surf); return; }
   });
 }
 function refreshDesignPop(){
@@ -5454,6 +5647,16 @@ function refreshDesignPop(){
       <div class="dp-label">${t('ds.nodes')}</div>
       <div class="dp-chips">${NODE_STYLES.map(k=>`<button class="dp-chip ${st.node===k?'on':''}" data-ns="${k}"><span class="chip-sw ns-${k}"></span>${t('ds.ns.'+k)}</button>`).join('')}</div>
       <div class="dp-note">${t('ds.boardNote')}</div>`;
+  }else if(designPop.area==='hub'){
+    const cur = S.settings.hubStyle;
+    el.innerHTML = `<div class="dp-head">${ic('palette',14)}<span>${t('ds.lib')}</span></div>
+      <div class="dp-presets libs">${LIB_STYLES.map(k=>`<button class="dp-preset ${cur===k?'on':''}" data-lib="${k}"><span class="lib-prev lp-${k}"><i></i><i></i><i></i></span><em>${t('ds.lib.'+k)}</em></button>`).join('')}</div>
+      <div class="dp-note">${t('ds.libNote')}</div>`;
+  }else if(designPop.area==='pipeline' || designPop.area==='shots'){
+    const p = activeProject(), cur = designPop.area==='pipeline' ? p.pipeStyle : p.shotStyle;
+    el.innerHTML = `<div class="dp-head">${ic('palette',14)}<span>${t(designPop.area==='pipeline' ? 'ds.surfPipe' : 'ds.surfShots')}</span></div>
+      <div class="dp-presets papers">${SURF_STYLES.map(k=>`<button class="dp-preset ${cur===k?'on':''}" data-surf="${k}"><span class="surf-prev surf-${k}"><b></b><i></i><i></i></span><em>${t('ds.surf.'+k)}</em></button>`).join('')}</div>
+      <div class="dp-note">${t('ds.surfNote')}</div>`;
   }else{
     const cur = activeProject().storyStyle;
     el.innerHTML = `<div class="dp-head">${ic('palette',14)}<span>${t('ds.story')}</span></div>
@@ -5461,6 +5664,19 @@ function refreshDesignPop(){
   }
 }
 document.addEventListener('keydown', e=>{ if(designPop && e.key==='Escape'){ e.stopImmediatePropagation(); e.preventDefault(); closeDesignPop(); } }, true);
+
+
+/* ============================================================================
+   TOUCH: Tablets und Smartphones erkennen → größere Bedienelemente (html.touch)
+   ============================================================================ */
+(function touchMode(){
+  const mq = matchMedia('(pointer: coarse)');
+  const set = () => document.documentElement.classList.toggle('touch', mq.matches || (navigator.maxTouchPoints > 0 && matchMedia('(hover: none)').matches));
+  set();
+  if(mq.addEventListener) mq.addEventListener('change', set);
+  // Erster Finger-Tipp auf einem Gerät mit Maus + Touchscreen schaltet ebenfalls um
+  window.addEventListener('pointerdown', e => { if(e.pointerType==='touch') document.documentElement.classList.add('touch'); else if(e.pointerType==='mouse' && !mq.matches) document.documentElement.classList.remove('touch'); }, true);
+})();
 
 /* ============================================================================
    GEFÜHRTE TOUR — erscheint beim ersten Start, jederzeit überspringbar (Esc),
@@ -5831,6 +6047,7 @@ function renderShots(){
       <div><div class="eyebrow">${t('sh.eyebrow')}</div><h1 class="page-title">${esc(projectName(p))}</h1><p class="page-sub">${t('sh.sub')}</p></div>
       <div class="head-actions">
         <label class="mini-range">${ic('film',14)}<span>${t('sh.fps')}</span><select class="sel" id="shFps">${[24,25,30,48,60].map(f=>`<option value="${f}" ${f===fps?'selected':''}>${f} fps</option>`).join('')}</select></label>
+        <button class="btn" id="shDesign" title="${esc(t('ds.surfShots'))}">${ic('palette',14)}<span class="hide-sm">${t('ds.design')}</span></button>
         <button class="btn btn-primary" id="shAdd" title="Shift+A">${ic('plus',14)}<span>${t('sh.add')}</span></button>
       </div>
     </div>
@@ -5844,6 +6061,7 @@ function renderShots(){
   </div>`;
   v.scrollTop = scroll;
   $('shFps').onchange = e => { p.fps = +e.target.value; changed(); renderShots(); };
+  applySurf(v, activeProject().shotStyle); $('shDesign').onclick = e => openDesignPop(e.currentTarget, 'shots');
   $('shAdd').onclick = addShot;
   v.onpointerdown = e => { const g = e.target.closest('[data-sgrip]'); if(g && e.button===0){ e.preventDefault(); shotDrag(e, g.closest('tr')); } };
   v.onkeydown = e => {   // Alt+↑/↓ verschiebt den Shot, in dem gerade getippt wird
@@ -6027,7 +6245,7 @@ function renderGuide(){
    START
    ============================================================================ */
 async function init(){
-  if(innerWidth < 900) ui.sideHidden = true;
+  if(innerWidth < 600) ui.sideHidden = true;
   initBoard();
   db = await idbOpen();
   let raw = null, assets = {};

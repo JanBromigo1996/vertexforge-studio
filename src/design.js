@@ -19,6 +19,17 @@ function applyStoryStyle(){
   root.className = root.className.replace(/\bpaper-\w+/g, '').trim();
   root.classList.add('paper-' + (activeProject().storyStyle || 'parchment'));
 }
+function applySurf(v, k){
+  if(!v) return;
+  v.className = v.className.replace(/\bsurf-\w+/g, '').trim();
+  v.classList.add('surf-' + (k || 'studio'));
+}
+function styleAnim(el){ if(!el) return; el.classList.add('style-anim'); clearTimeout(el._sa); el._sa = setTimeout(()=>el.classList.remove('style-anim'), 520); }
+function setHubStyle(k){ S.settings.hubStyle = k; const v = $('view-projects'); styleAnim(v); v.className = v.className.replace(/\blib-\w+/g,'').trim(); v.classList.add('lib-' + k); persistSoon(); refreshDesignPop(); }
+function setSurfStyle(area, k){
+  const p = activeProject(); p[area==='pipeline' ? 'pipeStyle' : 'shotStyle'] = k;
+  const v = $(area==='pipeline' ? 'view-pipeline' : 'view-shots'); styleAnim(v); applySurf(v, k); changed(); refreshDesignPop();
+}
 function setStoryStyle(v){ activeProject().storyStyle = v; applyStoryStyle(); changed(); refreshDesignPop(); }
 
 let designPop = null;
@@ -40,6 +51,8 @@ function openDesignPop(btn, area){
     const bgb = e.target.closest('[data-bg]'); if(bgb){ setBoardStyle({bg:bgb.dataset.bg}); return; }
     const nb = e.target.closest('[data-ns]'); if(nb){ setBoardStyle({node:nb.dataset.ns}); return; }
     const pp = e.target.closest('[data-paper]'); if(pp){ setStoryStyle(pp.dataset.paper); return; }
+    const lb = e.target.closest('[data-lib]'); if(lb){ setHubStyle(lb.dataset.lib); return; }
+    const sf = e.target.closest('[data-surf]'); if(sf){ setSurfStyle(designPop.area, sf.dataset.surf); return; }
   });
 }
 function refreshDesignPop(){
@@ -55,6 +68,16 @@ function refreshDesignPop(){
       <div class="dp-label">${t('ds.nodes')}</div>
       <div class="dp-chips">${NODE_STYLES.map(k=>`<button class="dp-chip ${st.node===k?'on':''}" data-ns="${k}"><span class="chip-sw ns-${k}"></span>${t('ds.ns.'+k)}</button>`).join('')}</div>
       <div class="dp-note">${t('ds.boardNote')}</div>`;
+  }else if(designPop.area==='hub'){
+    const cur = S.settings.hubStyle;
+    el.innerHTML = `<div class="dp-head">${ic('palette',14)}<span>${t('ds.lib')}</span></div>
+      <div class="dp-presets libs">${LIB_STYLES.map(k=>`<button class="dp-preset ${cur===k?'on':''}" data-lib="${k}"><span class="lib-prev lp-${k}"><i></i><i></i><i></i></span><em>${t('ds.lib.'+k)}</em></button>`).join('')}</div>
+      <div class="dp-note">${t('ds.libNote')}</div>`;
+  }else if(designPop.area==='pipeline' || designPop.area==='shots'){
+    const p = activeProject(), cur = designPop.area==='pipeline' ? p.pipeStyle : p.shotStyle;
+    el.innerHTML = `<div class="dp-head">${ic('palette',14)}<span>${t(designPop.area==='pipeline' ? 'ds.surfPipe' : 'ds.surfShots')}</span></div>
+      <div class="dp-presets papers">${SURF_STYLES.map(k=>`<button class="dp-preset ${cur===k?'on':''}" data-surf="${k}"><span class="surf-prev surf-${k}"><b></b><i></i><i></i></span><em>${t('ds.surf.'+k)}</em></button>`).join('')}</div>
+      <div class="dp-note">${t('ds.surfNote')}</div>`;
   }else{
     const cur = activeProject().storyStyle;
     el.innerHTML = `<div class="dp-head">${ic('palette',14)}<span>${t('ds.story')}</span></div>
@@ -62,3 +85,16 @@ function refreshDesignPop(){
   }
 }
 document.addEventListener('keydown', e=>{ if(designPop && e.key==='Escape'){ e.stopImmediatePropagation(); e.preventDefault(); closeDesignPop(); } }, true);
+
+
+/* ============================================================================
+   TOUCH: Tablets und Smartphones erkennen → größere Bedienelemente (html.touch)
+   ============================================================================ */
+(function touchMode(){
+  const mq = matchMedia('(pointer: coarse)');
+  const set = () => document.documentElement.classList.toggle('touch', mq.matches || (navigator.maxTouchPoints > 0 && matchMedia('(hover: none)').matches));
+  set();
+  if(mq.addEventListener) mq.addEventListener('change', set);
+  // Erster Finger-Tipp auf einem Gerät mit Maus + Touchscreen schaltet ebenfalls um
+  window.addEventListener('pointerdown', e => { if(e.pointerType==='touch') document.documentElement.classList.add('touch'); else if(e.pointerType==='mouse' && !mq.matches) document.documentElement.classList.remove('touch'); }, true);
+})();

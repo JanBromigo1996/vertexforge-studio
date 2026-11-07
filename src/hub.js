@@ -36,9 +36,11 @@ function renderProjects(){
     const active = p.id===S.activeProjectId;
     return `<article class="pcard ${active?'active':''}" data-pid="${p.id}">
       <div class="pcard-cover" tabindex="0" data-open="${p.id}" title="${esc(t('act.open'))}">
+        <i class="lib-deco lib-a" aria-hidden="true"></i><i class="lib-deco lib-b" aria-hidden="true"></i>
         ${coverHTML(p.cover)}
         <div class="pcard-progress"><div style="width:${s.pct}%"></div></div>
         ${active ? `<span class="pcard-active">${t('hub.active')}</span>` : ''}
+        <button class="pcard-more" data-pa="more" aria-label="${esc(t('act.more'))}">${ic('dots',18)}</button>
         <div class="pcard-actions">
           <button data-pa="design" title="${esc(t('act.design'))}">${ic('sliders',15)}</button>
           <button data-pa="image" title="${esc(t('act.uploadCover'))}">${ic('image',15)}</button>
@@ -54,6 +56,7 @@ function renderProjects(){
     </article>`;
   }).join('');
   const v = $('view-projects');
+  v.className = v.className.replace(/\blib-\w+/g,'').trim(); v.classList.add('lib-' + st.hubStyle);
   v.innerHTML = `<div class="page wide">
     <div class="page-head">
       <div><div class="eyebrow">${t('hub.eyebrow')}</div><h1 class="page-title">${t('mod.projects')}</h1><p class="page-sub">${t('hub.sub',{n:S.projects.length})}</p></div>
@@ -62,6 +65,7 @@ function renderProjects(){
         <label class="mini-range" title="${esc(t('hub.sort'))}">${ic('sort',14)}<select class="sel" id="hubSort">${['recent','name','progress','deadline'].map(k=>`<option value="${k}" ${st.hubSort===k?'selected':''}>${t('sort.'+k)}</option>`).join('')}</select></label>
         <label class="mini-range" title="${esc(t('hub.cover'))}">${ic('grid',14)}<span class="hide-sm">${t('hub.cover')}</span><input type="range" min="160" max="380" step="1" value="${st.cardSize}" data-hub="cardSize"></label>
         <label class="mini-range" title="${esc(t('hub.titleSize'))}">${ic('type',14)}<span class="hide-sm">${t('hub.titleSize')}</span><input type="range" min="0.6" max="1.6" step="0.01" value="${st.titleScale}" data-hub="titleScale"></label>
+        <button class="btn" id="hubDesign" title="${esc(t('ds.lib'))}">${ic('palette',15)}<span class="hide-sm">${t('ds.design')}</span></button>
         <button class="btn btn-primary" id="hubNew">${ic('plus',15)}<span>${t('np.title')}</span></button>
       </div>
     </div>
@@ -70,6 +74,7 @@ function renderProjects(){
       <div class="pcard"><div class="pcard-new" id="hubNewCard" tabindex="0"><div class="plus">${ic('plus',22)}</div>
         <div style="font-family:var(--display);font-weight:700;font-size:14px">${t('np.title')}</div><div class="note">${t('hub.newDesc')}</div></div></div>
     </div></div>`;
+  $('hubDesign').onclick = e => openDesignPop(e.currentTarget, 'hub');
   $('hubNew').onclick = newProjectDialog; $('hubNewCard').onclick = newProjectDialog;
   $('hubNewCard').onkeydown = e => { if(e.key==='Enter') newProjectDialog(); };
   $('hubSearch').oninput = e => { ui.hubQuery = e.target.value; const pos = e.target.selectionStart; renderProjects(); const s = $('hubSearch'); s.focus(); s.setSelectionRange(pos,pos); };
@@ -93,14 +98,18 @@ function renderProjects(){
   grid.onpointerleave = () => grid.querySelectorAll('.pcard-cover.tilting').forEach(x=>{ x.classList.remove('tilting'); x.style.removeProperty('--rx'); x.style.removeProperty('--ry'); });
   grid.onclick = e => {
     const a = e.target.closest('[data-pa]'), card = e.target.closest('[data-pid]');
+    if(a && card && a.dataset.pa==='more'){ e.stopPropagation(); const r = a.getBoundingClientRect(); hubMenu(card.dataset.pid, r.left, r.bottom + 4); return; }
     if(a && card){ e.stopPropagation(); projectAction(card.dataset.pid, a.dataset.pa); return; }
     const o = e.target.closest('[data-open]'); if(o) openProject(o.dataset.open);
   };
   grid.onkeydown = e => { const o = e.target.closest('[data-open]'); if(o && e.key==='Enter') openProject(o.dataset.open); };
   grid.oncontextmenu = e => {
     const card = e.target.closest('[data-pid]'); if(!card) return;
-    e.preventDefault(); const id = card.dataset.pid;
-    openMenu(e.clientX, e.clientY, [
+    e.preventDefault(); hubMenu(card.dataset.pid, e.clientX, e.clientY);
+  };
+}
+function hubMenu(id, x, y){
+    openMenu(x, y, [
       {label:t('act.open'), icon:'chevronR', run:()=>openProject(id)},
       {label:t('act.design'), icon:'sliders', run:()=>openDesigner(id)},
       {label:t('act.uploadCover'), icon:'image', run:()=>projectAction(id,'image')},
@@ -110,7 +119,6 @@ function renderProjects(){
       {sep:1},
       {label:t('act.delete'), icon:'trash', danger:true, run:()=>projectAction(id,'delete')}
     ], projectName(S.projects.find(p=>p.id===id)));
-  };
 }
 async function projectAction(id, act){
   const p = S.projects.find(x=>x.id===id); if(!p) return;

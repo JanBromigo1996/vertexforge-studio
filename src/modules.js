@@ -22,6 +22,7 @@ function renderShots(){
       <div><div class="eyebrow">${t('sh.eyebrow')}</div><h1 class="page-title">${esc(projectName(p))}</h1><p class="page-sub">${t('sh.sub')}</p></div>
       <div class="head-actions">
         <label class="mini-range">${ic('film',14)}<span>${t('sh.fps')}</span><select class="sel" id="shFps">${[24,25,30,48,60].map(f=>`<option value="${f}" ${f===fps?'selected':''}>${f} fps</option>`).join('')}</select></label>
+        <button class="btn" id="shDesign" title="${esc(t('ds.surfShots'))}">${ic('palette',14)}<span class="hide-sm">${t('ds.design')}</span></button>
         <button class="btn btn-primary" id="shAdd" title="Shift+A">${ic('plus',14)}<span>${t('sh.add')}</span></button>
       </div>
     </div>
@@ -35,6 +36,7 @@ function renderShots(){
   </div>`;
   v.scrollTop = scroll;
   $('shFps').onchange = e => { p.fps = +e.target.value; changed(); renderShots(); };
+  applySurf(v, activeProject().shotStyle); $('shDesign').onclick = e => openDesignPop(e.currentTarget, 'shots');
   $('shAdd').onclick = addShot;
   v.onpointerdown = e => { const g = e.target.closest('[data-sgrip]'); if(g && e.button===0){ e.preventDefault(); shotDrag(e, g.closest('tr')); } };
   v.onkeydown = e => {   // Alt+↑/↓ verschiebt den Shot, in dem gerade getippt wird
@@ -218,7 +220,7 @@ function renderGuide(){
    START
    ============================================================================ */
 async function init(){
-  if(innerWidth < 900) ui.sideHidden = true;
+  if(innerWidth < 600) ui.sideHidden = true;
   initBoard();
   db = await idbOpen();
   let raw = null, assets = {};

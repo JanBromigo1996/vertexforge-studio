@@ -3,7 +3,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.3.1';
+const APP_VERSION = '2.4.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -29,6 +29,9 @@ const BOARD_BGS = ['dots','grid','plain','cork','blueprint','paper','chalk'];
 const NODE_STYLES = ['studio','sticky','index','blueprint','chalk','glass'];
 const BOARD_PRESETS = {studio:['dots','studio'], pinboard:['cork','sticky'], sketch:['paper','index'], blueprint:['blueprint','blueprint'], chalk:['chalk','chalk'], glass:['plain','glass']};
 const STORY_PAPERS = ['parchment','clean','manuscript','typewriter','night'];
+/* Projektbibliothek: Darstellung der Projekte (global) · Pipeline/Shotlist: Oberfläche (pro Projekt) */
+const LIB_STYLES = ['studio','dvd','posters','books','gallery'];
+const SURF_STYLES = ['studio','paper','blueprint','kraft','film'];
 const DOCK_TARGETS = new Set(['card','mindmap']);
 
 const $ = id => document.getElementById(id);
@@ -645,6 +648,8 @@ function normalizeProject(p, A){
   const proj = {
     id:sid(p.id,'proj'), theme:THEMES.includes(p.theme) ? p.theme : 'fantasy', fps:[24,25,30,48,60].includes(+p.fps) ? +p.fps : 24,
     storyStyle:STORY_PAPERS.includes(p.storyStyle) ? p.storyStyle : 'parchment',
+    pipeStyle:SURF_STYLES.includes(p.pipeStyle) ? p.pipeStyle : 'studio',
+    shotStyle:SURF_STYLES.includes(p.shotStyle) ? p.shotStyle : 'studio',
     createdAt:num(p.createdAt, Date.now()), updatedAt:num(p.updatedAt, Date.now()),
     cover:normalizeCover(p.cover, A),
     phases:arr(p.phases).map(ph=>({
@@ -670,6 +675,7 @@ function normalizeSettings(s){
     mode:s.mode==='light' ? 'light' : 'dark',
     cardSize:num(s.cardSize,240,160,380), titleScale:num(s.titleScale,1,.6,1.6),
     hubSort:['recent','name','progress','deadline'].includes(s.hubSort) ? s.hubSort : 'recent',
+    hubStyle:LIB_STYLES.includes(s.hubStyle) ? s.hubStyle : 'studio',
     taskFilter:['all','open','overdue','critical'].includes(s.taskFilter) ? s.taskFilter : 'all',
     sortByDate:!!s.sortByDate, pipeView:s.pipeView==='kanban' ? 'kanban' : 'list',
     leftDrag:s.leftDrag==='pan' ? 'pan' : 'select', snap:s.snap!==false, grid:s.grid!==false, sysIcons:s.sysIcons!==false,

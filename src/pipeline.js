@@ -198,6 +198,7 @@ function renderPipeline(){
         <div class="seg">${filters.map(k=>`<button data-filter="${k}" class="${st.taskFilter===k?'active':''}">${t('flt.'+k)}</button>`).join('')}</div>
         <button class="btn" id="plSort">${ic('sort',14)}<span>${st.sortByDate ? t('pl.sortDate') : t('pl.sortManual')}</span></button>
         <button class="btn" id="plTpl">${ic('layers',14)}<span class="hide-sm">${t('tpl.insert')}</span></button>
+        <button class="btn" id="plDesign" title="${esc(t('ds.surfPipe'))}">${ic('palette',14)}<span class="hide-sm">${t('ds.design')}</span></button>
         <button class="btn btn-primary" id="plAdd">${ic('plus',14)}<span>${t('pl.addPhase')}</span></button>
       </div>
     </div>
@@ -252,6 +253,7 @@ function templateMenu(btn){
 }
 function bindPipeline(v){
   const st = S.settings;
+  applySurf(v, activeProject().pipeStyle); $('plDesign').onclick = e => openDesignPop(e.currentTarget, 'pipeline');
   v.querySelectorAll('[data-view]').forEach(b=>b.onclick = () => { st.pipeView = b.dataset.view; persistSoon(); renderPipeline(); });
   v.querySelectorAll('[data-filter]').forEach(b=>b.onclick = () => { st.taskFilter = b.dataset.filter; persistSoon(); renderPipeline(); });
   $('plSort').onclick = () => { st.sortByDate = !st.sortByDate; persistSoon(); renderPipeline(); };

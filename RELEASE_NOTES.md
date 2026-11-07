@@ -1,3 +1,20 @@
+## VertexForge Studio 2.4.0
+
+### New: designs for every area – only the look changes, never the features
+- **Project library:** Studio, DVD shelf, poster wall (taped film posters), leather-bound books, gallery frames
+- **Pipeline & shot list:** Studio, notebook, blueprint, production folder, cinema – chosen per project
+- Mind board (6 presets / 42 combinations) and story papers as before
+
+### New: tablet & phone
+- Touchscreens are detected automatically: larger buttons, handles and menus, project actions behind one ⋯ tap,
+  two-finger zoom on the mind board, board tools stay visible on tablets
+
+Install over 2.3.x – projects, versions and settings are kept.
+
+**VirusTotal (2.4.0):** results for these exact files are linked on the website and will be added here.
+
+---
+
 ## VertexForge Studio 2.3.1
 
 **Bug fix:** after installing 2.3.0 the program did not start from the desktop/Start menu shortcut.

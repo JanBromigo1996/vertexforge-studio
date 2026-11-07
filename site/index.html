@@ -415,6 +415,32 @@ footer .small{color:var(--muted)}
 .safe p{color:var(--fg-2);font-size:.95rem;margin:8px 0 0}
 .safe a{color:var(--brass)}
 
+/* Design-Showcase: Bereichsanzeige, Hauptbild, durchlaufender Filmstreifen */
+.showcase{margin:0}
+.sc-areas{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;padding:0}
+.sc-areas li{font:600 .72rem var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);transition:color .35s,border-color .35s,background .35s}
+.sc-areas li.on{color:var(--fg);border-color:var(--brass);background:color-mix(in srgb,var(--brass) 14%,transparent)}
+.sc-strip{position:relative;overflow:hidden;margin-top:14px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.sc-track{display:flex;gap:10px;width:max-content;animation:scRun 70s linear infinite}
+.sc-strip:hover .sc-track{animation-play-state:paused}
+.sc-track img{width:136px;height:82px;border-radius:8px;object-fit:cover;opacity:.5;filter:saturate(.7);border:1px solid var(--line);transition:opacity .4s,filter .4s,transform .4s,border-color .4s}
+.sc-track img.on{opacity:1;filter:none;transform:translateY(-3px);border-color:var(--brass)}
+@keyframes scRun{to{transform:translateX(-50%)}}
+.touchsec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:40px;align-items:center;margin-top:64px;padding:34px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(150deg,color-mix(in srgb,var(--brass) 8%,var(--panel)),var(--panel) 65%)}
+.ts-text h3{font:600 1.7rem/1.15 var(--display);margin:6px 0 12px}
+.ts-text p{color:var(--fg-2)}
+.ts-list{list-style:none;padding:0;margin:16px 0 22px;display:flex;flex-direction:column;gap:8px}
+.ts-list li{padding-left:22px;position:relative;color:var(--fg-2)}
+.ts-list li::before{content:"";position:absolute;left:0;top:.5em;width:10px;height:10px;border-radius:50%;border:2px solid var(--brass)}
+.ts-devices{position:relative;height:380px}
+.dev{position:absolute;border-radius:22px;padding:9px;background:#0d0d0f;box-shadow:0 30px 60px -20px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08) inset}
+.dev img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:14px}
+.dev.tablet{width:270px;height:360px;left:8%;top:0;transform:rotate(-4deg);animation:devFloat 7s ease-in-out infinite}
+.dev.phone{width:150px;height:300px;right:10%;bottom:-6px;border-radius:26px;transform:rotate(5deg);animation:devFloat 6s ease-in-out -2s infinite}
+@keyframes devFloat{50%{translate:0 -10px}}
+@media (max-width:860px){.touchsec{grid-template-columns:1fr;padding:24px}.ts-devices{height:330px}.dev.tablet{width:220px;height:295px;left:2%}.dev.phone{width:126px;height:250px;right:4%}}
+@media (prefers-reduced-motion: reduce){.sc-track,.dev.tablet,.dev.phone{animation:none}}
+
 </style>
 
 
@@ -447,7 +473,7 @@ footer .small{color:var(--muted)}
       <div class="ctas rise" style="--d:3">
         <a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#download">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg>
-          <span><span data-en>Download for Windows</span><span data-de>Für Windows laden</span><small>Setup · 14 MB · v2.3.1</small></span>
+          <span><span data-en>Download for Windows</span><span data-de>Für Windows laden</span><small>Setup · 14 MB · v2.4.0</small></span>
         </a>
         <a class="btn" href="app/">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
@@ -509,22 +535,44 @@ footer .small{color:var(--muted)}
   <div class="wrap">
     <div class="head reveal">
       <div class="eyebrow"><span data-en>Make it yours</span><span data-de>Mach es zu deinem</span></div>
-      <h2><span data-en>Every project gets its own look</span><span data-de>Jedes Projekt bekommt seinen eigenen Look</span></h2>
-      <p class="lead"><span data-en>A cork pinboard for character ideas, a blueprint for hard surface, a typewriter page for your script. Each board, each story and each project cover has its own style: one click for a preset, or mix your own.</span><span data-de>Eine Kork-Pinnwand für Charakterideen, ein Blaupausen-Plan für Hard-Surface, eine Schreibmaschinenseite für dein Skript. Jedes Denkbrett, jede Story und jedes Projekt-Cover hat seinen eigenen Stil: ein Klick für eine Vorlage, oder du mischst deinen eigenen.</span></p>
+      <h2><span data-en>Every area, your style</span><span data-de>Jeder Bereich, dein Stil</span></h2>
+      <p class="lead"><span data-en>Put your projects on a DVD shelf, tape them to a wall as film posters, bind them in leather or hang them in a gallery. Plan the pipeline on a blueprint, write the story on a typewriter page. Only the look changes: every feature and every overview stays exactly where it is.</span><span data-de>Stell deine Projekte als DVDs ins Regal, kleb sie als Filmposter an die Wand, bind sie in Leder oder häng sie in eine Galerie. Plane die Pipeline auf einer Blaupause, schreib die Story auf einer Schreibmaschinenseite. Nur die Optik ändert sich: Jede Funktion und jede Übersicht bleibt genau da, wo sie ist.</span></p>
     </div>
-    <figure class="show reveal" aria-label="Design styles of VertexForge Studio">
+    <figure class="showcase reveal" aria-label="Design styles">
+      <ol class="sc-areas" aria-hidden="true">
+        <li data-area="library"><span data-en>Library</span><span data-de>Bibliothek</span></li>
+        <li data-area="pipeline">Pipeline</li>
+        <li data-area="board"><span data-en>Mind board</span><span data-de>Denkbrett</span></li>
+        <li data-area="shots"><span data-en>Shot list</span><span data-de>Shotlist</span></li>
+        <li data-area="story">Story</li>
+      </ol>
       <div class="show-stage" id="show">
-        <img class="show-img on" src="assets/custom-board-pinboard.webp" alt="" width="1360" height="820">
+        <img class="show-img on" src="assets/custom-lib-books.webp" alt="" width="1360" height="820">
         <img class="show-img" src="" alt="" width="1360" height="820">
         <div class="show-tag"><span class="show-kind" id="showKind"></span><span class="show-name" id="showName"></span></div>
         <div class="show-bar"><i id="showBar"></i></div>
       </div>
+      <div class="sc-strip" aria-hidden="true"><div class="sc-track" id="scTrack"><img src="assets/custom-lib-books-t.webp" alt="" width="136" height="82" data-k="lib-books" loading="lazy"><img src="assets/custom-lib-dvd-t.webp" alt="" width="136" height="82" data-k="lib-dvd" loading="lazy"><img src="assets/custom-lib-posters-t.webp" alt="" width="136" height="82" data-k="lib-posters" loading="lazy"><img src="assets/custom-lib-gallery-t.webp" alt="" width="136" height="82" data-k="lib-gallery" loading="lazy"><img src="assets/custom-pipeline-blueprint-t.webp" alt="" width="136" height="82" data-k="pipeline-blueprint" loading="lazy"><img src="assets/custom-pipeline-paper-t.webp" alt="" width="136" height="82" data-k="pipeline-paper" loading="lazy"><img src="assets/custom-pipeline-kraft-t.webp" alt="" width="136" height="82" data-k="pipeline-kraft" loading="lazy"><img src="assets/custom-board-pinboard-t.webp" alt="" width="136" height="82" data-k="board-pinboard" loading="lazy"><img src="assets/custom-board-blueprint-t.webp" alt="" width="136" height="82" data-k="board-blueprint" loading="lazy"><img src="assets/custom-board-chalk-t.webp" alt="" width="136" height="82" data-k="board-chalk" loading="lazy"><img src="assets/custom-board-glass-t.webp" alt="" width="136" height="82" data-k="board-glass" loading="lazy"><img src="assets/custom-shots-film-t.webp" alt="" width="136" height="82" data-k="shots-film" loading="lazy"><img src="assets/custom-shots-paper-t.webp" alt="" width="136" height="82" data-k="shots-paper" loading="lazy"><img src="assets/custom-story-typewriter-t.webp" alt="" width="136" height="82" data-k="story-typewriter" loading="lazy"><img src="assets/custom-story-parchment-t.webp" alt="" width="136" height="82" data-k="story-parchment" loading="lazy"><img src="assets/custom-story-night-t.webp" alt="" width="136" height="82" data-k="story-night" loading="lazy"><img src="assets/custom-designer-t.webp" alt="" width="136" height="82" data-k="designer" loading="lazy"><img src="assets/custom-lib-books-t.webp" alt="" width="136" height="82" data-k="lib-books" loading="lazy"><img src="assets/custom-lib-dvd-t.webp" alt="" width="136" height="82" data-k="lib-dvd" loading="lazy"><img src="assets/custom-lib-posters-t.webp" alt="" width="136" height="82" data-k="lib-posters" loading="lazy"><img src="assets/custom-lib-gallery-t.webp" alt="" width="136" height="82" data-k="lib-gallery" loading="lazy"><img src="assets/custom-pipeline-blueprint-t.webp" alt="" width="136" height="82" data-k="pipeline-blueprint" loading="lazy"><img src="assets/custom-pipeline-paper-t.webp" alt="" width="136" height="82" data-k="pipeline-paper" loading="lazy"><img src="assets/custom-pipeline-kraft-t.webp" alt="" width="136" height="82" data-k="pipeline-kraft" loading="lazy"><img src="assets/custom-board-pinboard-t.webp" alt="" width="136" height="82" data-k="board-pinboard" loading="lazy"><img src="assets/custom-board-blueprint-t.webp" alt="" width="136" height="82" data-k="board-blueprint" loading="lazy"><img src="assets/custom-board-chalk-t.webp" alt="" width="136" height="82" data-k="board-chalk" loading="lazy"><img src="assets/custom-board-glass-t.webp" alt="" width="136" height="82" data-k="board-glass" loading="lazy"><img src="assets/custom-shots-film-t.webp" alt="" width="136" height="82" data-k="shots-film" loading="lazy"><img src="assets/custom-shots-paper-t.webp" alt="" width="136" height="82" data-k="shots-paper" loading="lazy"><img src="assets/custom-story-typewriter-t.webp" alt="" width="136" height="82" data-k="story-typewriter" loading="lazy"><img src="assets/custom-story-parchment-t.webp" alt="" width="136" height="82" data-k="story-parchment" loading="lazy"><img src="assets/custom-story-night-t.webp" alt="" width="136" height="82" data-k="story-night" loading="lazy"><img src="assets/custom-designer-t.webp" alt="" width="136" height="82" data-k="designer" loading="lazy"></div></div>
     </figure>
     <div class="cz-facts reveal-stagger">
-      <div><b class="num">6</b><h3><span data-en>Board presets</span><span data-de>Denkbrett-Vorlagen</span></h3><p><span data-en>Or combine 7 backgrounds with 6 note styles: 42 looks. Every board in a project can have its own.</span><span data-de>Oder kombiniere 7 Hintergründe mit 6 Notiz-Stilen: 42 Looks. Jedes Denkbrett eines Projekts kann seinen eigenen haben.</span></p></div>
-      <div><b class="num">5</b><h3><span data-en>Story papers</span><span data-de>Story-Papiere</span></h3><p><span data-en>From aged parchment to a dark night mode for late writing sessions, chosen per project.</span><span data-de>Von altem Pergament bis zum dunklen Nachtmodus für späte Schreibsessions, pro Projekt wählbar.</span></p></div>
-      <div><b class="num">50+</b><h3><span data-en>Cover fonts</span><span data-de>Cover-Schriften</span></h3><p><span data-en>Poster covers with title and banner, style presets, a top ribbon and your own artwork. Cover and title size adjust live in the library.</span><span data-de>Plakat-Cover mit Titel und Banner, Stil-Vorlagen, Banderole und deinem eigenen Artwork. Cover- und Titelgröße stellst du live in der Bibliothek ein.</span></p></div>
-      <div><b class="num">∞</b><h3><span data-en>Your workspace</span><span data-de>Dein Arbeitsplatz</span></h3><p><span data-en>Light and dark mode, interface zoom with <kbd>Ctrl</kbd> + mouse wheel, fullscreen for board and story, six languages.</span><span data-de>Heller und dunkler Modus, Oberflächen-Zoom mit <kbd>Strg</kbd> + Mausrad, Vollbild für Denkbrett und Story, sechs Sprachen.</span></p></div>
+      <div><b class="num">5</b><h3><span data-en>Library looks</span><span data-de>Bibliotheks-Looks</span></h3><p><span data-en>Studio, DVD shelf, poster wall, leather books, gallery. Progress and deadlines stay visible on every one.</span><span data-de>Studio, DVD-Regal, Poster-Wand, Lederbücher, Galerie. Fortschritt und Fristen bleiben überall sichtbar.</span></p></div>
+      <div><b class="num">5</b><h3><span data-en>Work surfaces</span><span data-de>Arbeitsflächen</span></h3><p><span data-en>Notebook, blueprint, production folder or cinema for the pipeline and the shot list, per project.</span><span data-de>Notizbuch, Blaupause, Produktionsmappe oder Kino für Pipeline und Shotlist, pro Projekt.</span></p></div>
+      <div><b class="num">42</b><h3><span data-en>Board combinations</span><span data-de>Denkbrett-Kombinationen</span></h3><p><span data-en>7 backgrounds × 6 note styles, from cork pinboard to chalkboard, for every board separately.</span><span data-de>7 Hintergründe × 6 Notiz-Stile, von der Korkwand bis zur Tafel, für jedes Brett einzeln.</span></p></div>
+      <div><b class="num">50+</b><h3><span data-en>Cover fonts</span><span data-de>Cover-Schriften</span></h3><p><span data-en>Design poster covers with title, banner, ribbon and your own artwork, plus five story papers.</span><span data-de>Gestalte Plakat-Cover mit Titel, Banner, Banderole und eigenem Artwork, dazu fünf Story-Papiere.</span></p></div>
+    </div>
+
+    <div class="touchsec reveal">
+      <div class="ts-text">
+        <div class="eyebrow"><span data-en>Tablet &amp; phone</span><span data-de>Tablet &amp; Smartphone</span></div>
+        <h3><span data-en>Made for fingers, too</span><span data-de>Auch für Finger gemacht</span></h3>
+        <p><span data-en>Open the browser version on a tablet or phone and VertexForge notices the touchscreen: buttons and handles grow, menus get finger-sized, project actions sit behind one tap, and the mind board zooms with two fingers.</span><span data-de>Öffne die Browser-Version auf Tablet oder Smartphone, und VertexForge erkennt den Touchscreen: Knöpfe und Anfasser werden größer, Menüs fingerfreundlich, Projekt-Aktionen liegen hinter einem Tipp, und das Denkbrett zoomst du mit zwei Fingern.</span></p>
+        <ul class="ts-list"><li><span data-en>Pinch to zoom, drag to pan</span><span data-de>Mit zwei Fingern zoomen, mit einem verschieben</span></li><li><span data-en>Large touch targets everywhere</span><span data-de>Große Tippflächen überall</span></li><li><span data-en>Layout adapts to the screen</span><span data-de>Layout passt sich dem Bildschirm an</span></li></ul>
+        <a class="btn" href="app/"><span><span data-en>Try it on this device</span><span data-de>Auf diesem Gerät ausprobieren</span></span></a>
+      </div>
+      <div class="ts-devices" aria-hidden="true">
+        <div class="dev tablet"><img src="assets/touch-tablet.webp" alt="" width="810" height="1080" loading="lazy"></div>
+        <div class="dev phone"><img src="assets/touch-phone.webp" alt="" width="585" height="996" loading="lazy"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -532,7 +580,7 @@ footer .small{color:var(--muted)}
 <section id="download">
   <div class="wrap">
     <div class="head reveal">
-      <div class="eyebrow">Download · v2.3.1</div>
+      <div class="eyebrow">Download · v2.4.0</div>
       <h2><span data-en>Get VertexForge Studio</span><span data-de>VertexForge Studio holen</span></h2>
       <p class="lead"><span data-en>Free for everyone. Your projects stay on your own computer, and updates never overwrite them.</span><span data-de>Kostenlos für alle. Deine Projekte bleiben auf deinem Computer, und Updates überschreiben sie nie.</span></p>
     </div>
@@ -577,16 +625,16 @@ footer .small{color:var(--muted)}
     </div>
 
     <div class="sheet reveal">
-      <div class="sheet-head"><span><span data-en>Scanner</span><span data-de>Scanner</span>: <b>ClamAV 1.5.4</b></span><span><span data-en>Signatures</span><span data-de>Signaturen</span>: <b data-count="3628245">3,628,245</b></span><span><span data-en>Scanned</span><span data-de>Geprüft</span>: <b>2026-11-07</b></span><span><a href="security/clamscan-2.3.1.txt"><span data-en>Full scan log</span><span data-de>Vollständiges Protokoll</span></a> · <a href="security/sha256-2.3.1.txt">SHA256SUMS</a></span></div>
+      <div class="sheet-head"><span><span data-en>Scanner</span><span data-de>Scanner</span>: <b>ClamAV 1.5.4</b></span><span><span data-en>Signatures</span><span data-de>Signaturen</span>: <b data-count="3628245">3,628,245</b></span><span><span data-en>Scanned</span><span data-de>Geprüft</span>: <b>2026-11-07</b></span><span><a href="security/clamscan-2.4.0.txt"><span data-en>Full scan log</span><span data-de>Vollständiges Protokoll</span></a> · <a href="security/sha256-2.4.0.txt">SHA256SUMS</a></span></div>
       <div class="tbl"><table>
         <thead><tr><th><span data-en>File</span><span data-de>Datei</span></th><th><span data-en>Result</span><span data-de>Ergebnis</span></th><th>SHA-256</th><th>VirusTotal</th></tr></thead>
         <tbody>
-          <tr><td>VertexForge-Studio-Setup.exe</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>a24a5f671b1af4eb3a129a92a3dfea654046255cafa0d40e7e2ad1f53d9face8</span><button type="button" class="copy" id="copy1">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/a24a5f671b1af4eb3a129a92a3dfea654046255cafa0d40e7e2ad1f53d9face8" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
-          <tr><td>VertexForge-Studio.exe <span class="small"><span data-en>(inside setup &amp; portable)</span><span data-de>(in Setup &amp; Portabel)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>e6b3ab56050af2d0fc56b9d6edd5a3ea5ee039d428d21ef1000fc46d13c91235</span><button type="button" class="copy" id="copy2">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/e6b3ab56050af2d0fc56b9d6edd5a3ea5ee039d428d21ef1000fc46d13c91235" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
-          <tr><td>Uninstall VertexForge Studio.exe <span class="small"><span data-en>(inside the setup)</span><span data-de>(im Setup enthalten)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>689c29197fba76e02bf808e146fe50df8839076012cf4c64cc8b453019cc168b</span><button type="button" class="copy" id="copy3">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/689c29197fba76e02bf808e146fe50df8839076012cf4c64cc8b453019cc168b" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio-Setup.exe</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>f497f901b58b7350d75aa22df3c6f37e86b060d4beed0d02304b56e01dde9077</span><button type="button" class="copy" id="copy1">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/f497f901b58b7350d75aa22df3c6f37e86b060d4beed0d02304b56e01dde9077" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio.exe <span class="small"><span data-en>(inside setup &amp; portable)</span><span data-de>(in Setup &amp; Portabel)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>58a843f1b8c3e5cfea4eb649982f8b8f48e904f97a9066dd587a3dc010559f80</span><button type="button" class="copy" id="copy2">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/58a843f1b8c3e5cfea4eb649982f8b8f48e904f97a9066dd587a3dc010559f80" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>Uninstall VertexForge Studio.exe <span class="small"><span data-en>(inside the setup)</span><span data-de>(im Setup enthalten)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>e808b366b1055962b83ca056b644de5e4325e6f572cbf2f42ad659533379a99d</span><button type="button" class="copy" id="copy3">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/e808b366b1055962b83ca056b644de5e4325e6f572cbf2f42ad659533379a99d" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
           <tr><td>WebView2Loader.dll <span class="small"><span data-en>(Microsoft, unchanged)</span><span data-de>(Microsoft, unverändert)</span></span></td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span> <span class="pill sig"><span data-en>Signed by Microsoft</span><span data-de>Von Microsoft signiert</span></span></td><td class="hash"><span>c4674acf95f0800793a4a6d61132adf5dfa694c218e482d86093494c4e84100a</span><button type="button" class="copy" id="copy4">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/c4674acf95f0800793a4a6d61132adf5dfa694c218e482d86093494c4e84100a" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
-          <tr><td>VertexForge-Studio-Portable.zip</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>010091960842f6fe64723a83ea9c221b80aa761e23b9c4824e3564afa5017d14</span><button type="button" class="copy" id="copy5">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/010091960842f6fe64723a83ea9c221b80aa761e23b9c4824e3564afa5017d14" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
-          <tr><td>VertexForge-Studio-Browser.html</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>ec67101db5dad3c5f1365a1b42bfdd26a654a80e599f182ab297f8d076db7ddd</span><button type="button" class="copy" id="copy6">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/ec67101db5dad3c5f1365a1b42bfdd26a654a80e599f182ab297f8d076db7ddd" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio-Portable.zip</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>c3d5cc204e3df070c62de22e7234ef8b6ed2fa4a80fc8f78ec05b59346fde801</span><button type="button" class="copy" id="copy5">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/c3d5cc204e3df070c62de22e7234ef8b6ed2fa4a80fc8f78ec05b59346fde801" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
+          <tr><td>VertexForge-Studio-Browser.html</td><td><span class="pill"><span data-en>ClamAV: clean</span><span data-de>ClamAV: sauber</span></span></td><td class="hash"><span>c3452ecddbb918cc1369f00a94ccfaf0cd43325cccfae74fef8bc34cd7849239</span><button type="button" class="copy" id="copy6">copy</button></td><td class="vt"><a href="https://www.virustotal.com/gui/file/c3452ecddbb918cc1369f00a94ccfaf0cd43325cccfae74fef8bc34cd7849239" target="_blank" rel="noopener"><span data-en>Report ↗</span><span data-de>Bericht ↗</span></a></td></tr>
         </tbody>
       </table></div>
     </div>
@@ -601,10 +649,10 @@ footer .small{color:var(--muted)}
           <p><span data-en>The window library used by the app hid a small Microsoft file (<code>WebView2Loader.dll</code>) inside the program and loaded it straight from memory. Malware uses the same trick, so scanners react to it (hence “FakeMsApp”). The setup also carried the app as an uncompressed embedded program and copied itself into the install folder.</span><span data-de>Die Fenster-Bibliothek der App hat eine kleine Microsoft-Datei (<code>WebView2Loader.dll</code>) im Programm versteckt und direkt aus dem Arbeitsspeicher geladen. Schadsoftware nutzt denselben Trick, deshalb reagieren Scanner darauf (daher „FakeMsApp“). Außerdem trug das Setup die App als unkomprimiertes eingebettetes Programm und kopierte sich selbst in den Installationsordner.</span></p></div></li>
         <li><span class="dot ok"></span><div><b><span data-en>Fixed for this release</span><span data-de>Für dieses Release behoben</span></b>
           <p><span data-en>The DLL is now a normal, Microsoft-signed file next to the program, loaded the ordinary way. The setup unpacks a compressed package like other installers, uses a separate uninstaller and no longer copies itself. Debug information stays in the program. All changes are in the <a data-gh="commits/main" href="#security">commit history</a>.</span><span data-de>Die DLL ist jetzt eine normale, von Microsoft signierte Datei neben dem Programm und wird ganz normal geladen. Das Setup entpackt ein komprimiertes Paket wie andere Installer, nutzt ein eigenes Deinstallationsprogramm und kopiert sich nicht mehr selbst. Debug-Informationen bleiben im Programm. Alle Änderungen stehen in der <a data-gh="commits/main" href="#security">Commit-Historie</a>.</span></p></div></li>
-        <li><span class="dot live"></span><div><b><span data-en>Current release 2.3.1: 2 of about 70 scanners</span><span data-de>Aktuelles Release 2.3.1: 2 von rund 70 Scannern</span></b><span class="when">2026-11-07</span>
+        <li><span class="dot live"></span><div><b><span data-en>Version 2.3.1: 2 of about 70 scanners</span><span data-de>Version 2.3.1: 2 von rund 70 Scannern</span></b><span class="when">2026-11-07</span>
           <p><span data-en>After the fix, all large vendors (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, Avast, Norton and many more) report the files as clean. Two smaller engines still raise a generic guess. Neither names a real virus. Both have been reported as false positives.</span><span data-de>Nach der Korrektur melden alle großen Hersteller (Microsoft, Kaspersky, Bitdefender, ESET, CrowdStrike, Avast, Norton und viele mehr) die Dateien als sauber. Zwei kleinere Scanner äußern noch eine allgemeine Vermutung. Keiner nennt einen echten Virus. Beide wurden als Fehlalarm gemeldet.</span></p>
           <ul class="det"><li><b>Bkav Pro</b><code>W32.Malware.B4D2B4A6 (generic)</code></li><li><b>Trapmine</b><code>Malicious.moderate.ml.score</code></li></ul>
-          <p><span data-en>Version 2.3.0 showed exactly the same two guesses (Bkav Pro <code>W32.Malware.69DD7DC0</code>, Trapmine). Bkav’s name is just a number that changes with every file.</span><span data-de>Version 2.3.0 zeigte genau dieselben zwei Vermutungen (Bkav Pro <code>W32.Malware.69DD7DC0</code>, Trapmine). Bkavs Name ist nur eine Nummer, die sich mit jeder Datei ändert.</span></p>
+          <p><span data-en>Version 2.4.0 adds designs and touch support; its own results are linked live in the table above and will be listed here. Version 2.3.0 showed exactly the same two guesses (Bkav Pro <code>W32.Malware.69DD7DC0</code>, Trapmine). Bkav’s name is just a number that changes with every file.</span><span data-de>Version 2.4.0 bringt Designs und Touch-Bedienung; ihre eigenen Ergebnisse sind oben live verlinkt und werden hier ergänzt. Version 2.3.0 zeigte genau dieselben zwei Vermutungen (Bkav Pro <code>W32.Malware.69DD7DC0</code>, Trapmine). Bkavs Name ist nur eine Nummer, die sich mit jeder Datei ändert.</span></p>
           <p><span data-en>The “Report” links above always show the live VirusTotal result of each exact file. Changes are tracked in the <a data-gh="issues?q=label%3Afalse-positive" href="#security">issues</a>.</span><span data-de>Die „Bericht“-Links oben zeigen immer das aktuelle VirusTotal-Ergebnis jeder einzelnen Datei. Änderungen werden in den <a data-gh="issues?q=label%3Afalse-positive" href="#security">Issues</a> verfolgt.</span></p></div></li>
       </ol>
     </div>
@@ -685,8 +733,9 @@ footer .small{color:var(--muted)}
       <details><summary><span data-en>Does it need the internet?</span><span data-de>Braucht es Internet?</span></summary><p><span data-en>No. The desktop app works fully offline and sends nothing anywhere.</span><span data-de>Nein. Die Desktop-App funktioniert komplett offline und sendet nichts irgendwohin.</span></p></details>
       <details><summary><span data-en>Where are my projects stored?</span><span data-de>Wo werden meine Projekte gespeichert?</span></summary><p><span data-en>Desktop app: in your user profile (%LOCALAPPDATA%\VertexForge Studio). Browser: in the browser’s local storage. Export .vforge files for backups or to move between computers.</span><span data-de>Desktop-App: in deinem Benutzerprofil (%LOCALAPPDATA%\VertexForge Studio). Browser: im lokalen Speicher des Browsers. Exportiere .vforge-Dateien als Backup oder zum Umziehen.</span></p></details>
       <details><summary><span data-en>Will an update delete my work?</span><span data-de>Löscht ein Update meine Arbeit?</span></summary><p><span data-en>No. Projects are stored apart from the program. Before every update the app saves a safety version that you can restore.</span><span data-de>Nein. Projekte liegen getrennt vom Programm. Vor jedem Update legt die App eine Sicherheits-Version an, die du wiederherstellen kannst.</span></p></details>
-      <details><summary><span data-en>Can I change how it looks?</span><span data-de>Kann ich das Aussehen ändern?</span></summary><p><span data-en>Yes, a lot: board styles, note styles, story papers, cover designs, light and dark mode and interface zoom. See <a href="#customize">Make it yours</a>.</span><span data-de>Ja, sehr viel: Denkbrett- und Notiz-Stile, Story-Papiere, Cover-Designs, heller und dunkler Modus und Oberflächen-Zoom. Siehe <a href="#customize">Anpassen</a>.</span></p></details>
+      <details><summary><span data-en>Can I change how it looks?</span><span data-de>Kann ich das Aussehen ändern?</span></summary><p><span data-en>Yes, a lot: five library looks (DVD shelf, poster wall, leather books, gallery), five work surfaces for pipeline and shot list, board and note styles, story papers, cover designs, light and dark mode and interface zoom. See <a href="#customize">Make it yours</a>.</span><span data-de>Ja, sehr viel: fünf Bibliotheks-Looks (DVD-Regal, Poster-Wand, Lederbücher, Galerie), fünf Arbeitsflächen für Pipeline und Shotlist, Denkbrett- und Notiz-Stile, Story-Papiere, Cover-Designs, heller und dunkler Modus und Oberflächen-Zoom. Siehe <a href="#customize">Anpassen</a>.</span></p></details>
       <details><summary><span data-en>Is there a portable version?</span><span data-de>Gibt es eine portable Version?</span></summary><p><span data-en>Yes. Unpack VertexForge-Studio-Portable.zip anywhere and start “VertexForge Studio.exe”. Keep WebView2Loader.dll in the same folder.</span><span data-de>Ja. Entpacke VertexForge-Studio-Portable.zip an einen beliebigen Ort und starte „VertexForge Studio.exe“. WebView2Loader.dll muss im selben Ordner bleiben.</span></p></details>
+      <details><summary><span data-en>Does it work on a tablet or phone?</span><span data-de>Funktioniert es auf Tablet oder Smartphone?</span></summary><p><span data-en>Yes, with the browser version. It detects touchscreens and switches to larger buttons, finger-friendly menus and two-finger zoom on the mind board. A tablet is the more comfortable choice for big boards.</span><span data-de>Ja, mit der Browser-Version. Sie erkennt Touchscreens und schaltet auf größere Knöpfe, fingerfreundliche Menüs und Zwei-Finger-Zoom auf dem Denkbrett um. Für große Denkbretter ist ein Tablet angenehmer.</span></p></details>
       <details><summary><span data-en>Is there a Mac app?</span><span data-de>Gibt es eine Mac-App?</span></summary><p><span data-en>Not yet. On macOS, use the browser version. It has all features except opening linked files directly in other programs.</span><span data-de>Noch nicht. Auf dem Mac nutzt du die Browser-Version. Sie kann alles außer verknüpfte Dateien direkt in anderen Programmen zu öffnen.</span></p></details>
       <details><summary><span data-en>Which languages are supported?</span><span data-de>Welche Sprachen gibt es?</span></summary><p><span data-en>English, Deutsch, Français, Español, Italiano, Português. Translations by native speakers are very welcome.</span><span data-de>English, Deutsch, Français, Español, Italiano, Português. Übersetzungen von Muttersprachlern sind sehr willkommen.</span></p></details>
       <details><summary><span data-en>How do I remove it completely?</span><span data-de>Wie entferne ich es vollständig?</span></summary><p><span data-en>Settings → Apps → VertexForge Studio → Uninstall. Tick “Also delete my local projects and settings” if you want everything gone. The <a href="install.html#data">install guide</a> lists every folder.</span><span data-de>Einstellungen → Apps → VertexForge Studio → Deinstallieren. Setze den Haken bei „Auch meine lokalen Projekte und Einstellungen löschen“, wenn alles weg soll. Die <a href="install.html#data">Anleitung</a> listet jeden Ordner auf.</span></p></details>
@@ -709,7 +758,7 @@ footer .small{color:var(--muted)}
 <footer>
   <div class="wrap">
     <a class="brand" href="#"><img src="assets/logo.svg" alt="" width="24" height="24">VertexForge Studio</a>
-    <span>v2.3.1 · MIT License</span>
+    <span>v2.4.0 · MIT License</span>
     <span><span data-en>Made by Jan with Claude. No AI in your art.</span><span data-de>Von Jan mit Claude gemacht. Keine KI in deiner Kunst.</span></span>
     <a href="install.html"><span data-en>Install guide</span><span data-de>Anleitung</span></a>
     <a data-gh="" href="#open-source">GitHub</a>
@@ -816,22 +865,29 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
 
   /* Design-Vorstellung: Stile blenden automatisch nacheinander über */
   const SHOW = [
-    ['board-pinboard','Mind board','Denkbrett','Pinboard','Pinnwand'],
-    ['board-blueprint','Mind board','Denkbrett','Blueprint','Blaupause'],
-    ['board-chalk','Mind board','Denkbrett','Chalkboard','Tafel'],
-    ['board-sketch','Mind board','Denkbrett','Sketchbook','Skizzenbuch'],
-    ['board-glass','Mind board','Denkbrett','Glass','Glas'],
-    ['board-studio','Mind board','Denkbrett','Studio','Studio'],
-    ['story-typewriter','Story','Story','Typewriter','Schreibmaschine'],
-    ['story-parchment','Story','Story','Parchment','Pergament'],
-    ['story-night','Story','Story','Night','Nacht'],
-    ['designer','Covers','Cover','Cover designer','Cover-Designer'],
-    ['hub-large','Library','Bibliothek','Large covers','Große Cover'],
-    ['hub-light','Library','Bibliothek','Light mode','Heller Modus']
+    ['lib-books','Library','Bibliothek','Leather books','Lederbücher','library'],
+    ['lib-dvd','Library','Bibliothek','DVD shelf','DVD-Regal','library'],
+    ['lib-posters','Library','Bibliothek','Poster wall','Poster-Wand','library'],
+    ['lib-gallery','Library','Bibliothek','Gallery','Galerie','library'],
+    ['pipeline-blueprint','Pipeline','Pipeline','Blueprint','Blaupause','pipeline'],
+    ['pipeline-paper','Pipeline','Pipeline','Notebook','Notizbuch','pipeline'],
+    ['pipeline-kraft','Pipeline','Pipeline','Production folder','Produktionsmappe','pipeline'],
+    ['board-pinboard','Mind board','Denkbrett','Pinboard','Pinnwand','board'],
+    ['board-blueprint','Mind board','Denkbrett','Blueprint','Blaupause','board'],
+    ['board-chalk','Mind board','Denkbrett','Chalkboard','Tafel','board'],
+    ['board-glass','Mind board','Denkbrett','Glass','Glas','board'],
+    ['shots-film','Shot list','Shotlist','Cinema','Kino','shots'],
+    ['shots-paper','Shot list','Shotlist','Notebook','Notizbuch','shots'],
+    ['story-typewriter','Story','Story','Typewriter','Schreibmaschine','story'],
+    ['story-parchment','Story','Story','Parchment','Pergament','story'],
+    ['story-night','Story','Story','Night','Nacht','story'],
+    ['designer','Covers','Cover','Cover designer','Cover-Designer','library']
   ];
   const imgs = [...document.querySelectorAll('.show-img')], kind = document.getElementById('showKind'), nm = document.getElementById('showName'), bar = document.getElementById('showBar');
   let si = 0, front = 0, showT = null, showVis = false;
-  const label = () => { const d = SHOW[si], de = VF.lang==='de'; kind.textContent = de ? d[2] : d[1]; nm.textContent = de ? d[4] : d[3]; imgs[front].alt = kind.textContent + ': ' + nm.textContent; };
+  const label = () => { const d = SHOW[si], de = VF.lang==='de'; kind.textContent = de ? d[2] : d[1]; nm.textContent = de ? d[4] : d[3]; imgs[front].alt = kind.textContent + ': ' + nm.textContent;
+    document.querySelectorAll('.sc-areas li').forEach(li=>li.classList.toggle('on', li.dataset.area===d[5]));
+    document.querySelectorAll('#scTrack img').forEach(im=>im.classList.toggle('on', im.dataset.k===d[0])); };
   function nextShow(){
     si = (si + 1) % SHOW.length;
     const back = imgs[1 - front], pre = new Image();

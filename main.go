@@ -40,7 +40,7 @@ import (
 
 const (
 	appName    = "VertexForge Studio"
-	appVersion = "2.3.1"
+	appVersion = "2.4.0"
 	virtHost   = "vertexforge.example"
 )
 
