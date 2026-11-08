@@ -12,7 +12,7 @@ import (
 
 const (
 	appName    = "VertexForge Studio"
-	appVersion = "2.8.0"
+	appVersion = "2.8.1"
 )
 
 //go:embed app

@@ -1000,7 +1000,7 @@ html.area-full .app{border:none}
 .wire.flow{stroke-dasharray:7 7;animation:wireFlow .9s linear infinite;opacity:1}
 @keyframes wireFlow{to{stroke-dashoffset:-14}}
 /* Überfällige Fristen pulsieren dezent */
-.cd.cd-overdue{animation:cdPulse 2.6s ease-in-out infinite}
+.cd.cd-overdue{animation:cdPulse 2.6s ease-in-out 3}
 @keyframes cdPulse{50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--danger) 22%,transparent)}}
 /* Fortschrittsringe & Balken laufen beim Öffnen hoch */
 .view.entering .ring .fg{animation:ringIn .8s var(--ease)}
@@ -1325,7 +1325,7 @@ html.touch .thumb-swap{width:32px;height:32px}
 .team-badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 9px 0 8px;margin-left:6px;border-radius:999px;border:1px solid var(--line-2);background:var(--panel);color:var(--text-2);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s}
 .team-badge:hover{color:var(--text);border-color:var(--accent)}
 .team-badge.st-ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line-2))}
-.team-badge.st-ok::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent);animation:teamPulse 2.4s ease-in-out infinite}
+.team-badge.st-ok::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent);animation:teamPulse 2.4s ease-in-out 3}
 @keyframes teamPulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--ok) 10%,transparent)}}
 .team-badge.st-locked{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,var(--line-2))}
 .team-badge.st-error,.team-badge.st-missing{color:var(--danger)}

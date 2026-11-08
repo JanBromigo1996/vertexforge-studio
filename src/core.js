@@ -3,7 +3,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.8.0';
+const APP_VERSION = '2.8.1';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
