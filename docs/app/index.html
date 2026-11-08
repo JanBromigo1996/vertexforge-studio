@@ -1015,7 +1015,7 @@ html.area-full .app{border:none}
 .wire.flow{stroke-dasharray:7 7;animation:wireFlow .9s linear infinite;opacity:1}
 @keyframes wireFlow{to{stroke-dashoffset:-14}}
 /* Überfällige Fristen pulsieren dezent */
-.cd.cd-overdue{animation:cdPulse 2.6s ease-in-out infinite}
+.cd.cd-overdue{animation:cdPulse 2.6s ease-in-out 3}
 @keyframes cdPulse{50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--danger) 22%,transparent)}}
 /* Fortschrittsringe & Balken laufen beim Öffnen hoch */
 .view.entering .ring .fg{animation:ringIn .8s var(--ease)}
@@ -1340,7 +1340,7 @@ html.touch .thumb-swap{width:32px;height:32px}
 .team-badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 9px 0 8px;margin-left:6px;border-radius:999px;border:1px solid var(--line-2);background:var(--panel);color:var(--text-2);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s}
 .team-badge:hover{color:var(--text);border-color:var(--accent)}
 .team-badge.st-ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line-2))}
-.team-badge.st-ok::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent);animation:teamPulse 2.4s ease-in-out infinite}
+.team-badge.st-ok::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent);animation:teamPulse 2.4s ease-in-out 3}
 @keyframes teamPulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--ok) 10%,transparent)}}
 .team-badge.st-locked{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,var(--line-2))}
 .team-badge.st-error,.team-badge.st-missing{color:var(--danger)}
@@ -2435,7 +2435,7 @@ de: [
   <div class="tip">Ist der Ordner kurz nicht erreichbar (offline, Laptop unterwegs), arbeitest du einfach lokal weiter – beim nächsten Kontakt wird abgeglichen. Team-Ordner funktionieren in der Desktop-App (Windows, macOS, Linux) sowie in Chrome und Edge am Computer.</div>`],
  ['install','download','Installation & Updates',`
   <ul><li><b>Windows:</b> „VertexForge Studio Setup.exe“ starten, Sprache und Zielordner wählen – Desktop- und Startmenü-Verknüpfung werden angelegt.</li>
-  <li><b>macOS:</b> DMG öffnen und die App in „Programme“ ziehen. Beim ersten Start: Rechtsklick → „Öffnen“ (die App ist nicht von Apple notarisiert).</li>
+  <li><b>macOS:</b> DMG öffnen und die App in „Programme“ ziehen. Beim ersten Start: Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“ (die App ist nicht von Apple notarisiert).</li>
   <li><b>Linux:</b> das .deb per Doppelklick bzw. <code>sudo apt install ./VertexForge-Studio-linux-amd64.deb</code> installieren – oder das .tar.gz entpacken und <code>./install.sh</code> ausführen.</li>
   <li><b>Updates:</b> einfach das neue Setup ausführen. Deine Projekte liegen getrennt vom Programm in deinem Benutzerprofil und werden <b>nie überschrieben</b>; vor jedem Update entsteht automatisch eine Sicherheits-Version, und ältere Daten werden verlustfrei übernommen.</li>
   <li><b>Entfernen:</b> Windows „Apps & Features“, macOS App in den Papierkorb, Linux <code>sudo apt remove vertexforge-studio</code> bzw. <code>./install.sh --uninstall</code>. Deine Projekte bleiben erhalten.</li></ul>`],
@@ -2447,7 +2447,7 @@ de: [
  ['faq','compass','Fragen & Lösungen',`
   <ul><li><b>Die App startet nicht (Windows):</b> Sie braucht die Microsoft Edge WebView2 Runtime (in Windows 10/11 meist vorhanden). Die Fehlermeldung nennt den genauen Grund und den Ort der Log-Datei.</li>
   <li><b>Die App startet nicht (Linux):</b> WebKitGTK fehlt – <code>sudo apt install libwebkit2gtk-4.1-0</code> (Fedora: <code>webkit2gtk4.1</code>).</li>
-  <li><b>SmartScreen / Gatekeeper warnt:</b> Die App ist nicht kostenpflichtig signiert – Windows: „Weitere Informationen → Trotzdem ausführen“, macOS: Rechtsklick → „Öffnen“.</li>
+  <li><b>SmartScreen / Gatekeeper warnt:</b> Die App ist nicht kostenpflichtig signiert – Windows: „Weitere Informationen → Trotzdem ausführen“, macOS: Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“.</li>
   <li><b>Wo liegen meine Daten?</b> Windows: %LOCALAPPDATA%\\VertexForge Studio · macOS: ~/Library/Application Support/VertexForge Studio · Linux: ~/.local/share/vertexforge-studio · Browser: im Speicher des Browsers.</li>
   <li><b>Verknüpfte Videos zeigen keine Vorschau:</b> Vorschauen von Dateien auf dem PC gibt es nur in der Desktop-App; im Browser bleiben Öffnen/Kopieren.</li></ul>`]
 ],
@@ -2524,7 +2524,7 @@ en: [
   <div class="tip">If the folder is briefly unreachable (offline, laptop on the road), just keep working locally – it syncs on the next contact. Team folders work in the desktop app (Windows, macOS, Linux) and in Chrome or Edge on a computer.</div>`],
  ['install','download','Installation & updates',`
   <ul><li><b>Windows:</b> run “VertexForge Studio Setup.exe”, choose language and folder – desktop and Start menu shortcuts are created.</li>
-  <li><b>macOS:</b> open the DMG and drag the app into “Applications”. First start: right-click → “Open” (the app is not notarised by Apple).</li>
+  <li><b>macOS:</b> open the DMG and drag the app into “Applications”. First start: System Settings → Privacy & Security → “Open Anyway” (the app is not notarised by Apple).</li>
   <li><b>Linux:</b> install the .deb by double-click or <code>sudo apt install ./VertexForge-Studio-linux-amd64.deb</code> – or unpack the .tar.gz and run <code>./install.sh</code>.</li>
   <li><b>Updates:</b> just run the new setup. Your projects live separately from the program in your user profile and are <b>never overwritten</b>; a safety version is created before every update and older data is migrated without loss.</li>
   <li><b>Remove:</b> Windows “Apps & features”, macOS move the app to the Trash, Linux <code>sudo apt remove vertexforge-studio</code> or <code>./install.sh --uninstall</code>. Your projects are kept.</li></ul>`],
@@ -2536,7 +2536,7 @@ en: [
  ['faq','compass','Questions & fixes',`
   <ul><li><b>The app does not start (Windows):</b> it needs the Microsoft Edge WebView2 Runtime (usually present on Windows 10/11). The error message names the exact reason and where the log file is.</li>
   <li><b>The app does not start (Linux):</b> WebKitGTK is missing – <code>sudo apt install libwebkit2gtk-4.1-0</code> (Fedora: <code>webkit2gtk4.1</code>).</li>
-  <li><b>SmartScreen / Gatekeeper warns:</b> the app is not paid-signed – Windows: “More info → Run anyway”, macOS: right-click → “Open”.</li>
+  <li><b>SmartScreen / Gatekeeper warns:</b> the app is not paid-signed – Windows: “More info → Run anyway”, macOS: System Settings → Privacy & Security → “Open Anyway”.</li>
   <li><b>Where is my data?</b> Windows: %LOCALAPPDATA%\\VertexForge Studio · macOS: ~/Library/Application Support/VertexForge Studio · Linux: ~/.local/share/vertexforge-studio · Browser: in the browser’s storage.</li>
   <li><b>Linked videos show no preview:</b> previews of files on your PC exist only in the desktop app; in the browser you can still open/copy.</li></ul>`]
 ],
@@ -2863,7 +2863,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.8.0';
+const APP_VERSION = '2.8.1';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -7447,37 +7447,45 @@ function renderGuide(){
 /* ============================================================================
    START
    ============================================================================ */
+/* Startprotokoll (macOS/Linux-App): landet in vertexforge.log – hilft bei Fehlerberichten */
+/* Kein Start darf an einer hängenden Systemabfrage scheitern: nach der Wartezeit geht es ohne Ergebnis weiter */
+function withTimeout(p, ms, what){ let done = false; return Promise.race([Promise.resolve(p).finally(()=>{ done = true; }), new Promise(res=>setTimeout(()=>{ if(!done) vfTrace('timeout: ' + what); res(null); }, ms))]); }
+function vfTrace(m){ if(window.__vfFileBase) try{ fetch('/vf-log?m=' + encodeURIComponent(m)).catch(()=>{}); }catch(e){} }
 async function init(){
+  vfTrace('init');
   if(innerWidth < 600) ui.sideHidden = true;
   initBoard();
   db = await idbOpen();
+  vfTrace(db ? 'db ok' : 'db failed');
   let raw = null, assets = {};
   if(db){
-    raw = await idbReq('suite', 'readonly', st=>st.get('main'));
-    assets = await idbAllAssets();
+    /* bewusst ohne Zeitlimit: ein leeres Ergebnis würde sonst wie ein neuer Start behandelt */
+    raw = await idbReq('suite', 'readonly', st=>st.get('main')); vfTrace('suite read');
+    assets = await idbAllAssets(); vfTrace('assets read');
   }
   let migrated = false, wiped = false, prevVersion = raw && raw.appVersion;
   /* Einmaliger Neustart der Vorab-Versionen: alte Test-Daten und Einstellungen verwerfen.
      Ab hier gilt: Updates migrieren verlustfrei (normalizeSuite) und legen vorher eine Sicherheits-Version an. */
   if(raw && (raw.resetEpoch||0) < RESET_EPOCH){ await wipeAllData(); raw = null; assets = {}; wiped = true; prevVersion = null; }
   let noLegacy = false; try{ noLegacy = localStorage.getItem('vf.noLegacy')==='1'; }catch(e){}
-  if(!raw && !wiped && !noLegacy){ const legacy = await loadLegacyPapyrus(); if(legacy && Array.isArray(legacy.projects) && legacy.projects.length){ raw = legacy; migrated = true; } }
+  if(!raw && !wiped && !noLegacy){ const legacy = await withTimeout(loadLegacyPapyrus(), 3000, 'legacy'); vfTrace('legacy checked'); if(legacy && Array.isArray(legacy.projects) && legacy.projects.length){ raw = legacy; migrated = true; } }
   if(raw){
     raw = Object.assign({}, raw, {assets:Object.assign({}, assets, raw.assets || {})});
     S = normalizeSuite(raw);
     Object.keys(assets).forEach(id=>ui.savedAssets.add(id));
   }else{
     let lang = detectLang();
-    if(IS_DESKTOP){ try{ const inf = await window.vfInfo(); if(inf && LANG_ORDER.includes(inf.lang)) lang = inf.lang; }catch(e){} }
+    if(IS_DESKTOP){ try{ const inf = await withTimeout(window.vfInfo(), 3000, 'vfInfo'); if(inf && LANG_ORDER.includes(inf.lang)) lang = inf.lang; }catch(e){} vfTrace('info read'); }
     S = normalizeSuite({projects:[], settings:{lang}});
     const A = assetCtx();
     S.projects = demoProjects().map(p=>normalizeProject(p, A));
     S.activeProjectId = S.projects[0].id;
   }
   if(!S.projects.length){ S.projects.push(normalizeProject(blankProject(), assetCtx())); S.activeProjectId = S.projects[0].id; }
-  render();
+  render(); vfTrace('rendered');
+  if(IS_DESKTOP && window.__vfFileBase) setTimeout(async()=>{ try{ const r = await withTimeout(window.vfExists(['/']), 4000, 'bridge test'); vfTrace('bridge test: ' + (r ? 'ok' : 'no answer')); const i = await withTimeout(window.vfInfo(), 4000, 'vfInfo 2'); vfTrace('vfInfo 2: ' + (i ? 'ok' : 'no answer')); }catch(e){ vfTrace('bridge error: ' + e.message); } }, 1500);
   H.base = snapshot();
-  await saveNow();
+  await saveNow(); vfTrace('saved');
   gcAssets();
   if(prevVersion && prevVersion !== APP_VERSION) setTimeout(()=>makeVersion('safety', t('ver.beforeUpdate', {v:APP_VERSION})), 800);
   loadSystemIcons();
@@ -7507,6 +7515,8 @@ async function init(){
     try{ window.vfCloseNow(); }catch(e){}
   };
 }
+window.addEventListener('error', e=>vfTrace('error: ' + (e.message||'') + ' @' + (e.lineno||'')));
+window.addEventListener('unhandledrejection', e=>vfTrace('rejection: ' + ((e.reason && e.reason.message) || e.reason)));
 init();
 
 /* Shot-Bild groß ansehen, ersetzen oder entfernen (Pfeiltasten: vorheriger/nächster Shot mit Bild) */

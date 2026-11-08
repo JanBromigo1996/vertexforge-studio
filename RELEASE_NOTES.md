@@ -1,7 +1,13 @@
 ## VertexForge Studio 2.8.1
 
-A small but important update for all systems.
+An important update – especially for Linux.
 
+- **Linux: dialogs and saving work again.** In 2.8.0 the Linux app only got answers from the system when the
+  WebKit developer package happened to be installed. On normal systems "Save as", "Open", linking files, team
+  folders and the language detection silently did nothing. Found by installing the .deb on clean Ubuntu 22.04,
+  Ubuntu 24.04 and Fedora 41, and fixed. **If you use Linux, please update.**
+- **Startup can no longer hang** on a slow system query; the macOS and Linux apps write a short start log
+  (`vertexforge.log`) that helps with bug reports.
 - **Much lighter when idle:** overdue badges and the team badge pulsed forever. Under an open dialog this kept the
   window redrawing all the time – on computers without graphics acceleration it used more than one full CPU core.
   They now pulse three times and rest. Idle CPU: from about 150 % to 0 % in our test.
