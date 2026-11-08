@@ -58,12 +58,9 @@ jobs:
           DISPLAY=:9 VF_DEBUG=1 vertexforge-studio > run2.txt 2>&1 & sleep 25
           cat run2.txt; DISPLAY=:9 import -window root shot-b-${{ matrix.os }}.png; pkill -f vertexforge-studio; sleep 2
           dpkg -l | grep -iE "gstreamer|gst-plugins|libgl1|mesa|fonts-" | awk '{print $2}' | tr '\n' ' '; echo
-          sudo apt-get install -y -q gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-gl >/dev/null 2>&1 || true
-          DISPLAY=:9 vertexforge-studio > run3.txt 2>&1 & sleep 25
-          DISPLAY=:9 import -window root shot-c-gst-${{ matrix.os }}.png; pkill -f vertexforge-studio; sleep 2
-          sudo apt-get install -y -q libwebkit2gtk-4.1-dev >/dev/null 2>&1 || true
+          sudo apt-get install -y -q libgl1-mesa-dri libegl-mesa0 > mesa.txt 2>&1 || true; grep -E "^(Setting up|The following NEW)" -A3 mesa.txt | head -20
           DISPLAY=:9 vertexforge-studio > run4.txt 2>&1 & sleep 25
-          DISPLAY=:9 import -window root shot-d-dev-${{ matrix.os }}.png
+          DISPLAY=:9 import -window root shot-d-mesa-${{ matrix.os }}.png
           curl -s http://127.0.0.1:47821/vf-ping; echo
           cat ~/.local/share/vertexforge-studio/vertexforge.log
           pgrep -f vertexforge-studio || { echo "APP NOT RUNNING"; exit 1; }
