@@ -1,0 +1,55 @@
+# Startet das veröffentlichte macOS-Release auf einem echten Mac und macht Bildschirmfotos.
+name: macOS smoke test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download the published DMG and check its checksum
+        run: |
+          gh release download --repo "$GITHUB_REPOSITORY" --pattern 'VertexForge-Studio-macOS.dmg' --pattern 'SHA256SUMS.txt'
+          grep macOS SHA256SUMS.txt | shasum -a 256 -c -
+      - name: Install like a user (with the download quarantine flag)
+        run: |
+          sw_vers; uname -m
+          hdiutil attach -nobrowse -mountpoint /Volumes/VF VertexForge-Studio-macOS.dmg
+          ls -la /Volumes/VF
+          cp -R "/Volumes/VF/VertexForge Studio.app" /Applications/
+          hdiutil detach /Volumes/VF
+          APP="/Applications/VertexForge Studio.app"
+          lipo -archs "$APP/Contents/MacOS/VertexForge Studio"
+          codesign --verify --verbose=2 "$APP"
+          spctl --assess --type execute --verbose "$APP" || echo "Gatekeeper: not notarised (expected)"
+      - name: Start the app (Apple Silicon)
+        run: |
+          APP="/Applications/VertexForge Studio.app"
+          open "$APP"; sleep 20
+          pgrep -fl "VertexForge Studio" || { echo "APP NOT RUNNING"; exit 1; }
+          curl -s http://127.0.0.1:47821/vf-ping; echo
+          cat ~/Library/Application\ Support/VertexForge\ Studio/vertexforge.log
+          screencapture -x shot-arm64.png || true
+          osascript -e 'tell application "System Events" to keystroke "q" using command down' || true
+          sleep 6; pgrep -fl "VertexForge Studio" && echo "still running after Cmd+Q" || echo "closed cleanly"
+          pkill -f "VertexForge Studio" || true; sleep 2
+      - name: Start the app again (data kept?) and the Intel version via Rosetta
+        run: |
+          APP="/Applications/VertexForge Studio.app"
+          softwareupdate --install-rosetta --agree-to-license || true
+          arch -x86_64 "$APP/Contents/MacOS/VertexForge Studio" & sleep 25
+          curl -s http://127.0.0.1:47821/vf-ping; echo
+          cat ~/Library/Application\ Support/VertexForge\ Studio/vertexforge.log
+          screencapture -x shot-intel.png || true
+          pkill -f "VertexForge Studio" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: macos-screenshots
+          path: shot-*.png
