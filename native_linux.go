@@ -93,6 +93,7 @@ static void vf_setup(void *w, const unsigned char *png, int len) {
 		webkit_settings_set_enable_back_forward_navigation_gestures(st, FALSE);
 		webkit_settings_set_javascript_can_access_clipboard(st, TRUE);
 		webkit_settings_set_enable_developer_extras(st, getenv("VF_DEBUG") != NULL);
+		webkit_settings_set_enable_write_console_messages_to_stdout(st, getenv("VF_DEBUG") != NULL);
 	}
 }
 */

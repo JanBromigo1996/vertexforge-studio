@@ -36,6 +36,31 @@ jobs:
         with:
           name: linux-${{ matrix.os }}
           path: shot-*.png
+  source-debug:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.4'
+      - name: Build from source
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q libwebkit2gtk-4.1-dev xvfb imagemagick
+          python3 build.py --desktop
+          CGO_ENABLED=1 go build -o vf .
+      - name: Start with console output and timed screenshots
+        run: |
+          Xvfb :9 -screen 0 1440x900x24 & sleep 2
+          export DISPLAY=:9 VF_DEBUG=1
+          ./vf > console.txt 2>&1 &
+          for t in 5 15 30 60 90; do sleep $([ $t = 5 ] && echo 5 || echo 15); import -window root -resize 50% shot-src-$t.png; done
+          cat console.txt | head -80
+          top -b -n1 | head -15
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: linux-source
+          path: shot-*.png
   fedora:
     runs-on: ubuntu-24.04
     container: fedora:41
