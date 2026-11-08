@@ -230,6 +230,8 @@ function renderGuide(){
    START
    ============================================================================ */
 /* Startprotokoll (macOS/Linux-App): landet in vertexforge.log – hilft bei Fehlerberichten */
+/* Kein Start darf an einer hängenden Systemabfrage scheitern: nach der Wartezeit geht es ohne Ergebnis weiter */
+function withTimeout(p, ms, what){ return Promise.race([Promise.resolve(p), new Promise(res=>setTimeout(()=>{ vfTrace('timeout: ' + what); res(null); }, ms))]); }
 function vfTrace(m){ if(window.__vfFileBase) try{ fetch('/vf-log?m=' + encodeURIComponent(m)).catch(()=>{}); }catch(e){} }
 async function init(){
   vfTrace('init');
@@ -239,22 +241,23 @@ async function init(){
   vfTrace(db ? 'db ok' : 'db failed');
   let raw = null, assets = {};
   if(db){
-    raw = await idbReq('suite', 'readonly', st=>st.get('main'));
-    assets = await idbAllAssets();
+    /* bewusst ohne Zeitlimit: ein leeres Ergebnis würde sonst wie ein neuer Start behandelt */
+    raw = await idbReq('suite', 'readonly', st=>st.get('main')); vfTrace('suite read');
+    assets = await idbAllAssets(); vfTrace('assets read');
   }
   let migrated = false, wiped = false, prevVersion = raw && raw.appVersion;
   /* Einmaliger Neustart der Vorab-Versionen: alte Test-Daten und Einstellungen verwerfen.
      Ab hier gilt: Updates migrieren verlustfrei (normalizeSuite) und legen vorher eine Sicherheits-Version an. */
   if(raw && (raw.resetEpoch||0) < RESET_EPOCH){ await wipeAllData(); raw = null; assets = {}; wiped = true; prevVersion = null; }
   let noLegacy = false; try{ noLegacy = localStorage.getItem('vf.noLegacy')==='1'; }catch(e){}
-  if(!raw && !wiped && !noLegacy){ const legacy = await loadLegacyPapyrus(); if(legacy && Array.isArray(legacy.projects) && legacy.projects.length){ raw = legacy; migrated = true; } }
+  if(!raw && !wiped && !noLegacy){ const legacy = await withTimeout(loadLegacyPapyrus(), 3000, 'legacy'); vfTrace('legacy checked'); if(legacy && Array.isArray(legacy.projects) && legacy.projects.length){ raw = legacy; migrated = true; } }
   if(raw){
     raw = Object.assign({}, raw, {assets:Object.assign({}, assets, raw.assets || {})});
     S = normalizeSuite(raw);
     Object.keys(assets).forEach(id=>ui.savedAssets.add(id));
   }else{
     let lang = detectLang();
-    if(IS_DESKTOP){ try{ const inf = await window.vfInfo(); if(inf && LANG_ORDER.includes(inf.lang)) lang = inf.lang; }catch(e){} }
+    if(IS_DESKTOP){ try{ const inf = await withTimeout(window.vfInfo(), 3000, 'vfInfo'); if(inf && LANG_ORDER.includes(inf.lang)) lang = inf.lang; }catch(e){} vfTrace('info read'); }
     S = normalizeSuite({projects:[], settings:{lang}});
     const A = assetCtx();
     S.projects = demoProjects().map(p=>normalizeProject(p, A));
