@@ -198,7 +198,11 @@ func main() {
 	_ = w.Bind("vfCloseNow", func() { w.Dispatch(quit) })
 
 	// ---- Systembrücke ----
+	infoCalls := 0
 	_ = w.Bind("vfInfo", func() map[string]string {
+		if infoCalls++; infoCalls <= 2 {
+			log.Printf("Brücke: vfInfo #%d", infoCalls)
+		}
 		return map[string]string{"version": appVersion, "platform": platformName(), "dataDir": base, "lang": systemLang(), "user": os.Getenv("USER")}
 	})
 	_ = w.Bind("vfSetTitle", func(t string) { w.SetTitle(t) })

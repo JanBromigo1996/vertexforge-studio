@@ -231,7 +231,7 @@ function renderGuide(){
    ============================================================================ */
 /* Startprotokoll (macOS/Linux-App): landet in vertexforge.log – hilft bei Fehlerberichten */
 /* Kein Start darf an einer hängenden Systemabfrage scheitern: nach der Wartezeit geht es ohne Ergebnis weiter */
-function withTimeout(p, ms, what){ return Promise.race([Promise.resolve(p), new Promise(res=>setTimeout(()=>{ vfTrace('timeout: ' + what); res(null); }, ms))]); }
+function withTimeout(p, ms, what){ let done = false; return Promise.race([Promise.resolve(p).finally(()=>{ done = true; }), new Promise(res=>setTimeout(()=>{ if(!done) vfTrace('timeout: ' + what); res(null); }, ms))]); }
 function vfTrace(m){ if(window.__vfFileBase) try{ fetch('/vf-log?m=' + encodeURIComponent(m)).catch(()=>{}); }catch(e){} }
 async function init(){
   vfTrace('init');
@@ -265,6 +265,7 @@ async function init(){
   }
   if(!S.projects.length){ S.projects.push(normalizeProject(blankProject(), assetCtx())); S.activeProjectId = S.projects[0].id; }
   render(); vfTrace('rendered');
+  if(IS_DESKTOP && window.__vfFileBase) setTimeout(async()=>{ try{ const r = await withTimeout(window.vfExists(['/']), 4000, 'bridge test'); vfTrace('bridge test: ' + (r ? 'ok' : 'no answer')); const i = await withTimeout(window.vfInfo(), 4000, 'vfInfo 2'); vfTrace('vfInfo 2: ' + (i ? 'ok' : 'no answer')); }catch(e){ vfTrace('bridge error: ' + e.message); } }, 1500);
   H.base = snapshot();
   await saveNow(); vfTrace('saved');
   gcAssets();
