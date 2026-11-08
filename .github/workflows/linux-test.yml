@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
+        os: [ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     env:
       GH_TOKEN: ${{ github.token }}
@@ -56,7 +56,14 @@ jobs:
           pkill -f vertexforge-studio; sleep 2; cat run1.txt
           echo "---- with VF_DEBUG=1 (console output) ----"
           DISPLAY=:9 VF_DEBUG=1 vertexforge-studio > run2.txt 2>&1 & sleep 25
-          cat run2.txt
+          cat run2.txt; DISPLAY=:9 import -window root shot-b-${{ matrix.os }}.png; pkill -f vertexforge-studio; sleep 2
+          dpkg -l | grep -iE "gstreamer|gst-plugins|libgl1|mesa|fonts-" | awk '{print $2}' | tr '\n' ' '; echo
+          sudo apt-get install -y -q gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-gl >/dev/null 2>&1 || true
+          DISPLAY=:9 vertexforge-studio > run3.txt 2>&1 & sleep 25
+          DISPLAY=:9 import -window root shot-c-gst-${{ matrix.os }}.png; pkill -f vertexforge-studio; sleep 2
+          sudo apt-get install -y -q libwebkit2gtk-4.1-dev >/dev/null 2>&1 || true
+          DISPLAY=:9 vertexforge-studio > run4.txt 2>&1 & sleep 25
+          DISPLAY=:9 import -window root shot-d-dev-${{ matrix.os }}.png
           curl -s http://127.0.0.1:47821/vf-ping; echo
           cat ~/.local/share/vertexforge-studio/vertexforge.log
           pgrep -f vertexforge-studio || { echo "APP NOT RUNNING"; exit 1; }
