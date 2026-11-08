@@ -1,3 +1,17 @@
+## VertexForge Studio 2.8.1
+
+A small but important update for all systems.
+
+- **Much lighter when idle:** overdue badges and the team badge pulsed forever. Under an open dialog this kept the
+  window redrawing all the time – on computers without graphics acceleration it used more than one full CPU core.
+  They now pulse three times and rest. Idle CPU: from about 150 % to 0 % in our test.
+- **macOS:** the window now fits small screens (e.g. 13-inch MacBook Neo with large text); quitting via the Dock or
+  the menu bar first lets the app save, like the close button.
+- **Tested on real systems:** macOS 26 on Apple Silicon (install from the DMG, start, quit), Ubuntu 22.04,
+  Ubuntu 24.04 and Fedora 41 (install, start). Mac first-start steps updated for macOS 15 and 26.
+
+---
+
 ## VertexForge Studio 2.8.0
 
 ### Now on macOS and Linux
