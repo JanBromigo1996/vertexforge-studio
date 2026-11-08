@@ -229,10 +229,14 @@ function renderGuide(){
 /* ============================================================================
    START
    ============================================================================ */
+/* Startprotokoll (macOS/Linux-App): landet in vertexforge.log – hilft bei Fehlerberichten */
+function vfTrace(m){ if(window.__vfFileBase) try{ fetch('/vf-log?m=' + encodeURIComponent(m)).catch(()=>{}); }catch(e){} }
 async function init(){
+  vfTrace('init');
   if(innerWidth < 600) ui.sideHidden = true;
   initBoard();
   db = await idbOpen();
+  vfTrace(db ? 'db ok' : 'db failed');
   let raw = null, assets = {};
   if(db){
     raw = await idbReq('suite', 'readonly', st=>st.get('main'));
@@ -257,9 +261,9 @@ async function init(){
     S.activeProjectId = S.projects[0].id;
   }
   if(!S.projects.length){ S.projects.push(normalizeProject(blankProject(), assetCtx())); S.activeProjectId = S.projects[0].id; }
-  render();
+  render(); vfTrace('rendered');
   H.base = snapshot();
-  await saveNow();
+  await saveNow(); vfTrace('saved');
   gcAssets();
   if(prevVersion && prevVersion !== APP_VERSION) setTimeout(()=>makeVersion('safety', t('ver.beforeUpdate', {v:APP_VERSION})), 800);
   loadSystemIcons();
@@ -289,6 +293,8 @@ async function init(){
     try{ window.vfCloseNow(); }catch(e){}
   };
 }
+window.addEventListener('error', e=>vfTrace('error: ' + (e.message||'') + ' @' + (e.lineno||'')));
+window.addEventListener('unhandledrejection', e=>vfTrace('rejection: ' + ((e.reason && e.reason.message) || e.reason)));
 init();
 
 /* Shot-Bild groß ansehen, ersetzen oder entfernen (Pfeiltasten: vorheriger/nächster Shot mit Bild) */

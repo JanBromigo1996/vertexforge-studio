@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04]
+        os: [ubuntu-22.04, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     env:
       GH_TOKEN: ${{ github.token }}
@@ -52,18 +52,7 @@ jobs:
           Xvfb :9 -screen 0 1440x900x24 & sleep 2
           DISPLAY=:9 vertexforge-studio > run1.txt 2>&1 & sleep 25
           top -b -n1 | grep -E "WebKitW|vertexfo" || true
-          DISPLAY=:9 import -window root shot-a-${{ matrix.os }}.png
-          pkill -f vertexforge-studio; sleep 2; cat run1.txt
-          echo "---- with VF_DEBUG=1 (console output) ----"
-          DISPLAY=:9 VF_DEBUG=1 vertexforge-studio > run2.txt 2>&1 & sleep 25
-          cat run2.txt; DISPLAY=:9 import -window root shot-b-${{ matrix.os }}.png; pkill -f vertexforge-studio; sleep 2
-          dpkg -l | grep -iE "gstreamer|gst-plugins|libgl1|mesa|fonts-" | awk '{print $2}' | tr '\n' ' '; echo
-          sudo apt-get install -y -q libgl1-mesa-dri libegl-mesa0 > mesa.txt 2>&1 || true; grep -E "^(Setting up|The following NEW)" -A3 mesa.txt | head -20
-          DISPLAY=:9 vertexforge-studio > run4.txt 2>&1 & sleep 25
-          DISPLAY=:9 import -window root shot-d-mesa-${{ matrix.os }}.png
-          curl -s http://127.0.0.1:47821/vf-ping; echo
           cat ~/.local/share/vertexforge-studio/vertexforge.log
-          pgrep -f vertexforge-studio || { echo "APP NOT RUNNING"; exit 1; }
           DISPLAY=:9 import -window root shot-${{ matrix.os }}.png
       - uses: actions/upload-artifact@v4
         if: always()

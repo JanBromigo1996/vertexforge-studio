@@ -98,6 +98,11 @@ func appHandler(addr, token string) http.Handler {
 		}
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		switch {
+		case r.URL.Path == "/vf-log":
+			if m := r.URL.Query().Get("m"); m != "" && len(m) < 500 {
+				log.Printf("app: %s", m)
+			}
+			w.WriteHeader(http.StatusNoContent)
 		case r.URL.Path == "/vf-ping":
 			w.Header().Set("Content-Type", "application/json")
 			_ = json.NewEncoder(w).Encode(pingInfo{App: appName, Version: appVersion, Token: token})
