@@ -1,0 +1,59 @@
+# Installiert die veröffentlichten Linux-Pakete auf mehreren Distributionen und startet die App.
+name: Linux smoke test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deb:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download and verify
+        run: |
+          gh release download --repo "$GITHUB_REPOSITORY" --pattern '*.deb' --pattern 'SHA256SUMS.txt'
+          grep amd64.deb SHA256SUMS.txt | sha256sum -c -
+      - name: Install the .deb like a user
+        run: sudo apt-get update -q && sudo apt-get install -y ./VertexForge-Studio-linux-amd64.deb xvfb imagemagick
+      - name: Start the app
+        run: |
+          Xvfb :9 -screen 0 1440x900x24 & sleep 2
+          DISPLAY=:9 vertexforge-studio & sleep 30
+          curl -s http://127.0.0.1:47821/vf-ping; echo
+          cat ~/.local/share/vertexforge-studio/vertexforge.log
+          pgrep -f vertexforge-studio || { echo "APP NOT RUNNING"; exit 1; }
+          DISPLAY=:9 import -window root shot-${{ matrix.os }}.png
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: linux-${{ matrix.os }}
+          path: shot-*.png
+  fedora:
+    runs-on: ubuntu-24.04
+    container: fedora:41
+    steps:
+      - name: Install from the .tar.gz
+        run: |
+          dnf install -y -q webkit2gtk4.1 xorg-x11-server-Xvfb ImageMagick curl tar
+          curl -sL -o vf.tgz https://github.com/${{ github.repository }}/releases/latest/download/VertexForge-Studio-linux-x86_64.tar.gz
+          tar xzf vf.tgz && cd VertexForge-Studio-linux-x86_64 && ./install.sh
+      - name: Start the app
+        run: |
+          Xvfb :9 -screen 0 1440x900x24 & sleep 2
+          DISPLAY=:9 ~/.local/bin/vertexforge-studio & sleep 30
+          curl -s http://127.0.0.1:47821/vf-ping; echo
+          cat ~/.local/share/vertexforge-studio/vertexforge.log
+          DISPLAY=:9 import -window root shot-fedora.png
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: linux-fedora
+          path: shot-*.png
