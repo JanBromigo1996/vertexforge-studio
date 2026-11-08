@@ -5,7 +5,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 VER=$(grep -o "appVersion = \"[^\"]*\"" shared.go | cut -d'"' -f2)
-python3 build.py
+python3 build.py --desktop
 OUT=dist/linux; rm -rf "$OUT"; mkdir -p "$OUT"
 CGO_ENABLED=1 go build -trimpath -ldflags "-s -w" -o "$OUT/vertexforge-studio" .
 
