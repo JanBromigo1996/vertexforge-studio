@@ -50,8 +50,13 @@ jobs:
       - name: Start the app
         run: |
           Xvfb :9 -screen 0 1440x900x24 & sleep 2
-          DISPLAY=:9 vertexforge-studio & sleep 25
+          DISPLAY=:9 vertexforge-studio > run1.txt 2>&1 & sleep 25
           top -b -n1 | grep -E "WebKitW|vertexfo" || true
+          DISPLAY=:9 import -window root shot-a-${{ matrix.os }}.png
+          pkill -f vertexforge-studio; sleep 2; cat run1.txt
+          echo "---- with VF_DEBUG=1 (console output) ----"
+          DISPLAY=:9 VF_DEBUG=1 vertexforge-studio > run2.txt 2>&1 & sleep 25
+          cat run2.txt
           curl -s http://127.0.0.1:47821/vf-ping; echo
           cat ~/.local/share/vertexforge-studio/vertexforge.log
           pgrep -f vertexforge-studio || { echo "APP NOT RUNNING"; exit 1; }
