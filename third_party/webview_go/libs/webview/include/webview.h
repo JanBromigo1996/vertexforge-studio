@@ -1378,21 +1378,14 @@ public:
   }
 
   void eval_impl(const std::string &js) override {
-    auto &lib = get_webkit_library();
-    auto wkmajor = webkit_get_major_version();
-    auto wkminor = webkit_get_minor_version();
-    if ((wkmajor == 2 && wkminor >= 40) || wkmajor > 2) {
-      if (auto fn =
-              lib.get(webkit_symbols::webkit_web_view_evaluate_javascript)) {
-        fn(WEBKIT_WEB_VIEW(m_webview), js.c_str(),
-           static_cast<gssize>(js.size()), nullptr, nullptr, nullptr, nullptr,
-           nullptr);
-      }
-    } else if (auto fn =
-                   lib.get(webkit_symbols::webkit_web_view_run_javascript)) {
-      fn(WEBKIT_WEB_VIEW(m_webview), js.c_str(), nullptr, nullptr, nullptr);
-    }
+    // VertexForge: direkt aufrufen. Die Suche nach "libwebkit2gtk-4.1.so" findet die
+    // Bibliothek nur, wenn das Entwicklerpaket installiert ist – sonst gingen alle
+    // Antworten an die Seite verloren. Wir linken ohnehin fest gegen WebKitGTK 4.1.
+    webkit_web_view_evaluate_javascript(WEBKIT_WEB_VIEW(m_webview), js.c_str(),
+                                        static_cast<gssize>(js.size()), nullptr,
+                                        nullptr, nullptr, nullptr, nullptr);
   }
+
 
 private:
   static char *get_string_from_js_result(WebKitJavascriptResult *r) {
