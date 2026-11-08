@@ -40,5 +40,16 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
     const r = el.getBoundingClientRect(); el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px');
   }));
 
+  /* Download passend zum System des Besuchers hervorheben */
+  const ua = navigator.userAgent || '', plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+  const os = /Android|iPhone|iPad|CrOS/i.test(ua) ? '' : /Mac/i.test(plat) ? 'mac' : /Linux/i.test(plat) ? 'linux' : /Win/i.test(plat) ? 'win' : '';
+  const FILES = {win:'VertexForge-Studio-Setup.exe', mac:'VertexForge-Studio-macOS.dmg', linux:'VertexForge-Studio-linux-amd64.deb'};
+  if(os){
+    const hero = document.getElementById('heroDl');
+    if(hero){ hero.href = gh + 'releases/latest/download/' + FILES[os]; hero.querySelectorAll('.hero-os').forEach(e=>e.hidden = e.dataset.for !== os); }
+    const cards = document.querySelectorAll('.dl [data-os]');
+    if(cards.length){ cards.forEach(c=>c.classList.toggle('main', c.dataset.os === os)); const m = document.querySelector('.dl [data-os="' + os + '"]'); if(m && m.parentNode.firstElementChild !== m) m.parentNode.insertBefore(m, m.parentNode.firstElementChild); }
+  }
+
   VF.setLang(VF.lang);
 })();

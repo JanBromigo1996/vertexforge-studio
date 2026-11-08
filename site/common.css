@@ -509,3 +509,13 @@ footer .small{color:var(--muted)}
 @media (max-width:980px){.cardsec{grid-template-columns:1fr}.hand{height:400px}}
 @media (max-width:560px){.hand{height:330px}.hcard{width:150px}.hcard:nth-child(1){--x:-120px!important}.hcard:nth-child(2){--x:-42px!important}.hcard:nth-child(3){--x:42px!important}.hcard:nth-child(4){--x:120px!important}.rarity{grid-template-columns:1fr}}
 @media (prefers-reduced-motion: reduce){.hcard,.hand.dealt .hcard{animation:none;opacity:1;translate:0 0}.rarity li{animation:none}.show-img[class*="tr-"]{animation:none}}
+/* Downloads für drei Systeme */
+.dl.dl3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.dl .card.wide{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr) auto;align-items:center;gap:22px;padding:20px 24px}
+.dl .card.wide .btns{margin-top:0;flex-wrap:nowrap}
+.card .os{position:relative}
+.new-pill{margin-left:auto;align-self:flex-start;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:99px;color:var(--brass);border:1px solid color-mix(in srgb,var(--brass) 55%,transparent);background:color-mix(in srgb,var(--brass) 10%,transparent)}
+.card.main .new-pill{display:none}
+.card ul code,.card p code{font-size:.85em}
+@media (max-width:1000px){ .dl.dl3{grid-template-columns:repeat(2,minmax(0,1fr))} .dl .card.wide{grid-template-columns:1fr} .dl .card.wide .btns{flex-wrap:wrap} }
+@media (max-width:760px){ .dl.dl3{grid-template-columns:1fr} }

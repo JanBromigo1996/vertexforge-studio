@@ -1,3 +1,33 @@
+## VertexForge Studio 2.8.0
+
+### Now on macOS and Linux
+- **macOS 11+** (Apple Silicon and Intel in one download): native app with the Mac menu bar, ⌘ shortcuts,
+  full-screen and system dialogs. Not notarised by Apple (that needs a paid account), so the first start is
+  right-click ▸ Open. Built publicly by GitHub Actions from this repository.
+- **Linux** (x86_64): `.deb` for Ubuntu/Debian/Mint and `.tar.gz` with `install.sh` for other distributions.
+  Needs WebKitGTK 4.1.
+- Same features as on Windows: native file dialogs, team folders, linked files with previews, UI zoom,
+  saving before the window closes. Shortcut labels show ⌘ ⌥ ⇧ on a Mac.
+- Both are brand new and less tested than the Windows app – bug reports are very welcome.
+
+### Fixed: "WebView2 Runtime not found" although it is installed (Windows)
+- The bundled `WebView2Loader.dll` (from 2021) is replaced by the current Microsoft-signed version.
+- If the loader still fails, the app now falls back to the installed runtime directly.
+- If starting really fails, the message shows the exact reason, the runtime version and where the log is,
+  instead of wrongly claiming the runtime is missing.
+
+### Smoother to work with
+- Fast tooltips with keyboard-shortcut chips instead of slow browser tooltips.
+- Dialogs, panels and menus fade out instead of vanishing; content slides in when you open an area;
+  ticking off a task gives a small check animation.
+- Much faster with long lists: hundreds of tasks or shots only render what is visible (pipeline about 5×
+  faster with 400 tasks); large mind boards open faster.
+
+**ClamAV:** all 9 files clean (`clamscan.txt`). **VirusTotal:** results are published on the website and here
+as soon as the files are online.
+
+---
+
 ## VertexForge Studio 2.7.0
 
 ### Project library that looks like the real thing

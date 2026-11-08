@@ -519,6 +519,16 @@ footer .small{color:var(--muted)}
 @media (max-width:980px){.cardsec{grid-template-columns:1fr}.hand{height:400px}}
 @media (max-width:560px){.hand{height:330px}.hcard{width:150px}.hcard:nth-child(1){--x:-120px!important}.hcard:nth-child(2){--x:-42px!important}.hcard:nth-child(3){--x:42px!important}.hcard:nth-child(4){--x:120px!important}.rarity{grid-template-columns:1fr}}
 @media (prefers-reduced-motion: reduce){.hcard,.hand.dealt .hcard{animation:none;opacity:1;translate:0 0}.rarity li{animation:none}.show-img[class*="tr-"]{animation:none}}
+/* Downloads für drei Systeme */
+.dl.dl3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.dl .card.wide{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr) auto;align-items:center;gap:22px;padding:20px 24px}
+.dl .card.wide .btns{margin-top:0;flex-wrap:nowrap}
+.card .os{position:relative}
+.new-pill{margin-left:auto;align-self:flex-start;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:99px;color:var(--brass);border:1px solid color-mix(in srgb,var(--brass) 55%,transparent);background:color-mix(in srgb,var(--brass) 10%,transparent)}
+.card.main .new-pill{display:none}
+.card ul code,.card p code{font-size:.85em}
+@media (max-width:1000px){ .dl.dl3{grid-template-columns:repeat(2,minmax(0,1fr))} .dl .card.wide{grid-template-columns:1fr} .dl .card.wide .btns{flex-wrap:wrap} }
+@media (max-width:760px){ .dl.dl3{grid-template-columns:1fr} }
 
 </style>
 
@@ -527,7 +537,8 @@ footer .small{color:var(--muted)}
     <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="30" height="30">VertexForge Studio</a>
     <nav class="nav" aria-label="Sections">
       <a href="#windows">Windows</a>
-      <a href="#mac-linux">macOS · Linux</a>
+      <a href="#macos">macOS</a>
+      <a href="#linux">Linux</a>
       <a href="#updates">Updates</a>
       <a href="#data"><span data-en>Your data</span><span data-de>Deine Daten</span></a>
       <a href="#trouble"><span data-en>Troubleshooting</span><span data-de>Probleme</span></a>
@@ -544,17 +555,18 @@ footer .small{color:var(--muted)}
 <section class="hero guide-hero">
   <div class="wrap">
     <a class="back rise" href="index.html" style="--d:0">← <span data-en>Back to the homepage</span><span data-de>Zurück zur Startseite</span></a>
-    <div class="eyebrow rise" style="--d:1;margin-top:20px"><span data-en>Installation guide · v2.7.0</span><span data-de>Installationsanleitung · v2.7.0</span></div>
+    <div class="eyebrow rise" style="--d:1;margin-top:20px"><span data-en>Installation guide · v2.8.0</span><span data-de>Installationsanleitung · v2.8.0</span></div>
     <h1 class="rise" style="--d:2;margin-top:12px"><span data-en>From download to your <em>first project</em></span><span data-de>Vom Download zum <em>ersten Projekt</em></span></h1>
     <p class="lead rise" style="--d:3"><span data-en>About three minutes. Pick your system, follow the steps, and the guided tour takes over on the first start.</span><span data-de>Etwa drei Minuten. Wähle dein System, folge den Schritten, und beim ersten Start übernimmt die geführte Tour.</span></p>
     <div class="pick rise" style="--d:4">
       <a class="pick-card" href="#windows"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg><span><b>Windows 10 / 11</b><span class="small"><span data-en>Desktop app with installer</span><span data-de>Desktop-App mit Installer</span></span></span><i>→</i></a>
-      <a class="pick-card" href="#mac-linux"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span><b>macOS · Linux</b><span class="small"><span data-en>Browser version, no install</span><span data-de>Browser-Version, ohne Installation</span></span></span><i>→</i></a>
+      <a class="pick-card" href="#macos"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9 9V6.5A2.5 2.5 0 1 0 6.5 9H9zm0 0h6m-6 0v6m6-6V6.5A2.5 2.5 0 1 1 17.5 9H15zm0 0v6m0 0h2.5a2.5 2.5 0 1 1-2.5 2.5V15zm0 0H9m0 0v2.5A2.5 2.5 0 1 1 6.5 15H9z"/></svg><span><b>macOS 11+</b><span class="small"><span data-en>Apple Silicon & Intel</span><span data-de>Apple Silicon & Intel</span></span></span><i>→</i></a>
+      <a class="pick-card" href="#linux"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 10l3 2.5L7 15M12.5 15H17"/></svg><span><b>Linux</b><span class="small"><span data-en>.deb or .tar.gz</span><span data-de>.deb oder .tar.gz</span></span></span><i>→</i></a>
     </div>
     <div class="req rise" style="--d:5">
-      <div><span class="k"><span data-en>System</span><span data-de>System</span></span><span>Windows 10 / 11 (64-bit) · <span data-en>any current browser</span><span data-de>jeder aktuelle Browser</span></span></div>
+      <div><span class="k"><span data-en>System</span><span data-de>System</span></span><span>Windows 10 / 11 · macOS 11+ · Linux (64-bit) · <span data-en>or any current browser</span><span data-de>oder jeder aktuelle Browser</span></span></div>
       <div><span class="k"><span data-en>Disk space</span><span data-de>Speicher</span></span><span>~25 MB + <span data-en>your projects</span><span data-de>deine Projekte</span></span></div>
-      <div><span class="k"><span data-en>Needs</span><span data-de>Benötigt</span></span><span>Microsoft Edge WebView2 Runtime (<span data-en>preinstalled on most PCs</span><span data-de>auf den meisten PCs vorinstalliert</span>)</span></div>
+      <div><span class="k"><span data-en>Needs</span><span data-de>Benötigt</span></span><span><span data-en>Windows: WebView2 Runtime · Linux: WebKitGTK 4.1 · Mac: nothing</span><span data-de>Windows: WebView2 Runtime · Linux: WebKitGTK 4.1 · Mac: nichts</span></span></div>
       <div><span class="k"><span data-en>Cost</span><span data-de>Kosten</span></span><span><span data-en>Free, MIT license, no account</span><span data-de>Kostenlos, MIT-Lizenz, kein Konto</span></span></div>
     </div>
   </div>
@@ -575,7 +587,7 @@ footer .small{color:var(--muted)}
           <div class="ctas"><a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#windows"><span><span data-en>Download Setup</span><span data-de>Setup laden</span><small>.exe · 14 MB</small></span></a></div>
           <pre>certutil -hashfile VertexForge-Studio-Setup.exe SHA256
 <span class="cmt"># <span data-en>must print</span><span data-de>muss ausgeben</span>:</span>
-8f41c2caf6b71ba593d90d6aa8908788e1a8edcbd95963bae3208f9fa0989b1f</pre>
+43d2cbceae2eb445a40e6eda8c2f45b461c374def0fbecdc578c6079d290b4b5</pre>
         </div>
       </li>
       <li class="step-card reveal">
@@ -622,18 +634,57 @@ footer .small{color:var(--muted)}
   </div>
 </section>
 
-<section id="mac-linux">
+<section id="macos">
   <div class="wrap two">
     <div class="reveal">
-      <div class="eyebrow">macOS · Linux</div>
-      <h2 style="margin-top:12px"><span data-en>Use the browser version</span><span data-de>Die Browser-Version nutzen</span></h2>
-      <p class="lead" style="margin-top:14px"><span data-en>There is no native Mac or Linux app yet. The browser version has every feature except opening linked files directly in other programs (it copies the path instead).</span><span data-de>Eine native Mac- oder Linux-App gibt es noch nicht. Die Browser-Version kann alles außer verknüpfte Dateien direkt in anderen Programmen zu öffnen (sie kopiert stattdessen den Pfad).</span></p>
-      <div class="ctas"><a class="btn primary" href="app/"><span><span data-en>Open in browser</span><span data-de>Im Browser öffnen</span><small><span data-en>runs on this website</span><span data-de>läuft auf dieser Website</span></small></span></a><a class="btn" data-gh="releases/latest/download/VertexForge-Studio-Browser.html" href="#mac-linux"><span><span data-en>Download as file</span><span data-de>Als Datei laden</span><small>.html · 0.6 MB</small></span></a></div>
+      <div class="eyebrow">macOS 11+ · Apple Silicon & Intel</div>
+      <h2 style="margin-top:12px"><span data-en>Install on a Mac</span><span data-de>Auf dem Mac installieren</span></h2>
+      <p class="lead" style="margin-top:14px"><span data-en>A real Mac app with the menu bar, ⌘ shortcuts, full-screen and system dialogs. One download runs natively on M1–M4 and on Intel Macs.</span><span data-de>Eine echte Mac-App mit Menüleiste, ⌘-Kürzeln, Vollbild und System-Dialogen. Ein Download läuft nativ auf M1–M4 und auf Intel-Macs.</span></p>
+      <div class="ctas"><a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-macOS.dmg" href="#macos"><span><span data-en>Download for Mac</span><span data-de>Für Mac laden</span><small>.dmg · 12.5 MB</small></span></a></div>
+      <pre>shasum -a 256 VertexForge-Studio-macOS.dmg
+<span class="cmt"># <span data-en>must print</span><span data-de>muss ausgeben</span>:</span>
+5bc078ff4772884dce20dfd42609d6b4f6414246d4ba54faecc4d99b15392ea4</pre>
+    </div>
+    <ol class="mini-steps reveal-stagger">
+      <li><b><span data-en>Open the DMG</span><span data-de>DMG öffnen</span></b> <span data-en>and drag <b>VertexForge Studio</b> onto the <b>Applications</b> folder.</span><span data-de>und <b>VertexForge Studio</b> auf den Ordner <b>Programme</b> ziehen.</span></li>
+      <li><b><span data-en>First start:</span><span data-de>Erster Start:</span></b> <span data-en>in Applications, <b>right-click</b> (or Control-click) the app and choose <b>Open</b>, then <b>Open</b> again. Only needed once.</span><span data-de>In „Programme“ die App mit <b>Rechtsklick</b> (oder Control-Klick) anklicken, <b>Öffnen</b> wählen und nochmal <b>Öffnen</b>. Nur beim ersten Mal nötig.</span></li>
+      <li><b><span data-en>macOS 15 or newer:</span><span data-de>Ab macOS 15:</span></b> <span data-en>if there is no Open button, go to <b>System Settings ▸ Privacy &amp; Security</b>, scroll down and click <b>Open Anyway</b>.</span><span data-de>Fehlt der Öffnen-Knopf, gehe zu <b>Systemeinstellungen ▸ Datenschutz &amp; Sicherheit</b>, scrolle nach unten und klicke <b>Trotzdem öffnen</b>.</span></li>
+      <li><b><span data-en>Why the warning?</span><span data-de>Warum die Warnung?</span></b> <span data-en>Apple only stays quiet for apps notarised through a paid developer account ($99 a year). The app is signed “ad hoc”, built publicly on GitHub’s Mac servers from the open source code, and its checksum is listed here, so you can verify it is exactly that build.</span><span data-de>Apple schweigt nur bei Apps, die über ein bezahltes Entwicklerkonto notarisiert sind (99 $ im Jahr). Die App ist „ad hoc“ signiert, wird öffentlich auf GitHubs Mac-Servern aus dem offenen Quellcode gebaut, und ihre Prüfsumme steht hier, damit du prüfen kannst, dass es genau dieser Build ist.</span></li>
+      <li><b><span data-en>Data:</span><span data-de>Daten:</span></b> <code>~/Library/Application Support/VertexForge Studio</code> <span data-en>(log file) and the app’s WebKit storage. Removing the app keeps your projects.</span><span data-de>(Protokoll) und der WebKit-Speicher der App. Beim Entfernen der App bleiben deine Projekte erhalten.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="linux" class="alt">
+  <div class="wrap two">
+    <div class="reveal">
+      <div class="eyebrow">Linux · x86_64</div>
+      <h2 style="margin-top:12px"><span data-en>Install on Linux</span><span data-de>Unter Linux installieren</span></h2>
+      <p class="lead" style="margin-top:14px"><span data-en>A native app with an app-menu entry and your desktop’s file dialogs. Runs on Ubuntu 22.04+, Debian 12+, Linux Mint 21+, Fedora 36+, Arch and others with WebKitGTK 4.1.</span><span data-de>Eine native App mit Startmenü-Eintrag und den Dateidialogen deines Desktops. Läuft auf Ubuntu 22.04+, Debian 12+, Linux Mint 21+, Fedora 36+, Arch und anderen mit WebKitGTK 4.1.</span></p>
+      <div class="ctas"><a class="btn primary" data-gh="releases/latest/download/VertexForge-Studio-linux-amd64.deb" href="#linux"><span><span data-en>Download .deb</span><span data-de>.deb laden</span><small>Ubuntu · Debian · Mint · 6.2 MB</small></span></a><a class="btn" data-gh="releases/latest/download/VertexForge-Studio-linux-x86_64.tar.gz" href="#linux"><span>.tar.gz<small><span data-en>all distributions</span><span data-de>alle Distributionen</span> · 6.7 MB</small></span></a></div>
+    </div>
+    <ol class="mini-steps reveal-stagger">
+      <li><b>.deb:</b> <span data-en>double-click it to open your software centre, or in a terminal:</span><span data-de>per Doppelklick im Software-Center öffnen oder im Terminal:</span><pre>sudo apt install ./VertexForge-Studio-linux-amd64.deb</pre></li>
+      <li><b>.tar.gz:</b> <span data-en>unpack it and install for your user only, no root needed:</span><span data-de>entpacken und nur für deinen Benutzer installieren, ohne root:</span><pre>tar xzf VertexForge-Studio-linux-x86_64.tar.gz
+cd VertexForge-Studio-linux-x86_64 &amp;&amp; ./install.sh</pre></li>
+      <li><b><span data-en>Missing WebKitGTK?</span><span data-de>WebKitGTK fehlt?</span></b> <span data-en>Ubuntu/Debian/Mint:</span><span data-de>Ubuntu/Debian/Mint:</span> <code>sudo apt install libwebkit2gtk-4.1-0</code> · Fedora: <code>sudo dnf install webkit2gtk4.1</code> · Arch: <code>sudo pacman -S webkit2gtk-4.1</code></li>
+      <li><b><span data-en>Data:</span><span data-de>Daten:</span></b> <code>~/.local/share/vertexforge-studio</code> <span data-en>– projects, settings and log. Uninstalling keeps them.</span><span data-de>– Projekte, Einstellungen und Protokoll. Beim Deinstallieren bleiben sie erhalten.</span></li>
+      <li><b><span data-en>Check the file:</span><span data-de>Datei prüfen:</span></b> <code>sha256sum VertexForge-Studio-linux-amd64.deb</code> <span data-en>must print</span><span data-de>muss ausgeben</span> <code class="hash-inline">9782763e472be753a5537261e4d73921bd4ce1a5f69dc2deb9de262fd92cfaf4</code></li>
+    </ol>
+  </div>
+</section>
+
+<section id="browser">
+  <div class="wrap two">
+    <div class="reveal">
+      <div class="eyebrow"><span data-en>Any system</span><span data-de>Jedes System</span></div>
+      <h2 style="margin-top:12px"><span data-en>Or use the browser version</span><span data-de>Oder die Browser-Version nutzen</span></h2>
+      <p class="lead" style="margin-top:14px"><span data-en>For a Chromebook, a tablet or a computer where you cannot install anything. It has every feature except opening linked files directly in other programs (it copies the path instead).</span><span data-de>Für ein Chromebook, ein Tablet oder einen Computer, auf dem du nichts installieren kannst. Sie kann alles außer verknüpfte Dateien direkt in anderen Programmen zu öffnen (sie kopiert stattdessen den Pfad).</span></p>
+      <div class="ctas"><a class="btn primary" href="app/"><span><span data-en>Open in browser</span><span data-de>Im Browser öffnen</span><small><span data-en>runs on this website</span><span data-de>läuft auf dieser Website</span></small></span></a><a class="btn" data-gh="releases/latest/download/VertexForge-Studio-Browser.html" href="#browser"><span><span data-en>Download as file</span><span data-de>Als Datei laden</span><small>.html · 0.7 MB</small></span></a></div>
     </div>
     <ol class="mini-steps reveal-stagger">
       <li><b><span data-en>Online:</span><span data-de>Online:</span></b> <span data-en>click “Open in browser” and bookmark the page. Your projects are stored in this browser on this computer.</span><span data-de>Klicke auf „Im Browser öffnen“ und setze ein Lesezeichen. Deine Projekte werden in diesem Browser auf diesem Computer gespeichert.</span></li>
       <li><b><span data-en>Offline:</span><span data-de>Offline:</span></b> <span data-en>download the .html file, put it somewhere permanent (e.g. Documents) and double-click it. Always open the same file, because the browser stores data per file location.</span><span data-de>Lade die .html-Datei, lege sie an einen festen Ort (z. B. Dokumente) und öffne sie per Doppelklick. Öffne immer dieselbe Datei, denn der Browser speichert die Daten pro Dateiort.</span></li>
-      <li><b>Safari:</b> <span data-en>with macOS Sonoma or newer you can use <b>File ▸ Add to Dock</b> to get an app-like window.</span><span data-de>Ab macOS Sonoma kannst du mit <b>Ablage ▸ Zum Dock hinzufügen</b> ein app-ähnliches Fenster bekommen.</span></li>
       <li><b><span data-en>Back up regularly:</span><span data-de>Regelmäßig sichern:</span></b> <span data-en>browsers can delete stored data when you clear history or site data. Use <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>S</kbd> to save a .vforge project file.</span><span data-de>Browser können gespeicherte Daten löschen, wenn du Verlauf oder Website-Daten leerst. Speichere mit <kbd>Strg</kbd>/<kbd>⌘</kbd>+<kbd>S</kbd> eine .vforge-Projektdatei.</span></li>
     </ol>
   </div>
@@ -696,7 +747,7 @@ footer .small{color:var(--muted)}
 <footer>
   <div class="wrap">
     <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="24" height="24">VertexForge Studio</a>
-    <span>v2.7.0 · MIT License</span>
+    <span>v2.8.0 · MIT License</span>
     <span><span data-en>Made by Jan with Claude. No AI in your art.</span><span data-de>Von Jan mit Claude gemacht. Keine KI in deiner Kunst.</span></span>
     <a href="index.html"><span data-en>Homepage</span><span data-de>Startseite</span></a>
     <a data-gh="" href="#">GitHub</a>
@@ -745,6 +796,17 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
   document.querySelectorAll('.feat,.card,.step-card').forEach(el=>el.addEventListener('pointermove', e=>{
     const r = el.getBoundingClientRect(); el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px');
   }));
+
+  /* Download passend zum System des Besuchers hervorheben */
+  const ua = navigator.userAgent || '', plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+  const os = /Android|iPhone|iPad|CrOS/i.test(ua) ? '' : /Mac/i.test(plat) ? 'mac' : /Linux/i.test(plat) ? 'linux' : /Win/i.test(plat) ? 'win' : '';
+  const FILES = {win:'VertexForge-Studio-Setup.exe', mac:'VertexForge-Studio-macOS.dmg', linux:'VertexForge-Studio-linux-amd64.deb'};
+  if(os){
+    const hero = document.getElementById('heroDl');
+    if(hero){ hero.href = gh + 'releases/latest/download/' + FILES[os]; hero.querySelectorAll('.hero-os').forEach(e=>e.hidden = e.dataset.for !== os); }
+    const cards = document.querySelectorAll('.dl [data-os]');
+    if(cards.length){ cards.forEach(c=>c.classList.toggle('main', c.dataset.os === os)); const m = document.querySelector('.dl [data-os="' + os + '"]'); if(m && m.parentNode.firstElementChild !== m) m.parentNode.insertBefore(m, m.parentNode.firstElementChild); }
+  }
 
   VF.setLang(VF.lang);
 })();

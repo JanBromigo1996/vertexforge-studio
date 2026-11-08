@@ -1492,6 +1492,48 @@ html.is-fs .win-ctl [data-win="max"]{display:none}
 .tc-back > *:not(.tc-crest){position:static;z-index:auto}
 .tc:not(.flip) .tc-back,.tc.flip .tc-front{pointer-events:none}
 
+/* ============================================================================
+   BEWEGUNG & FEINSCHLIFF – kurz, federnd, nie im Weg
+   ============================================================================ */
+:root{--ease-out:cubic-bezier(.16,1,.3,1); --spring:cubic-bezier(.34,1.4,.64,1)}
+/* Tooltips */
+.vtip{position:fixed;left:0;top:0;z-index:3000;display:flex;align-items:center;gap:8px;max-width:300px;padding:5px 9px;border-radius:6px;background:var(--panel-2);border:1px solid var(--line-2);box-shadow:var(--shadow-sm);color:var(--text);font-size:11.5px;line-height:1.35;pointer-events:none;opacity:0;transform:translateY(-3px) scale(.97);transform-origin:50% 0;transition:opacity .09s ease,transform .14s var(--ease-out)}
+.vtip.above{transform:translateY(3px) scale(.97);transform-origin:50% 100%}
+.vtip.show{opacity:1;transform:none}
+.vtip-k{display:inline-flex;gap:2px;color:var(--text-2);white-space:nowrap}
+.vtip-k kbd{font-size:9.5px;padding:0 4px;border-bottom-width:1px}
+/* Schließen: Kopie blendet weich aus */
+.modal.ghost{display:flex;pointer-events:none;animation:ghostFade .15s ease-in forwards}
+.modal.ghost > *{animation:ghostPop .15s ease-in forwards}
+.menu.ghost{pointer-events:none;animation:ghostPop .1s ease-in forwards}
+@keyframes ghostFade{to{opacity:0}}
+@keyframes ghostPop{to{opacity:0;transform:translateY(4px) scale(.975)}}
+/* Öffnen: etwas lebendiger */
+.modal.open > *{animation:popIn .26s var(--ease-out)}
+.menu{animation:menuIn .14s var(--ease-out)}
+/* Bereich öffnen: Inhalte rücken versetzt nach */
+.stag{animation:stagIn .34s var(--ease-out) both;animation-delay:calc(var(--i,0) * 22ms)}
+@keyframes stagIn{from{opacity:0;transform:translateY(10px)}}
+/* Aufgabe erledigt: Haken springt, Zeile leuchtet kurz */
+.task.just-done .chk span{animation:chkPop .38s var(--spring)}
+.task.just-done{animation:doneGlow .7s ease-out}
+@keyframes chkPop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes doneGlow{0%{background:color-mix(in srgb,var(--ok) 18%,transparent)}100%{background:transparent}}
+.chk input:checked+span::after{animation:chkDraw .22s var(--ease-out)}
+@keyframes chkDraw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+/* Spürbares Drücken auf allem Klickbaren */
+.icon-btn:active,.tabs button:active,.menubar button:active,.seg button:active{transform:scale(.94)}
+.icon-btn,.tabs button,.menubar button{transition:background-color .12s,color .12s,border-color .12s,transform .12s var(--spring)}
+.menu-item{transition:background-color .08s,color .08s}
+.btn-primary{transition:background-color .12s,box-shadow .2s,transform .12s var(--spring)}
+.btn-primary:hover{box-shadow:0 4px 16px color-mix(in srgb,var(--accent) 30%,transparent)}
+/* Fortschrittsbalken gleiten statt zu springen */
+.bar > i,.progress > i,.prog > i{transition:width .45s var(--ease-out)}
+@media (prefers-reduced-motion:reduce){.vtip{transition:none}.stag,.task.just-done,.task.just-done .chk span,.chk input:checked+span::after{animation:none}}
+/* Lange Listen: nur sichtbare Zeilen werden gezeichnet (spürbar flüssiger bei hunderten Aufgaben/Shots) */
+.task-list > .task{content-visibility:auto;contain-intrinsic-size:auto 44px}
+.shot-table tbody > tr{content-visibility:auto;contain-intrinsic-size:auto 64px}
+
 </style>
 </head>
 <body>
@@ -2079,7 +2121,7 @@ const T = {
   "tm.alone":["Gerade arbeitet niemand sonst daran.", "Nobody else is working on it right now.", "Personne d’autre ne travaille dessus.", "Nadie más está trabajando ahora.", "Nessun altro ci sta lavorando.", "Ninguém mais está trabalhando agora."],
   "tm.nameQ":["Wie heißt du im Team?", "Your name in the team", "Votre nom dans l’équipe", "Tu nombre en el equipo", "Il tuo nome nel team", "Seu nome na equipe"],
   "tm.nameText":["Der Name erscheint bei deinen Änderungen und zeigt den anderen, dass du gerade arbeitest.", "Shown with your changes and tells others you are working.", "Affiché avec vos modifications.", "Se muestra con tus cambios.", "Mostrato con le tue modifiche.", "Aparece com suas alterações."],
-  "tm.unsupported":["Team-Ordner funktionieren in der Windows-App sowie in Chrome und Edge am Computer. Dieser Browser erlaubt keinen Ordnerzugriff – nutze dort Export und Import von .vforge-Dateien.", "Team folders work in the Windows app and in Chrome or Edge on a computer. This browser does not allow folder access – use .vforge export and import here.", "Les dossiers d’équipe fonctionnent dans l’app Windows et dans Chrome ou Edge sur ordinateur. Ici, utilisez l’export/import .vforge.", "Las carpetas de equipo funcionan en la app de Windows y en Chrome o Edge en ordenador. Aquí usa exportar/importar .vforge.", "Le cartelle del team funzionano nell’app Windows e in Chrome o Edge su computer. Qui usa esporta/importa .vforge.", "Pastas de equipe funcionam no app Windows e no Chrome ou Edge no computador. Aqui use exportar/importar .vforge."],
+  "tm.unsupported":["Team-Ordner funktionieren in der Desktop-App sowie in Chrome und Edge am Computer. Dieser Browser erlaubt keinen Ordnerzugriff – nutze dort Export und Import von .vforge-Dateien.", "Team folders work in the desktop app and in Chrome or Edge on a computer. This browser does not allow folder access – use .vforge export and import here.", "Les dossiers d’équipe fonctionnent dans l’app de bureau et dans Chrome ou Edge sur ordinateur. Ici, utilisez l’export/import .vforge.", "Las carpetas de equipo funcionan en la app de escritorio y en Chrome o Edge en ordenador. Aquí usa exportar/importar .vforge.", "Le cartelle del team funzionano nell’app desktop e in Chrome o Edge su computer. Qui usa esporta/importa .vforge.", "Pastas de equipe funcionam no app para desktop e no Chrome ou Edge no computador. Aqui use exportar/importar .vforge."],
   "tm.shareQ":["„{name}“ im Team-Ordner teilen", "Share “{name}” in a team folder", "Partager « {name} »", "Compartir «{name}»", "Condividi «{name}»", "Compartilhar “{name}”"],
   "tm.shareText":["Wähle einen Ordner, den dein Team bereits teilt – z. B. in OneDrive, Dropbox, Google Drive, Nextcloud oder auf einem Netzlaufwerk. Darin entsteht ein Projektordner. Jede Person öffnet ihn mit „Team-Projekt öffnen“. Änderungen werden alle paar Sekunden abgeglichen; es gibt keinen Server und kein Konto.", "Choose a folder your team already shares – e.g. in OneDrive, Dropbox, Google Drive, Nextcloud or on a network drive. A project folder is created inside. Everyone opens it with “Open team project”. Changes sync every few seconds; there is no server and no account.", "Choisissez un dossier déjà partagé (OneDrive, Dropbox, Google Drive, Nextcloud, lecteur réseau). Chacun l’ouvre avec « Ouvrir un projet d’équipe ». Synchronisation toutes les quelques secondes, sans serveur ni compte.", "Elige una carpeta que tu equipo ya comparte (OneDrive, Dropbox, Google Drive, Nextcloud, unidad de red). Cada persona la abre con «Abrir proyecto de equipo». Se sincroniza cada pocos segundos, sin servidor ni cuenta.", "Scegli una cartella già condivisa (OneDrive, Dropbox, Google Drive, Nextcloud, unità di rete). Ognuno la apre con «Apri progetto del team». Sincronizzazione ogni pochi secondi, senza server né account.", "Escolha uma pasta que a equipe já compartilha (OneDrive, Dropbox, Google Drive, Nextcloud, rede). Cada um abre com “Abrir projeto de equipe”. Sincroniza a cada poucos segundos, sem servidor nem conta."],
   "tm.pickFolder":["Ordner wählen …", "Choose folder…", "Choisir…", "Elegir carpeta…", "Scegli cartella…", "Escolher pasta…"],
@@ -2296,13 +2338,16 @@ const T = {
   'guide.only':['','','','','',''],
 };
 
+/* Mac: Tastenkürzel mit ⌘/⌥ anzeigen (die App reagiert auf Cmd genauso wie auf Strg) */
+const IS_MAC = window.__vfPlatform==='macos' || /Mac/.test(navigator.platform||'') && !('ontouchend' in document);
+function macKeys(s){ return IS_MAC && typeof s==='string' ? s.replace(/\b(Strg|Ctrl)\b/g,'⌘').replace(/\bAlt\b/g,'⌥').replace(/\bShift\b/g,'⇧') : s; }
 function t(key, vars){
   const row = T[key];
   let s;
   if(row){ const i = LANG_ORDER.indexOf(currentLang()); s = row[i]; if(s==null || s==='') s = row[1] || row[0]; }
   else s = key;
   if(vars) s = s.replace(/\{(\w+)\}/g, (m,k)=> vars[k]!=null ? vars[k] : m);
-  return s;
+  return macKeys(s);
 }
 function plural(n){ return Math.abs(n)===1 ? t('g.day') : t('g.days'); }
 
@@ -2364,7 +2409,7 @@ de: [
   <p>Asset-Karten und Welt-Bibel-Einträge speichern Pfade zu deinen Arbeitsdateien. Das Programm wird an der Endung erkannt: .blend, .ztl, .spp, .sbs, .zprj, .psd, .aep, .drp, .uproject und viele mehr.</p>
   <table><tr><th></th><th>Desktop-App</th><th>Browser</th></tr>
   <tr><td>Klick aufs Badge</td><td>öffnet die Datei im passenden Programm</td><td>kopiert den Pfad</td></tr>
-  <tr><td>Durchsuchen</td><td>Windows-Dateidialog</td><td>Pfad einfügen</td></tr>
+  <tr><td>Durchsuchen</td><td>Dateidialog des Systems</td><td>Pfad einfügen</td></tr>
   <tr><td>Programm-Icons</td><td>Icons der installierten Programme</td><td>Farbcodes / eigene Icons</td></tr></table>
   <div class="tip">Unter <b>Einstellungen → Software-Bibliothek</b> passt du Farben, Kürzel und Endungen an oder fügst Programme hinzu.</div>`],
  ['shots','film','Shotlist',`
@@ -2387,20 +2432,23 @@ de: [
   <li>Alle anderen: <b>Datei ▸ Team-Projekt öffnen …</b> und genau diesen Ordner wählen.</li>
   <li>Oben neben dem Projektnamen zeigt <b>Team</b> den Status und wer gerade mitarbeitet.</li></ol>
   <p>Jede Aufgabe, Karte, jeder Shot und jedes Kapitel ist eine eigene kleine Datei. Ändern zwei Leute <i>verschiedene</i> Dinge, wird alles automatisch zusammengeführt. Ändern beide <i>dasselbe</i> gleichzeitig, gilt deine Fassung – die andere bleibt im Unterordner „conflicts“ erhalten. Abgeglichen wird alle paar Sekunden; wie schnell es bei den anderen ankommt, hängt vom Cloud-Dienst ab.</p>
-  <div class="tip">Ist der Ordner kurz nicht erreichbar (offline, Laptop unterwegs), arbeitest du einfach lokal weiter – beim nächsten Kontakt wird abgeglichen. Team-Ordner funktionieren in der Windows-App sowie in Chrome und Edge am Computer.</div>`],
+  <div class="tip">Ist der Ordner kurz nicht erreichbar (offline, Laptop unterwegs), arbeitest du einfach lokal weiter – beim nächsten Kontakt wird abgeglichen. Team-Ordner funktionieren in der Desktop-App (Windows, macOS, Linux) sowie in Chrome und Edge am Computer.</div>`],
  ['install','download','Installation & Updates',`
-  <ul><li><b>Installieren:</b> „VertexForge Studio Setup.exe“ starten, Sprache und Zielordner wählen – Desktop- und Startmenü-Verknüpfung werden angelegt.</li>
+  <ul><li><b>Windows:</b> „VertexForge Studio Setup.exe“ starten, Sprache und Zielordner wählen – Desktop- und Startmenü-Verknüpfung werden angelegt.</li>
+  <li><b>macOS:</b> DMG öffnen und die App in „Programme“ ziehen. Beim ersten Start: Rechtsklick → „Öffnen“ (die App ist nicht von Apple notarisiert).</li>
+  <li><b>Linux:</b> das .deb per Doppelklick bzw. <code>sudo apt install ./VertexForge-Studio-linux-amd64.deb</code> installieren – oder das .tar.gz entpacken und <code>./install.sh</code> ausführen.</li>
   <li><b>Updates:</b> einfach das neue Setup ausführen. Deine Projekte liegen getrennt vom Programm in deinem Benutzerprofil und werden <b>nie überschrieben</b>; vor jedem Update entsteht automatisch eine Sicherheits-Version, und ältere Daten werden verlustfrei übernommen.</li>
-  <li><b>Entfernen:</b> über Windows „Apps & Features“. Deine Projekte bleiben erhalten, außer du wählst ausdrücklich „Lokale Daten löschen“.</li></ul>`],
+  <li><b>Entfernen:</b> Windows „Apps & Features“, macOS App in den Papierkorb, Linux <code>sudo apt remove vertexforge-studio</code> bzw. <code>./install.sh --uninstall</code>. Deine Projekte bleiben erhalten.</li></ul>`],
  ['settings','sliders','Sprache & Einstellungen',`
   <ul><li><b>Sprache:</b> Deutsch, English, Français, Español, Italiano, Português – in der Statusleiste oder in den Einstellungen.</li>
-  <li><b>Fenster:</b> eigene Titelleiste (ziehen, Doppelklick maximiert); <kbd>F11</kbd> Vollbild.</li>
+  <li><b>Fenster:</b> unter Windows eigene Titelleiste (ziehen, Doppelklick maximiert), unter macOS und Linux die gewohnte Fensterleiste; <kbd>F11</kbd> Vollbild.</li>
   <li><b>Daten:</b> Beispielprojekte laden, Backup exportieren, Projekte oder alles zurücksetzen.</li></ul>`],
  ['keys','keyboard','Alle Tastenkürzel','{KEYS}'],
  ['faq','compass','Fragen & Lösungen',`
-  <ul><li><b>Die App startet nicht:</b> Sie braucht die Microsoft Edge WebView2 Runtime (in Windows 10/11 meist vorhanden) – sonst öffnet sich die Download-Seite.</li>
-  <li><b>SmartScreen warnt:</b> Die App ist nicht signiert – „Weitere Informationen → Trotzdem ausführen“.</li>
-  <li><b>Wo liegen meine Daten?</b> Desktop: %LOCALAPPDATA%\\VertexForge Studio. Browser: im Speicher des Browsers.</li>
+  <ul><li><b>Die App startet nicht (Windows):</b> Sie braucht die Microsoft Edge WebView2 Runtime (in Windows 10/11 meist vorhanden). Die Fehlermeldung nennt den genauen Grund und den Ort der Log-Datei.</li>
+  <li><b>Die App startet nicht (Linux):</b> WebKitGTK fehlt – <code>sudo apt install libwebkit2gtk-4.1-0</code> (Fedora: <code>webkit2gtk4.1</code>).</li>
+  <li><b>SmartScreen / Gatekeeper warnt:</b> Die App ist nicht kostenpflichtig signiert – Windows: „Weitere Informationen → Trotzdem ausführen“, macOS: Rechtsklick → „Öffnen“.</li>
+  <li><b>Wo liegen meine Daten?</b> Windows: %LOCALAPPDATA%\\VertexForge Studio · macOS: ~/Library/Application Support/VertexForge Studio · Linux: ~/.local/share/vertexforge-studio · Browser: im Speicher des Browsers.</li>
   <li><b>Verknüpfte Videos zeigen keine Vorschau:</b> Vorschauen von Dateien auf dem PC gibt es nur in der Desktop-App; im Browser bleiben Öffnen/Kopieren.</li></ul>`]
 ],
 en: [
@@ -2450,7 +2498,7 @@ en: [
   <p>Asset cards and world-bible entries store paths to your working files. The program is detected by extension: .blend, .ztl, .spp, .sbs, .zprj, .psd, .aep, .drp, .uproject and many more.</p>
   <table><tr><th></th><th>Desktop app</th><th>Browser</th></tr>
   <tr><td>Badge click</td><td>opens the file in its program</td><td>copies the path</td></tr>
-  <tr><td>Browse</td><td>Windows file dialog</td><td>paste the path</td></tr>
+  <tr><td>Browse</td><td>system file dialog</td><td>paste the path</td></tr>
   <tr><td>Program icons</td><td>icons of installed programs</td><td>color codes / your own icons</td></tr></table>
   <div class="tip">In <b>Settings → Software library</b> you adjust colors, codes and extensions or add programs.</div>`],
  ['shots','film','Shot list',`
@@ -2473,20 +2521,23 @@ en: [
   <li>Everyone else: <b>File ▸ Open team project…</b> and choose exactly that folder.</li>
   <li><b>Team</b> next to the project name shows the status and who is working right now.</li></ol>
   <p>Every task, card, shot and chapter is its own small file. When two people change <i>different</i> things, everything is merged automatically. When both change <i>the same</i> thing at the same moment, your version wins – the other one is kept in the “conflicts” subfolder. Syncing happens every few seconds; how fast it reaches the others depends on the cloud service.</p>
-  <div class="tip">If the folder is briefly unreachable (offline, laptop on the road), just keep working locally – it syncs on the next contact. Team folders work in the Windows app and in Chrome or Edge on a computer.</div>`],
+  <div class="tip">If the folder is briefly unreachable (offline, laptop on the road), just keep working locally – it syncs on the next contact. Team folders work in the desktop app (Windows, macOS, Linux) and in Chrome or Edge on a computer.</div>`],
  ['install','download','Installation & updates',`
-  <ul><li><b>Install:</b> run “VertexForge Studio Setup.exe”, choose language and folder – desktop and Start menu shortcuts are created.</li>
+  <ul><li><b>Windows:</b> run “VertexForge Studio Setup.exe”, choose language and folder – desktop and Start menu shortcuts are created.</li>
+  <li><b>macOS:</b> open the DMG and drag the app into “Applications”. First start: right-click → “Open” (the app is not notarised by Apple).</li>
+  <li><b>Linux:</b> install the .deb by double-click or <code>sudo apt install ./VertexForge-Studio-linux-amd64.deb</code> – or unpack the .tar.gz and run <code>./install.sh</code>.</li>
   <li><b>Updates:</b> just run the new setup. Your projects live separately from the program in your user profile and are <b>never overwritten</b>; a safety version is created before every update and older data is migrated without loss.</li>
-  <li><b>Remove:</b> via Windows “Apps & features”. Your projects are kept unless you explicitly choose “Delete local data”.</li></ul>`],
+  <li><b>Remove:</b> Windows “Apps & features”, macOS move the app to the Trash, Linux <code>sudo apt remove vertexforge-studio</code> or <code>./install.sh --uninstall</code>. Your projects are kept.</li></ul>`],
  ['settings','sliders','Language & settings',`
   <ul><li><b>Language:</b> Deutsch, English, Français, Español, Italiano, Português – in the status bar or in settings.</li>
-  <li><b>Window:</b> custom title bar (drag, double-click maximizes); <kbd>F11</kbd> fullscreen.</li>
+  <li><b>Window:</b> on Windows a custom title bar (drag, double-click maximizes), on macOS and Linux the usual window bar; <kbd>F11</kbd> fullscreen.</li>
   <li><b>Data:</b> load sample projects, export a backup, reset projects or everything.</li></ul>`],
  ['keys','keyboard','All keyboard shortcuts','{KEYS}'],
  ['faq','compass','Questions & fixes',`
-  <ul><li><b>The app does not start:</b> it needs the Microsoft Edge WebView2 Runtime (usually present on Windows 10/11) – otherwise the download page opens.</li>
-  <li><b>SmartScreen warns:</b> the app is not code-signed – “More info → Run anyway”.</li>
-  <li><b>Where is my data?</b> Desktop: %LOCALAPPDATA%\\VertexForge Studio. Browser: in the browser’s storage.</li>
+  <ul><li><b>The app does not start (Windows):</b> it needs the Microsoft Edge WebView2 Runtime (usually present on Windows 10/11). The error message names the exact reason and where the log file is.</li>
+  <li><b>The app does not start (Linux):</b> WebKitGTK is missing – <code>sudo apt install libwebkit2gtk-4.1-0</code> (Fedora: <code>webkit2gtk4.1</code>).</li>
+  <li><b>SmartScreen / Gatekeeper warns:</b> the app is not paid-signed – Windows: “More info → Run anyway”, macOS: right-click → “Open”.</li>
+  <li><b>Where is my data?</b> Windows: %LOCALAPPDATA%\\VertexForge Studio · macOS: ~/Library/Application Support/VertexForge Studio · Linux: ~/.local/share/vertexforge-studio · Browser: in the browser’s storage.</li>
   <li><b>Linked videos show no preview:</b> previews of files on your PC exist only in the desktop app; in the browser you can still open/copy.</li></ul>`]
 ],
 fr: [
@@ -2535,7 +2586,7 @@ fr: [
   <p>Les cartes d’asset et la bible du monde enregistrent les chemins de vos fichiers. Le logiciel est reconnu par l’extension : .blend, .ztl, .spp, .sbs, .zprj, .psd, .aep, .drp, .uproject et bien d’autres.</p>
   <table><tr><th></th><th>App de bureau</th><th>Navigateur</th></tr>
   <tr><td>Clic sur le badge</td><td>ouvre le fichier dans son logiciel</td><td>copie le chemin</td></tr>
-  <tr><td>Parcourir</td><td>boîte de dialogue Windows</td><td>coller le chemin</td></tr>
+  <tr><td>Parcourir</td><td>boîte de dialogue du système</td><td>coller le chemin</td></tr>
   <tr><td>Icônes</td><td>icônes des logiciels installés</td><td>codes couleur / vos icônes</td></tr></table>`],
  ['shots','film','Liste des plans',`
   <ul><li>Chaque plan : ID, image de storyboard, séquence, action, images, objectif et note VFX ; durée calculée selon la cadence.</li>
@@ -2614,7 +2665,7 @@ es: [
   <p>Las tarjetas de asset y la biblia del mundo guardan rutas a tus archivos. El programa se reconoce por la extensión: .blend, .ztl, .spp, .sbs, .zprj, .psd, .aep, .drp, .uproject y muchas más.</p>
   <table><tr><th></th><th>App de escritorio</th><th>Navegador</th></tr>
   <tr><td>Clic en la insignia</td><td>abre el archivo en su programa</td><td>copia la ruta</td></tr>
-  <tr><td>Examinar</td><td>diálogo de Windows</td><td>pegar la ruta</td></tr>
+  <tr><td>Examinar</td><td>diálogo del sistema</td><td>pegar la ruta</td></tr>
   <tr><td>Iconos</td><td>iconos de los programas instalados</td><td>códigos de color / tus iconos</td></tr></table>`],
  ['shots','film','Lista de planos',`
   <ul><li>Cada plano: ID, imagen de storyboard, secuencia, acción, frames, lente y nota VFX; la duración se calcula según la cadencia.</li>
@@ -2812,7 +2863,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.7.0';
+const APP_VERSION = '2.8.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -3269,7 +3320,11 @@ const MEDIA_EXT = {image:['png','jpg','jpeg','webp','gif','bmp','avif','svg'], v
 function fileKind(path){ const e = (basename(path).split('.').pop() || '').toLowerCase(); return MEDIA_EXT.image.includes(e) ? 'image' : MEDIA_EXT.video.includes(e) ? 'video' : 'other'; }
 function localFileURL(path){
   const p = String(path||'').trim(), m = p.match(/^([a-zA-Z]):[\\/](.*)$/);
-  if(!m) return '';
+  if(!m){
+    /* macOS/Linux-App: absolute Pfade über den lokalen App-Server (mit Schlüssel) */
+    if(p.startsWith('/') && window.__vfFileBase) return window.__vfFileBase + p.split('/').map(encodeURIComponent).join('/');
+    return location.protocol==='file:' && p.startsWith('/') ? 'file://' + p.split('/').map(encodeURIComponent).join('/') : '';
+  }
   const rest = m[2].split(/[\\/]+/).map(encodeURIComponent).join('/');
   if(IS_DESKTOP) return `https://drive-${m[1].toLowerCase()}.vertexforge.example/${rest}`;
   return location.protocol==='file:' ? `file:///${m[1].toUpperCase()}:/${rest}` : '';
@@ -3757,7 +3812,7 @@ function dialog({title, text='', buttons=[{label:t('g.ok'), value:true, primary:
       ${input!==null ? `<input class="inp" id="dlgInput" value="${esc(input)}">` : ''}
       <div class="dlg-actions">${buttons.map((b,i)=>`<button class="btn ${b.primary?'btn-primary':''} ${b.danger?'btn-danger':''}" data-i="${i}">${esc(b.label)}</button>`).join('')}</div></div>`;
     m.classList.add('open');
-    const close = v => { m.classList.remove('open'); m.innerHTML = ''; document.removeEventListener('keydown', kd, true); resolve(v); };
+    const close = v => { ghostOut(m); m.classList.remove('open'); m.innerHTML = ''; document.removeEventListener('keydown', kd, true); resolve(v); };
     m.querySelectorAll('[data-i]').forEach(btn=> btn.onclick = () => { const b = buttons[+btn.dataset.i]; close(input!==null && b.value===true ? $('dlgInput').value : b.value); });
     const kd = e => { if(e.key==='Escape'){ e.stopPropagation(); e.preventDefault(); close(null); } else if(e.key==='Enter' && input!==null){ e.preventDefault(); close($('dlgInput').value); } };
     document.addEventListener('keydown', kd, true);
@@ -3776,11 +3831,11 @@ function openSheet(html, cls=''){
   m.onpointerdown = e => { if(e.target===m) closeSheet(); };
   return m.firstElementChild;
 }
-function closeSheet(){ const m = $('modal2'); if(!m.classList.contains('open')) return; m.classList.remove('open'); m.innerHTML = ''; if(ui.onSheetClose){ const f = ui.onSheetClose; ui.onSheetClose = null; f(); } }
+function closeSheet(){ const m = $('modal2'); if(!m.classList.contains('open')) return; ghostOut(m); m.classList.remove('open'); m.innerHTML = ''; if(ui.onSheetClose){ const f = ui.onSheetClose; ui.onSheetClose = null; f(); } }
 
 /* Kontextmenü / Dropdown */
 let menuEl = null;
-function closeMenu(){ if(menuEl){ menuEl.remove(); menuEl = null; } if(ui.menuBtn){ ui.menuBtn.classList.remove('open'); ui.menuBtn = null; } document.removeEventListener('pointerdown', menuOutside, true); }
+function closeMenu(){ if(menuEl){ ghostOut(menuEl); menuEl.remove(); menuEl = null; } if(ui.menuBtn){ ui.menuBtn.classList.remove('open'); ui.menuBtn = null; } document.removeEventListener('pointerdown', menuOutside, true); }
 function menuOutside(e){ if(menuEl && !menuEl.contains(e.target) && !(ui.menuBtn && ui.menuBtn.contains(e.target))) closeMenu(); }
 function openMenu(x, y, items, title){
   closeMenu();
@@ -3789,7 +3844,7 @@ function openMenu(x, y, items, title){
   el.innerHTML = (title ? `<div class="menu-title">${esc(title)}</div>` : '') + items.map((it,i)=>{
     if(it.sep) return '<div class="menu-sep"></div>';
     if(it.swatches) return `<div class="menu-swatches">${it.swatches.map((s,j)=>`<button data-sw="${i}:${j}" title="${esc(s.title||s.color)}" style="background:${s.color||'var(--accent)'}"></button>`).join('')}</div>`;
-    return `<button class="menu-item ${it.danger?'danger':''}" data-mi="${i}" ${it.disabled?'disabled':''} role="menuitem">${it.checked!==undefined ? `<span class="check">${it.checked?ic('check',14):''}</span>` : (it.icon ? ic(it.icon,15) : '<span style="width:15px"></span>')}<span class="lbl">${esc(it.label)}</span>${it.kbd ? `<kbd>${esc(it.kbd)}</kbd>` : ''}</button>`;
+    return `<button class="menu-item ${it.danger?'danger':''}" data-mi="${i}" ${it.disabled?'disabled':''} role="menuitem">${it.checked!==undefined ? `<span class="check">${it.checked?ic('check',14):''}</span>` : (it.icon ? ic(it.icon,15) : '<span style="width:15px"></span>')}<span class="lbl">${esc(it.label)}</span>${it.kbd ? `<kbd>${esc(kbdLabel(it.kbd))}</kbd>` : ''}</button>`;
   }).join('');
   $('menuLayer').appendChild(el); menuEl = el;
   const r = el.getBoundingClientRect();
@@ -3890,7 +3945,7 @@ function openPalette(){
     const hit = c => { const h = (c.label + ' ' + c.group + ' ' + (c.sub || '') + ' ' + (c.extra || '')).toLowerCase(); return q.every(w=>h.includes(w)); };
     shown = q.length ? [...content.filter(hit).slice(0, 40), ...cmds.filter(hit)].slice(0, 70) : cmds.slice(0, 60);
     hl = clamp(hl, 0, Math.max(0, shown.length-1));
-    list.innerHTML = shown.length ? shown.map((c,i)=>`<button class="menu-item ${i===hl?'hl':''} ${c.content?'pc-item':''}" data-pi="${i}">${ic(c.icon,15)}<span class="lbl">${esc(c.label)}${c.sub?`<small>${esc(c.sub)}</small>`:''}</span>${c.kbd?`<kbd>${esc(c.kbd)}</kbd>`:''}<span class="grp">${esc(c.group)}</span></button>`).join('') : `<div class="palette-empty">${t('pal.none')}</div>`;
+    list.innerHTML = shown.length ? shown.map((c,i)=>`<button class="menu-item ${i===hl?'hl':''} ${c.content?'pc-item':''}" data-pi="${i}">${ic(c.icon,15)}<span class="lbl">${esc(c.label)}${c.sub?`<small>${esc(c.sub)}</small>`:''}</span>${c.kbd?`<kbd>${esc(kbdLabel(c.kbd))}</kbd>`:''}<span class="grp">${esc(c.group)}</span></button>`).join('') : `<div class="palette-empty">${t('pal.none')}</div>`;
     const h = list.querySelector('.hl'); if(h) h.scrollIntoView({block:'nearest'});
   };
   const run = i => { const c = shown[i]; closePalette(); if(c) c.run(); };
@@ -4154,8 +4209,52 @@ function swipeViews(from, to){
   a.classList.add('leaving'); b.classList.add('entering');
   clearTimeout(ui.swipeT);
   ui.swipeT = setTimeout(()=>{ a.classList.remove('leaving'); b.classList.remove('entering'); }, 230);
-  countUp(b);
+  countUp(b); staggerIn(b);
 }
+/* Inhalte eines Bereichs erscheinen beim Öffnen leicht versetzt – nur die ersten, damit nichts wartet */
+const STAGGER_SEL = '.hub-grid > *, .kpi-row > *, .phase-list > *, .kb-list > *, .shot-table tbody > tr, .gsec, .side-list > *';
+function staggerIn(root){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const els = [...root.querySelectorAll(STAGGER_SEL)].slice(0, 18);
+  els.forEach((e,i)=>{ e.style.setProperty('--i', i); e.classList.add('stag'); });
+  setTimeout(()=>els.forEach(e=>{ e.classList.remove('stag'); e.style.removeProperty('--i'); }), 420 + els.length*22);
+}
+/* Schließen mit kurzem Ausblenden: eine Kopie blendet aus, das Original ist sofort wieder frei */
+function ghostOut(el){
+  if(!el || !el.isConnected || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const r = el.getBoundingClientRect(); if(!r.width) return;
+  const g = el.cloneNode(true); g.removeAttribute('id'); g.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));
+  g.classList.remove('open'); g.classList.add('ghost'); g.setAttribute('aria-hidden','true'); g.inert = true;
+  g.style.zIndex = getComputedStyle(el).zIndex;
+  el.querySelectorAll('canvas').forEach((c,i)=>{ const d = g.querySelectorAll('canvas')[i]; if(d){ d.width = c.width; d.height = c.height; try{ d.getContext('2d').drawImage(c,0,0); }catch(e){} } });
+  document.body.appendChild(g); setTimeout(()=>g.remove(), 180);
+}
+/* Schnelle Tooltips statt der trägen Browser-Titel, Tastenkürzel als Tasten-Chips */
+const TIP = {el:null, t:0, warm:0, cur:null};
+function hideTip(){ clearTimeout(TIP.t); if(TIP.cur && TIP.el && TIP.el.classList.contains('show')) TIP.warm = performance.now() + 400; TIP.cur = null; if(TIP.el) TIP.el.classList.remove('show'); }
+function showTip(tg){
+  const raw = tg.dataset.tip; if(!raw) return;
+  if(!TIP.el){ TIP.el = document.createElement('div'); TIP.el.className = 'vtip'; TIP.el.setAttribute('role','tooltip'); document.body.appendChild(TIP.el); }
+  const el = TIP.el, parts = raw.split(' · '); let key = '';
+  if(parts.length > 1 && /^(Ctrl|Strg|Alt|Shift|F\d|Esc|Del|Entf|⌘|⌥|⇧|\?$)/.test(parts[parts.length-1].trim())) key = parts.pop().trim();
+  el.innerHTML = `<span>${esc(macKeys(parts.join(' · ')))}</span>${key ? `<span class="vtip-k">${keyHTML(key)}</span>` : ''}`;
+  el.style.left = '0px'; el.style.top = '0px'; el.classList.remove('above');
+  const r = tg.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+  let y = r.bottom + 7, above = false; if(y + h > innerHeight - 6){ y = r.top - h - 7; above = true; }
+  el.style.left = Math.round(Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width/2 - w/2))) + 'px'; el.style.top = Math.round(y) + 'px';
+  el.classList.toggle('above', above); void el.offsetWidth; el.classList.add('show');
+}
+document.addEventListener('pointerover', e=>{
+  if(e.pointerType==='touch' || !e.target.closest) return;
+  const tg = e.target.closest('[title],[data-tip]:not(.bt-tool)');
+  if(!tg || tg===TIP.cur || tg.classList.contains('bt-tool') || tg.closest('.vtip')) return;
+  if(tg.hasAttribute('title')){ const tt = tg.getAttribute('title'); tg.removeAttribute('title'); if(!tt) return; tg.dataset.tip = tt; if(!tg.hasAttribute('aria-label') && !tg.textContent.trim()) tg.setAttribute('aria-label', tt); }
+  hideTip(); TIP.cur = tg;
+  TIP.t = setTimeout(()=>{ if(TIP.cur===tg && tg.isConnected) showTip(tg); }, performance.now() < TIP.warm ? 30 : 450);
+});
+document.addEventListener('pointerout', e=>{ if(TIP.cur && !(e.relatedTarget && TIP.cur.contains(e.relatedTarget))) hideTip(); });
+['pointerdown','keydown','wheel'].forEach(ev=>document.addEventListener(ev, hideTip, true));
+window.addEventListener('blur', hideTip);
 /* Kennzahlen zählen beim Öffnen eines Bereichs kurz hoch */
 function countUp(root){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -4297,9 +4396,10 @@ const KEYMAP = [
   ['other','Shift+A','k.addCtx'],['other','V','k.view'],['other','Ctrl+Space','k.focus'],['other','⠿ Drag / Alt+↑↓','sh.drag']
 ];
 const KEY_DE = {Ctrl:'Strg', Del:'Entf', Home:'Pos1', Space:'Leertaste', PgUp:'Bild↑', PgDn:'Bild↓', Wheel:'Mausrad', Shake:'Schütteln', LMB:'Linksklick', RMB:'Rechtsklick', MMB:'Mitteltaste', Drag:'Ziehen'};
+function kbdLabel(s){ if(currentLang()==='de') s = s.replace(/\b(Ctrl|Del)\b/g, w=>KEY_DE[w]); return macKeys(s); }
 function keyHTML(s){
   const de = currentLang()==='de';
-  return s.split(' / ').map(alt=>alt.split(/\+(?!$)/).map(k=>{ let x = k.trim(); if(de) x = x.replace(/[A-Za-z]+/g, w=>KEY_DE[w]||w); return `<kbd>${esc(x)}</kbd>`; }).join('+')).join(' <span class="muted">/</span> ');
+  return s.split(' / ').map(alt=>alt.split(/\+(?!$)/).map(k=>{ let x = k.trim(); if(de) x = x.replace(/[A-Za-z]+/g, w=>KEY_DE[w]||w); x = macKeys(x); return `<kbd>${esc(x)}</kbd>`; }).join('+')).join(' <span class="muted">/</span> ');
 }
 function keysTableHTML(){
   return `<div class="keys-grid">${['global','board','other'].map(c=>`<div class="keys-group"><h4>${t('ctx.'+c)}</h4>${KEYMAP.filter(k=>k[0]===c).map(k=>`<div class="keys-row"><span>${t(k[2])}</span><span>${keyHTML(k[1])}</span></div>`).join('')}</div>`).join('')}</div>`;
@@ -4722,7 +4822,7 @@ function initDesignerDrag(){
     el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
   };
 }
-function closeDesigner(){ $('designer').classList.remove('open'); $('designer').innerHTML = ''; ui.designer = null; }
+function closeDesigner(){ ghostOut($('designer')); $('designer').classList.remove('open'); $('designer').innerHTML = ''; ui.designer = null; }
 function saveDesigner(){
   const d = ui.designer; if(!d) return;
   const p = S.projects.find(x=>x.id===d.id);
@@ -5027,7 +5127,9 @@ function bindPipeline(v){
       if(k==='done') x.status = el.checked ? 'done' : 'todo';
       if(k==='prio') x.prio = PRIOS.includes(el.value) ? el.value : 'med';
       if(k==='deadline') x.deadline = isoDate(el.value);
+      const key = el.closest('[data-task]').dataset.task;
       changed(); renderPipeline();
+      if(k==='done' && x.status==='done'){ const row = v.querySelector(`[data-task="${key}"]`); if(row){ row.classList.add('just-done'); setTimeout(()=>row.classList.remove('just-done'), 700); } }
     }
   };
   v.oninput = e => onField(e, false);
@@ -5199,6 +5301,7 @@ function nodeHTML(n, i){
 function renderNodes(){
   const b = activeBoard();
   $('nodes').innerHTML = b.nodes.map(nodeHTML).join('');
+  ui.nodeEls = new Map(); $('nodes').querySelectorAll('.node[data-id]').forEach(e=>ui.nodeEls.set(e.dataset.id, e));
   // Neue Elemente (hinzugefügt, eingefügt, per Undo zurückgeholt) sanft einblenden
   const ids = b.nodes.map(n=>n.id);
   if(ui.nodeSeenBoard===b.id && ui.nodeSeen) ids.forEach(id=>{ if(!ui.nodeSeen.has(id)){ const el = nodeEl(id); if(el) el.classList.add('pop'); } });
@@ -5212,7 +5315,11 @@ function updateNodeEl(n){
   const tmp = document.createElement('div'); tmp.innerHTML = nodeHTML(n, activeBoard().nodes.indexOf(n));
   el.replaceWith(tmp.firstElementChild); layoutDocks(); renderWires();
 }
-function nodeEl(id){ return $('nodes').querySelector(`[data-id="${id}"]`); }
+/* Element-Cache: viele Karten = viele Abfragen, eine Map hält das schnell */
+function nodeEl(id){
+  const m = ui.nodeEls; let el = m && m.get(id); if(el && el.isConnected) return el;
+  el = $('nodes').querySelector(`[data-id="${id}"]`); if(el && m) m.set(id, el); return el;
+}
 function nodeSize(n){
   if(CV.sizes && CV.sizes.has(n.id)) return CV.sizes.get(n.id);
   const el = nodeEl(n.id), s = {w:el ? el.offsetWidth : n.w || 100, h:el ? el.offsetHeight : n.h || 60};
@@ -7332,7 +7439,7 @@ function renderGuide(){
       <div class="head-actions"><button class="btn" onclick="startTour()">${ic('sparkle',14)} ${t('tour.menu')}</button><button class="btn" onclick="openKeys()">${ic('keyboard',14)} ${t('h.keys')}</button><button class="btn btn-primary" onclick="go('projects')">${ic('grid',14)} ${t('mod.projects')}</button></div></div>
     <div class="guide">
       <nav class="guide-toc">${secs.map(([id,,title])=>`<button data-gjump="${id}">${esc(title)}</button>`).join('')}</nav>
-      <div class="guide-body">${secs.map(([id,icon,title,html])=>`<section class="panel gsec" id="g_${id}"><h2><span class="gi">${ic(icon,16)}</span>${esc(title)}</h2>${html.replace('{KEYS}', keysTableHTML())}</section>`).join('')}</div>
+      <div class="guide-body">${secs.map(([id,icon,title,html])=>`<section class="panel gsec" id="g_${id}"><h2><span class="gi">${ic(icon,16)}</span>${esc(title)}</h2>${macKeys(html).replace('{KEYS}', keysTableHTML())}</section>`).join('')}</div>
     </div></div>`;
   v.querySelector('.guide-toc').onclick = e => { const b = e.target.closest('[data-gjump]'); if(b){ const s = $('g_'+b.dataset.gjump); if(s) s.scrollIntoView({behavior:'smooth', block:'start'}); } };
 }
