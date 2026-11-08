@@ -221,7 +221,7 @@ function renderGuide(){
       <div class="head-actions"><button class="btn" onclick="startTour()">${ic('sparkle',14)} ${t('tour.menu')}</button><button class="btn" onclick="openKeys()">${ic('keyboard',14)} ${t('h.keys')}</button><button class="btn btn-primary" onclick="go('projects')">${ic('grid',14)} ${t('mod.projects')}</button></div></div>
     <div class="guide">
       <nav class="guide-toc">${secs.map(([id,,title])=>`<button data-gjump="${id}">${esc(title)}</button>`).join('')}</nav>
-      <div class="guide-body">${secs.map(([id,icon,title,html])=>`<section class="panel gsec" id="g_${id}"><h2><span class="gi">${ic(icon,16)}</span>${esc(title)}</h2>${html.replace('{KEYS}', keysTableHTML())}</section>`).join('')}</div>
+      <div class="guide-body">${secs.map(([id,icon,title,html])=>`<section class="panel gsec" id="g_${id}"><h2><span class="gi">${ic(icon,16)}</span>${esc(title)}</h2>${macKeys(html).replace('{KEYS}', keysTableHTML())}</section>`).join('')}</div>
     </div></div>`;
   v.querySelector('.guide-toc').onclick = e => { const b = e.target.closest('[data-gjump]'); if(b){ const s = $('g_'+b.dataset.gjump); if(s) s.scrollIntoView({behavior:'smooth', block:'start'}); } };
 }

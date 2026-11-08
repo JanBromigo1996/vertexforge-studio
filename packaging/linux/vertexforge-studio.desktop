@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=VertexForge Studio
+GenericName=3D Project Planner
+GenericName[de]=3D-Projektplaner
+Comment=Plan and organise 3D film projects and their pipelines
+Comment[de]=3D-Filmprojekte und ihre Pipelines planen und organisieren
+Exec=vertexforge-studio
+Icon=vertexforge-studio
+Terminal=false
+Categories=Graphics;3DGraphics;ProjectManagement;Office;
+StartupWMClass=vertexforge-studio
+Keywords=3D;Blender;pipeline;storyboard;shot list;planning;

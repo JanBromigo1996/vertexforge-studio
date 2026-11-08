@@ -15,10 +15,7 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
-	"sort"
-	"embed"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/fs"
 	"log"
@@ -26,6 +23,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime/debug"
+	"sort"
 	"strings"
 	"sync"
 	"syscall"
@@ -35,48 +33,42 @@ import (
 
 	webview2 "github.com/jchv/go-webview2"
 	"github.com/jchv/go-webview2/pkg/edge"
+	"github.com/jchv/go-webview2/webviewloader"
 	"golang.org/x/sys/windows/registry"
 	"vertexforge/winutil"
 )
 
-const (
-	appName    = "VertexForge Studio"
-	appVersion = "2.7.0"
-	virtHost   = "vertexforge.example"
-)
-
-//go:embed app
-var appFiles embed.FS
+const virtHost = "vertexforge.example"
 
 var (
-	comdlg32          = syscall.NewLazyDLL("comdlg32.dll")
-	procGetSaveName   = comdlg32.NewProc("GetSaveFileNameW")
-	procGetOpenName   = comdlg32.NewProc("GetOpenFileNameW")
-	shell32           = syscall.NewLazyDLL("shell32.dll")
-	procShellExecute  = shell32.NewProc("ShellExecuteW")
-	user32            = syscall.NewLazyDLL("user32.dll")
-	kernel32 = syscall.NewLazyDLL("kernel32.dll")
-	procMessageBox    = user32.NewProc("MessageBoxW")
+	comdlg32             = syscall.NewLazyDLL("comdlg32.dll")
+	procGetSaveName      = comdlg32.NewProc("GetSaveFileNameW")
+	procGetOpenName      = comdlg32.NewProc("GetOpenFileNameW")
+	shell32              = syscall.NewLazyDLL("shell32.dll")
+	procShellExecute     = shell32.NewProc("ShellExecuteW")
+	user32               = syscall.NewLazyDLL("user32.dll")
+	kernel32             = syscall.NewLazyDLL("kernel32.dll")
+	procMessageBox       = user32.NewProc("MessageBoxW")
 	procSetErrorMode     = kernel32.NewProc("SetErrorMode")
 	procGetLogicalDrives = kernel32.NewProc("GetLogicalDrives")
 	procGetDriveType     = kernel32.NewProc("GetDriveTypeW")
-	procSetForeground = user32.NewProc("SetForegroundWindow")
-	procGetWindowLong = user32.NewProc("GetWindowLongPtrW")
-	procSetWindowLong = user32.NewProc("SetWindowLongPtrW")
-	procGetPlacement  = user32.NewProc("GetWindowPlacement")
-	procSetPlacement  = user32.NewProc("SetWindowPlacement")
-	procMonitorFromWn = user32.NewProc("MonitorFromWindow")
-	procGetMonitorInf = user32.NewProc("GetMonitorInfoW")
-	procSetWindowPos  = user32.NewProc("SetWindowPos")
-	procIsZoomed      = user32.NewProc("IsZoomed")
-	procGetKeyState   = user32.NewProc("GetKeyState")
-	procShowWindowM   = user32.NewProc("ShowWindow")
-	procReleaseCap    = user32.NewProc("ReleaseCapture")
-	procSendMessage   = user32.NewProc("SendMessageW")
-	procPostMessage   = user32.NewProc("PostMessageW")
-	dwmapi            = syscall.NewLazyDLL("dwmapi.dll")
-	procDwmExtend     = dwmapi.NewProc("DwmExtendFrameIntoClientArea")
-	procDwmSetAttr    = dwmapi.NewProc("DwmSetWindowAttribute")
+	procSetForeground    = user32.NewProc("SetForegroundWindow")
+	procGetWindowLong    = user32.NewProc("GetWindowLongPtrW")
+	procSetWindowLong    = user32.NewProc("SetWindowLongPtrW")
+	procGetPlacement     = user32.NewProc("GetWindowPlacement")
+	procSetPlacement     = user32.NewProc("SetWindowPlacement")
+	procMonitorFromWn    = user32.NewProc("MonitorFromWindow")
+	procGetMonitorInf    = user32.NewProc("GetMonitorInfoW")
+	procSetWindowPos     = user32.NewProc("SetWindowPos")
+	procIsZoomed         = user32.NewProc("IsZoomed")
+	procGetKeyState      = user32.NewProc("GetKeyState")
+	procShowWindowM      = user32.NewProc("ShowWindow")
+	procReleaseCap       = user32.NewProc("ReleaseCapture")
+	procSendMessage      = user32.NewProc("SendMessageW")
+	procPostMessage      = user32.NewProc("PostMessageW")
+	dwmapi               = syscall.NewLazyDLL("dwmapi.dll")
+	procDwmExtend        = dwmapi.NewProc("DwmExtendFrameIntoClientArea")
+	procDwmSetAttr       = dwmapi.NewProc("DwmSetWindowAttribute")
 )
 
 // ---- Rahmenloses Vollbild (F11) ----
@@ -225,85 +217,6 @@ func shellOpen(owner uintptr, target string) error {
 
 func messageBox(text, caption string, flags uintptr) {
 	_, _, _ = procMessageBox.Call(0, uintptr(unsafe.Pointer(ptr(text))), uintptr(unsafe.Pointer(ptr(caption))), flags)
-}
-
-// writeAtomic schreibt zuerst in eine Temp-Datei und benennt dann um –
-// so bleibt bei einem Absturz die alte Projektdatei erhalten.
-// ---- Team-Ordner: gemeinsamer Projektordner (OneDrive, Dropbox, Netzlaufwerk …) ----
-// Alle Zugriffe bleiben strikt innerhalb des gewählten Ordners.
-func teamPath(root, rel string) (string, error) {
-	if root == "" || rel == "" {
-		return "", errors.New("empty path")
-	}
-	clean := filepath.Clean(filepath.FromSlash(rel))
-	if filepath.IsAbs(clean) || clean == "." || strings.HasPrefix(clean, "..") || strings.ContainsAny(clean, ":*?\"<>|") {
-		return "", errors.New("invalid path")
-	}
-	return filepath.Join(root, clean), nil
-}
-
-type teamEntry struct {
-	Rel   string `json:"rel"`
-	Mtime int64  `json:"mtime"`
-	Size  int64  `json:"size"`
-}
-
-func teamScan(root string) ([]teamEntry, error) {
-	out := []teamEntry{}
-	st, err := os.Stat(root)
-	if err != nil || !st.IsDir() {
-		return out, errors.New("folder not reachable")
-	}
-	err = filepath.WalkDir(root, func(p string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return nil
-		}
-		if d.IsDir() {
-			if p != root && strings.Count(strings.TrimPrefix(p, root), string(os.PathSeparator)) > 3 {
-				return filepath.SkipDir
-			}
-			return nil
-		}
-		name := d.Name()
-		if strings.HasSuffix(name, ".tmp") || strings.HasPrefix(name, "~") || len(out) >= 50000 {
-			return nil
-		}
-		info, err := d.Info()
-		if err != nil {
-			return nil
-		}
-		rel, _ := filepath.Rel(root, p)
-		out = append(out, teamEntry{Rel: filepath.ToSlash(rel), Mtime: info.ModTime().UnixMilli(), Size: info.Size()})
-		return nil
-	})
-	return out, err
-}
-
-func teamWrite(root, rel, content string) error {
-	p, err := teamPath(root, rel)
-	if err != nil {
-		return err
-	}
-	if err := os.MkdirAll(filepath.Dir(p), 0o755); err != nil {
-		return err
-	}
-	tmp := p + ".tmp"
-	if err := os.WriteFile(tmp, []byte(content), 0o644); err != nil {
-		return err
-	}
-	return os.Rename(tmp, p)
-}
-
-func writeAtomic(path, content string) error {
-	tmp := path + ".tmp"
-	if err := os.WriteFile(tmp, []byte(content), 0o644); err != nil {
-		return err
-	}
-	if _, err := os.Stat(path); err == nil {
-		_ = os.Remove(path + ".bak")
-		_ = os.Rename(path, path+".bak")
-	}
-	return os.Rename(tmp, path)
 }
 
 // extractApp kopiert die eingebettete Web-App in den Programmordner
@@ -480,6 +393,9 @@ func main() {
 		defer lf.Close()
 	}
 	log.Printf("VertexForge Studio %s – Start (%s)", appVersion, exePath())
+	if v, _ := webviewloader.GetInstalledVersion(); true {
+		log.Printf("WebView2 Runtime: %q", v)
+	}
 	// Keine Windows-Fehlerdialoge („Kein Datenträger im Laufwerk“) beim Prüfen von Laufwerken
 	procSetErrorMode.Call(0x0001 | 0x8000) // SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX
 	// Unerwartete Fehler nicht stumm verschlucken, sondern melden
@@ -510,10 +426,20 @@ func main() {
 		},
 	})
 	if w == nil {
-		log.Printf("WebView2 konnte nicht gestartet werden")
-		messageBox("Microsoft Edge WebView2 Runtime wurde nicht gefunden.\n\nBitte installiere sie (kostenlos) und starte VertexForge Studio erneut.\n\n"+
-			"Microsoft Edge WebView2 Runtime is missing. Please install it and restart.", appName, 0x30)
-		_ = shellOpen(0, "https://go.microsoft.com/fwlink/p/?LinkId=2124703")
+		ver, _ := webviewloader.GetInstalledVersion()
+		log.Printf("WebView2 konnte nicht gestartet werden – Runtime: %q, Details: %s", ver, webviewloader.LastError)
+		logPath := filepath.Join(base, "vertexforge.log")
+		if ver == "" {
+			messageBox("Microsoft Edge WebView2 Runtime wurde nicht gefunden.\n\nBitte installiere sie (kostenlos) und starte VertexForge Studio erneut.\n\n"+
+				"Microsoft Edge WebView2 Runtime is missing. Please install it and restart.", appName, 0x30)
+			_ = shellOpen(0, "https://go.microsoft.com/fwlink/p/?LinkId=2124703")
+		} else {
+			messageBox(fmt.Sprintf("VertexForge Studio konnte die Oberfläche nicht starten.\nWebView2 %s ist installiert, meldet aber: %s\n\n"+
+				"Bitte starte den PC neu. Hilft das nicht, melde den Fehler mit dieser Datei:\n%s\n\n"+
+				"VertexForge Studio could not start its interface (WebView2 %s: %s).\nPlease restart your PC; if that does not help, report it with the log file above.",
+				ver, webviewloader.LastError, logPath, ver, webviewloader.LastError), appName, 0x30)
+			_ = shellOpen(0, "https://github.com/JanBromigo1996/vertexforge-studio/issues/new?template=bug_report.md")
+		}
 		return
 	}
 	defer w.Destroy()
@@ -644,7 +570,7 @@ func main() {
 		m := [4]int32{1, 1, 1, 1}
 		_, _, _ = procDwmExtend.Call(hwnd, uintptr(unsafe.Pointer(&m)))
 		dark := int32(1)
-		_, _, _ = procDwmSetAttr.Call(hwnd, 20, uintptr(unsafe.Pointer(&dark)), 4) // DWMWA_USE_IMMERSIVE_DARK_MODE
+		_, _, _ = procDwmSetAttr.Call(hwnd, 20, uintptr(unsafe.Pointer(&dark)), 4)        // DWMWA_USE_IMMERSIVE_DARK_MODE
 		_, _, _ = procSetWindowPos.Call(hwnd, 0, 0, 0, 0, 0, 0x0001|0x0002|0x0004|0x0020) // FRAMECHANGED
 	}
 	winState := func() map[string]bool {

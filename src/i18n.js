@@ -761,13 +761,16 @@ const T = {
   'guide.only':['','','','','',''],
 };
 
+/* Mac: Tastenkürzel mit ⌘/⌥ anzeigen (die App reagiert auf Cmd genauso wie auf Strg) */
+const IS_MAC = window.__vfPlatform==='macos' || /Mac/.test(navigator.platform||'') && !('ontouchend' in document);
+function macKeys(s){ return IS_MAC && typeof s==='string' ? s.replace(/\b(Strg|Ctrl)\b/g,'⌘').replace(/\bAlt\b/g,'⌥').replace(/\bShift\b/g,'⇧') : s; }
 function t(key, vars){
   const row = T[key];
   let s;
   if(row){ const i = LANG_ORDER.indexOf(currentLang()); s = row[i]; if(s==null || s==='') s = row[1] || row[0]; }
   else s = key;
   if(vars) s = s.replace(/\{(\w+)\}/g, (m,k)=> vars[k]!=null ? vars[k] : m);
-  return s;
+  return macKeys(s);
 }
 function plural(n){ return Math.abs(n)===1 ? t('g.day') : t('g.days'); }
 

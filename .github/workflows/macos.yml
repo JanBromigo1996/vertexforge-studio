@@ -1,0 +1,38 @@
+# Baut die macOS-App (.dmg, Universal: Apple Silicon + Intel) auf einem Mac-Runner von GitHub.
+# Nur manuell starten; das Ergebnis liegt danach unter "Artifacts" des Laufs.
+name: macOS build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.4'
+      - name: Build universal app and DMG
+        run: ./build_macos.sh
+      - name: Virus scan (ClamAV)
+        run: |
+          brew install clamav >/dev/null
+          CONF="$(brew --prefix)/etc/clamav"
+          cp "$CONF/freshclam.conf.sample" "$CONF/freshclam.conf"
+          sed -i '' 's/^Example/#Example/' "$CONF/freshclam.conf"
+          freshclam --quiet || freshclam
+          cd dist
+          clamscan --heuristic-alerts=yes --alert-broken=yes --scan-archive=yes VertexForge-Studio-macOS.dmg | tee clamscan-macos.txt
+          grep -q "Infected files: 0" clamscan-macos.txt
+          shasum -a 256 VertexForge-Studio-macOS.dmg | tee sha256-macos.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VertexForge-Studio-macOS
+          path: |
+            dist/VertexForge-Studio-macOS.dmg
+            dist/clamscan-macos.txt
+            dist/sha256-macos.txt

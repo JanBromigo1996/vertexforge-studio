@@ -4,6 +4,8 @@
 package edge
 
 import (
+	"fmt"
+	"github.com/jchv/go-webview2/webviewloader"
 	"log"
 	"os"
 	"path/filepath"
@@ -16,6 +18,7 @@ import (
 
 type Chromium struct {
 	hwnd                  uintptr
+	failed                bool
 	focusOnInit           bool
 	controller            *ICoreWebView2Controller
 	webview               *ICoreWebView2
@@ -88,8 +91,8 @@ func (e *Chromium) Embed(hwnd uintptr) bool {
 	if err != nil {
 		log.Printf("Error calling Webview2Loader: %v", err)
 		return false
-	} else if res != 0 {
-		log.Printf("Result: %08x", res)
+	} else if int32(uint32(res)) < 0 {
+		log.Printf("WebView2 start: 0x%08X (%s)", uint32(res), webviewloader.LastError)
 		return false
 	}
 	var msg w32.Msg
@@ -108,6 +111,9 @@ func (e *Chromium) Embed(hwnd uintptr) bool {
 		}
 		_, _, _ = w32.User32TranslateMessage.Call(uintptr(unsafe.Pointer(&msg)))
 		_, _, _ = w32.User32DispatchMessageW.Call(uintptr(unsafe.Pointer(&msg)))
+	}
+	if e.failed {
+		return false
 	}
 	e.Init("window.external={invoke:s=>window.chrome.webview.postMessage(s)}")
 	return true
@@ -169,8 +175,12 @@ func (e *Chromium) Release() uintptr {
 }
 
 func (e *Chromium) EnvironmentCompleted(res uintptr, env *ICoreWebView2Environment) uintptr {
-	if int64(res) < 0 {
-		log.Fatalf("Creating environment failed with %08x", res)
+	if int32(uint32(res)) < 0 || env == nil {
+		webviewloader.LastError = fmt.Sprintf("creating environment failed: 0x%08X", uint32(res))
+		log.Printf("%s", webviewloader.LastError)
+		e.failed = true
+		atomic.StoreUintptr(&e.inited, 1)
+		return 0
 	}
 	_, _, _ = env.vtbl.AddRef.Call(uintptr(unsafe.Pointer(env)))
 	e.environment = env
@@ -184,8 +194,12 @@ func (e *Chromium) EnvironmentCompleted(res uintptr, env *ICoreWebView2Environme
 }
 
 func (e *Chromium) CreateCoreWebView2ControllerCompleted(res uintptr, controller *ICoreWebView2Controller) uintptr {
-	if int64(res) < 0 {
-		log.Fatalf("Creating controller failed with %08x", res)
+	if int32(uint32(res)) < 0 || controller == nil {
+		webviewloader.LastError = fmt.Sprintf("creating controller failed: 0x%08X", uint32(res))
+		log.Printf("%s", webviewloader.LastError)
+		e.failed = true
+		atomic.StoreUintptr(&e.inited, 1)
+		return 0
 	}
 	_, _, _ = controller.vtbl.AddRef.Call(uintptr(unsafe.Pointer(controller)))
 	e.controller = controller

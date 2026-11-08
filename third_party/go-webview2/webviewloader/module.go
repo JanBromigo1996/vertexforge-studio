@@ -26,6 +26,9 @@ import (
 
 const runtimeClientID = `{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}`
 
+// LastError beschreibt den letzten Fehlschlag beim Start (für Protokoll und Fehlermeldung).
+var LastError string
+
 var (
 	dllPath  = "WebView2Loader.dll"
 	initOnce sync.Once
@@ -78,16 +81,37 @@ func parseVer(v string) [4]int {
 }
 
 // GetInstalledVersion gibt die installierte WebView2-Runtime-Version zurück ("" wenn keine).
+// Zuerst fragt sie Microsofts Loader, dann sucht sie selbst (Registry und Standardordner).
 func GetInstalledVersion() (string, error) {
+	if dll, err := loader(); err == nil {
+		if proc := dll.NewProc("GetAvailableCoreWebView2BrowserVersionString"); proc.Find() == nil {
+			var v *uint16
+			hr, _, _ := proc.Call(0, uintptr(unsafe.Pointer(&v)))
+			if int32(uint32(hr)) >= 0 && v != nil {
+				ver := windows.UTF16PtrToString(v)
+				windows.CoTaskMemFree(unsafe.Pointer(v))
+				if ver != "" {
+					return ver, nil
+				}
+			}
+		}
+	}
 	if dir, ver := findRuntime(); dir != "" {
 		return ver, nil
 	}
 	return "", nil
 }
 
+// RuntimeFound meldet, ob überhaupt eine WebView2-Runtime gefunden wird.
+func RuntimeFound() bool { v, _ := GetInstalledVersion(); return v != "" }
+
 // findRuntime sucht die installierte Evergreen-WebView2-Runtime (Registry, dann Standardordner).
 func findRuntime() (dir, version string) {
-	type cand struct{ root registry.Key; key string; base string }
+	type cand struct {
+		root registry.Key
+		key  string
+		base string
+	}
 	pf86 := os.Getenv("ProgramFiles(x86)")
 	if pf86 == "" {
 		pf86 = `C:\Program Files (x86)`
@@ -150,7 +174,10 @@ func fileExists(p string) bool {
 }
 
 // CreateCoreWebView2EnvironmentWithOptions startet die WebView2-Umgebung.
+// Weg 1: Microsofts WebView2Loader.dll. Scheitert sie (fehlt, zu alt, findet die Runtime nicht),
+// Weg 2: die offizielle EmbeddedBrowserWebView.dll der installierten Runtime direkt.
 func CreateCoreWebView2EnvironmentWithOptions(browserExecutableFolder, userDataFolder *uint16, environmentOptions uintptr, environmentCompletedHandle uintptr) (uintptr, error) {
+	LastError = ""
 	if dll, err := loader(); err == nil {
 		if proc := dll.NewProc("CreateCoreWebView2EnvironmentWithOptions"); proc.Find() == nil {
 			res, _, _ := proc.Call(
@@ -159,10 +186,14 @@ func CreateCoreWebView2EnvironmentWithOptions(browserExecutableFolder, userDataF
 				environmentOptions,
 				environmentCompletedHandle,
 			)
-			return res, nil
+			if int32(uint32(res)) >= 0 {
+				return res, nil
+			}
+			LastError = fmt.Sprintf("WebView2Loader.dll: 0x%08X", uint32(res))
 		}
+	} else {
+		LastError = "WebView2Loader.dll: " + err.Error()
 	}
-	// Ohne WebView2Loader.dll: die offizielle Runtime-DLL direkt verwenden.
 	dir := ""
 	runtimeType := uintptr(0) // installierte Runtime
 	if browserExecutableFolder != nil {
@@ -172,13 +203,18 @@ func CreateCoreWebView2EnvironmentWithOptions(browserExecutableFolder, userDataF
 		dir, _ = findRuntime()
 	}
 	if dir == "" {
-		return 0, fmt.Errorf("WebView2 runtime not found")
+		LastError += "; runtime not found"
+		return 0x80070002, nil
 	}
 	client := windows.NewLazyDLL(clientDLL(dir))
 	proc := client.NewProc("CreateWebViewEnvironmentWithOptionsInternal")
 	if err := proc.Find(); err != nil {
-		return 0, fmt.Errorf("WebView2 runtime: %w", err)
+		LastError += "; " + clientDLL(dir) + ": " + err.Error()
+		return 0x80004005, nil
 	}
 	res, _, _ := proc.Call(1, runtimeType, uintptr(unsafe.Pointer(userDataFolder)), environmentOptions, environmentCompletedHandle)
+	if int32(uint32(res)) < 0 {
+		LastError += fmt.Sprintf("; runtime %s: 0x%08X", dir, uint32(res))
+	}
 	return res, nil
 }

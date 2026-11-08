@@ -460,7 +460,11 @@ const MEDIA_EXT = {image:['png','jpg','jpeg','webp','gif','bmp','avif','svg'], v
 function fileKind(path){ const e = (basename(path).split('.').pop() || '').toLowerCase(); return MEDIA_EXT.image.includes(e) ? 'image' : MEDIA_EXT.video.includes(e) ? 'video' : 'other'; }
 function localFileURL(path){
   const p = String(path||'').trim(), m = p.match(/^([a-zA-Z]):[\\/](.*)$/);
-  if(!m) return '';
+  if(!m){
+    /* macOS/Linux-App: absolute Pfade über den lokalen App-Server (mit Schlüssel) */
+    if(p.startsWith('/') && window.__vfFileBase) return window.__vfFileBase + p.split('/').map(encodeURIComponent).join('/');
+    return location.protocol==='file:' && p.startsWith('/') ? 'file://' + p.split('/').map(encodeURIComponent).join('/') : '';
+  }
   const rest = m[2].split(/[\\/]+/).map(encodeURIComponent).join('/');
   if(IS_DESKTOP) return `https://drive-${m[1].toLowerCase()}.vertexforge.example/${rest}`;
   return location.protocol==='file:' ? `file:///${m[1].toUpperCase()}:/${rest}` : '';
@@ -980,7 +984,7 @@ function openMenu(x, y, items, title){
   el.innerHTML = (title ? `<div class="menu-title">${esc(title)}</div>` : '') + items.map((it,i)=>{
     if(it.sep) return '<div class="menu-sep"></div>';
     if(it.swatches) return `<div class="menu-swatches">${it.swatches.map((s,j)=>`<button data-sw="${i}:${j}" title="${esc(s.title||s.color)}" style="background:${s.color||'var(--accent)'}"></button>`).join('')}</div>`;
-    return `<button class="menu-item ${it.danger?'danger':''}" data-mi="${i}" ${it.disabled?'disabled':''} role="menuitem">${it.checked!==undefined ? `<span class="check">${it.checked?ic('check',14):''}</span>` : (it.icon ? ic(it.icon,15) : '<span style="width:15px"></span>')}<span class="lbl">${esc(it.label)}</span>${it.kbd ? `<kbd>${esc(it.kbd)}</kbd>` : ''}</button>`;
+    return `<button class="menu-item ${it.danger?'danger':''}" data-mi="${i}" ${it.disabled?'disabled':''} role="menuitem">${it.checked!==undefined ? `<span class="check">${it.checked?ic('check',14):''}</span>` : (it.icon ? ic(it.icon,15) : '<span style="width:15px"></span>')}<span class="lbl">${esc(it.label)}</span>${it.kbd ? `<kbd>${esc(kbdLabel(it.kbd))}</kbd>` : ''}</button>`;
   }).join('');
   $('menuLayer').appendChild(el); menuEl = el;
   const r = el.getBoundingClientRect();
@@ -1081,7 +1085,7 @@ function openPalette(){
     const hit = c => { const h = (c.label + ' ' + c.group + ' ' + (c.sub || '') + ' ' + (c.extra || '')).toLowerCase(); return q.every(w=>h.includes(w)); };
     shown = q.length ? [...content.filter(hit).slice(0, 40), ...cmds.filter(hit)].slice(0, 70) : cmds.slice(0, 60);
     hl = clamp(hl, 0, Math.max(0, shown.length-1));
-    list.innerHTML = shown.length ? shown.map((c,i)=>`<button class="menu-item ${i===hl?'hl':''} ${c.content?'pc-item':''}" data-pi="${i}">${ic(c.icon,15)}<span class="lbl">${esc(c.label)}${c.sub?`<small>${esc(c.sub)}</small>`:''}</span>${c.kbd?`<kbd>${esc(c.kbd)}</kbd>`:''}<span class="grp">${esc(c.group)}</span></button>`).join('') : `<div class="palette-empty">${t('pal.none')}</div>`;
+    list.innerHTML = shown.length ? shown.map((c,i)=>`<button class="menu-item ${i===hl?'hl':''} ${c.content?'pc-item':''}" data-pi="${i}">${ic(c.icon,15)}<span class="lbl">${esc(c.label)}${c.sub?`<small>${esc(c.sub)}</small>`:''}</span>${c.kbd?`<kbd>${esc(kbdLabel(c.kbd))}</kbd>`:''}<span class="grp">${esc(c.group)}</span></button>`).join('') : `<div class="palette-empty">${t('pal.none')}</div>`;
     const h = list.querySelector('.hl'); if(h) h.scrollIntoView({block:'nearest'});
   };
   const run = i => { const c = shown[i]; closePalette(); if(c) c.run(); };
@@ -1488,9 +1492,10 @@ const KEYMAP = [
   ['other','Shift+A','k.addCtx'],['other','V','k.view'],['other','Ctrl+Space','k.focus'],['other','⠿ Drag / Alt+↑↓','sh.drag']
 ];
 const KEY_DE = {Ctrl:'Strg', Del:'Entf', Home:'Pos1', Space:'Leertaste', PgUp:'Bild↑', PgDn:'Bild↓', Wheel:'Mausrad', Shake:'Schütteln', LMB:'Linksklick', RMB:'Rechtsklick', MMB:'Mitteltaste', Drag:'Ziehen'};
+function kbdLabel(s){ if(currentLang()==='de') s = s.replace(/\b(Ctrl|Del)\b/g, w=>KEY_DE[w]); return macKeys(s); }
 function keyHTML(s){
   const de = currentLang()==='de';
-  return s.split(' / ').map(alt=>alt.split(/\+(?!$)/).map(k=>{ let x = k.trim(); if(de) x = x.replace(/[A-Za-z]+/g, w=>KEY_DE[w]||w); return `<kbd>${esc(x)}</kbd>`; }).join('+')).join(' <span class="muted">/</span> ');
+  return s.split(' / ').map(alt=>alt.split(/\+(?!$)/).map(k=>{ let x = k.trim(); if(de) x = x.replace(/[A-Za-z]+/g, w=>KEY_DE[w]||w); x = macKeys(x); return `<kbd>${esc(x)}</kbd>`; }).join('+')).join(' <span class="muted">/</span> ');
 }
 function keysTableHTML(){
   return `<div class="keys-grid">${['global','board','other'].map(c=>`<div class="keys-group"><h4>${t('ctx.'+c)}</h4>${KEYMAP.filter(k=>k[0]===c).map(k=>`<div class="keys-row"><span>${t(k[2])}</span><span>${keyHTML(k[1])}</span></div>`).join('')}</div>`).join('')}</div>`;
