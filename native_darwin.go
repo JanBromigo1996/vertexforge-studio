@@ -7,6 +7,7 @@ package main
 #cgo LDFLAGS: -framework Cocoa -framework WebKit
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import <objc/runtime.h>
 
 static NSWindow *vf_win(void *w) { return (__bridge NSWindow *)w; }
 
@@ -66,12 +67,38 @@ static void vf_menu(int de) {
 	[NSApp setWindowsMenu:win];
 }
 
+extern int vfGoShouldBlockClose(void);
+
+// Beenden über Dock-Menü, Apple-Menü oder Abmelden: erst die App sichern lassen (wie beim Fenster-X).
+static NSApplicationTerminateReply vf_should_terminate(id self, SEL _cmd, NSApplication *app) {
+	return vfGoShouldBlockClose() ? NSTerminateCancel : NSTerminateNow;
+}
+
+// Fenster an kleine Bildschirme anpassen (z. B. 13-Zoll-MacBook mit großer Textdarstellung).
+static void vf_fit(NSWindow *win) {
+	NSScreen *sc = [win screen] ? [win screen] : [NSScreen mainScreen];
+	if (!sc) return;
+	NSRect vis = [sc visibleFrame], f = [win frame];
+	CGFloat w = MIN(f.size.width, floor(vis.size.width * 0.94));
+	CGFloat h = MIN(f.size.height, floor(vis.size.height * 0.94));
+	[win setFrame:NSMakeRect(vis.origin.x, vis.origin.y, w, h) display:NO];
+	[win center];
+}
+
 static void vf_setup(void *w, int de) {
 	vf_menu(de);
+	id del = [NSApp delegate];
+	if (del) {
+		Class cls = object_getClass(del);
+		SEL sel = @selector(applicationShouldTerminate:);
+		if (!class_addMethod(cls, sel, (IMP)vf_should_terminate, "Q@:@")) {
+			class_replaceMethod(cls, sel, (IMP)vf_should_terminate, "Q@:@");
+		}
+	}
 	NSWindow *win = vf_win(w);
+	vf_fit(win);
 	[win setCollectionBehavior:[win collectionBehavior] | NSWindowCollectionBehaviorFullScreenPrimary];
 	[win setTabbingMode:NSWindowTabbingModeDisallowed];
-	[win center];
 }
 */
 import "C"

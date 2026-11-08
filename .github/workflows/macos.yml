@@ -21,9 +21,25 @@ jobs:
       # ClamAV-Prüfung des DMG erfolgt beim Release (Linux), da die Signaturen auf dem Mac-Runner oft nicht laden.
       - name: Checksum
         run: cd dist && shasum -a 256 VertexForge-Studio-macOS.dmg | tee sha256-macos.txt
-      - uses: actions/upload-artifact@v4
+      - name: Smoke test (install, start, screenshot, quit)
+        run: |
+          sw_vers; uname -m
+          hdiutil attach -nobrowse -mountpoint /Volumes/VF dist/VertexForge-Studio-macOS.dmg
+          cp -R "/Volumes/VF/VertexForge Studio.app" /Applications/ && hdiutil detach /Volumes/VF
+          APP="/Applications/VertexForge Studio.app"
+          lipo -archs "$APP/Contents/MacOS/VertexForge Studio"
+          codesign --verify --verbose=2 "$APP"
+          open "$APP"; sleep 20
+          curl -s http://127.0.0.1:47821/vf-ping; echo
+          screencapture -x dist/shot-macos.png || true
+          osascript -e 'quit app "VertexForge Studio"' || true
+          sleep 8
+          cat ~/Library/Application\ Support/VertexForge\ Studio/vertexforge.log
+          if pgrep -f "VertexForge Studio.app"; then echo "QUIT: still running"; else echo "QUIT: closed after saving"; fi
+
         with:
           name: VertexForge-Studio-macOS
           path: |
             dist/VertexForge-Studio-macOS.dmg
             dist/sha256-macos.txt
+            dist/shot-macos.png
