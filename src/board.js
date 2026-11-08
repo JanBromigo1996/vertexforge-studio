@@ -126,6 +126,7 @@ function nodeHTML(n, i){
 function renderNodes(){
   const b = activeBoard();
   $('nodes').innerHTML = b.nodes.map(nodeHTML).join('');
+  ui.nodeEls = new Map(); $('nodes').querySelectorAll('.node[data-id]').forEach(e=>ui.nodeEls.set(e.dataset.id, e));
   // Neue Elemente (hinzugefügt, eingefügt, per Undo zurückgeholt) sanft einblenden
   const ids = b.nodes.map(n=>n.id);
   if(ui.nodeSeenBoard===b.id && ui.nodeSeen) ids.forEach(id=>{ if(!ui.nodeSeen.has(id)){ const el = nodeEl(id); if(el) el.classList.add('pop'); } });
@@ -139,7 +140,11 @@ function updateNodeEl(n){
   const tmp = document.createElement('div'); tmp.innerHTML = nodeHTML(n, activeBoard().nodes.indexOf(n));
   el.replaceWith(tmp.firstElementChild); layoutDocks(); renderWires();
 }
-function nodeEl(id){ return $('nodes').querySelector(`[data-id="${id}"]`); }
+/* Element-Cache: viele Karten = viele Abfragen, eine Map hält das schnell */
+function nodeEl(id){
+  const m = ui.nodeEls; let el = m && m.get(id); if(el && el.isConnected) return el;
+  el = $('nodes').querySelector(`[data-id="${id}"]`); if(el && m) m.set(id, el); return el;
+}
 function nodeSize(n){
   if(CV.sizes && CV.sizes.has(n.id)) return CV.sizes.get(n.id);
   const el = nodeEl(n.id), s = {w:el ? el.offsetWidth : n.w || 100, h:el ? el.offsetHeight : n.h || 60};

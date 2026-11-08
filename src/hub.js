@@ -304,7 +304,7 @@ function initDesignerDrag(){
     el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
   };
 }
-function closeDesigner(){ $('designer').classList.remove('open'); $('designer').innerHTML = ''; ui.designer = null; }
+function closeDesigner(){ ghostOut($('designer')); $('designer').classList.remove('open'); $('designer').innerHTML = ''; ui.designer = null; }
 function saveDesigner(){
   const d = ui.designer; if(!d) return;
   const p = S.projects.find(x=>x.id===d.id);

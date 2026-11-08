@@ -3,7 +3,7 @@ let db = null;     // IndexedDB-Verbindung
 /* ============================================================================
    A. KONSTANTEN & HILFSFUNKTIONEN
    ============================================================================ */
-const APP_VERSION = '2.7.0';
+const APP_VERSION = '2.8.0';
 const SCHEMA = 3;
 const MODULES = ['projects','pipeline','board','shots','story','guide'];
 const MOD_ICONS = {projects:'grid', pipeline:'calendar', board:'network', shots:'film', story:'book', guide:'compass'};
@@ -952,7 +952,7 @@ function dialog({title, text='', buttons=[{label:t('g.ok'), value:true, primary:
       ${input!==null ? `<input class="inp" id="dlgInput" value="${esc(input)}">` : ''}
       <div class="dlg-actions">${buttons.map((b,i)=>`<button class="btn ${b.primary?'btn-primary':''} ${b.danger?'btn-danger':''}" data-i="${i}">${esc(b.label)}</button>`).join('')}</div></div>`;
     m.classList.add('open');
-    const close = v => { m.classList.remove('open'); m.innerHTML = ''; document.removeEventListener('keydown', kd, true); resolve(v); };
+    const close = v => { ghostOut(m); m.classList.remove('open'); m.innerHTML = ''; document.removeEventListener('keydown', kd, true); resolve(v); };
     m.querySelectorAll('[data-i]').forEach(btn=> btn.onclick = () => { const b = buttons[+btn.dataset.i]; close(input!==null && b.value===true ? $('dlgInput').value : b.value); });
     const kd = e => { if(e.key==='Escape'){ e.stopPropagation(); e.preventDefault(); close(null); } else if(e.key==='Enter' && input!==null){ e.preventDefault(); close($('dlgInput').value); } };
     document.addEventListener('keydown', kd, true);
@@ -971,11 +971,11 @@ function openSheet(html, cls=''){
   m.onpointerdown = e => { if(e.target===m) closeSheet(); };
   return m.firstElementChild;
 }
-function closeSheet(){ const m = $('modal2'); if(!m.classList.contains('open')) return; m.classList.remove('open'); m.innerHTML = ''; if(ui.onSheetClose){ const f = ui.onSheetClose; ui.onSheetClose = null; f(); } }
+function closeSheet(){ const m = $('modal2'); if(!m.classList.contains('open')) return; ghostOut(m); m.classList.remove('open'); m.innerHTML = ''; if(ui.onSheetClose){ const f = ui.onSheetClose; ui.onSheetClose = null; f(); } }
 
 /* Kontextmenü / Dropdown */
 let menuEl = null;
-function closeMenu(){ if(menuEl){ menuEl.remove(); menuEl = null; } if(ui.menuBtn){ ui.menuBtn.classList.remove('open'); ui.menuBtn = null; } document.removeEventListener('pointerdown', menuOutside, true); }
+function closeMenu(){ if(menuEl){ ghostOut(menuEl); menuEl.remove(); menuEl = null; } if(ui.menuBtn){ ui.menuBtn.classList.remove('open'); ui.menuBtn = null; } document.removeEventListener('pointerdown', menuOutside, true); }
 function menuOutside(e){ if(menuEl && !menuEl.contains(e.target) && !(ui.menuBtn && ui.menuBtn.contains(e.target))) closeMenu(); }
 function openMenu(x, y, items, title){
   closeMenu();
@@ -1349,8 +1349,52 @@ function swipeViews(from, to){
   a.classList.add('leaving'); b.classList.add('entering');
   clearTimeout(ui.swipeT);
   ui.swipeT = setTimeout(()=>{ a.classList.remove('leaving'); b.classList.remove('entering'); }, 230);
-  countUp(b);
+  countUp(b); staggerIn(b);
 }
+/* Inhalte eines Bereichs erscheinen beim Öffnen leicht versetzt – nur die ersten, damit nichts wartet */
+const STAGGER_SEL = '.hub-grid > *, .kpi-row > *, .phase-list > *, .kb-list > *, .shot-table tbody > tr, .gsec, .side-list > *';
+function staggerIn(root){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const els = [...root.querySelectorAll(STAGGER_SEL)].slice(0, 18);
+  els.forEach((e,i)=>{ e.style.setProperty('--i', i); e.classList.add('stag'); });
+  setTimeout(()=>els.forEach(e=>{ e.classList.remove('stag'); e.style.removeProperty('--i'); }), 420 + els.length*22);
+}
+/* Schließen mit kurzem Ausblenden: eine Kopie blendet aus, das Original ist sofort wieder frei */
+function ghostOut(el){
+  if(!el || !el.isConnected || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const r = el.getBoundingClientRect(); if(!r.width) return;
+  const g = el.cloneNode(true); g.removeAttribute('id'); g.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));
+  g.classList.remove('open'); g.classList.add('ghost'); g.setAttribute('aria-hidden','true'); g.inert = true;
+  g.style.zIndex = getComputedStyle(el).zIndex;
+  el.querySelectorAll('canvas').forEach((c,i)=>{ const d = g.querySelectorAll('canvas')[i]; if(d){ d.width = c.width; d.height = c.height; try{ d.getContext('2d').drawImage(c,0,0); }catch(e){} } });
+  document.body.appendChild(g); setTimeout(()=>g.remove(), 180);
+}
+/* Schnelle Tooltips statt der trägen Browser-Titel, Tastenkürzel als Tasten-Chips */
+const TIP = {el:null, t:0, warm:0, cur:null};
+function hideTip(){ clearTimeout(TIP.t); if(TIP.cur && TIP.el && TIP.el.classList.contains('show')) TIP.warm = performance.now() + 400; TIP.cur = null; if(TIP.el) TIP.el.classList.remove('show'); }
+function showTip(tg){
+  const raw = tg.dataset.tip; if(!raw) return;
+  if(!TIP.el){ TIP.el = document.createElement('div'); TIP.el.className = 'vtip'; TIP.el.setAttribute('role','tooltip'); document.body.appendChild(TIP.el); }
+  const el = TIP.el, parts = raw.split(' · '); let key = '';
+  if(parts.length > 1 && /^(Ctrl|Strg|Alt|Shift|F\d|Esc|Del|Entf|⌘|⌥|⇧|\?$)/.test(parts[parts.length-1].trim())) key = parts.pop().trim();
+  el.innerHTML = `<span>${esc(macKeys(parts.join(' · ')))}</span>${key ? `<span class="vtip-k">${keyHTML(key)}</span>` : ''}`;
+  el.style.left = '0px'; el.style.top = '0px'; el.classList.remove('above');
+  const r = tg.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+  let y = r.bottom + 7, above = false; if(y + h > innerHeight - 6){ y = r.top - h - 7; above = true; }
+  el.style.left = Math.round(Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width/2 - w/2))) + 'px'; el.style.top = Math.round(y) + 'px';
+  el.classList.toggle('above', above); void el.offsetWidth; el.classList.add('show');
+}
+document.addEventListener('pointerover', e=>{
+  if(e.pointerType==='touch' || !e.target.closest) return;
+  const tg = e.target.closest('[title],[data-tip]:not(.bt-tool)');
+  if(!tg || tg===TIP.cur || tg.classList.contains('bt-tool') || tg.closest('.vtip')) return;
+  if(tg.hasAttribute('title')){ const tt = tg.getAttribute('title'); tg.removeAttribute('title'); if(!tt) return; tg.dataset.tip = tt; if(!tg.hasAttribute('aria-label') && !tg.textContent.trim()) tg.setAttribute('aria-label', tt); }
+  hideTip(); TIP.cur = tg;
+  TIP.t = setTimeout(()=>{ if(TIP.cur===tg && tg.isConnected) showTip(tg); }, performance.now() < TIP.warm ? 30 : 450);
+});
+document.addEventListener('pointerout', e=>{ if(TIP.cur && !(e.relatedTarget && TIP.cur.contains(e.relatedTarget))) hideTip(); });
+['pointerdown','keydown','wheel'].forEach(ev=>document.addEventListener(ev, hideTip, true));
+window.addEventListener('blur', hideTip);
 /* Kennzahlen zählen beim Öffnen eines Bereichs kurz hoch */
 function countUp(root){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;

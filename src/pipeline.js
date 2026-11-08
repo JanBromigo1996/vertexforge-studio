@@ -295,7 +295,9 @@ function bindPipeline(v){
       if(k==='done') x.status = el.checked ? 'done' : 'todo';
       if(k==='prio') x.prio = PRIOS.includes(el.value) ? el.value : 'med';
       if(k==='deadline') x.deadline = isoDate(el.value);
+      const key = el.closest('[data-task]').dataset.task;
       changed(); renderPipeline();
+      if(k==='done' && x.status==='done'){ const row = v.querySelector(`[data-task="${key}"]`); if(row){ row.classList.add('just-done'); setTimeout(()=>row.classList.remove('just-done'), 700); } }
     }
   };
   v.oninput = e => onField(e, false);

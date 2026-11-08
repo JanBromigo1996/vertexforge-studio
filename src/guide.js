@@ -50,7 +50,7 @@ de: [
   <p>Asset-Karten und Welt-Bibel-Einträge speichern Pfade zu deinen Arbeitsdateien. Das Programm wird an der Endung erkannt: .blend, .ztl, .spp, .sbs, .zprj, .psd, .aep, .drp, .uproject und viele mehr.</p>
   <table><tr><th></th><th>Desktop-App</th><th>Browser</th></tr>
   <tr><td>Klick aufs Badge</td><td>öffnet die Datei im passenden Programm</td><td>kopiert den Pfad</td></tr>
-  <tr><td>Durchsuchen</td><td>Windows-Dateidialog</td><td>Pfad einfügen</td></tr>
+  <tr><td>Durchsuchen</td><td>Dateidialog des Systems</td><td>Pfad einfügen</td></tr>
   <tr><td>Programm-Icons</td><td>Icons der installierten Programme</td><td>Farbcodes / eigene Icons</td></tr></table>
   <div class="tip">Unter <b>Einstellungen → Software-Bibliothek</b> passt du Farben, Kürzel und Endungen an oder fügst Programme hinzu.</div>`],
  ['shots','film','Shotlist',`
@@ -73,20 +73,23 @@ de: [
   <li>Alle anderen: <b>Datei ▸ Team-Projekt öffnen …</b> und genau diesen Ordner wählen.</li>
   <li>Oben neben dem Projektnamen zeigt <b>Team</b> den Status und wer gerade mitarbeitet.</li></ol>
   <p>Jede Aufgabe, Karte, jeder Shot und jedes Kapitel ist eine eigene kleine Datei. Ändern zwei Leute <i>verschiedene</i> Dinge, wird alles automatisch zusammengeführt. Ändern beide <i>dasselbe</i> gleichzeitig, gilt deine Fassung – die andere bleibt im Unterordner „conflicts“ erhalten. Abgeglichen wird alle paar Sekunden; wie schnell es bei den anderen ankommt, hängt vom Cloud-Dienst ab.</p>
-  <div class="tip">Ist der Ordner kurz nicht erreichbar (offline, Laptop unterwegs), arbeitest du einfach lokal weiter – beim nächsten Kontakt wird abgeglichen. Team-Ordner funktionieren in der Windows-App sowie in Chrome und Edge am Computer.</div>`],
+  <div class="tip">Ist der Ordner kurz nicht erreichbar (offline, Laptop unterwegs), arbeitest du einfach lokal weiter – beim nächsten Kontakt wird abgeglichen. Team-Ordner funktionieren in der Desktop-App (Windows, macOS, Linux) sowie in Chrome und Edge am Computer.</div>`],
  ['install','download','Installation & Updates',`
-  <ul><li><b>Installieren:</b> „VertexForge Studio Setup.exe“ starten, Sprache und Zielordner wählen – Desktop- und Startmenü-Verknüpfung werden angelegt.</li>
+  <ul><li><b>Windows:</b> „VertexForge Studio Setup.exe“ starten, Sprache und Zielordner wählen – Desktop- und Startmenü-Verknüpfung werden angelegt.</li>
+  <li><b>macOS:</b> DMG öffnen und die App in „Programme“ ziehen. Beim ersten Start: Rechtsklick → „Öffnen“ (die App ist nicht von Apple notarisiert).</li>
+  <li><b>Linux:</b> das .deb per Doppelklick bzw. <code>sudo apt install ./VertexForge-Studio-linux-amd64.deb</code> installieren – oder das .tar.gz entpacken und <code>./install.sh</code> ausführen.</li>
   <li><b>Updates:</b> einfach das neue Setup ausführen. Deine Projekte liegen getrennt vom Programm in deinem Benutzerprofil und werden <b>nie überschrieben</b>; vor jedem Update entsteht automatisch eine Sicherheits-Version, und ältere Daten werden verlustfrei übernommen.</li>
-  <li><b>Entfernen:</b> über Windows „Apps & Features“. Deine Projekte bleiben erhalten, außer du wählst ausdrücklich „Lokale Daten löschen“.</li></ul>`],
+  <li><b>Entfernen:</b> Windows „Apps & Features“, macOS App in den Papierkorb, Linux <code>sudo apt remove vertexforge-studio</code> bzw. <code>./install.sh --uninstall</code>. Deine Projekte bleiben erhalten.</li></ul>`],
  ['settings','sliders','Sprache & Einstellungen',`
   <ul><li><b>Sprache:</b> Deutsch, English, Français, Español, Italiano, Português – in der Statusleiste oder in den Einstellungen.</li>
-  <li><b>Fenster:</b> eigene Titelleiste (ziehen, Doppelklick maximiert); <kbd>F11</kbd> Vollbild.</li>
+  <li><b>Fenster:</b> unter Windows eigene Titelleiste (ziehen, Doppelklick maximiert), unter macOS und Linux die gewohnte Fensterleiste; <kbd>F11</kbd> Vollbild.</li>
   <li><b>Daten:</b> Beispielprojekte laden, Backup exportieren, Projekte oder alles zurücksetzen.</li></ul>`],
  ['keys','keyboard','Alle Tastenkürzel','{KEYS}'],
  ['faq','compass','Fragen & Lösungen',`
-  <ul><li><b>Die App startet nicht:</b> Sie braucht die Microsoft Edge WebView2 Runtime (in Windows 10/11 meist vorhanden) – sonst öffnet sich die Download-Seite.</li>
-  <li><b>SmartScreen warnt:</b> Die App ist nicht signiert – „Weitere Informationen → Trotzdem ausführen“.</li>
-  <li><b>Wo liegen meine Daten?</b> Desktop: %LOCALAPPDATA%\\VertexForge Studio. Browser: im Speicher des Browsers.</li>
+  <ul><li><b>Die App startet nicht (Windows):</b> Sie braucht die Microsoft Edge WebView2 Runtime (in Windows 10/11 meist vorhanden). Die Fehlermeldung nennt den genauen Grund und den Ort der Log-Datei.</li>
+  <li><b>Die App startet nicht (Linux):</b> WebKitGTK fehlt – <code>sudo apt install libwebkit2gtk-4.1-0</code> (Fedora: <code>webkit2gtk4.1</code>).</li>
+  <li><b>SmartScreen / Gatekeeper warnt:</b> Die App ist nicht kostenpflichtig signiert – Windows: „Weitere Informationen → Trotzdem ausführen“, macOS: Rechtsklick → „Öffnen“.</li>
+  <li><b>Wo liegen meine Daten?</b> Windows: %LOCALAPPDATA%\\VertexForge Studio · macOS: ~/Library/Application Support/VertexForge Studio · Linux: ~/.local/share/vertexforge-studio · Browser: im Speicher des Browsers.</li>
   <li><b>Verknüpfte Videos zeigen keine Vorschau:</b> Vorschauen von Dateien auf dem PC gibt es nur in der Desktop-App; im Browser bleiben Öffnen/Kopieren.</li></ul>`]
 ],
 en: [
@@ -136,7 +139,7 @@ en: [
   <p>Asset cards and world-bible entries store paths to your working files. The program is detected by extension: .blend, .ztl, .spp, .sbs, .zprj, .psd, .aep, .drp, .uproject and many more.</p>
   <table><tr><th></th><th>Desktop app</th><th>Browser</th></tr>
   <tr><td>Badge click</td><td>opens the file in its program</td><td>copies the path</td></tr>
-  <tr><td>Browse</td><td>Windows file dialog</td><td>paste the path</td></tr>
+  <tr><td>Browse</td><td>system file dialog</td><td>paste the path</td></tr>
   <tr><td>Program icons</td><td>icons of installed programs</td><td>color codes / your own icons</td></tr></table>
   <div class="tip">In <b>Settings → Software library</b> you adjust colors, codes and extensions or add programs.</div>`],
  ['shots','film','Shot list',`
@@ -159,20 +162,23 @@ en: [
   <li>Everyone else: <b>File ▸ Open team project…</b> and choose exactly that folder.</li>
   <li><b>Team</b> next to the project name shows the status and who is working right now.</li></ol>
   <p>Every task, card, shot and chapter is its own small file. When two people change <i>different</i> things, everything is merged automatically. When both change <i>the same</i> thing at the same moment, your version wins – the other one is kept in the “conflicts” subfolder. Syncing happens every few seconds; how fast it reaches the others depends on the cloud service.</p>
-  <div class="tip">If the folder is briefly unreachable (offline, laptop on the road), just keep working locally – it syncs on the next contact. Team folders work in the Windows app and in Chrome or Edge on a computer.</div>`],
+  <div class="tip">If the folder is briefly unreachable (offline, laptop on the road), just keep working locally – it syncs on the next contact. Team folders work in the desktop app (Windows, macOS, Linux) and in Chrome or Edge on a computer.</div>`],
  ['install','download','Installation & updates',`
-  <ul><li><b>Install:</b> run “VertexForge Studio Setup.exe”, choose language and folder – desktop and Start menu shortcuts are created.</li>
+  <ul><li><b>Windows:</b> run “VertexForge Studio Setup.exe”, choose language and folder – desktop and Start menu shortcuts are created.</li>
+  <li><b>macOS:</b> open the DMG and drag the app into “Applications”. First start: right-click → “Open” (the app is not notarised by Apple).</li>
+  <li><b>Linux:</b> install the .deb by double-click or <code>sudo apt install ./VertexForge-Studio-linux-amd64.deb</code> – or unpack the .tar.gz and run <code>./install.sh</code>.</li>
   <li><b>Updates:</b> just run the new setup. Your projects live separately from the program in your user profile and are <b>never overwritten</b>; a safety version is created before every update and older data is migrated without loss.</li>
-  <li><b>Remove:</b> via Windows “Apps & features”. Your projects are kept unless you explicitly choose “Delete local data”.</li></ul>`],
+  <li><b>Remove:</b> Windows “Apps & features”, macOS move the app to the Trash, Linux <code>sudo apt remove vertexforge-studio</code> or <code>./install.sh --uninstall</code>. Your projects are kept.</li></ul>`],
  ['settings','sliders','Language & settings',`
   <ul><li><b>Language:</b> Deutsch, English, Français, Español, Italiano, Português – in the status bar or in settings.</li>
-  <li><b>Window:</b> custom title bar (drag, double-click maximizes); <kbd>F11</kbd> fullscreen.</li>
+  <li><b>Window:</b> on Windows a custom title bar (drag, double-click maximizes), on macOS and Linux the usual window bar; <kbd>F11</kbd> fullscreen.</li>
   <li><b>Data:</b> load sample projects, export a backup, reset projects or everything.</li></ul>`],
  ['keys','keyboard','All keyboard shortcuts','{KEYS}'],
  ['faq','compass','Questions & fixes',`
-  <ul><li><b>The app does not start:</b> it needs the Microsoft Edge WebView2 Runtime (usually present on Windows 10/11) – otherwise the download page opens.</li>
-  <li><b>SmartScreen warns:</b> the app is not code-signed – “More info → Run anyway”.</li>
-  <li><b>Where is my data?</b> Desktop: %LOCALAPPDATA%\\VertexForge Studio. Browser: in the browser’s storage.</li>
+  <ul><li><b>The app does not start (Windows):</b> it needs the Microsoft Edge WebView2 Runtime (usually present on Windows 10/11). The error message names the exact reason and where the log file is.</li>
+  <li><b>The app does not start (Linux):</b> WebKitGTK is missing – <code>sudo apt install libwebkit2gtk-4.1-0</code> (Fedora: <code>webkit2gtk4.1</code>).</li>
+  <li><b>SmartScreen / Gatekeeper warns:</b> the app is not paid-signed – Windows: “More info → Run anyway”, macOS: right-click → “Open”.</li>
+  <li><b>Where is my data?</b> Windows: %LOCALAPPDATA%\\VertexForge Studio · macOS: ~/Library/Application Support/VertexForge Studio · Linux: ~/.local/share/vertexforge-studio · Browser: in the browser’s storage.</li>
   <li><b>Linked videos show no preview:</b> previews of files on your PC exist only in the desktop app; in the browser you can still open/copy.</li></ul>`]
 ],
 fr: [
@@ -221,7 +227,7 @@ fr: [
   <p>Les cartes d’asset et la bible du monde enregistrent les chemins de vos fichiers. Le logiciel est reconnu par l’extension : .blend, .ztl, .spp, .sbs, .zprj, .psd, .aep, .drp, .uproject et bien d’autres.</p>
   <table><tr><th></th><th>App de bureau</th><th>Navigateur</th></tr>
   <tr><td>Clic sur le badge</td><td>ouvre le fichier dans son logiciel</td><td>copie le chemin</td></tr>
-  <tr><td>Parcourir</td><td>boîte de dialogue Windows</td><td>coller le chemin</td></tr>
+  <tr><td>Parcourir</td><td>boîte de dialogue du système</td><td>coller le chemin</td></tr>
   <tr><td>Icônes</td><td>icônes des logiciels installés</td><td>codes couleur / vos icônes</td></tr></table>`],
  ['shots','film','Liste des plans',`
   <ul><li>Chaque plan : ID, image de storyboard, séquence, action, images, objectif et note VFX ; durée calculée selon la cadence.</li>
@@ -300,7 +306,7 @@ es: [
   <p>Las tarjetas de asset y la biblia del mundo guardan rutas a tus archivos. El programa se reconoce por la extensión: .blend, .ztl, .spp, .sbs, .zprj, .psd, .aep, .drp, .uproject y muchas más.</p>
   <table><tr><th></th><th>App de escritorio</th><th>Navegador</th></tr>
   <tr><td>Clic en la insignia</td><td>abre el archivo en su programa</td><td>copia la ruta</td></tr>
-  <tr><td>Examinar</td><td>diálogo de Windows</td><td>pegar la ruta</td></tr>
+  <tr><td>Examinar</td><td>diálogo del sistema</td><td>pegar la ruta</td></tr>
   <tr><td>Iconos</td><td>iconos de los programas instalados</td><td>códigos de color / tus iconos</td></tr></table>`],
  ['shots','film','Lista de planos',`
   <ul><li>Cada plano: ID, imagen de storyboard, secuencia, acción, frames, lente y nota VFX; la duración se calcula según la cadencia.</li>
