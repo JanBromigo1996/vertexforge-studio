@@ -23,8 +23,11 @@
 - Much faster with long lists: hundreds of tasks or shots only render what is visible (pipeline about 5×
   faster with 400 tasks); large mind boards open faster.
 
-**ClamAV:** all 9 files clean (`clamscan.txt`). **VirusTotal:** results are published on the website and here
-as soon as the files are online.
+**ClamAV:** all 9 files clean (`clamscan.txt`).
+**VirusTotal (2.8.0):** macOS .dmg and both Linux files: 0 detections. Windows: 3 of about 70 –
+**Bkav Pro** `W32.Malware.8FBF5AC8` (generic), **Trapmine** `Malicious.moderate.ml.score` (as in every version since
+2.3.1) and **CrowdStrike Falcon** `Win/malicious_confidence_60% (D)` (machine-learning guess, back for the first time
+since 2.3.1, possibly because of the new WebView2 start code). None names a real virus; reported as false positives.
 
 ---
 

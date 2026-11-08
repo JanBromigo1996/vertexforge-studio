@@ -76,7 +76,7 @@ de: [
   <div class="tip">Ist der Ordner kurz nicht erreichbar (offline, Laptop unterwegs), arbeitest du einfach lokal weiter – beim nächsten Kontakt wird abgeglichen. Team-Ordner funktionieren in der Desktop-App (Windows, macOS, Linux) sowie in Chrome und Edge am Computer.</div>`],
  ['install','download','Installation & Updates',`
   <ul><li><b>Windows:</b> „VertexForge Studio Setup.exe“ starten, Sprache und Zielordner wählen – Desktop- und Startmenü-Verknüpfung werden angelegt.</li>
-  <li><b>macOS:</b> DMG öffnen und die App in „Programme“ ziehen. Beim ersten Start: Rechtsklick → „Öffnen“ (die App ist nicht von Apple notarisiert).</li>
+  <li><b>macOS:</b> DMG öffnen und die App in „Programme“ ziehen. Beim ersten Start: Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“ (die App ist nicht von Apple notarisiert).</li>
   <li><b>Linux:</b> das .deb per Doppelklick bzw. <code>sudo apt install ./VertexForge-Studio-linux-amd64.deb</code> installieren – oder das .tar.gz entpacken und <code>./install.sh</code> ausführen.</li>
   <li><b>Updates:</b> einfach das neue Setup ausführen. Deine Projekte liegen getrennt vom Programm in deinem Benutzerprofil und werden <b>nie überschrieben</b>; vor jedem Update entsteht automatisch eine Sicherheits-Version, und ältere Daten werden verlustfrei übernommen.</li>
   <li><b>Entfernen:</b> Windows „Apps & Features“, macOS App in den Papierkorb, Linux <code>sudo apt remove vertexforge-studio</code> bzw. <code>./install.sh --uninstall</code>. Deine Projekte bleiben erhalten.</li></ul>`],
@@ -88,7 +88,7 @@ de: [
  ['faq','compass','Fragen & Lösungen',`
   <ul><li><b>Die App startet nicht (Windows):</b> Sie braucht die Microsoft Edge WebView2 Runtime (in Windows 10/11 meist vorhanden). Die Fehlermeldung nennt den genauen Grund und den Ort der Log-Datei.</li>
   <li><b>Die App startet nicht (Linux):</b> WebKitGTK fehlt – <code>sudo apt install libwebkit2gtk-4.1-0</code> (Fedora: <code>webkit2gtk4.1</code>).</li>
-  <li><b>SmartScreen / Gatekeeper warnt:</b> Die App ist nicht kostenpflichtig signiert – Windows: „Weitere Informationen → Trotzdem ausführen“, macOS: Rechtsklick → „Öffnen“.</li>
+  <li><b>SmartScreen / Gatekeeper warnt:</b> Die App ist nicht kostenpflichtig signiert – Windows: „Weitere Informationen → Trotzdem ausführen“, macOS: Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“.</li>
   <li><b>Wo liegen meine Daten?</b> Windows: %LOCALAPPDATA%\\VertexForge Studio · macOS: ~/Library/Application Support/VertexForge Studio · Linux: ~/.local/share/vertexforge-studio · Browser: im Speicher des Browsers.</li>
   <li><b>Verknüpfte Videos zeigen keine Vorschau:</b> Vorschauen von Dateien auf dem PC gibt es nur in der Desktop-App; im Browser bleiben Öffnen/Kopieren.</li></ul>`]
 ],
@@ -165,7 +165,7 @@ en: [
   <div class="tip">If the folder is briefly unreachable (offline, laptop on the road), just keep working locally – it syncs on the next contact. Team folders work in the desktop app (Windows, macOS, Linux) and in Chrome or Edge on a computer.</div>`],
  ['install','download','Installation & updates',`
   <ul><li><b>Windows:</b> run “VertexForge Studio Setup.exe”, choose language and folder – desktop and Start menu shortcuts are created.</li>
-  <li><b>macOS:</b> open the DMG and drag the app into “Applications”. First start: right-click → “Open” (the app is not notarised by Apple).</li>
+  <li><b>macOS:</b> open the DMG and drag the app into “Applications”. First start: System Settings → Privacy & Security → “Open Anyway” (the app is not notarised by Apple).</li>
   <li><b>Linux:</b> install the .deb by double-click or <code>sudo apt install ./VertexForge-Studio-linux-amd64.deb</code> – or unpack the .tar.gz and run <code>./install.sh</code>.</li>
   <li><b>Updates:</b> just run the new setup. Your projects live separately from the program in your user profile and are <b>never overwritten</b>; a safety version is created before every update and older data is migrated without loss.</li>
   <li><b>Remove:</b> Windows “Apps & features”, macOS move the app to the Trash, Linux <code>sudo apt remove vertexforge-studio</code> or <code>./install.sh --uninstall</code>. Your projects are kept.</li></ul>`],
@@ -177,7 +177,7 @@ en: [
  ['faq','compass','Questions & fixes',`
   <ul><li><b>The app does not start (Windows):</b> it needs the Microsoft Edge WebView2 Runtime (usually present on Windows 10/11). The error message names the exact reason and where the log file is.</li>
   <li><b>The app does not start (Linux):</b> WebKitGTK is missing – <code>sudo apt install libwebkit2gtk-4.1-0</code> (Fedora: <code>webkit2gtk4.1</code>).</li>
-  <li><b>SmartScreen / Gatekeeper warns:</b> the app is not paid-signed – Windows: “More info → Run anyway”, macOS: right-click → “Open”.</li>
+  <li><b>SmartScreen / Gatekeeper warns:</b> the app is not paid-signed – Windows: “More info → Run anyway”, macOS: System Settings → Privacy & Security → “Open Anyway”.</li>
   <li><b>Where is my data?</b> Windows: %LOCALAPPDATA%\\VertexForge Studio · macOS: ~/Library/Application Support/VertexForge Studio · Linux: ~/.local/share/vertexforge-studio · Browser: in the browser’s storage.</li>
   <li><b>Linked videos show no preview:</b> previews of files on your PC exist only in the desktop app; in the browser you can still open/copy.</li></ul>`]
 ],
