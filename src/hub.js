@@ -52,6 +52,7 @@ function renderProjects(){
       <div class="pcard-meta">
         <div class="pcard-name" title="${esc(projectName(p))}">${esc(projectName(p))}</div>
         <div class="pcard-sub"><span>${s.pct}% · ${t('hub.tasks',{d:s.done, t:s.total})}</span>${s.next ? cdBadge(s.next.task.deadline, false) : ''}</div>
+        <div class="pcard-jump">${['pipeline','board','shots','story'].map(m=>`<button data-jump="${m}" title="${esc(t('hub.jump',{area:t('mod.'+m)}))}">${ic(MOD_ICONS[m],14)}</button>`).join('')}</div>
       </div>
     </article>`;
   }).join('');
@@ -67,6 +68,7 @@ function renderProjects(){
         <button class="btn btn-primary" id="hubNew">${ic('plus',15)}<span>${t('np.title')}</span></button>
       </div>
     </div>
+    ${focusStripHTML()}
     <div class="hub-grid" id="hubGrid" style="--card-w:${st.cardSize}px;--title-scale:${st.titleScale}">
       ${cards || `<div class="empty">${t('hub.noMatch')}</div>`}
       <div class="pcard"><div class="pcard-new" id="hubNewCard" tabindex="0"><div class="plus">${ic('plus',22)}</div>
@@ -89,7 +91,10 @@ function renderProjects(){
     c.style.setProperty('--mx', (px*100).toFixed(1) + '%'); c.style.setProperty('--my', (py*100).toFixed(1) + '%');
   };
   grid.onpointerleave = () => grid.querySelectorAll('.pcard-cover.tilting').forEach(x=>{ x.classList.remove('tilting'); x.style.removeProperty('--rx'); x.style.removeProperty('--ry'); });
+  bindFocusStrip();
   grid.onclick = e => {
+    const j = e.target.closest('[data-jump]'), jc = e.target.closest('[data-pid]');
+    if(j && jc){ e.stopPropagation(); openProject(jc.dataset.pid, false); go(j.dataset.jump); return; }
     const a = e.target.closest('[data-pa]'), card = e.target.closest('[data-pid]');
     if(a && card && a.dataset.pa==='more'){ e.stopPropagation(); const r = a.getBoundingClientRect(); hubMenu(card.dataset.pid, r.left, r.bottom + 4); return; }
     if(a && card){ e.stopPropagation(); projectAction(card.dataset.pid, a.dataset.pa); return; }
@@ -100,6 +105,53 @@ function renderProjects(){
     const card = e.target.closest('[data-pid]'); if(!card) return;
     e.preventDefault(); hubMenu(card.dataset.pid, e.clientX, e.clientY);
   };
+}
+/* „Als Nächstes“: die dringendsten offenen Aufgaben aller Projekte – abhaken oder direkt hinspringen */
+function focusTasks(limit=3){
+  const out = [];
+  S.projects.forEach(p=>p.phases.forEach(ph=>ph.tasks.forEach(x=>{
+    if(x.status==='done') return;
+    const d = x.deadline ? daysUntil(x.deadline) : 9999;
+    out.push({p, ph, x, d, w:(d < 0 ? -1000 : 0) + d * 2 + PRIO_WEIGHT[x.prio] * 3 + (x.status==='wip' ? -4 : 0) + (p.id===S.activeProjectId ? -1 : 0)});
+  })));
+  return out.sort((a,b)=>a.w - b.w).slice(0, limit);
+}
+function focusStripHTML(){
+  if(S.settings.hubFocus===false) return `<button class="focus-show" id="focusShow">${ic('target',14)} ${t('fo.title')}</button>`;
+  const list = focusTasks();
+  const items = list.map(({p,ph,x})=>`<div class="fo-item p-${x.prio} st-${x.status}" data-fk="${p.id}|${ph.id}|${x.id}">
+      <label class="chk" title="${esc(t('fo.done'))}"><input type="checkbox" data-fdone><span></span></label>
+      <button class="fo-main" data-fgo title="${esc(t('fo.open'))}"><span class="fo-text">${esc(x.text || t('ph.newTask'))}</span>
+        <span class="fo-meta"><i class="fo-dot" style="background:${esc(p.cover && p.cover.ribbonColor || 'var(--accent)')}"></i>${esc(projectName(p))} · ${esc(ph.title)}</span></button>
+      ${cdBadge(x.deadline, false)}
+    </div>`).join('');
+  return `<section class="focus-strip panel" id="focusStrip">
+    <header><span class="fo-title">${ic('target',15)} ${t('fo.title')}</span><span class="fo-sub">${t('fo.sub')}</span><button class="icon-btn sm" id="focusHide" title="${esc(t('fo.hide'))}">${ic('xmark',14)}</button></header>
+    <div class="fo-list">${items || `<div class="fo-empty">${ic('check',16)} ${t('fo.empty')}</div>`}</div>
+  </section>`;
+}
+function bindFocusStrip(){
+  const show = $('focusShow'); if(show) show.onclick = () => { S.settings.hubFocus = true; persistSoon(); renderProjects(); };
+  const fs = $('focusStrip'); if(!fs) return;
+  $('focusHide').onclick = () => { S.settings.hubFocus = false; persistSoon(); renderProjects(); };
+  fs.onclick = e => {
+    const it = e.target.closest('[data-fk]'); if(!it) return;
+    const [pid, phid, tid] = it.dataset.fk.split('|'), p = S.projects.find(q=>q.id===pid); if(!p) return;
+    const ph = p.phases.find(q=>q.id===phid), x = ph && ph.tasks.find(q=>q.id===tid); if(!x) return;
+    if(e.target.closest('[data-fdone]')){
+      if(!e.target.checked) return;
+      it.classList.add('leaving');
+      setTimeout(()=>{ histCommit(); x.status = 'done'; p.updatedAt = Date.now(); changed(); renderProjects(); setTimeout(()=>{ histCommit(); undoToast(t('fo.ticked', {task:x.text}), 'check'); }, 0); }, 260);
+      return;
+    }
+    if(e.target.closest('[data-fgo]')) jumpToTask(pid, phid, tid);
+  };
+}
+function jumpToTask(pid, phid, tid){
+  openProject(pid, false); go('pipeline');
+  const p = activeProject(), ph = p.phases.find(q=>q.id===phid); if(ph && ph.collapsed){ ph.collapsed = false; renderPipeline(); }
+  setTimeout(()=>{ const row = document.querySelector(`[data-task="${phid}:${tid}"]`); if(!row) return;
+    row.scrollIntoView({behavior:'smooth', block:'center'}); row.classList.remove('found'); void row.offsetWidth; row.classList.add('found'); setTimeout(()=>row.classList.remove('found'), 1800); }, 260);
 }
 function hubMenu(id, x, y){
     openMenu(x, y, [

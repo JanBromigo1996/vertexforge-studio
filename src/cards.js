@@ -68,9 +68,10 @@ function cardTilt(e){
   if(CV && CV.drag && CV.drag.moved) return;
   const r = tc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
   // Auf dem Denkbrett nur dezent (Knöpfe sollen nicht unter dem Zeiger wegwandern), im Deck voll; über Bedienelementen ruhig
-  const k = tc.closest('.deck-card') ? 1 : e.target.closest('button, input, textarea, .tc-bar, .n-links') ? 0 : .3;
+  const k = tc.closest('.deck-card') ? 1 : 0;
   tc.style.setProperty('--mx', (x*100).toFixed(1) + '%'); tc.style.setProperty('--my', (y*100).toFixed(1) + '%');
-  tc.style.setProperty('--tx', ((.5 - y) * 10 * k).toFixed(2) + 'deg'); tc.style.setProperty('--ty', ((x - .5) * 12 * k).toFixed(2) + 'deg');
+  /* Neigen nur im Deck: auf dem Denkbrett würde die 3D-Drehung die Karte beim Heranzoomen unscharf rendern */
+  if(k === 1){ tc.style.setProperty('--tx', ((.5 - y) * 10).toFixed(2) + 'deg'); tc.style.setProperty('--ty', ((x - .5) * 12).toFixed(2) + 'deg'); }
   tc.classList.add('hover');
 }
 function cardTiltOut(e){ const tc = e.target.closest && e.target.closest('.tc'); if(tc && !tc.contains(e.relatedTarget)){ tc.classList.remove('hover'); tc.style.removeProperty('--tx'); tc.style.removeProperty('--ty'); } }

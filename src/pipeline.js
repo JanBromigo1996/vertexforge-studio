@@ -157,7 +157,8 @@ function renderPipeline(){
     const total = ph.tasks.length, done = ph.tasks.filter(x=>x.status==='done').length, pct = total ? Math.round(done/total*100) : 0;
     const est = ph.tasks.filter(x=>x.status!=='done').reduce((a,x)=>a+(x.est||0),0);
     const tasks = filteredTasks(ph);
-    return `<section class="phase panel ${ph.collapsed?'collapsed':''}" id="phase_${ph.id}" data-phase="${ph.id}">
+    const fEmpty = st.taskFilter!=='all' && !tasks.length;
+    return `<section class="phase panel ${ph.collapsed?'collapsed':''} ${fEmpty?'f-empty':''}" id="phase_${ph.id}" data-phase="${ph.id}">
       <header class="phase-head">
         <button class="icon-btn sm" data-pact="collapse"><span class="chev">${ic('chevron',15)}</span></button>
         <span class="phase-num">${pad(i+1)}</span>
@@ -174,7 +175,7 @@ function renderPipeline(){
       </header>
       <div class="phase-bar"><div style="width:${pct}%"></div></div>
       <div class="phase-body">
-        <div class="phase-tools">${ph.tools.map(toolChip).join('')}<input class="tools-input" value="${esc(ph.tools.join(', '))}" placeholder="${esc(t('ph.tools'))}" data-pf="tools"></div>
+        <div class="phase-tools ${ph.tools.length?'':'editing'}">${ph.tools.map(toolChip).join('')}${ph.tools.length ? `<button class="tools-edit" data-tedit title="${esc(t('ph.toolsEdit'))}">${ic('edit',12)}</button>` : ''}<input class="tools-input" value="${esc(ph.tools.join(', '))}" placeholder="${esc(t('ph.tools'))}" data-pf="tools"></div>
         ${est ? `<div class="phase-meta">${ic('clock',13)} ${t('ph.effort',{h:Math.round(est*10)/10})}</div>` : ''}
         <div class="task-list">${tasks.length ? tasks.map(x=>taskRow(ph,x)).join('') : `<div class="task-empty">${total ? t('ph.noMatch') : t('ph.noTasks')}</div>`}</div>
         <div class="task-add">
@@ -203,11 +204,11 @@ function renderPipeline(){
       </div>
     </div>
     <div class="kpi-row">
-      <div class="panel kpi">${ring(s.pct)}<div class="kpi-main"><div class="kpi-label">${t('kpi.progress')}</div><div class="kpi-text">${t('kpi.progressText',{d:s.done, t:s.total})}</div></div></div>
-      <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.next')}</div>
+      <div class="panel kpi kpi-click" data-kpi="all" title="${esc(t('kpi.showAll'))}">${ring(s.pct)}<div class="kpi-main"><div class="kpi-label">${t('kpi.progress')}</div><div class="kpi-text">${t('kpi.progressText',{d:s.done, t:s.total})}</div></div></div>
+      <div class="panel kpi ${next?'kpi-click':''}" data-kpi="next" ${next?`title="${esc(t('fo.open'))}"`:''}><div class="kpi-main"><div class="kpi-label">${t('kpi.next')}</div>
         ${next ? `<div class="kpi-text" title="${esc(next.task.text)}" style="color:var(--text);font-weight:600">${esc(next.task.text)}</div><div class="inline">${cdBadge(next.task.deadline,false)}<span class="muted mono" style="font-size:10.5px">${fmtDate(next.task.deadline)}</span></div>` : `<div class="kpi-text">${t('kpi.noNext')}</div>`}</div></div>
-      <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.overdue')}</div><div class="kpi-value" style="color:${s.overdue?'var(--danger)':'var(--ok)'}">${s.overdue}</div><div class="kpi-text">${s.overdue ? t('kpi.overdueYes') : t('kpi.overdueNo')}</div></div></div>
-      <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.critical')}</div><div class="kpi-value" style="color:${s.critical?'var(--crit)':'var(--text)'}">${s.critical}</div><div class="kpi-text">Critical</div></div></div>
+      <div class="panel kpi kpi-click ${st.taskFilter==='overdue'?'on':''}" data-kpi="overdue" title="${esc(t('kpi.filter',{f:t('flt.overdue')}))}"><div class="kpi-main"><div class="kpi-label">${t('kpi.overdue')}</div><div class="kpi-value" style="color:${s.overdue?'var(--danger)':'var(--ok)'}">${s.overdue}</div><div class="kpi-text">${s.overdue ? t('kpi.overdueYes') : t('kpi.overdueNo')}</div></div></div>
+      <div class="panel kpi kpi-click ${st.taskFilter==='critical'?'on':''}" data-kpi="critical" title="${esc(t('kpi.filter',{f:t('flt.critical')}))}"><div class="kpi-main"><div class="kpi-label">${t('kpi.critical')}</div><div class="kpi-value" style="color:${s.critical?'var(--crit)':'var(--text)'}">${s.critical}</div><div class="kpi-text">Critical</div></div></div>
       <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.workload')}</div>
         ${s.est ? `<div class="kpi-value">${Math.round(s.est)} h</div><div class="kpi-text">${t('kpi.workloadText',{r:perDay.toFixed(1)})}</div><div class="meter ${perDay>8?'danger':perDay>5?'warn':''}"><div style="width:${clamp(perDay/8*100,3,100)}%"></div></div>` : `<div class="kpi-text">${t('kpi.noEst')}</div>`}</div></div>
       <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.final')}</div><div class="kpi-value" style="font-size:17px">${s.finalDeadline ? fmtDate(s.finalDeadline) : '—'}</div>${s.finalDeadline ? cdBadge(s.finalDeadline, s.total>0 && s.done===s.total) : ''}</div></div>
@@ -256,6 +257,17 @@ function bindPipeline(v){
   applySurf(v, activeProject().pipeStyle); $('plDesign').onclick = e => openDesignPop(e.currentTarget, 'pipeline');
   v.querySelectorAll('[data-view]').forEach(b=>b.onclick = () => { st.pipeView = b.dataset.view; persistSoon(); renderPipeline(); });
   v.querySelectorAll('[data-filter]').forEach(b=>b.onclick = () => { st.taskFilter = b.dataset.filter; persistSoon(); renderPipeline(); });
+  /* Programme einer Phase: Chips anzeigen, Textfeld erst beim Bearbeiten */
+  v.querySelectorAll('[data-tedit]').forEach(b=>b.onclick = () => { const w = b.closest('.phase-tools'); w.classList.add('editing'); const i = w.querySelector('.tools-input'); i.focus(); i.select(); });
+  v.querySelectorAll('.phase-tools .tools-input').forEach(i=>i.addEventListener('blur', ()=>{ const w = i.closest('.phase-tools'); if(w && i.value.trim()) w.classList.remove('editing'); }));
+  /* Kennzahlen sind Abkürzungen: Überfällig/Kritisch filtern, „Nächste Deadline“ springt zur Aufgabe */
+  v.querySelectorAll('.kpi-click[data-kpi]').forEach(k=>k.onclick = () => {
+    const f = k.dataset.kpi;
+    if(f==='next'){ const n = stats(activeProject()).next; if(n) jumpToTask(S.activeProjectId, n.phase.id, n.task.id); return; }
+    st.taskFilter = (f!=='all' && st.taskFilter===f) ? 'all' : f; if(st.pipeView==='kanban' && f==='all') st.pipeView = 'list';
+    persistSoon(); renderPipeline();
+    const pl = v.querySelector('.phase-list, .kanban'); if(pl && f!=='all') pl.scrollIntoView({behavior:'smooth', block:'start'});
+  });
   $('plSort').onclick = () => { st.sortByDate = !st.sortByDate; persistSoon(); renderPipeline(); };
   $('plAdd').onclick = addPhase;
   $('plTpl').onclick = e => templateMenu(e.currentTarget);

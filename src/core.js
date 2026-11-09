@@ -90,6 +90,7 @@ const ICONS = {
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
   sliders:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  xmark:'<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
   check:'<path d="M5 12.5l4.5 4.5L19 7"/>', type:'<path d="M5 7V4h14v3M12 4v16M9 20h6"/>',
   zoomIn:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/>', zoomOut:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/>',
   fit:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
@@ -927,10 +928,10 @@ function softDelete(name){
   setTimeout(()=>{ histCommit(); undoToast(name ? t('ts.deletedNamed',{name}) : t('ts.deleted')); }, 0);
   return Promise.resolve(true);
 }
-function undoToast(msg){
+function undoToast(msg, icon='trash'){
   const el = document.createElement('div');
   el.className = 'toast undo';
-  el.innerHTML = ic('trash',15) + `<span>${esc(msg)}</span><button>${ic('undo',14)}${t('e.undo')}</button><i class="toast-time"></i>`;
+  el.innerHTML = ic(icon,15) + `<span>${esc(msg)}</span><button>${ic('undo',14)}${t('e.undo')}</button><i class="toast-time"></i>`;
   $('toasts').appendChild(el);
   while($('toasts').children.length > 4) $('toasts').firstChild.remove();
   const close = () => { el.style.transition = 'opacity .25s, transform .25s'; el.style.opacity = '0'; el.style.transform = 'translateY(6px)'; setTimeout(()=>el.remove(), 260); };
@@ -1017,6 +1018,7 @@ function getCommands(){
   const add = (label, run, kbd='', group=t('pal.cmd'), icon='chevronR') => cmds.push({label, run, kbd, group, icon});
   MODULES.forEach((mod,i)=>add(t('mod.'+mod), ()=>go(mod), 'Alt+'+(i+1), t('pal.go'), MOD_ICONS[mod]));
   S.projects.forEach(p=>add(projectName(p), ()=>openProject(p.id), '', t('pal.project'), 'film'));
+  add(t('qc.title'), ()=>quickCapture(), 'Q', t('menu.edit'), 'plus');
   add(t('f.newProject'), newProjectDialog, 'Ctrl+N', t('menu.file'), 'plus');
   add(t('tour.menu'), startTour, '', t('menu.help'), 'sparkle');
   add(t('uz.in'), ()=>stepUiZoom(1), 'Ctrl++', t('menu.view'), 'plus');
@@ -1164,6 +1166,7 @@ function renderChrome(){
     <nav class="tabs" id="tabs" role="tablist"><span class="tab-ink" id="tabInk"></span>${MODULES.map((m,i)=>`<button role="tab" data-mod="${m}" class="${S.activeModule===m?'active':''}" title="${esc(t('mod.'+m))} · Alt+${i+1}">${ic(MOD_ICONS[m],15)}<span>${t('mod.'+m)}</span></button>`).join('')}</nav>
     <div class="tb-right">
       <div class="tb-tools">
+        <button class="icon-btn qc-btn" data-act="capture" title="${esc(t('qc.title'))} · Q">${ic('plus',17)}</button>
         <button class="icon-btn" data-act="search" title="${esc(t('pal.searchTip'))} · Ctrl+K">${ic('search',17)}</button>
         <button class="icon-btn save-btn" id="savePill"></button>
         <button class="icon-btn" data-act="versions" title="${esc(t('ver.title'))} · Ctrl+Alt+H">${ic('history',17)}</button>
@@ -1182,6 +1185,7 @@ function renderChrome(){
   tb.querySelector('[data-act=settings]').onclick = openSettings;
   tb.querySelector('[data-act=versions]').onclick = openVersions;
   tb.querySelector('[data-act=search]').onclick = openPalette;
+  tb.querySelector('[data-act=capture]').onclick = () => quickCapture();
   const fs = tb.querySelector('[data-act=fullscreen]'); if(fs) fs.onclick = toggleFullscreen;
   tb.querySelectorAll('[data-win]').forEach(b=>b.onclick = () => winAction(b.dataset.win));
   $('projCrumb').onclick = e => openProjectMenu(e.currentTarget);
@@ -1376,18 +1380,25 @@ function showTip(tg){
   const raw = tg.dataset.tip; if(!raw) return;
   if(!TIP.el){ TIP.el = document.createElement('div'); TIP.el.className = 'vtip'; TIP.el.setAttribute('role','tooltip'); document.body.appendChild(TIP.el); }
   const el = TIP.el, parts = raw.split(' · '); let key = '';
-  if(parts.length > 1 && /^(Ctrl|Strg|Alt|Shift|F\d|Esc|Del|Entf|⌘|⌥|⇧|\?$)/.test(parts[parts.length-1].trim())) key = parts.pop().trim();
+  if(parts.length > 1 && /^(Ctrl|Strg|Alt|Shift|F\d|Esc|Del|Entf|⌘|⌥|⇧|[A-Z0-9?]$)/.test(parts[parts.length-1].trim())) key = parts.pop().trim();
   el.innerHTML = `<span>${esc(macKeys(parts.join(' · ')))}</span>${key ? `<span class="vtip-k">${keyHTML(key)}</span>` : ''}`;
-  el.style.left = '0px'; el.style.top = '0px'; el.classList.remove('above');
+  el.style.left = '0px'; el.style.top = '0px'; el.classList.remove('above','right');
   const r = tg.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
-  let y = r.bottom + 7, above = false; if(y + h > innerHeight - 6){ y = r.top - h - 7; above = true; }
-  el.style.left = Math.round(Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width/2 - w/2))) + 'px'; el.style.top = Math.round(y) + 'px';
-  el.classList.toggle('above', above); void el.offsetWidth; el.classList.add('show');
+  if(tg.closest('.bt-tools') && r.right + w + 16 < innerWidth){
+    el.style.left = Math.round(r.right + 11) + 'px'; el.style.top = Math.round(r.top + r.height/2 - h/2) + 'px'; el.classList.add('right');
+  }else{
+    let y = r.bottom + 8, above = false; if(y + h > innerHeight - 6){ y = r.top - h - 8; above = true; }
+    const x = Math.round(Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width/2 - w/2)));
+    el.style.left = x + 'px'; el.style.top = Math.round(y) + 'px';
+    el.style.setProperty('--ax', Math.round(Math.max(10, Math.min(w - 10, r.left + r.width/2 - x))) + 'px');
+    el.classList.toggle('above', above);
+  }
+  void el.offsetWidth; el.classList.add('show');
 }
 document.addEventListener('pointerover', e=>{
   if(e.pointerType==='touch' || !e.target.closest) return;
-  const tg = e.target.closest('[title],[data-tip]:not(.bt-tool)');
-  if(!tg || tg===TIP.cur || tg.classList.contains('bt-tool') || tg.closest('.vtip')) return;
+  const tg = e.target.closest('[title],[data-tip]');
+  if(!tg || tg===TIP.cur || tg.closest('.vtip')) return;
   if(tg.hasAttribute('title')){ const tt = tg.getAttribute('title'); tg.removeAttribute('title'); if(!tt) return; tg.dataset.tip = tt; if(!tg.hasAttribute('aria-label') && !tg.textContent.trim()) tg.setAttribute('aria-label', tt); }
   hideTip(); TIP.cur = tg;
   TIP.t = setTimeout(()=>{ if(TIP.cur===tg && tg.isConnected) showTip(tg); }, performance.now() < TIP.warm ? 30 : 450);
@@ -1526,7 +1537,7 @@ async function openSettings(){
 }
 const KEYMAP = [
   ['global','Ctrl+Z','k.undo'],['global','Ctrl+Shift+Z / Ctrl+Y','k.redo'],['global','Ctrl+S','k.save'],['global','Ctrl+Shift+S','k.saveAs'],['global','Ctrl+Alt+S','ver.save'],['global','Ctrl+Alt+H','ver.title'],['global','Ctrl+Alt+Shift+S','f.saveInc'],['global','Ctrl+O','k.open'],
-  ['global','Ctrl+N','k.newProject'],['global','Ctrl+K / F3','k.search'],['global','F1','k.guide'],['global','?','k.keys'],['global','Ctrl+,','k.settings'],
+  ['global','Ctrl+N','k.newProject'],['global','Ctrl+K / F3','k.search'],['global','F1','k.guide'],['global','?','k.keys'],['global','Q','qc.title'],['global','Ctrl+,','k.settings'],
   ['global','Ctrl+PgUp / Ctrl+PgDn','k.workspace'],['global','Alt+1 … Alt+6','k.workspaceN'],['global','Shift+A','k.addCtx'],['global','Esc','k.esc'],['global','F11','v.fullscreen'],['global','Ctrl+Wheel / Ctrl++ / Ctrl+-','k.uiZoom'],['global','Ctrl+0','uz.reset'],
   ['board','LMB','k.select'],['board','Shift+LMB','k.selectAdd'],['board','LMB-Drag','k.box'],['board','A','k.selectAll'],['board','Alt+A','k.deselect'],['board','Ctrl+I','k.invert'],
   ['board','G','k.grab'],['board','G → X / Y','k.axis'],['board','S','k.scale'],['board','X / Del','k.delete'],['board','Shift+D','k.duplicate'],['board','Ctrl+C / Ctrl+V','k.copyPaste'],
@@ -1626,6 +1637,7 @@ document.addEventListener('keydown', e=>{
   if(ctrl && k==='z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
   if(ctrl && k==='y'){ e.preventDefault(); redo(); return; }
   if(e.key==='?'){ e.preventDefault(); openKeys(); return; }
+  if(!ctrl && !e.altKey && !e.shiftKey && e.code==='KeyQ' && !(typeof CV!=='undefined' && CV.drag) && !ui.xf){ e.preventDefault(); quickCapture(); return; }
   const h = MOD_KEYS[S.activeModule];
   if(h && h(e, ctrl, k)) e.preventDefault();
 });

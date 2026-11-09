@@ -517,8 +517,6 @@ html.mode-swap,html.mode-swap *{transition:background-color .24s ease,border-col
 .bt-tool:hover{background:var(--hover);color:var(--text)}
 .bt-tool:active{transform:scale(.94)}
 .bt-tool.on{background:var(--acc-soft);color:var(--accent);box-shadow:inset 0 0 0 1px var(--acc-line)}
-.bt-tool::after{content:attr(data-tip);position:absolute;left:calc(100% + 10px);top:50%;transform:translate(-4px,-50%);white-space:nowrap;padding:5px 9px;border-radius:6px;background:var(--panel-2);border:1px solid var(--line-2);box-shadow:var(--shadow-sm);color:var(--text);font-size:11.5px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .12s,transform .12s}
-.bt-tool:hover::after{opacity:1;transform:translate(0,-50%);transition-delay:.3s}
 .bt-hsep{height:1px;background:var(--line);margin:3px 6px}
 .viewport{flex:1;position:relative;overflow:hidden;background-color:var(--canvas);background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:var(--g,24px) var(--g,24px);background-position:var(--gx,0) var(--gy,0);cursor:default;touch-action:none;outline:none}
 .viewport.nogrid{background-image:none}
@@ -1496,12 +1494,18 @@ html.is-fs .win-ctl [data-win="max"]{display:none}
    BEWEGUNG & FEINSCHLIFF – kurz, federnd, nie im Weg
    ============================================================================ */
 :root{--ease-out:cubic-bezier(.16,1,.3,1); --spring:cubic-bezier(.34,1.4,.64,1)}
-/* Tooltips */
-.vtip{position:fixed;left:0;top:0;z-index:3000;display:flex;align-items:center;gap:8px;max-width:300px;padding:5px 9px;border-radius:6px;background:var(--panel-2);border:1px solid var(--line-2);box-shadow:var(--shadow-sm);color:var(--text);font-size:11.5px;line-height:1.35;pointer-events:none;opacity:0;transform:translateY(-3px) scale(.97);transform-origin:50% 0;transition:opacity .09s ease,transform .14s var(--ease-out)}
-.vtip.above{transform:translateY(3px) scale(.97);transform-origin:50% 100%}
+/* Tooltips: kleine Etiketten im Stil der App – Panel, Akzentkante, Pfeil zum Element */
+.vtip{position:fixed;left:0;top:0;z-index:3000;display:flex;align-items:center;gap:10px;max-width:300px;padding:6px 10px 6px 11px;border-radius:7px;background:color-mix(in srgb,var(--panel-2) 94%,var(--accent));border:1px solid var(--line-2);box-shadow:0 10px 26px rgba(0,0,0,.28),0 1px 0 rgba(255,255,255,.04) inset;color:var(--text);font-size:11.5px;font-weight:500;line-height:1.35;letter-spacing:.01em;pointer-events:none;opacity:0;transform:translateY(-4px) scale(.96);transform-origin:var(--ax,50%) 0;transition:opacity .1s ease,transform .16s var(--ease-out)}
+.vtip::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:2px;border-radius:2px;background:var(--accent);opacity:.85}
+.vtip::after{content:"";position:absolute;left:var(--ax,50%);top:-5px;width:8px;height:8px;margin-left:-4px;background:inherit;border-left:1px solid var(--line-2);border-top:1px solid var(--line-2);transform:rotate(45deg);border-top-left-radius:2px}
+.vtip.above{transform:translateY(4px) scale(.96);transform-origin:var(--ax,50%) 100%}
+.vtip.above::after{top:auto;bottom:-5px;transform:rotate(225deg)}
+.vtip.right{transform:translateX(-4px) scale(.96);transform-origin:0 50%}
+.vtip.right::after{left:-5px;top:50%;margin:-4px 0 0;transform:rotate(-45deg)}
 .vtip.show{opacity:1;transform:none}
-.vtip-k{display:inline-flex;gap:2px;color:var(--text-2);white-space:nowrap}
-.vtip-k kbd{font-size:9.5px;padding:0 4px;border-bottom-width:1px}
+html[data-mode="light"] .vtip{box-shadow:0 10px 26px rgba(64,48,26,.16),0 1px 0 rgba(255,255,255,.7) inset}
+.vtip-k{display:inline-flex;align-items:center;gap:3px;padding-left:9px;border-left:1px solid var(--line-2);color:var(--muted);white-space:nowrap}
+.vtip-k kbd{font-size:9.5px;padding:0 4px;border-bottom-width:1px;background:var(--panel);color:var(--text-2)}
 /* Schließen: Kopie blendet weich aus */
 .modal.ghost{display:flex;pointer-events:none;animation:ghostFade .15s ease-in forwards}
 .modal.ghost > *{animation:ghostPop .15s ease-in forwards}
@@ -1533,6 +1537,76 @@ html.is-fs .win-ctl [data-win="max"]{display:none}
 /* Lange Listen: nur sichtbare Zeilen werden gezeichnet (spürbar flüssiger bei hunderten Aufgaben/Shots) */
 .task-list > .task{content-visibility:auto;contain-intrinsic-size:auto 44px}
 .shot-table tbody > tr{content-visibility:auto;contain-intrinsic-size:auto 64px}
+/* Denkbrett: Karten ohne dauerhaften 3D-Kontext, damit sie beim Zoomen gestochen scharf bleiben */
+.node .tc:not(.flip):not(.lift){perspective:none}
+.node .tc:not(.flip):not(.lift) .tc-inner{transform:none}
+/* Bibliothek: „Als Nächstes“ */
+.focus-strip{margin:0 0 22px;padding:12px 14px 14px;border-radius:var(--r-lg)}
+.focus-strip header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.fo-title{display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-weight:700;font-size:14px;color:var(--text)}
+.fo-title .ic{color:var(--accent)}
+.fo-sub{color:var(--muted);font-size:12px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fo-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+.fo-item{position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel-2);transition:transform .18s var(--spring),border-color .15s,background-color .15s,opacity .25s;overflow:hidden}
+.fo-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--info)}
+.fo-item.p-low::before{background:var(--muted)} .fo-item.p-high::before{background:var(--warn)} .fo-item.p-critical::before{background:var(--crit)}
+.fo-item:hover{border-color:var(--line-2);transform:translateY(-2px);background:var(--hover)}
+.fo-item.leaving{opacity:0;transform:translateX(18px) scale(.97)}
+.fo-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;border:none;background:none;text-align:left;cursor:pointer;padding:0}
+.fo-text{font-size:12.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fo-meta{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fo-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.fo-item .cd{flex-shrink:0}
+.fo-item.st-wip .fo-text::after{content:"";display:inline-block;width:6px;height:6px;margin-left:7px;border-radius:50%;background:var(--warn);vertical-align:2px}
+.fo-empty{display:flex;align-items:center;gap:8px;color:var(--muted);padding:6px 2px}
+.focus-show{display:inline-flex;align-items:center;gap:6px;margin:0 0 16px;padding:5px 11px;border:1px dashed var(--line-2);border-radius:99px;background:none;color:var(--muted);font-size:12px;cursor:pointer}
+.focus-show:hover{color:var(--accent);border-color:var(--acc-line)}
+/* Projektkarte: direkt in einen Bereich springen */
+.pcard-jump{display:flex;gap:4px;margin-top:6px;opacity:0;transform:translateY(-3px);transition:opacity .16s,transform .2s var(--ease-out)}
+.pcard:hover .pcard-jump,.pcard:focus-within .pcard-jump,html.touch .pcard-jump{opacity:1;transform:none}
+.pcard-jump button{width:28px;height:24px;display:grid;place-items:center;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--text-2);cursor:pointer;transition:color .12s,border-color .12s,transform .12s var(--spring),background-color .12s}
+.pcard-jump button:hover{color:var(--accent);border-color:var(--acc-line);background:var(--acc-soft);transform:translateY(-1px)}
+.pcard-jump button:active{transform:scale(.92)}
+/* Klickbare Kennzahlen */
+.kpi-click{cursor:pointer;transition:transform .18s var(--spring),border-color .15s,box-shadow .2s}
+.kpi-click:hover{transform:translateY(-2px);border-color:var(--line-2);box-shadow:var(--shadow-sm)}
+.kpi-click:active{transform:translateY(0) scale(.985)}
+.kpi-click.on{border-color:var(--acc-line);box-shadow:inset 0 0 0 1px var(--acc-line)}
+/* Schnell erfassen */
+.qc-sheet{max-width:560px}
+.qc-h{display:flex;align-items:center;gap:8px;font-size:17px}
+.qc-h .ic{color:var(--accent)}
+.qc-proj{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:2px 8px;border:1px solid var(--line);border-radius:99px;margin-left:4px}
+.qc{gap:12px}
+.qc-kinds{align-self:flex-start}
+.qc-text{height:44px;font-size:15px;padding:0 14px}
+.qc-opts{display:flex;flex-wrap:wrap;align-items:center;gap:14px;min-height:30px;font-size:12px;color:var(--text-2)}
+.qc-opts label{display:flex;align-items:center;gap:8px}
+.qc-foot{justify-content:space-between;font-size:11.5px}
+.qc-done{display:inline-flex;align-items:center;gap:6px;color:var(--ok);font-weight:600;opacity:0}
+.qc-done.pop{animation:qcPop 2.2s var(--ease-out) forwards}
+@keyframes qcPop{0%{opacity:0;transform:translateY(4px)}12%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+.qc-btn .ic{transition:transform .25s var(--spring)}
+.qc-btn:hover .ic{transform:rotate(90deg)}
+.phase-tools:not(.editing) .tools-input{display:none}
+.tools-edit{width:24px;height:24px;display:grid;place-items:center;border:1px dashed var(--line-2);border-radius:6px;background:none;color:var(--muted);cursor:pointer;opacity:0;transition:opacity .15s,color .12s,border-color .12s}
+.phase:hover .tools-edit,.tools-edit:focus-visible{opacity:1}
+.tools-edit:hover{color:var(--accent);border-color:var(--acc-line)}
+.phase-tools.editing .tools-edit{display:none}
+html.touch .tools-edit{opacity:1}
+.qc-done{max-width:55%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qc-foot .muted{white-space:nowrap}
+.fo-list{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.fo-item .cd{max-width:42%}
+.fo-item .cd span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Filter aktiv: Phasen ohne Treffer schrumpfen auf ihre Kopfzeile */
+.phase.f-empty{opacity:.5}
+.phase.f-empty .phase-body,.phase.f-empty .phase-bar{display:none}
+.phase.f-empty:hover{opacity:.8}
+.fo-list{grid-template-columns:repeat(auto-fill,minmax(380px,1fr))}
+.fo-item .cd{max-width:none;font-size:10px}
+.fo-item .cd .ic{display:none}
+.fo-list{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
 
 </style>
 </head>
@@ -1653,6 +1727,32 @@ const T = {
   'sort.progress':['Fortschritt','Progress','Progression','Progreso','Avanzamento','Progresso'],
   'sort.deadline':['Nächste Deadline','Next deadline','Prochaine échéance','Próxima fecha límite','Prossima scadenza','Próximo prazo'],
   'hub.newDesc':['Cover, Pipeline-Vorlage, Denkbrett, Shotlist & Story','Cover, pipeline template, board, shot list & story','Couverture, modèle de pipeline, tableau, plans & récit','Portada, plantilla de pipeline, tablero, planos e historia','Copertina, modello pipeline, lavagna, inquadrature e storia','Capa, modelo de pipeline, quadro, planos e história'],
+  'hub.jump':['Direkt zu: {area}','Go to: {area}','Aller à : {area}','Ir a: {area}','Vai a: {area}','Ir para: {area}'],
+  'fo.title':['Als Nächstes','Up next','À faire ensuite','A continuación','Prossimi passi','A seguir'],
+  'fo.sub':['die dringendsten offenen Aufgaben aus allen Projekten','the most urgent open tasks across all projects','les tâches ouvertes les plus urgentes de tous les projets','las tareas abiertas más urgentes de todos los proyectos','le attività aperte più urgenti di tutti i progetti','as tarefas abertas mais urgentes de todos os projetos'],
+  'fo.done':['Erledigt','Done','Fait','Hecho','Fatto','Feito'],
+  'fo.open':['In der Pipeline zeigen','Show in the pipeline','Afficher dans le pipeline','Mostrar en el pipeline','Mostra nella pipeline','Mostrar no pipeline'],
+  'fo.hide':['Ausblenden','Hide','Masquer','Ocultar','Nascondi','Ocultar'],
+  'fo.empty':['Alles erledigt – Zeit für etwas Neues.','All done – time for something new.','Tout est fait – place à la suite.','Todo hecho: hora de algo nuevo.','Tutto fatto: tempo per qualcosa di nuovo.','Tudo feito – hora de algo novo.'],
+  'fo.ticked':['Erledigt: {task}','Done: {task}','Fait : {task}','Hecho: {task}','Fatto: {task}','Feito: {task}'],
+  'kpi.showAll':['Alle Aufgaben zeigen','Show all tasks','Afficher toutes les tâches','Mostrar todas las tareas','Mostra tutte le attività','Mostrar todas as tarefas'],
+  'kpi.filter':['Nur „{f}“ zeigen (nochmal klicken: alle)','Show only “{f}” (click again: all)','Afficher seulement « {f} » (re-cliquer : tout)','Mostrar solo «{f}» (otro clic: todo)','Mostra solo «{f}» (di nuovo: tutto)','Mostrar só “{f}” (clicar de novo: tudo)'],
+  'qc.title':['Schnell erfassen','Quick capture','Saisie rapide','Captura rápida','Cattura rapida','Captura rápida'],
+  'qc.task':['Aufgabe','Task','Tâche','Tarea','Attività','Tarefa'],
+  'qc.note':['Notiz','Note','Note','Nota','Nota','Nota'],
+  'qc.shot':['Shot','Shot','Plan','Plano','Inquadratura','Plano'],
+  'qc.ph.task':['Was ist zu tun? z. B. „Retopo der Hände“','What needs doing? e.g. “Retopo the hands”','Que faut-il faire ? ex. « Retopo des mains »','¿Qué hay que hacer? p. ej. «Retopo de las manos»','Cosa c’è da fare? es. «Retopo delle mani»','O que fazer? ex. “Retopo das mãos”'],
+  'qc.ph.note':['Idee, Referenz, Gedanke …','Idea, reference, thought …','Idée, référence, pensée …','Idea, referencia, pensamiento …','Idea, riferimento, pensiero …','Ideia, referência, pensamento …'],
+  'qc.ph.shot':['Was passiert im Shot? z. B. „Close-up: Augen öffnen sich“','What happens in the shot? e.g. “Close-up: eyes open”','Que se passe-t-il ? ex. « Gros plan : les yeux s’ouvrent »','¿Qué ocurre? p. ej. «Primer plano: abre los ojos»','Cosa succede? es. «Primo piano: occhi che si aprono»','O que acontece? ex. “Close: olhos abrem”'],
+  'qc.phase':['Phase','Phase','Phase','Fase','Fase','Fase'],
+  'qc.prio':['Priorität','Priority','Priorité','Prioridad','Priorità','Prioridade'],
+  'qc.noPhase':['Noch keine Phase – lege zuerst eine in der Pipeline an.','No phase yet – add one in the pipeline first.','Aucune phase – créez-en une dans le pipeline.','Aún no hay fases: crea una en el pipeline.','Nessuna fase: creane una nella pipeline.','Ainda sem fase – crie uma no pipeline.'],
+  'qc.noteWhere':['Landet als Notiz auf „{board}“.','Lands as a note on “{board}”.','Arrive comme note sur « {board} ».','Se añade como nota en «{board}».','Finisce come nota su «{board}».','Vai como nota para “{board}”.'],
+  'qc.shotWhere':['Wird ans Ende der Shotlist angehängt.','Is added to the end of the shot list.','Ajouté à la fin de la liste des plans.','Se añade al final de la lista de planos.','Aggiunta in fondo alla lista.','Adicionado ao fim da lista de planos.'],
+  'qc.add':['hinzufügen','add','ajouter','añadir','aggiungi','adicionar'],
+  'qc.switch':['Art wechseln','switch type','changer de type','cambiar tipo','cambia tipo','mudar tipo'],
+  'qc.added':['Hinzugefügt: {where}','Added: {where}','Ajouté : {where}','Añadido: {where}','Aggiunto: {where}','Adicionado: {where}'],
+  'ph.toolsEdit':['Programme bearbeiten','Edit programs','Modifier les logiciels','Editar programas','Modifica programmi','Editar programas'],
   'hub.active':['Aktiv','Active','Actif','Activo','Attivo','Ativo'],
   'hub.tasks':['{d}/{t} Aufgaben','{d}/{t} tasks','{d}/{t} tâches','{d}/{t} tareas','{d}/{t} attività','{d}/{t} tarefas'],
   'hub.noMatch':['Keine Projekte gefunden.','No projects found.','Aucun projet trouvé.','No se encontraron proyectos.','Nessun progetto trovato.','Nenhum projeto encontrado.'],
@@ -2950,6 +3050,7 @@ const ICONS = {
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
   sliders:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  xmark:'<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
   check:'<path d="M5 12.5l4.5 4.5L19 7"/>', type:'<path d="M5 7V4h14v3M12 4v16M9 20h6"/>',
   zoomIn:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/>', zoomOut:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/>',
   fit:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
@@ -3787,10 +3888,10 @@ function softDelete(name){
   setTimeout(()=>{ histCommit(); undoToast(name ? t('ts.deletedNamed',{name}) : t('ts.deleted')); }, 0);
   return Promise.resolve(true);
 }
-function undoToast(msg){
+function undoToast(msg, icon='trash'){
   const el = document.createElement('div');
   el.className = 'toast undo';
-  el.innerHTML = ic('trash',15) + `<span>${esc(msg)}</span><button>${ic('undo',14)}${t('e.undo')}</button><i class="toast-time"></i>`;
+  el.innerHTML = ic(icon,15) + `<span>${esc(msg)}</span><button>${ic('undo',14)}${t('e.undo')}</button><i class="toast-time"></i>`;
   $('toasts').appendChild(el);
   while($('toasts').children.length > 4) $('toasts').firstChild.remove();
   const close = () => { el.style.transition = 'opacity .25s, transform .25s'; el.style.opacity = '0'; el.style.transform = 'translateY(6px)'; setTimeout(()=>el.remove(), 260); };
@@ -3877,6 +3978,7 @@ function getCommands(){
   const add = (label, run, kbd='', group=t('pal.cmd'), icon='chevronR') => cmds.push({label, run, kbd, group, icon});
   MODULES.forEach((mod,i)=>add(t('mod.'+mod), ()=>go(mod), 'Alt+'+(i+1), t('pal.go'), MOD_ICONS[mod]));
   S.projects.forEach(p=>add(projectName(p), ()=>openProject(p.id), '', t('pal.project'), 'film'));
+  add(t('qc.title'), ()=>quickCapture(), 'Q', t('menu.edit'), 'plus');
   add(t('f.newProject'), newProjectDialog, 'Ctrl+N', t('menu.file'), 'plus');
   add(t('tour.menu'), startTour, '', t('menu.help'), 'sparkle');
   add(t('uz.in'), ()=>stepUiZoom(1), 'Ctrl++', t('menu.view'), 'plus');
@@ -4024,6 +4126,7 @@ function renderChrome(){
     <nav class="tabs" id="tabs" role="tablist"><span class="tab-ink" id="tabInk"></span>${MODULES.map((m,i)=>`<button role="tab" data-mod="${m}" class="${S.activeModule===m?'active':''}" title="${esc(t('mod.'+m))} · Alt+${i+1}">${ic(MOD_ICONS[m],15)}<span>${t('mod.'+m)}</span></button>`).join('')}</nav>
     <div class="tb-right">
       <div class="tb-tools">
+        <button class="icon-btn qc-btn" data-act="capture" title="${esc(t('qc.title'))} · Q">${ic('plus',17)}</button>
         <button class="icon-btn" data-act="search" title="${esc(t('pal.searchTip'))} · Ctrl+K">${ic('search',17)}</button>
         <button class="icon-btn save-btn" id="savePill"></button>
         <button class="icon-btn" data-act="versions" title="${esc(t('ver.title'))} · Ctrl+Alt+H">${ic('history',17)}</button>
@@ -4042,6 +4145,7 @@ function renderChrome(){
   tb.querySelector('[data-act=settings]').onclick = openSettings;
   tb.querySelector('[data-act=versions]').onclick = openVersions;
   tb.querySelector('[data-act=search]').onclick = openPalette;
+  tb.querySelector('[data-act=capture]').onclick = () => quickCapture();
   const fs = tb.querySelector('[data-act=fullscreen]'); if(fs) fs.onclick = toggleFullscreen;
   tb.querySelectorAll('[data-win]').forEach(b=>b.onclick = () => winAction(b.dataset.win));
   $('projCrumb').onclick = e => openProjectMenu(e.currentTarget);
@@ -4236,18 +4340,25 @@ function showTip(tg){
   const raw = tg.dataset.tip; if(!raw) return;
   if(!TIP.el){ TIP.el = document.createElement('div'); TIP.el.className = 'vtip'; TIP.el.setAttribute('role','tooltip'); document.body.appendChild(TIP.el); }
   const el = TIP.el, parts = raw.split(' · '); let key = '';
-  if(parts.length > 1 && /^(Ctrl|Strg|Alt|Shift|F\d|Esc|Del|Entf|⌘|⌥|⇧|\?$)/.test(parts[parts.length-1].trim())) key = parts.pop().trim();
+  if(parts.length > 1 && /^(Ctrl|Strg|Alt|Shift|F\d|Esc|Del|Entf|⌘|⌥|⇧|[A-Z0-9?]$)/.test(parts[parts.length-1].trim())) key = parts.pop().trim();
   el.innerHTML = `<span>${esc(macKeys(parts.join(' · ')))}</span>${key ? `<span class="vtip-k">${keyHTML(key)}</span>` : ''}`;
-  el.style.left = '0px'; el.style.top = '0px'; el.classList.remove('above');
+  el.style.left = '0px'; el.style.top = '0px'; el.classList.remove('above','right');
   const r = tg.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
-  let y = r.bottom + 7, above = false; if(y + h > innerHeight - 6){ y = r.top - h - 7; above = true; }
-  el.style.left = Math.round(Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width/2 - w/2))) + 'px'; el.style.top = Math.round(y) + 'px';
-  el.classList.toggle('above', above); void el.offsetWidth; el.classList.add('show');
+  if(tg.closest('.bt-tools') && r.right + w + 16 < innerWidth){
+    el.style.left = Math.round(r.right + 11) + 'px'; el.style.top = Math.round(r.top + r.height/2 - h/2) + 'px'; el.classList.add('right');
+  }else{
+    let y = r.bottom + 8, above = false; if(y + h > innerHeight - 6){ y = r.top - h - 8; above = true; }
+    const x = Math.round(Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width/2 - w/2)));
+    el.style.left = x + 'px'; el.style.top = Math.round(y) + 'px';
+    el.style.setProperty('--ax', Math.round(Math.max(10, Math.min(w - 10, r.left + r.width/2 - x))) + 'px');
+    el.classList.toggle('above', above);
+  }
+  void el.offsetWidth; el.classList.add('show');
 }
 document.addEventListener('pointerover', e=>{
   if(e.pointerType==='touch' || !e.target.closest) return;
-  const tg = e.target.closest('[title],[data-tip]:not(.bt-tool)');
-  if(!tg || tg===TIP.cur || tg.classList.contains('bt-tool') || tg.closest('.vtip')) return;
+  const tg = e.target.closest('[title],[data-tip]');
+  if(!tg || tg===TIP.cur || tg.closest('.vtip')) return;
   if(tg.hasAttribute('title')){ const tt = tg.getAttribute('title'); tg.removeAttribute('title'); if(!tt) return; tg.dataset.tip = tt; if(!tg.hasAttribute('aria-label') && !tg.textContent.trim()) tg.setAttribute('aria-label', tt); }
   hideTip(); TIP.cur = tg;
   TIP.t = setTimeout(()=>{ if(TIP.cur===tg && tg.isConnected) showTip(tg); }, performance.now() < TIP.warm ? 30 : 450);
@@ -4386,7 +4497,7 @@ async function openSettings(){
 }
 const KEYMAP = [
   ['global','Ctrl+Z','k.undo'],['global','Ctrl+Shift+Z / Ctrl+Y','k.redo'],['global','Ctrl+S','k.save'],['global','Ctrl+Shift+S','k.saveAs'],['global','Ctrl+Alt+S','ver.save'],['global','Ctrl+Alt+H','ver.title'],['global','Ctrl+Alt+Shift+S','f.saveInc'],['global','Ctrl+O','k.open'],
-  ['global','Ctrl+N','k.newProject'],['global','Ctrl+K / F3','k.search'],['global','F1','k.guide'],['global','?','k.keys'],['global','Ctrl+,','k.settings'],
+  ['global','Ctrl+N','k.newProject'],['global','Ctrl+K / F3','k.search'],['global','F1','k.guide'],['global','?','k.keys'],['global','Q','qc.title'],['global','Ctrl+,','k.settings'],
   ['global','Ctrl+PgUp / Ctrl+PgDn','k.workspace'],['global','Alt+1 … Alt+6','k.workspaceN'],['global','Shift+A','k.addCtx'],['global','Esc','k.esc'],['global','F11','v.fullscreen'],['global','Ctrl+Wheel / Ctrl++ / Ctrl+-','k.uiZoom'],['global','Ctrl+0','uz.reset'],
   ['board','LMB','k.select'],['board','Shift+LMB','k.selectAdd'],['board','LMB-Drag','k.box'],['board','A','k.selectAll'],['board','Alt+A','k.deselect'],['board','Ctrl+I','k.invert'],
   ['board','G','k.grab'],['board','G → X / Y','k.axis'],['board','S','k.scale'],['board','X / Del','k.delete'],['board','Shift+D','k.duplicate'],['board','Ctrl+C / Ctrl+V','k.copyPaste'],
@@ -4486,6 +4597,7 @@ document.addEventListener('keydown', e=>{
   if(ctrl && k==='z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
   if(ctrl && k==='y'){ e.preventDefault(); redo(); return; }
   if(e.key==='?'){ e.preventDefault(); openKeys(); return; }
+  if(!ctrl && !e.altKey && !e.shiftKey && e.code==='KeyQ' && !(typeof CV!=='undefined' && CV.drag) && !ui.xf){ e.preventDefault(); quickCapture(); return; }
   const h = MOD_KEYS[S.activeModule];
   if(h && h(e, ctrl, k)) e.preventDefault();
 });
@@ -4570,6 +4682,7 @@ function renderProjects(){
       <div class="pcard-meta">
         <div class="pcard-name" title="${esc(projectName(p))}">${esc(projectName(p))}</div>
         <div class="pcard-sub"><span>${s.pct}% · ${t('hub.tasks',{d:s.done, t:s.total})}</span>${s.next ? cdBadge(s.next.task.deadline, false) : ''}</div>
+        <div class="pcard-jump">${['pipeline','board','shots','story'].map(m=>`<button data-jump="${m}" title="${esc(t('hub.jump',{area:t('mod.'+m)}))}">${ic(MOD_ICONS[m],14)}</button>`).join('')}</div>
       </div>
     </article>`;
   }).join('');
@@ -4585,6 +4698,7 @@ function renderProjects(){
         <button class="btn btn-primary" id="hubNew">${ic('plus',15)}<span>${t('np.title')}</span></button>
       </div>
     </div>
+    ${focusStripHTML()}
     <div class="hub-grid" id="hubGrid" style="--card-w:${st.cardSize}px;--title-scale:${st.titleScale}">
       ${cards || `<div class="empty">${t('hub.noMatch')}</div>`}
       <div class="pcard"><div class="pcard-new" id="hubNewCard" tabindex="0"><div class="plus">${ic('plus',22)}</div>
@@ -4607,7 +4721,10 @@ function renderProjects(){
     c.style.setProperty('--mx', (px*100).toFixed(1) + '%'); c.style.setProperty('--my', (py*100).toFixed(1) + '%');
   };
   grid.onpointerleave = () => grid.querySelectorAll('.pcard-cover.tilting').forEach(x=>{ x.classList.remove('tilting'); x.style.removeProperty('--rx'); x.style.removeProperty('--ry'); });
+  bindFocusStrip();
   grid.onclick = e => {
+    const j = e.target.closest('[data-jump]'), jc = e.target.closest('[data-pid]');
+    if(j && jc){ e.stopPropagation(); openProject(jc.dataset.pid, false); go(j.dataset.jump); return; }
     const a = e.target.closest('[data-pa]'), card = e.target.closest('[data-pid]');
     if(a && card && a.dataset.pa==='more'){ e.stopPropagation(); const r = a.getBoundingClientRect(); hubMenu(card.dataset.pid, r.left, r.bottom + 4); return; }
     if(a && card){ e.stopPropagation(); projectAction(card.dataset.pid, a.dataset.pa); return; }
@@ -4618,6 +4735,53 @@ function renderProjects(){
     const card = e.target.closest('[data-pid]'); if(!card) return;
     e.preventDefault(); hubMenu(card.dataset.pid, e.clientX, e.clientY);
   };
+}
+/* „Als Nächstes“: die dringendsten offenen Aufgaben aller Projekte – abhaken oder direkt hinspringen */
+function focusTasks(limit=3){
+  const out = [];
+  S.projects.forEach(p=>p.phases.forEach(ph=>ph.tasks.forEach(x=>{
+    if(x.status==='done') return;
+    const d = x.deadline ? daysUntil(x.deadline) : 9999;
+    out.push({p, ph, x, d, w:(d < 0 ? -1000 : 0) + d * 2 + PRIO_WEIGHT[x.prio] * 3 + (x.status==='wip' ? -4 : 0) + (p.id===S.activeProjectId ? -1 : 0)});
+  })));
+  return out.sort((a,b)=>a.w - b.w).slice(0, limit);
+}
+function focusStripHTML(){
+  if(S.settings.hubFocus===false) return `<button class="focus-show" id="focusShow">${ic('target',14)} ${t('fo.title')}</button>`;
+  const list = focusTasks();
+  const items = list.map(({p,ph,x})=>`<div class="fo-item p-${x.prio} st-${x.status}" data-fk="${p.id}|${ph.id}|${x.id}">
+      <label class="chk" title="${esc(t('fo.done'))}"><input type="checkbox" data-fdone><span></span></label>
+      <button class="fo-main" data-fgo title="${esc(t('fo.open'))}"><span class="fo-text">${esc(x.text || t('ph.newTask'))}</span>
+        <span class="fo-meta"><i class="fo-dot" style="background:${esc(p.cover && p.cover.ribbonColor || 'var(--accent)')}"></i>${esc(projectName(p))} · ${esc(ph.title)}</span></button>
+      ${cdBadge(x.deadline, false)}
+    </div>`).join('');
+  return `<section class="focus-strip panel" id="focusStrip">
+    <header><span class="fo-title">${ic('target',15)} ${t('fo.title')}</span><span class="fo-sub">${t('fo.sub')}</span><button class="icon-btn sm" id="focusHide" title="${esc(t('fo.hide'))}">${ic('xmark',14)}</button></header>
+    <div class="fo-list">${items || `<div class="fo-empty">${ic('check',16)} ${t('fo.empty')}</div>`}</div>
+  </section>`;
+}
+function bindFocusStrip(){
+  const show = $('focusShow'); if(show) show.onclick = () => { S.settings.hubFocus = true; persistSoon(); renderProjects(); };
+  const fs = $('focusStrip'); if(!fs) return;
+  $('focusHide').onclick = () => { S.settings.hubFocus = false; persistSoon(); renderProjects(); };
+  fs.onclick = e => {
+    const it = e.target.closest('[data-fk]'); if(!it) return;
+    const [pid, phid, tid] = it.dataset.fk.split('|'), p = S.projects.find(q=>q.id===pid); if(!p) return;
+    const ph = p.phases.find(q=>q.id===phid), x = ph && ph.tasks.find(q=>q.id===tid); if(!x) return;
+    if(e.target.closest('[data-fdone]')){
+      if(!e.target.checked) return;
+      it.classList.add('leaving');
+      setTimeout(()=>{ histCommit(); x.status = 'done'; p.updatedAt = Date.now(); changed(); renderProjects(); setTimeout(()=>{ histCommit(); undoToast(t('fo.ticked', {task:x.text}), 'check'); }, 0); }, 260);
+      return;
+    }
+    if(e.target.closest('[data-fgo]')) jumpToTask(pid, phid, tid);
+  };
+}
+function jumpToTask(pid, phid, tid){
+  openProject(pid, false); go('pipeline');
+  const p = activeProject(), ph = p.phases.find(q=>q.id===phid); if(ph && ph.collapsed){ ph.collapsed = false; renderPipeline(); }
+  setTimeout(()=>{ const row = document.querySelector(`[data-task="${phid}:${tid}"]`); if(!row) return;
+    row.scrollIntoView({behavior:'smooth', block:'center'}); row.classList.remove('found'); void row.offsetWidth; row.classList.add('found'); setTimeout(()=>row.classList.remove('found'), 1800); }, 260);
 }
 function hubMenu(id, x, y){
     openMenu(x, y, [
@@ -4989,7 +5153,8 @@ function renderPipeline(){
     const total = ph.tasks.length, done = ph.tasks.filter(x=>x.status==='done').length, pct = total ? Math.round(done/total*100) : 0;
     const est = ph.tasks.filter(x=>x.status!=='done').reduce((a,x)=>a+(x.est||0),0);
     const tasks = filteredTasks(ph);
-    return `<section class="phase panel ${ph.collapsed?'collapsed':''}" id="phase_${ph.id}" data-phase="${ph.id}">
+    const fEmpty = st.taskFilter!=='all' && !tasks.length;
+    return `<section class="phase panel ${ph.collapsed?'collapsed':''} ${fEmpty?'f-empty':''}" id="phase_${ph.id}" data-phase="${ph.id}">
       <header class="phase-head">
         <button class="icon-btn sm" data-pact="collapse"><span class="chev">${ic('chevron',15)}</span></button>
         <span class="phase-num">${pad(i+1)}</span>
@@ -5006,7 +5171,7 @@ function renderPipeline(){
       </header>
       <div class="phase-bar"><div style="width:${pct}%"></div></div>
       <div class="phase-body">
-        <div class="phase-tools">${ph.tools.map(toolChip).join('')}<input class="tools-input" value="${esc(ph.tools.join(', '))}" placeholder="${esc(t('ph.tools'))}" data-pf="tools"></div>
+        <div class="phase-tools ${ph.tools.length?'':'editing'}">${ph.tools.map(toolChip).join('')}${ph.tools.length ? `<button class="tools-edit" data-tedit title="${esc(t('ph.toolsEdit'))}">${ic('edit',12)}</button>` : ''}<input class="tools-input" value="${esc(ph.tools.join(', '))}" placeholder="${esc(t('ph.tools'))}" data-pf="tools"></div>
         ${est ? `<div class="phase-meta">${ic('clock',13)} ${t('ph.effort',{h:Math.round(est*10)/10})}</div>` : ''}
         <div class="task-list">${tasks.length ? tasks.map(x=>taskRow(ph,x)).join('') : `<div class="task-empty">${total ? t('ph.noMatch') : t('ph.noTasks')}</div>`}</div>
         <div class="task-add">
@@ -5035,11 +5200,11 @@ function renderPipeline(){
       </div>
     </div>
     <div class="kpi-row">
-      <div class="panel kpi">${ring(s.pct)}<div class="kpi-main"><div class="kpi-label">${t('kpi.progress')}</div><div class="kpi-text">${t('kpi.progressText',{d:s.done, t:s.total})}</div></div></div>
-      <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.next')}</div>
+      <div class="panel kpi kpi-click" data-kpi="all" title="${esc(t('kpi.showAll'))}">${ring(s.pct)}<div class="kpi-main"><div class="kpi-label">${t('kpi.progress')}</div><div class="kpi-text">${t('kpi.progressText',{d:s.done, t:s.total})}</div></div></div>
+      <div class="panel kpi ${next?'kpi-click':''}" data-kpi="next" ${next?`title="${esc(t('fo.open'))}"`:''}><div class="kpi-main"><div class="kpi-label">${t('kpi.next')}</div>
         ${next ? `<div class="kpi-text" title="${esc(next.task.text)}" style="color:var(--text);font-weight:600">${esc(next.task.text)}</div><div class="inline">${cdBadge(next.task.deadline,false)}<span class="muted mono" style="font-size:10.5px">${fmtDate(next.task.deadline)}</span></div>` : `<div class="kpi-text">${t('kpi.noNext')}</div>`}</div></div>
-      <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.overdue')}</div><div class="kpi-value" style="color:${s.overdue?'var(--danger)':'var(--ok)'}">${s.overdue}</div><div class="kpi-text">${s.overdue ? t('kpi.overdueYes') : t('kpi.overdueNo')}</div></div></div>
-      <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.critical')}</div><div class="kpi-value" style="color:${s.critical?'var(--crit)':'var(--text)'}">${s.critical}</div><div class="kpi-text">Critical</div></div></div>
+      <div class="panel kpi kpi-click ${st.taskFilter==='overdue'?'on':''}" data-kpi="overdue" title="${esc(t('kpi.filter',{f:t('flt.overdue')}))}"><div class="kpi-main"><div class="kpi-label">${t('kpi.overdue')}</div><div class="kpi-value" style="color:${s.overdue?'var(--danger)':'var(--ok)'}">${s.overdue}</div><div class="kpi-text">${s.overdue ? t('kpi.overdueYes') : t('kpi.overdueNo')}</div></div></div>
+      <div class="panel kpi kpi-click ${st.taskFilter==='critical'?'on':''}" data-kpi="critical" title="${esc(t('kpi.filter',{f:t('flt.critical')}))}"><div class="kpi-main"><div class="kpi-label">${t('kpi.critical')}</div><div class="kpi-value" style="color:${s.critical?'var(--crit)':'var(--text)'}">${s.critical}</div><div class="kpi-text">Critical</div></div></div>
       <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.workload')}</div>
         ${s.est ? `<div class="kpi-value">${Math.round(s.est)} h</div><div class="kpi-text">${t('kpi.workloadText',{r:perDay.toFixed(1)})}</div><div class="meter ${perDay>8?'danger':perDay>5?'warn':''}"><div style="width:${clamp(perDay/8*100,3,100)}%"></div></div>` : `<div class="kpi-text">${t('kpi.noEst')}</div>`}</div></div>
       <div class="panel kpi"><div class="kpi-main"><div class="kpi-label">${t('kpi.final')}</div><div class="kpi-value" style="font-size:17px">${s.finalDeadline ? fmtDate(s.finalDeadline) : '—'}</div>${s.finalDeadline ? cdBadge(s.finalDeadline, s.total>0 && s.done===s.total) : ''}</div></div>
@@ -5088,6 +5253,17 @@ function bindPipeline(v){
   applySurf(v, activeProject().pipeStyle); $('plDesign').onclick = e => openDesignPop(e.currentTarget, 'pipeline');
   v.querySelectorAll('[data-view]').forEach(b=>b.onclick = () => { st.pipeView = b.dataset.view; persistSoon(); renderPipeline(); });
   v.querySelectorAll('[data-filter]').forEach(b=>b.onclick = () => { st.taskFilter = b.dataset.filter; persistSoon(); renderPipeline(); });
+  /* Programme einer Phase: Chips anzeigen, Textfeld erst beim Bearbeiten */
+  v.querySelectorAll('[data-tedit]').forEach(b=>b.onclick = () => { const w = b.closest('.phase-tools'); w.classList.add('editing'); const i = w.querySelector('.tools-input'); i.focus(); i.select(); });
+  v.querySelectorAll('.phase-tools .tools-input').forEach(i=>i.addEventListener('blur', ()=>{ const w = i.closest('.phase-tools'); if(w && i.value.trim()) w.classList.remove('editing'); }));
+  /* Kennzahlen sind Abkürzungen: Überfällig/Kritisch filtern, „Nächste Deadline“ springt zur Aufgabe */
+  v.querySelectorAll('.kpi-click[data-kpi]').forEach(k=>k.onclick = () => {
+    const f = k.dataset.kpi;
+    if(f==='next'){ const n = stats(activeProject()).next; if(n) jumpToTask(S.activeProjectId, n.phase.id, n.task.id); return; }
+    st.taskFilter = (f!=='all' && st.taskFilter===f) ? 'all' : f; if(st.pipeView==='kanban' && f==='all') st.pipeView = 'list';
+    persistSoon(); renderPipeline();
+    const pl = v.querySelector('.phase-list, .kanban'); if(pl && f!=='all') pl.scrollIntoView({behavior:'smooth', block:'start'});
+  });
   $('plSort').onclick = () => { st.sortByDate = !st.sortByDate; persistSoon(); renderPipeline(); };
   $('plAdd').onclick = addPhase;
   $('plTpl').onclick = e => templateMenu(e.currentTarget);
@@ -6318,9 +6494,10 @@ function cardTilt(e){
   if(CV && CV.drag && CV.drag.moved) return;
   const r = tc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
   // Auf dem Denkbrett nur dezent (Knöpfe sollen nicht unter dem Zeiger wegwandern), im Deck voll; über Bedienelementen ruhig
-  const k = tc.closest('.deck-card') ? 1 : e.target.closest('button, input, textarea, .tc-bar, .n-links') ? 0 : .3;
+  const k = tc.closest('.deck-card') ? 1 : 0;
   tc.style.setProperty('--mx', (x*100).toFixed(1) + '%'); tc.style.setProperty('--my', (y*100).toFixed(1) + '%');
-  tc.style.setProperty('--tx', ((.5 - y) * 10 * k).toFixed(2) + 'deg'); tc.style.setProperty('--ty', ((x - .5) * 12 * k).toFixed(2) + 'deg');
+  /* Neigen nur im Deck: auf dem Denkbrett würde die 3D-Drehung die Karte beim Heranzoomen unscharf rendern */
+  if(k === 1){ tc.style.setProperty('--tx', ((.5 - y) * 10).toFixed(2) + 'deg'); tc.style.setProperty('--ty', ((x - .5) * 12).toFixed(2) + 'deg'); }
   tc.classList.add('hover');
 }
 function cardTiltOut(e){ const tc = e.target.closest && e.target.closest('.tc'); if(tc && !tc.contains(e.relatedTarget)){ tc.classList.remove('hover'); tc.style.removeProperty('--tx'); tc.style.removeProperty('--ty'); } }
@@ -7518,6 +7695,57 @@ async function init(){
 window.addEventListener('error', e=>vfTrace('error: ' + (e.message||'') + ' @' + (e.lineno||'')));
 window.addEventListener('unhandledrejection', e=>vfTrace('rejection: ' + ((e.reason && e.reason.message) || e.reason)));
 init();
+
+/* ============================================================================
+   SCHNELL ERFASSEN (Q): Aufgabe, Notiz oder Shot festhalten, ohne den Bereich zu wechseln
+   ============================================================================ */
+function quickCapture(kind){
+  const p = activeProject(); if(!p) return;
+  const kinds = [['task','calendar'],['note','note'],['shot','film']];
+  ui.qcKind = kind || ui.qcKind || (S.activeModule==='board' ? 'note' : S.activeModule==='shots' ? 'shot' : 'task');
+  const nextPh = (stats(p).next || {}).phase, defPh = (ui.qcPhase && p.phases.find(x=>x.id===ui.qcPhase)) || nextPh || p.phases.find(ph=>ph.tasks.some(x=>x.status!=='done')) || p.phases[0];
+  const el = openSheet(`<div class="dlg-head"><h2 class="qc-h">${ic('plus',17)} ${t('qc.title')} <span class="qc-proj">${esc(projectName(p))}</span></h2><button class="icon-btn" data-close title="${esc(t('g.close'))}">${ic('xmark',18)}</button></div>
+    <div class="dlg-body qc">
+      <div class="qc-kinds seg">${kinds.map(([k,i])=>`<button data-qk="${k}" class="${ui.qcKind===k?'active':''}">${ic(i,14)} ${t('qc.'+k)}</button>`).join('')}</div>
+      <input class="inp qc-text" id="qcText" maxlength="300" autocomplete="off">
+      <div class="qc-opts" id="qcOpts"></div>
+    </div>
+    <div class="dlg-foot qc-foot"><span class="qc-done" id="qcDone"></span><span class="muted">${keyHTML('Enter')} ${t('qc.add')} · ${keyHTML('Tab')} ${t('qc.switch')} · ${keyHTML('Esc')} ${t('g.close')}</span></div>`, 'qc-sheet');
+  el.querySelector('[data-close]').onclick = closeSheet;
+  const txt = el.querySelector('#qcText'), opts = el.querySelector('#qcOpts');
+  const paint = () => {
+    el.querySelectorAll('[data-qk]').forEach(b=>b.classList.toggle('active', b.dataset.qk===ui.qcKind));
+    txt.placeholder = t('qc.ph.' + ui.qcKind);
+    opts.innerHTML = ui.qcKind==='task' ? (p.phases.length ? `<label>${t('qc.phase')}<select class="sel" id="qcPhase">${p.phases.map(ph=>`<option value="${ph.id}" ${defPh && ph.id===defPh.id?'selected':''}>${esc(ph.title)}</option>`).join('')}</select></label>
+        <label>${t('qc.prio')}<select class="sel" id="qcPrio">${PRIOS.map(k=>`<option value="${k}" ${k==='med'?'selected':''}>${PRIO_LABEL[k]}</option>`).join('')}</select></label>` : `<span class="muted">${t('qc.noPhase')}</span>`)
+      : ui.qcKind==='note' ? `<span class="muted">${ic('network',13)} ${t('qc.noteWhere',{board:esc(activeBoard().name || t('mod.board'))})}</span>`
+      : `<span class="muted">${ic('film',13)} ${t('qc.shotWhere')}</span>`;
+    txt.focus();
+  };
+  el.querySelectorAll('[data-qk]').forEach(b=>b.onclick = () => { ui.qcKind = b.dataset.qk; paint(); });
+  const add = () => {
+    const v = txt.value.trim(); if(!v) return;
+    let label = '';
+    if(ui.qcKind==='task'){
+      const ph = p.phases.find(x=>x.id===(el.querySelector('#qcPhase')||{}).value); if(!ph) return;
+      ui.qcPhase = ph.id; ph.tasks.push(newTask(v, ph.deadline || '', (el.querySelector('#qcPrio')||{}).value || 'med', 0)); label = ph.title;
+    }else if(ui.qcKind==='note'){
+      const b = activeBoard(), c = b.cam, n = b.nodes.filter(x=>x.type==='note').length % 6;
+      const at = {x:(innerWidth/2 - c.x)/c.z + n*26, y:(innerHeight/2 - c.y)/c.z + n*22};
+      const node = normalizeNode({id:uid('nd'), type:'note', x:Math.round(at.x - 110), y:Math.round(at.y - 75), w:220, h:150, color:'', text:v}, new Set(b.nodes.map(x=>x.id)), assetCtx());
+      b.nodes.push(node); label = b.name || t('mod.board');
+    }else{
+      const maxN = p.shots.reduce((m,s)=>Math.max(m, parseInt((s.code.match(/\d+/)||['0'])[0],10)), 0), last = p.shots[p.shots.length-1];
+      p.shots.push({uid:uid('sh'), code:`SH_${String(maxN+10).padStart(3,'0')}`, seq:last ? last.seq : 'SQ01', desc:v, frames:72, lens:'50mm', vfx:'', thumb:'', status:Object.fromEntries(DEPTS.map(([k])=>[k,'todo']))});
+      label = t('mod.shots');
+    }
+    changed(); rerenderActive();
+    txt.value = ''; txt.focus();
+    const d = el.querySelector('#qcDone'); d.innerHTML = `${ic('check',13)} ${esc(t('qc.added',{where:label}))}`; d.classList.remove('pop'); void d.offsetWidth; d.classList.add('pop');
+  };
+  txt.onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); add(); } else if(e.key==='Tab' && !e.shiftKey && !txt.value){ e.preventDefault(); const i = kinds.findIndex(k=>k[0]===ui.qcKind); ui.qcKind = kinds[(i+1)%kinds.length][0]; paint(); } };
+  paint();
+}
 
 /* Shot-Bild groß ansehen, ersetzen oder entfernen (Pfeiltasten: vorheriger/nächster Shot mit Bild) */
 function openShotImage(i){

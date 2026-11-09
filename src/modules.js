@@ -301,6 +301,57 @@ window.addEventListener('error', e=>vfTrace('error: ' + (e.message||'') + ' @' +
 window.addEventListener('unhandledrejection', e=>vfTrace('rejection: ' + ((e.reason && e.reason.message) || e.reason)));
 init();
 
+/* ============================================================================
+   SCHNELL ERFASSEN (Q): Aufgabe, Notiz oder Shot festhalten, ohne den Bereich zu wechseln
+   ============================================================================ */
+function quickCapture(kind){
+  const p = activeProject(); if(!p) return;
+  const kinds = [['task','calendar'],['note','note'],['shot','film']];
+  ui.qcKind = kind || ui.qcKind || (S.activeModule==='board' ? 'note' : S.activeModule==='shots' ? 'shot' : 'task');
+  const nextPh = (stats(p).next || {}).phase, defPh = (ui.qcPhase && p.phases.find(x=>x.id===ui.qcPhase)) || nextPh || p.phases.find(ph=>ph.tasks.some(x=>x.status!=='done')) || p.phases[0];
+  const el = openSheet(`<div class="dlg-head"><h2 class="qc-h">${ic('plus',17)} ${t('qc.title')} <span class="qc-proj">${esc(projectName(p))}</span></h2><button class="icon-btn" data-close title="${esc(t('g.close'))}">${ic('xmark',18)}</button></div>
+    <div class="dlg-body qc">
+      <div class="qc-kinds seg">${kinds.map(([k,i])=>`<button data-qk="${k}" class="${ui.qcKind===k?'active':''}">${ic(i,14)} ${t('qc.'+k)}</button>`).join('')}</div>
+      <input class="inp qc-text" id="qcText" maxlength="300" autocomplete="off">
+      <div class="qc-opts" id="qcOpts"></div>
+    </div>
+    <div class="dlg-foot qc-foot"><span class="qc-done" id="qcDone"></span><span class="muted">${keyHTML('Enter')} ${t('qc.add')} · ${keyHTML('Tab')} ${t('qc.switch')} · ${keyHTML('Esc')} ${t('g.close')}</span></div>`, 'qc-sheet');
+  el.querySelector('[data-close]').onclick = closeSheet;
+  const txt = el.querySelector('#qcText'), opts = el.querySelector('#qcOpts');
+  const paint = () => {
+    el.querySelectorAll('[data-qk]').forEach(b=>b.classList.toggle('active', b.dataset.qk===ui.qcKind));
+    txt.placeholder = t('qc.ph.' + ui.qcKind);
+    opts.innerHTML = ui.qcKind==='task' ? (p.phases.length ? `<label>${t('qc.phase')}<select class="sel" id="qcPhase">${p.phases.map(ph=>`<option value="${ph.id}" ${defPh && ph.id===defPh.id?'selected':''}>${esc(ph.title)}</option>`).join('')}</select></label>
+        <label>${t('qc.prio')}<select class="sel" id="qcPrio">${PRIOS.map(k=>`<option value="${k}" ${k==='med'?'selected':''}>${PRIO_LABEL[k]}</option>`).join('')}</select></label>` : `<span class="muted">${t('qc.noPhase')}</span>`)
+      : ui.qcKind==='note' ? `<span class="muted">${ic('network',13)} ${t('qc.noteWhere',{board:esc(activeBoard().name || t('mod.board'))})}</span>`
+      : `<span class="muted">${ic('film',13)} ${t('qc.shotWhere')}</span>`;
+    txt.focus();
+  };
+  el.querySelectorAll('[data-qk]').forEach(b=>b.onclick = () => { ui.qcKind = b.dataset.qk; paint(); });
+  const add = () => {
+    const v = txt.value.trim(); if(!v) return;
+    let label = '';
+    if(ui.qcKind==='task'){
+      const ph = p.phases.find(x=>x.id===(el.querySelector('#qcPhase')||{}).value); if(!ph) return;
+      ui.qcPhase = ph.id; ph.tasks.push(newTask(v, ph.deadline || '', (el.querySelector('#qcPrio')||{}).value || 'med', 0)); label = ph.title;
+    }else if(ui.qcKind==='note'){
+      const b = activeBoard(), c = b.cam, n = b.nodes.filter(x=>x.type==='note').length % 6;
+      const at = {x:(innerWidth/2 - c.x)/c.z + n*26, y:(innerHeight/2 - c.y)/c.z + n*22};
+      const node = normalizeNode({id:uid('nd'), type:'note', x:Math.round(at.x - 110), y:Math.round(at.y - 75), w:220, h:150, color:'', text:v}, new Set(b.nodes.map(x=>x.id)), assetCtx());
+      b.nodes.push(node); label = b.name || t('mod.board');
+    }else{
+      const maxN = p.shots.reduce((m,s)=>Math.max(m, parseInt((s.code.match(/\d+/)||['0'])[0],10)), 0), last = p.shots[p.shots.length-1];
+      p.shots.push({uid:uid('sh'), code:`SH_${String(maxN+10).padStart(3,'0')}`, seq:last ? last.seq : 'SQ01', desc:v, frames:72, lens:'50mm', vfx:'', thumb:'', status:Object.fromEntries(DEPTS.map(([k])=>[k,'todo']))});
+      label = t('mod.shots');
+    }
+    changed(); rerenderActive();
+    txt.value = ''; txt.focus();
+    const d = el.querySelector('#qcDone'); d.innerHTML = `${ic('check',13)} ${esc(t('qc.added',{where:label}))}`; d.classList.remove('pop'); void d.offsetWidth; d.classList.add('pop');
+  };
+  txt.onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); add(); } else if(e.key==='Tab' && !e.shiftKey && !txt.value){ e.preventDefault(); const i = kinds.findIndex(k=>k[0]===ui.qcKind); ui.qcKind = kinds[(i+1)%kinds.length][0]; paint(); } };
+  paint();
+}
+
 /* Shot-Bild groß ansehen, ersetzen oder entfernen (Pfeiltasten: vorheriger/nächster Shot mit Bild) */
 function openShotImage(i){
   const p = activeProject();

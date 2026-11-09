@@ -6,11 +6,12 @@
     <nav class="nav" aria-label="Sections">
       <a href="#views"><span data-en>Tour</span><span data-de>Einblick</span></a>
       <a href="#features"><span data-en>Features</span><span data-de>Funktionen</span></a>
+      <a href="#customize"><span data-en>Styles</span><span data-de>Designs</span></a>
       <a href="#download">Download</a>
       <a href="install.html"><span data-en>Install guide</span><span data-de>Anleitung</span></a>
       <a href="#security"><span data-en>Security</span><span data-de>Sicherheit</span></a>
       <a href="#open-source">Open Source</a>
-      <a href="#about"><span data-en>About</span><span data-de>Über</span></a>
+      <a href="#share"><span data-en>Share</span><span data-de>Teilen</span></a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
       <button type="button" id="langEn" data-setlang="en" aria-pressed="true">EN</button>
@@ -24,7 +25,7 @@
   <div class="wrap hero-grid">
     <div>
       <div class="eyebrow rise" style="--d:0"><span data-en>Free · open source · for 3D artists</span><span data-de>Kostenlos · Open Source · für 3D-Artists</span></div>
-      <h1 class="rise" style="margin-top:14px;--d:1"><span data-en>Plan your 3D project like a <em>production</em>.</span><span data-de>Plane dein 3D-Projekt wie eine <em>Produktion</em>.</span></h1>
+      <h1 class="rise" style="margin-top:14px;--d:1"><span data-en>Plan your <span class="rot" data-words="3D project|short film|creature|game asset|diorama|portfolio piece">3D project</span> like a <em>production</em>.</span><span data-de>Plane <span class="rot" data-words="dein 3D-Projekt|deinen Kurzfilm|deine Kreatur|dein Game-Asset|dein Diorama|dein Portfolio-Piece">dein 3D-Projekt</span> wie eine <em>Produktion</em>.</span></h1>
       <p class="lead rise" style="--d:2"><span data-en>VertexForge Studio keeps pipeline, deadlines, references, shots and story of a personal 3D project in one calm place – next to Blender, ZBrush, Substance and the rest of your tools.</span><span data-de>VertexForge Studio hält Pipeline, Deadlines, Referenzen, Shots und Story eines persönlichen 3D-Projekts an einem ruhigen Ort zusammen – neben Blender, ZBrush, Substance und deinen anderen Programmen.</span></p>
       <div class="ctas rise" style="--d:3">
         <a class="btn primary" id="heroDl" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#download">
@@ -87,6 +88,33 @@
   </div>
 </section>
 
+<section id="flow">
+  <div class="wrap flow-grid">
+    <div class="reveal">
+      <div class="eyebrow"><span data-en>New in 2.9 · Made for flow</span><span data-de>Neu in 2.9 · Für deinen Flow</span></div>
+      <h2 style="margin-top:12px"><span data-en>Catch the idea. Keep sculpting.</span><span data-de>Idee festhalten. Weiter sculpten.</span></h2>
+      <p class="lead" style="margin-top:14px"><span data-en>Press <kbd>Q</kbd> anywhere – like Blender’s quick menu – and drop a task, a note or a shot into your project without leaving what you are doing. The library shows what is <b>up next</b> across all projects, and every number in the pipeline is a shortcut.</span><span data-de>Drück überall <kbd>Q</kbd> – wie Blenders Schnellmenü – und leg eine Aufgabe, Notiz oder einen Shot ins Projekt, ohne die Arbeit zu verlassen. Die Bibliothek zeigt, was <b>als Nächstes</b> ansteht, über alle Projekte, und jede Zahl in der Pipeline ist eine Abkürzung.</span></p>
+      <ul class="flow-list">
+        <li><b>Q</b><span><span data-en>Quick capture: task, note or shot in two seconds</span><span data-de>Schnell erfassen: Aufgabe, Notiz oder Shot in zwei Sekunden</span></span></li>
+        <li><b>↗</b><span><span data-en>Up next: tick off the most urgent tasks right from the library</span><span data-de>Als Nächstes: die dringendsten Aufgaben direkt in der Bibliothek abhaken</span></span></li>
+        <li><b>#</b><span><span data-en>Click “Overdue” or “Critical” and the pipeline filters itself</span><span data-de>„Überfällig“ oder „Kritisch“ anklicken, und die Pipeline filtert sich</span></span></li>
+        <li><b>⌘K</b><span><span data-en>Find any task, card, shot or chapter</span><span data-de>Jede Aufgabe, Karte, Szene oder jedes Kapitel finden</span></span></li>
+      </ul>
+    </div>
+    <div class="qc-demo reveal" id="qcDemo" aria-label="Try quick capture">
+      <div class="qd-head"><span class="qd-dots"><i></i><i></i><i></i></span><span data-en>Try it – type and press Enter</span><span data-de>Probier’s – tippen und Enter drücken</span></div>
+      <div class="qd-kinds" role="tablist">
+        <button type="button" class="on" data-k="task"><span data-en>Task</span><span data-de>Aufgabe</span></button>
+        <button type="button" data-k="note"><span data-en>Note</span><span data-de>Notiz</span></button>
+        <button type="button" data-k="shot">Shot</button>
+      </div>
+      <form class="qd-form" id="qdForm" autocomplete="off"><input id="qdIn" maxlength="70" aria-label="Quick capture"><button type="submit" aria-label="Add">↵</button></form>
+      <div class="qd-out" id="qdOut"></div>
+      <p class="qd-foot"><span data-en>This is a tiny demo on this page – nothing is saved.</span><span data-de>Das ist nur eine kleine Demo auf dieser Seite – nichts wird gespeichert.</span></p>
+    </div>
+  </div>
+</section>
+
 <section id="customize" class="alt">
   <div class="wrap">
     <div class="head reveal">
@@ -95,22 +123,31 @@
       <p class="lead"><span data-en>Put your projects on a DVD shelf, tape them to a wall as film posters, bind them in leather or hang them in a gallery. Plan the pipeline on a blueprint, write the story on a typewriter page. Only the look changes: every feature and every overview stays exactly where it is.</span><span data-de>Stell deine Projekte als DVDs ins Regal, kleb sie als Filmposter an die Wand, bind sie in Leder oder häng sie in eine Galerie. Plane die Pipeline auf einer Blaupause, schreib die Story auf einer Schreibmaschinenseite. Nur die Optik ändert sich: Jede Funktion und jede Übersicht bleibt genau da, wo sie ist.</span></p>
     </div>
     <figure class="showcase reveal" aria-label="Design styles">
-      <ol class="sc-areas" aria-hidden="true">
-        <li data-area="library"><span data-en>Library</span><span data-de>Bibliothek</span></li>
-        <li data-area="pipeline">Pipeline</li>
-        <li data-area="board"><span data-en>Mind board</span><span data-de>Denkbrett</span></li>
-        <li data-area="shots"><span data-en>Shot list</span><span data-de>Shotlist</span></li>
-        <li data-area="story">Story</li>
-      </ol>
-      <div class="show-stage" id="show">
+      <div class="sc-areas" role="tablist" id="scAreas">
+        <button type="button" data-area="all" class="on"><span data-en>All</span><span data-de>Alle</span><b></b></button>
+        <button type="button" data-area="library"><span data-en>Library</span><span data-de>Bibliothek</span><b></b></button>
+        <button type="button" data-area="pipeline">Pipeline<b></b></button>
+        <button type="button" data-area="board"><span data-en>Mind board</span><span data-de>Denkbrett</span><b></b></button>
+        <button type="button" data-area="shots"><span data-en>Shot list</span><span data-de>Shotlist</span><b></b></button>
+        <button type="button" data-area="story">Story<b></b></button>
+      </div>
+      <div class="show-stage" id="show" tabindex="0" aria-roledescription="carousel" aria-label="Design styles">
         <img class="show-img on" src="assets/custom-lib-books.webp" alt="" width="1360" height="820">
         <img class="show-img" src="" alt="" width="1360" height="820">
         <div class="show-tag"><span class="show-kind" id="showKind"></span><span class="show-name" id="showName"></span></div>
+        <div class="show-ctl">
+          <button type="button" id="showPrev" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <span class="show-count" id="showCount">1 / 1</span>
+          <button type="button" id="showPlay" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+          <button type="button" id="showDice" aria-label="Surprise me"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg></button>
+          <button type="button" id="showNext" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="show-hint" aria-hidden="true"><span data-en>← → or swipe · click a style below</span><span data-de>← → oder wischen · unten einen Stil anklicken</span></div>
         <div class="show-bar"><i id="showBar"></i></div>
         <div class="tr-title" id="trTitle" aria-hidden="true"></div>
         <div class="tr-flash" id="trFlash" aria-hidden="true"></div>
       </div>
-      <div class="sc-strip" aria-hidden="true"><div class="sc-track" id="scTrack"><img src="assets/custom-lib-books-t.webp" alt="" width="136" height="82" data-k="lib-books" loading="lazy"><img src="assets/custom-lib-dvd-t.webp" alt="" width="136" height="82" data-k="lib-dvd" loading="lazy"><img src="assets/custom-lib-posters-t.webp" alt="" width="136" height="82" data-k="lib-posters" loading="lazy"><img src="assets/custom-lib-gallery-t.webp" alt="" width="136" height="82" data-k="lib-gallery" loading="lazy"><img src="assets/custom-pipeline-blueprint-t.webp" alt="" width="136" height="82" data-k="pipeline-blueprint" loading="lazy"><img src="assets/custom-pipeline-paper-t.webp" alt="" width="136" height="82" data-k="pipeline-paper" loading="lazy"><img src="assets/custom-pipeline-kraft-t.webp" alt="" width="136" height="82" data-k="pipeline-kraft" loading="lazy"><img src="assets/custom-cards-board-t.webp" alt="" width="136" height="82" data-k="cards-board" loading="lazy"><img src="assets/custom-cards-deck-t.webp" alt="" width="136" height="82" data-k="cards-deck" loading="lazy"><img src="assets/custom-board-desk-t.webp" alt="" width="136" height="82" data-k="board-desk" loading="lazy"><img src="assets/custom-board-workshop-t.webp" alt="" width="136" height="82" data-k="board-workshop" loading="lazy"><img src="assets/custom-board-felt-t.webp" alt="" width="136" height="82" data-k="board-felt" loading="lazy"><img src="assets/custom-board-pinboard-t.webp" alt="" width="136" height="82" data-k="board-pinboard" loading="lazy"><img src="assets/custom-board-blueprint-t.webp" alt="" width="136" height="82" data-k="board-blueprint" loading="lazy"><img src="assets/custom-board-chalk-t.webp" alt="" width="136" height="82" data-k="board-chalk" loading="lazy"><img src="assets/custom-board-glass-t.webp" alt="" width="136" height="82" data-k="board-glass" loading="lazy"><img src="assets/custom-shots-film-t.webp" alt="" width="136" height="82" data-k="shots-film" loading="lazy"><img src="assets/custom-shots-paper-t.webp" alt="" width="136" height="82" data-k="shots-paper" loading="lazy"><img src="assets/custom-story-typewriter-t.webp" alt="" width="136" height="82" data-k="story-typewriter" loading="lazy"><img src="assets/custom-story-parchment-t.webp" alt="" width="136" height="82" data-k="story-parchment" loading="lazy"><img src="assets/custom-story-night-t.webp" alt="" width="136" height="82" data-k="story-night" loading="lazy"><img src="assets/custom-designer-t.webp" alt="" width="136" height="82" data-k="designer" loading="lazy"><img src="assets/custom-lib-books-t.webp" alt="" width="136" height="82" data-k="lib-books" loading="lazy"><img src="assets/custom-lib-dvd-t.webp" alt="" width="136" height="82" data-k="lib-dvd" loading="lazy"><img src="assets/custom-lib-posters-t.webp" alt="" width="136" height="82" data-k="lib-posters" loading="lazy"><img src="assets/custom-lib-gallery-t.webp" alt="" width="136" height="82" data-k="lib-gallery" loading="lazy"><img src="assets/custom-pipeline-blueprint-t.webp" alt="" width="136" height="82" data-k="pipeline-blueprint" loading="lazy"><img src="assets/custom-pipeline-paper-t.webp" alt="" width="136" height="82" data-k="pipeline-paper" loading="lazy"><img src="assets/custom-pipeline-kraft-t.webp" alt="" width="136" height="82" data-k="pipeline-kraft" loading="lazy"><img src="assets/custom-cards-board-t.webp" alt="" width="136" height="82" data-k="cards-board" loading="lazy"><img src="assets/custom-cards-deck-t.webp" alt="" width="136" height="82" data-k="cards-deck" loading="lazy"><img src="assets/custom-board-desk-t.webp" alt="" width="136" height="82" data-k="board-desk" loading="lazy"><img src="assets/custom-board-workshop-t.webp" alt="" width="136" height="82" data-k="board-workshop" loading="lazy"><img src="assets/custom-board-felt-t.webp" alt="" width="136" height="82" data-k="board-felt" loading="lazy"><img src="assets/custom-board-pinboard-t.webp" alt="" width="136" height="82" data-k="board-pinboard" loading="lazy"><img src="assets/custom-board-blueprint-t.webp" alt="" width="136" height="82" data-k="board-blueprint" loading="lazy"><img src="assets/custom-board-chalk-t.webp" alt="" width="136" height="82" data-k="board-chalk" loading="lazy"><img src="assets/custom-board-glass-t.webp" alt="" width="136" height="82" data-k="board-glass" loading="lazy"><img src="assets/custom-shots-film-t.webp" alt="" width="136" height="82" data-k="shots-film" loading="lazy"><img src="assets/custom-shots-paper-t.webp" alt="" width="136" height="82" data-k="shots-paper" loading="lazy"><img src="assets/custom-story-typewriter-t.webp" alt="" width="136" height="82" data-k="story-typewriter" loading="lazy"><img src="assets/custom-story-parchment-t.webp" alt="" width="136" height="82" data-k="story-parchment" loading="lazy"><img src="assets/custom-story-night-t.webp" alt="" width="136" height="82" data-k="story-night" loading="lazy"><img src="assets/custom-designer-t.webp" alt="" width="136" height="82" data-k="designer" loading="lazy"></div></div>
+      <div class="sc-strip" id="scStrip"><div class="sc-track" id="scTrack" role="listbox" aria-label="Styles"></div></div>
     </figure>
     <div class="cz-facts reveal-stagger">
       <div><b class="num">5</b><h3><span data-en>Library looks</span><span data-de>Bibliotheks-Looks</span></h3><p><span data-en>Studio, DVD shelf, poster wall, leather books, gallery. Progress and deadlines stay visible on every one.</span><span data-de>Studio, DVD-Regal, Poster-Wand, Lederbücher, Galerie. Fortschritt und Fristen bleiben überall sichtbar.</span></p></div>
@@ -311,6 +348,47 @@
   </div>
 </section>
 
+<section id="share" class="alt">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span data-en>Spread the word</span><span data-de>Erzähl es weiter</span></div>
+      <h2><span data-en>Know a 3D artist drowning in sticky notes?</span><span data-de>Kennst du 3D-Artists, die in Zetteln versinken?</span></h2>
+      <p class="lead"><span data-en>VertexForge has no ads, no tracking and no marketing budget. It grows only when artists tell each other about it. If it helps you, a share or a star on GitHub means a lot.</span><span data-de>VertexForge hat keine Werbung, kein Tracking und kein Marketing-Budget. Es wächst nur, wenn Artists einander davon erzählen. Wenn es dir hilft, bedeutet ein Teilen oder ein Stern auf GitHub sehr viel.</span></p>
+    </div>
+    <div class="share-grid reveal-stagger">
+      <div class="share-card">
+        <h3><span data-en>Share in one click</span><span data-de>Mit einem Klick teilen</span></h3>
+        <div class="share-btns">
+          <a class="sbtn" id="shReddit" target="_blank" rel="noopener">Reddit</a>
+          <a class="sbtn" id="shBsky" target="_blank" rel="noopener">Bluesky</a>
+          <a class="sbtn" id="shX" target="_blank" rel="noopener">X</a>
+          <button type="button" class="sbtn" id="shCopy"><span data-en>Copy link</span><span data-de>Link kopieren</span></button>
+          <a class="sbtn star" data-gh="" href="#share">★ <span data-en>Star on GitHub</span><span data-de>Stern auf GitHub</span></a>
+        </div>
+        <p class="small"><span data-en>The buttons are plain links: no share widgets, no cookies, nothing loads until you click.</span><span data-de>Die Knöpfe sind einfache Links: keine Share-Widgets, keine Cookies, nichts lädt, bevor du klickst.</span></p>
+        <div class="pitch"><span class="k"><span data-en>Ready-made post</span><span data-de>Fertiger Beitrag</span></span><p id="pitch"></p><button type="button" class="copy" id="pitchCopy">copy</button></div>
+      </div>
+      <div class="share-card">
+        <h3><span data-en>“Planned with VertexForge” badge</span><span data-de>Badge „Planned with VertexForge“</span></h3>
+        <p><span data-en>Put it on your ArtStation description, portfolio or a project README. It links back here.</span><span data-de>Für deine ArtStation-Beschreibung, dein Portfolio oder eine Projekt-README. Er verlinkt hierher.</span></p>
+        <a class="badge-prev" href="https://vertexforge.pages.dev" target="_blank" rel="noopener"><img src="assets/badge-planned.svg" alt="Planned with VertexForge" width="210" height="32"></a>
+        <div class="snip"><div class="snip-tabs"><button type="button" class="on" data-snip="md">Markdown</button><button type="button" data-snip="html">HTML</button></div><code id="snipCode"></code><button type="button" class="copy" id="snipCopy">copy</button></div>
+      </div>
+      <div class="share-card">
+        <h3><span data-en>Press &amp; brand kit</span><span data-de>Presse- &amp; Markenkit</span></h3>
+        <p><span data-en>Writing about it or making a video? Use these freely.</span><span data-de>Du schreibst darüber oder machst ein Video? Nutze das gerne.</span></p>
+        <ul class="kit">
+          <li><img src="assets/logo.svg" alt="" width="34" height="34"><span><b>Logo</b> <a href="assets/logo.svg" download>SVG</a> · <a href="assets/logo-256.png" download>PNG</a></span></li>
+          <li><img src="assets/og-card.jpg" alt="" width="60" height="32" class="wide"><span><b><span data-en>Share image</span><span data-de>Teilen-Bild</span></b> <a href="assets/og-card.jpg" download>1200×630</a></span></li>
+          <li><img src="assets/shot-projects.webp" alt="" width="60" height="32" class="wide"><span><b>Screenshots</b> <a href="assets/shot-projects.webp" download><span data-en>Library</span><span data-de>Bibliothek</span></a> · <a href="assets/shot-pipeline.webp" download>Pipeline</a> · <a href="assets/shot-board-studio.webp" download><span data-en>Board</span><span data-de>Denkbrett</span></a></span></li>
+        </ul>
+        <div class="swatches"><button type="button" style="--c:#cfa75c" data-hex="#CFA75C"><i></i>Brass</button><button type="button" style="--c:#1d1a16" data-hex="#1D1A16"><i></i>Ink</button><button type="button" style="--c:#ece6da" data-hex="#ECE6DA"><i></i>Parchment</button><button type="button" style="--c:#7fb6a5" data-hex="#7FB6A5"><i></i>Patina</button></div>
+        <p class="small"><span data-en>Typefaces: Cinzel (titles), Inter (text), JetBrains Mono (labels).</span><span data-de>Schriften: Cinzel (Titel), Inter (Text), JetBrains Mono (Beschriftungen).</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="open-source">
   <div class="wrap os-grid">
     <div>
@@ -474,44 +552,121 @@
     ['story-night','Story','Story','Night','Nacht','story'],
     ['designer','Covers','Cover','Cover designer','Cover-Designer','library']
   ];
+  /* Interaktive Design-Vorstellung: läuft von selbst wie ein Trailer, lässt sich aber jederzeit steuern:
+     Bereich wählen, Stil anklicken oder überfahren, Pfeile/Wischen, Würfel, Pause. */
   const imgs = [...document.querySelectorAll('.show-img')], kind = document.getElementById('showKind'), nm = document.getElementById('showName'), bar = document.getElementById('showBar');
-  let si = 0, front = 0, showT = null, showVis = false;
-  const label = () => { const d = SHOW[si], de = VF.lang==='de'; kind.textContent = de ? d[2] : d[1]; nm.textContent = de ? d[4] : d[3]; imgs[front].alt = kind.textContent + ': ' + nm.textContent;
-    document.querySelectorAll('.sc-areas li').forEach(li=>li.classList.toggle('on', li.dataset.area===d[5]));
-    document.querySelectorAll('#scTrack img').forEach(im=>im.classList.toggle('on', im.dataset.k===d[0])); };
-  /* Trailer: schnelle Schnitte, jeder Übergang anders; beim Bereichswechsel blitzt der Bereichsname auf */
-  const TRANS = ['wipe','zoom','iris','slide','split','tilt'], AREA = {library:['Library','Bibliothek'], pipeline:['Pipeline','Pipeline'], board:['Mind board','Denkbrett'], shots:['Shot list','Shotlist'], story:['Story','Story']};
   const stage = document.getElementById('show'), trTitle = document.getElementById('trTitle'), trFlash = document.getElementById('trFlash');
-  let ti = 0, SCENE = 1500;
-  function nextShow(){
-    const prevArea = SHOW[si][5];
-    si = (si + 1) % SHOW.length;
-    const inc = imgs[1 - front], out = imgs[front], pre = new Image(), tr = TRANS[ti++ % TRANS.length];
-    pre.onload = () => {
+  const track = document.getElementById('scTrack'), areasEl = document.getElementById('scAreas'), countEl = document.getElementById('showCount'), playBtn = document.getElementById('showPlay');
+  const TRANS = ['wipe','zoom','iris','slide','split','tilt'], AREA = {library:['Library','Bibliothek'], pipeline:['Pipeline','Pipeline'], board:['Mind board','Denkbrett'], shots:['Shot list','Shotlist'], story:['Story','Story']};
+  let si = 0, front = 0, showT = null, showVis = false, ti = 0, area = 'all', user = false, idleT = 0, busy = false;
+  const SCENE = 2200, list = () => SHOW.map((d,i)=>i).filter(i=>area==='all' || SHOW[i][5]===area);
+  areasEl.querySelectorAll('[data-area]').forEach(b=>{ const n = b.dataset.area==='all' ? SHOW.length : SHOW.filter(d=>d[5]===b.dataset.area).length; b.querySelector('b').textContent = n; });
+  track.innerHTML = SHOW.map((d,i)=>`<button type="button" role="option" data-i="${i}" data-area="${d[5]}"><img src="assets/custom-${d[0]}-t.webp" alt="" width="136" height="82" loading="lazy"><span data-en>${d[3]}</span><span data-de>${d[4]}</span></button>`).join('');
+  const label = () => {
+    const d = SHOW[si], de = VF.lang==='de', L = list();
+    kind.textContent = de ? d[2] : d[1]; nm.textContent = de ? d[4] : d[3]; imgs[front].alt = kind.textContent + ': ' + nm.textContent;
+    countEl.textContent = (L.indexOf(si) + 1) + ' / ' + L.length;
+    track.querySelectorAll('[data-i]').forEach(b=>{ const on = +b.dataset.i===si; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); b.hidden = area!=='all' && b.dataset.area!==area; });
+    const cur = track.querySelector('.on'); if(cur && showVis){ const sr = track.parentNode, x = cur.offsetLeft - sr.clientWidth/2 + cur.offsetWidth/2; sr.scrollTo({left:x, behavior:VF.still ? 'auto' : 'smooth'}); }
+  };
+  function show(n, dir){
+    if(n===si || busy) return;
+    const prevArea = SHOW[si][5]; si = n; busy = true;
+    const inc = imgs[1 - front], out = imgs[front], pre = new Image(), tr = dir < 0 ? 'slideback' : TRANS[ti++ % TRANS.length];
+    pre.onload = pre.onerror = () => {
       inc.className = 'show-img'; inc.src = pre.src; void inc.offsetWidth;
       inc.classList.add('on', 'enter', 'tr-' + tr); out.classList.add('leave');
-      setTimeout(()=>{ out.className = 'show-img'; inc.classList.remove('enter', 'tr-' + tr); }, 520);
+      setTimeout(()=>{ out.className = 'show-img'; inc.classList.remove('enter', 'tr-' + tr); busy = false; }, 520);
       front = 1 - front; label();
       stage.classList.remove('flip'); void stage.offsetWidth; stage.classList.add('flip');
-      if(SHOW[si][5]!==prevArea){
-        trTitle.textContent = AREA[SHOW[si][5]][VF.lang==='de'?1:0];
-        trTitle.classList.remove('go'); trFlash.classList.remove('go'); void trTitle.offsetWidth; trTitle.classList.add('go'); trFlash.classList.add('go');
-      }
+      if(SHOW[si][5]!==prevArea){ trTitle.textContent = AREA[SHOW[si][5]][VF.lang==='de'?1:0]; trTitle.classList.remove('go'); trFlash.classList.remove('go'); void trTitle.offsetWidth; trTitle.classList.add('go'); trFlash.classList.add('go'); }
     };
     pre.src = 'assets/custom-' + SHOW[si][0] + '.webp';
   }
+  const step = d => { const L = list(), k = L.indexOf(si); show(L[((k < 0 ? -1 : k) + d + L.length) % L.length], d); };
   function runShow(){
     clearInterval(showT); bar.classList.remove('run');
-    if(VF.still || !showVis || document.hidden || stage.classList.contains('paused')) return;
+    const paused = VF.still || !showVis || document.hidden || stage.classList.contains('paused') || stage.classList.contains('stopped');
+    playBtn.setAttribute('aria-label', stage.classList.contains('stopped') ? 'Play' : 'Pause');
+    if(paused) return;
     void bar.offsetWidth; bar.classList.add('run');
-    showT = setInterval(()=>{ nextShow(); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); }, SCENE);
+    showT = setInterval(()=>{ step(1); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); }, SCENE);
   }
-  stage.addEventListener('mouseenter', ()=>{ stage.classList.add('paused'); runShow(); });
-  stage.addEventListener('mouseleave', ()=>{ stage.classList.remove('paused'); runShow(); });
-  if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{ showVis = e.isIntersecting; runShow(); }), {threshold:.3}).observe(document.getElementById('show'));
+  /* Nach einer Bedienung kurz innehalten, dann läuft der Trailer weiter */
+  const touched = () => { stage.classList.add('paused'); runShow(); clearTimeout(idleT); idleT = setTimeout(()=>{ stage.classList.remove('paused'); runShow(); }, 7000); };
+  document.getElementById('showPrev').onclick = () => { step(-1); touched(); };
+  document.getElementById('showNext').onclick = () => { step(1); touched(); };
+  document.getElementById('showDice').onclick = () => { const L = list().filter(i=>i!==si); show(L[Math.floor(Math.random()*L.length)], 1); stage.classList.remove('roll'); void stage.offsetWidth; stage.classList.add('roll'); touched(); };
+  playBtn.onclick = () => { stage.classList.toggle('stopped'); runShow(); };
+  areasEl.onclick = e => { const b = e.target.closest('[data-area]'); if(!b) return;
+    area = b.dataset.area; areasEl.querySelectorAll('[data-area]').forEach(x=>x.classList.toggle('on', x===b));
+    const L = list(); if(!L.includes(si)) show(L[0], 1); else label(); touched(); };
+  track.onclick = e => { const b = e.target.closest('[data-i]'); if(b){ show(+b.dataset.i, 1); touched(); } };
+  let hoverT = 0;
+  track.onpointerover = e => { const b = e.target.closest('[data-i]'); if(!b || e.pointerType==='touch') return; clearTimeout(hoverT); hoverT = setTimeout(()=>{ show(+b.dataset.i, 1); touched(); }, 220); };
+  track.onpointerleave = () => clearTimeout(hoverT);
+  stage.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'){ e.preventDefault(); step(1); touched(); } if(e.key==='ArrowLeft'){ e.preventDefault(); step(-1); touched(); } if(e.key===' '){ e.preventDefault(); playBtn.click(); } });
+  /* Wischen auf dem Touchscreen, leichte Neigung mit der Maus */
+  let sx = null;
+  stage.addEventListener('pointerdown', e=>{ if(e.target.closest('button')) return; sx = e.clientX; });
+  stage.addEventListener('pointerup', e=>{ if(sx===null) return; const dx = e.clientX - sx; sx = null; if(Math.abs(dx) > 40){ step(dx < 0 ? 1 : -1); touched(); } });
+  stage.addEventListener('pointermove', e=>{ if(e.pointerType==='touch' || VF.still) return; const r = stage.getBoundingClientRect(), x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
+    stage.style.setProperty('--sx', (x*-4).toFixed(2) + 'deg'); stage.style.setProperty('--sy', (y*3).toFixed(2) + 'deg'); stage.style.setProperty('--gx', ((x+.5)*100).toFixed(1) + '%'); stage.style.setProperty('--gy', ((y+.5)*100).toFixed(1) + '%'); });
+  stage.addEventListener('mouseenter', ()=>{ stage.classList.add('paused', 'hov'); runShow(); });
+  stage.addEventListener('mouseleave', ()=>{ stage.classList.remove('paused', 'hov'); stage.style.removeProperty('--sx'); stage.style.removeProperty('--sy'); runShow(); });
+  if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{ showVis = e.isIntersecting; runShow(); if(showVis) label(); }), {threshold:.3}).observe(stage);
   document.addEventListener('visibilitychange', runShow);
-  SHOW.forEach(d=>{ const i = new Image(); i.src = 'assets/custom-' + d[0] + '.webp'; });
   VF.onLang.push(label); label();
+
+  /* Überschrift: das Projekt wechselt – Kurzfilm, Kreatur, Game-Asset … */
+  if(!VF.still) document.querySelectorAll('.rot').forEach(el=>{
+    const words = el.dataset.words.split('|'); let i = 0;
+    /* Platz für das längste Wort reservieren, damit die Zeilen nicht springen */
+    const fit = () => { if(!el.offsetParent) return; const cur = el.textContent; el.style.minWidth = '0'; let m = 0; words.forEach(w=>{ el.textContent = w; m = Math.max(m, el.offsetWidth); }); el.textContent = cur; el.style.minWidth = m + 'px'; };
+    fit(); VF.onLang.push(()=>setTimeout(fit, 0)); addEventListener('resize', fit); document.fonts && document.fonts.ready.then(fit);
+    setInterval(()=>{ if(document.hidden) return; i = (i + 1) % words.length; el.classList.add('out');
+      setTimeout(()=>{ el.textContent = words[i]; el.classList.remove('out'); el.classList.add('in'); setTimeout(()=>el.classList.remove('in'), 450); }, 280); }, 2600);
+  });
+
+  /* Teilen: einfache Links, fertiger Text, Badge-Code, Markenfarben */
+  const URL_ = 'https://vertexforge.pages.dev';
+  const PITCH = ['VertexForge Studio – a free, open-source planner for 3D projects: pipeline with deadlines, an infinite mind board with collectible asset cards, shot list and story. Offline, no account, Windows/Mac/Linux. ' + URL_,
+    'VertexForge Studio – ein kostenloser Open-Source-Planer für 3D-Projekte: Pipeline mit Deadlines, ein unendliches Denkbrett mit Asset-Sammelkarten, Shotlist und Story. Offline, ohne Konto, Windows/Mac/Linux. ' + URL_];
+  const shareSet = () => { const de = VF.lang==='de', txt = PITCH[de?1:0], short = de ? 'VertexForge Studio – kostenloser Planer für 3D-Projekte' : 'VertexForge Studio – a free planner for 3D projects';
+    document.getElementById('pitch').textContent = txt;
+    document.getElementById('shReddit').href = 'https://www.reddit.com/submit?url=' + encodeURIComponent(URL_) + '&title=' + encodeURIComponent(short);
+    document.getElementById('shBsky').href = 'https://bsky.app/intent/compose?text=' + encodeURIComponent(txt);
+    document.getElementById('shX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(short) + '&url=' + encodeURIComponent(URL_); };
+  if(document.getElementById('pitch')){
+    VF.onLang.push(shareSet); shareSet();
+    const copyBtn = (btn, get) => btn.addEventListener('click', ()=>{ const done = () => { const o = btn.innerHTML; btn.classList.add('ok'); btn.textContent = '✓'; setTimeout(()=>{ btn.innerHTML = o; btn.classList.remove('ok'); }, 1300); }; try{ navigator.clipboard.writeText(get()).then(done, done); }catch(e){} });
+    copyBtn(document.getElementById('shCopy'), ()=>URL_);
+    copyBtn(document.getElementById('pitchCopy'), ()=>document.getElementById('pitch').textContent);
+    const SNIP = {md:'[![Planned with VertexForge](' + URL_ + '/assets/badge-planned.svg)](' + URL_ + ')', html:'<a href="' + URL_ + '"><img src="' + URL_ + '/assets/badge-planned.svg" alt="Planned with VertexForge" width="210" height="32"></a>'};
+    let snip = 'md'; const sc = document.getElementById('snipCode'); sc.textContent = SNIP.md;
+    document.querySelectorAll('[data-snip]').forEach(b=>b.onclick = () => { snip = b.dataset.snip; sc.textContent = SNIP[snip]; document.querySelectorAll('[data-snip]').forEach(x=>x.classList.toggle('on', x===b)); });
+    copyBtn(document.getElementById('snipCopy'), ()=>SNIP[snip]);
+    document.querySelectorAll('.swatches [data-hex]').forEach(b=>copyBtn(b, ()=>b.dataset.hex));
+  }
+
+  /* Mini-Demo „Schnell erfassen“ */
+  const qd = document.getElementById('qcDemo');
+  if(qd){
+    const inp = document.getElementById('qdIn'), out = document.getElementById('qdOut');
+    const PH = {task:['Retopo the hands','Hände retopologisieren'], note:['Reference: wet frog skin','Referenz: nasse Froschhaut'], shot:['Close-up: the staff starts to glow','Close-up: der Stab beginnt zu leuchten']};
+    const ICO = {task:'☐', note:'✎', shot:'▣'}, WHERE = {task:['Pipeline · Sculpting','Pipeline · Sculpting'], note:['Mind board','Denkbrett'], shot:['Shot list · SH_040','Shotlist · SH_040']};
+    let k = 'task';
+    const ph = () => { inp.placeholder = PH[k][VF.lang==='de'?1:0]; };
+    qd.querySelector('.qd-kinds').onclick = e => { const b = e.target.closest('[data-k]'); if(!b) return; k = b.dataset.k; qd.querySelectorAll('[data-k]').forEach(x=>x.classList.toggle('on', x===b)); ph(); inp.focus(); };
+    inp.addEventListener('keydown', e=>{ if(e.key==='Tab' && !inp.value){ e.preventDefault(); const ks = ['task','note','shot']; qd.querySelector(`[data-k="${ks[(ks.indexOf(k)+1)%3]}"]`).click(); } });
+    document.getElementById('qdForm').onsubmit = e => {
+      e.preventDefault(); const v = (inp.value.trim() || inp.placeholder).slice(0,70);
+      const row = document.createElement('div'); row.className = 'qd-item ' + k;
+      row.innerHTML = `<i>${ICO[k]}</i><span></span><small>${WHERE[k][VF.lang==='de'?1:0]}</small>`; row.querySelector('span').textContent = v;
+      out.prepend(row); while(out.children.length > 4) out.lastChild.remove(); inp.value = '';
+    };
+    VF.onLang.push(ph); ph();
+  }
 
   /* Sammelkarten: austeilen, Licht folgt der Maus, Klick dreht um */
   const hand = document.getElementById('hand');

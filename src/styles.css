@@ -502,8 +502,6 @@ html.mode-swap,html.mode-swap *{transition:background-color .24s ease,border-col
 .bt-tool:hover{background:var(--hover);color:var(--text)}
 .bt-tool:active{transform:scale(.94)}
 .bt-tool.on{background:var(--acc-soft);color:var(--accent);box-shadow:inset 0 0 0 1px var(--acc-line)}
-.bt-tool::after{content:attr(data-tip);position:absolute;left:calc(100% + 10px);top:50%;transform:translate(-4px,-50%);white-space:nowrap;padding:5px 9px;border-radius:6px;background:var(--panel-2);border:1px solid var(--line-2);box-shadow:var(--shadow-sm);color:var(--text);font-size:11.5px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .12s,transform .12s}
-.bt-tool:hover::after{opacity:1;transform:translate(0,-50%);transition-delay:.3s}
 .bt-hsep{height:1px;background:var(--line);margin:3px 6px}
 .viewport{flex:1;position:relative;overflow:hidden;background-color:var(--canvas);background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:var(--g,24px) var(--g,24px);background-position:var(--gx,0) var(--gy,0);cursor:default;touch-action:none;outline:none}
 .viewport.nogrid{background-image:none}
@@ -1481,12 +1479,18 @@ html.is-fs .win-ctl [data-win="max"]{display:none}
    BEWEGUNG & FEINSCHLIFF – kurz, federnd, nie im Weg
    ============================================================================ */
 :root{--ease-out:cubic-bezier(.16,1,.3,1); --spring:cubic-bezier(.34,1.4,.64,1)}
-/* Tooltips */
-.vtip{position:fixed;left:0;top:0;z-index:3000;display:flex;align-items:center;gap:8px;max-width:300px;padding:5px 9px;border-radius:6px;background:var(--panel-2);border:1px solid var(--line-2);box-shadow:var(--shadow-sm);color:var(--text);font-size:11.5px;line-height:1.35;pointer-events:none;opacity:0;transform:translateY(-3px) scale(.97);transform-origin:50% 0;transition:opacity .09s ease,transform .14s var(--ease-out)}
-.vtip.above{transform:translateY(3px) scale(.97);transform-origin:50% 100%}
+/* Tooltips: kleine Etiketten im Stil der App – Panel, Akzentkante, Pfeil zum Element */
+.vtip{position:fixed;left:0;top:0;z-index:3000;display:flex;align-items:center;gap:10px;max-width:300px;padding:6px 10px 6px 11px;border-radius:7px;background:color-mix(in srgb,var(--panel-2) 94%,var(--accent));border:1px solid var(--line-2);box-shadow:0 10px 26px rgba(0,0,0,.28),0 1px 0 rgba(255,255,255,.04) inset;color:var(--text);font-size:11.5px;font-weight:500;line-height:1.35;letter-spacing:.01em;pointer-events:none;opacity:0;transform:translateY(-4px) scale(.96);transform-origin:var(--ax,50%) 0;transition:opacity .1s ease,transform .16s var(--ease-out)}
+.vtip::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:2px;border-radius:2px;background:var(--accent);opacity:.85}
+.vtip::after{content:"";position:absolute;left:var(--ax,50%);top:-5px;width:8px;height:8px;margin-left:-4px;background:inherit;border-left:1px solid var(--line-2);border-top:1px solid var(--line-2);transform:rotate(45deg);border-top-left-radius:2px}
+.vtip.above{transform:translateY(4px) scale(.96);transform-origin:var(--ax,50%) 100%}
+.vtip.above::after{top:auto;bottom:-5px;transform:rotate(225deg)}
+.vtip.right{transform:translateX(-4px) scale(.96);transform-origin:0 50%}
+.vtip.right::after{left:-5px;top:50%;margin:-4px 0 0;transform:rotate(-45deg)}
 .vtip.show{opacity:1;transform:none}
-.vtip-k{display:inline-flex;gap:2px;color:var(--text-2);white-space:nowrap}
-.vtip-k kbd{font-size:9.5px;padding:0 4px;border-bottom-width:1px}
+html[data-mode="light"] .vtip{box-shadow:0 10px 26px rgba(64,48,26,.16),0 1px 0 rgba(255,255,255,.7) inset}
+.vtip-k{display:inline-flex;align-items:center;gap:3px;padding-left:9px;border-left:1px solid var(--line-2);color:var(--muted);white-space:nowrap}
+.vtip-k kbd{font-size:9.5px;padding:0 4px;border-bottom-width:1px;background:var(--panel);color:var(--text-2)}
 /* Schließen: Kopie blendet weich aus */
 .modal.ghost{display:flex;pointer-events:none;animation:ghostFade .15s ease-in forwards}
 .modal.ghost > *{animation:ghostPop .15s ease-in forwards}
@@ -1518,3 +1522,73 @@ html.is-fs .win-ctl [data-win="max"]{display:none}
 /* Lange Listen: nur sichtbare Zeilen werden gezeichnet (spürbar flüssiger bei hunderten Aufgaben/Shots) */
 .task-list > .task{content-visibility:auto;contain-intrinsic-size:auto 44px}
 .shot-table tbody > tr{content-visibility:auto;contain-intrinsic-size:auto 64px}
+/* Denkbrett: Karten ohne dauerhaften 3D-Kontext, damit sie beim Zoomen gestochen scharf bleiben */
+.node .tc:not(.flip):not(.lift){perspective:none}
+.node .tc:not(.flip):not(.lift) .tc-inner{transform:none}
+/* Bibliothek: „Als Nächstes“ */
+.focus-strip{margin:0 0 22px;padding:12px 14px 14px;border-radius:var(--r-lg)}
+.focus-strip header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.fo-title{display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-weight:700;font-size:14px;color:var(--text)}
+.fo-title .ic{color:var(--accent)}
+.fo-sub{color:var(--muted);font-size:12px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fo-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+.fo-item{position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel-2);transition:transform .18s var(--spring),border-color .15s,background-color .15s,opacity .25s;overflow:hidden}
+.fo-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--info)}
+.fo-item.p-low::before{background:var(--muted)} .fo-item.p-high::before{background:var(--warn)} .fo-item.p-critical::before{background:var(--crit)}
+.fo-item:hover{border-color:var(--line-2);transform:translateY(-2px);background:var(--hover)}
+.fo-item.leaving{opacity:0;transform:translateX(18px) scale(.97)}
+.fo-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;border:none;background:none;text-align:left;cursor:pointer;padding:0}
+.fo-text{font-size:12.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fo-meta{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fo-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.fo-item .cd{flex-shrink:0}
+.fo-item.st-wip .fo-text::after{content:"";display:inline-block;width:6px;height:6px;margin-left:7px;border-radius:50%;background:var(--warn);vertical-align:2px}
+.fo-empty{display:flex;align-items:center;gap:8px;color:var(--muted);padding:6px 2px}
+.focus-show{display:inline-flex;align-items:center;gap:6px;margin:0 0 16px;padding:5px 11px;border:1px dashed var(--line-2);border-radius:99px;background:none;color:var(--muted);font-size:12px;cursor:pointer}
+.focus-show:hover{color:var(--accent);border-color:var(--acc-line)}
+/* Projektkarte: direkt in einen Bereich springen */
+.pcard-jump{display:flex;gap:4px;margin-top:6px;opacity:0;transform:translateY(-3px);transition:opacity .16s,transform .2s var(--ease-out)}
+.pcard:hover .pcard-jump,.pcard:focus-within .pcard-jump,html.touch .pcard-jump{opacity:1;transform:none}
+.pcard-jump button{width:28px;height:24px;display:grid;place-items:center;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--text-2);cursor:pointer;transition:color .12s,border-color .12s,transform .12s var(--spring),background-color .12s}
+.pcard-jump button:hover{color:var(--accent);border-color:var(--acc-line);background:var(--acc-soft);transform:translateY(-1px)}
+.pcard-jump button:active{transform:scale(.92)}
+/* Klickbare Kennzahlen */
+.kpi-click{cursor:pointer;transition:transform .18s var(--spring),border-color .15s,box-shadow .2s}
+.kpi-click:hover{transform:translateY(-2px);border-color:var(--line-2);box-shadow:var(--shadow-sm)}
+.kpi-click:active{transform:translateY(0) scale(.985)}
+.kpi-click.on{border-color:var(--acc-line);box-shadow:inset 0 0 0 1px var(--acc-line)}
+/* Schnell erfassen */
+.qc-sheet{max-width:560px}
+.qc-h{display:flex;align-items:center;gap:8px;font-size:17px}
+.qc-h .ic{color:var(--accent)}
+.qc-proj{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:2px 8px;border:1px solid var(--line);border-radius:99px;margin-left:4px}
+.qc{gap:12px}
+.qc-kinds{align-self:flex-start}
+.qc-text{height:44px;font-size:15px;padding:0 14px}
+.qc-opts{display:flex;flex-wrap:wrap;align-items:center;gap:14px;min-height:30px;font-size:12px;color:var(--text-2)}
+.qc-opts label{display:flex;align-items:center;gap:8px}
+.qc-foot{justify-content:space-between;font-size:11.5px}
+.qc-done{display:inline-flex;align-items:center;gap:6px;color:var(--ok);font-weight:600;opacity:0}
+.qc-done.pop{animation:qcPop 2.2s var(--ease-out) forwards}
+@keyframes qcPop{0%{opacity:0;transform:translateY(4px)}12%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+.qc-btn .ic{transition:transform .25s var(--spring)}
+.qc-btn:hover .ic{transform:rotate(90deg)}
+.phase-tools:not(.editing) .tools-input{display:none}
+.tools-edit{width:24px;height:24px;display:grid;place-items:center;border:1px dashed var(--line-2);border-radius:6px;background:none;color:var(--muted);cursor:pointer;opacity:0;transition:opacity .15s,color .12s,border-color .12s}
+.phase:hover .tools-edit,.tools-edit:focus-visible{opacity:1}
+.tools-edit:hover{color:var(--accent);border-color:var(--acc-line)}
+.phase-tools.editing .tools-edit{display:none}
+html.touch .tools-edit{opacity:1}
+.qc-done{max-width:55%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qc-foot .muted{white-space:nowrap}
+.fo-list{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.fo-item .cd{max-width:42%}
+.fo-item .cd span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Filter aktiv: Phasen ohne Treffer schrumpfen auf ihre Kopfzeile */
+.phase.f-empty{opacity:.5}
+.phase.f-empty .phase-body,.phase.f-empty .phase-bar{display:none}
+.phase.f-empty:hover{opacity:.8}
+.fo-list{grid-template-columns:repeat(auto-fill,minmax(380px,1fr))}
+.fo-item .cd{max-width:none;font-size:10px}
+.fo-item .cd .ic{display:none}
+.fo-list{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}

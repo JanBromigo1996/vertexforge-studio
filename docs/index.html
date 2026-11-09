@@ -8,7 +8,12 @@
 <meta name="description" content="VertexForge Studio – a free, open-source planning tool for 3D artists: pipeline, deadlines, mind board, shot list and story in one place.">
 <meta property="og:title" content="VertexForge Studio">
 <meta property="og:description" content="VertexForge Studio – a free, open-source planning tool for 3D artists: pipeline, deadlines, mind board, shot list and story in one place.">
-<meta property="og:image" content="https://vertexforge.pages.dev/assets/shot-hero.webp">
+<meta property="og:image" content="https://vertexforge.pages.dev/assets/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#141316">
 <meta property="og:url" content="https://vertexforge.pages.dev/">
 <link rel="icon" href="assets/favicon.png">
 <link rel="stylesheet" href="assets/site-fonts.css">
@@ -422,15 +427,42 @@ footer .small{color:var(--muted)}
 
 /* Design-Showcase: Bereichsanzeige, Hauptbild, durchlaufender Filmstreifen */
 .showcase{margin:0}
-.sc-areas{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;padding:0}
-.sc-areas li{font:600 .72rem var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);transition:color .35s,border-color .35s,background .35s}
-.sc-areas li.on{color:var(--fg);border-color:var(--brass);background:color-mix(in srgb,var(--brass) 14%,transparent)}
-.sc-strip{position:relative;overflow:hidden;margin-top:14px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.sc-track{display:flex;gap:10px;width:max-content;animation:scRun 70s linear infinite}
-.sc-strip:hover .sc-track{animation-play-state:paused}
-.sc-track img{width:136px;height:82px;border-radius:8px;object-fit:cover;opacity:.5;filter:saturate(.7);border:1px solid var(--line);transition:opacity .4s,filter .4s,transform .4s,border-color .4s}
-.sc-track img.on{opacity:1;filter:none;transform:translateY(-3px);border-color:var(--brass)}
-@keyframes scRun{to{transform:translateX(-50%)}}
+.sc-areas{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;padding:0}
+.sc-areas button{display:inline-flex;align-items:center;gap:8px;font:600 .72rem var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:7px 8px 7px 13px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:color .25s,border-color .25s,background .25s,transform .2s}
+.sc-areas button b{font-weight:600;min-width:20px;padding:1px 6px;border-radius:99px;background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--fg-2);letter-spacing:0}
+.sc-areas button:hover{color:var(--fg);border-color:var(--line-2);transform:translateY(-1px)}
+.sc-areas button.on{color:var(--fg);border-color:var(--brass);background:color-mix(in srgb,var(--brass) 14%,transparent)}
+.sc-areas button.on b{background:var(--brass);color:#1d1a16}
+.sc-strip{position:relative;overflow-x:auto;overflow-y:hidden;margin-top:14px;padding:6px 2px 10px;scroll-snap-type:x proximity;scrollbar-width:thin;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.sc-track{display:flex;gap:10px;width:max-content;padding:0 4%}
+.sc-track button{display:flex;flex-direction:column;gap:6px;padding:0;border:none;background:none;color:var(--muted);font:600 .74rem var(--body);cursor:pointer;scroll-snap-align:center;text-align:left;transition:color .25s}
+.sc-track button[hidden]{display:none}
+.sc-track img{display:block;width:136px;height:82px;border-radius:9px;object-fit:cover;opacity:.55;filter:saturate(.7);border:1px solid var(--line);transition:opacity .3s,filter .3s,transform .3s cubic-bezier(.34,1.4,.64,1),border-color .3s,box-shadow .3s}
+.sc-track button:hover img{opacity:.95;filter:none;transform:translateY(-3px)}
+.sc-track button.on{color:var(--fg)}
+.sc-track button.on img{opacity:1;filter:none;transform:translateY(-4px) scale(1.04);border-color:var(--brass);box-shadow:0 10px 24px -10px color-mix(in srgb,var(--brass) 60%,transparent)}
+.sc-track button span{padding-left:2px;max-width:136px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Bühne: neigt sich leicht zur Maus, Lichtreflex folgt */
+.showcase{perspective:1600px}
+.show-stage{transform:rotateY(var(--sx,0deg)) rotateX(var(--sy,0deg));transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .4s;outline:none}
+.show-stage.hov{box-shadow:0 40px 80px -30px rgba(0,0,0,.6),0 0 0 1px color-mix(in srgb,var(--brass) 40%,transparent)}
+.show-stage::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(600px circle at var(--gx,50%) var(--gy,50%),rgba(255,240,210,.10),transparent 45%);opacity:0;transition:opacity .4s}
+.show-stage.hov::after{opacity:1}
+.show-stage:focus-visible{box-shadow:0 0 0 3px var(--brass)}
+.show-stage.roll{animation:roll .5s cubic-bezier(.34,1.5,.64,1)}
+@keyframes roll{40%{transform:rotateY(var(--sx,0deg)) rotateX(var(--sy,0deg)) scale(.985) rotate(-.6deg)}}
+.show-ctl{position:absolute;right:16px;bottom:18px;z-index:6;display:flex;align-items:center;gap:4px;padding:4px;border-radius:999px;background:rgba(18,17,20,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);color:#f0e8d8}
+.show-ctl button{width:34px;height:34px;display:grid;place-items:center;border:none;border-radius:50%;background:transparent;color:inherit;cursor:pointer;transition:background .15s,transform .15s cubic-bezier(.34,1.5,.64,1)}
+.show-ctl button:hover{background:rgba(255,255,255,.12);transform:scale(1.08)}
+.show-ctl button:active{transform:scale(.92)}
+.show-count{min-width:54px;text-align:center;font:600 .72rem var(--mono);letter-spacing:.06em;color:rgba(240,232,216,.75)}
+#showPlay .i-play{display:none} .show-stage.stopped #showPlay .i-play{display:block} .show-stage.stopped #showPlay .i-pause{display:none}
+.show-hint{position:absolute;left:50%;top:14px;z-index:6;transform:translate(-50%,-6px);padding:5px 12px;border-radius:99px;background:rgba(18,17,20,.6);color:rgba(240,232,216,.85);font:500 .72rem var(--mono);letter-spacing:.04em;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;white-space:nowrap}
+.show-stage.hov .show-hint{opacity:1;transform:translate(-50%,0)}
+.show-img.tr-slideback{animation:trSlideBack .46s cubic-bezier(.7,0,.2,1)}
+@keyframes trSlideBack{from{transform:translateX(-100%)}to{transform:none}}
+@media (max-width:620px){ .show-ctl{right:8px;bottom:8px} .show-ctl button{width:30px;height:30px} .show-count{min-width:44px} .show-hint{display:none} .sc-track img{width:112px;height:68px} }
+@media (hover:none){ .show-hint{display:none} }
 .touchsec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:40px;align-items:center;margin-top:64px;padding:34px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(150deg,color-mix(in srgb,var(--brass) 8%,var(--panel)),var(--panel) 65%)}
 .ts-text h3{font:600 1.7rem/1.15 var(--display);margin:6px 0 12px}
 .ts-text p{color:var(--fg-2)}
@@ -444,7 +476,7 @@ footer .small{color:var(--muted)}
 .dev.phone{width:150px;height:300px;right:10%;bottom:-6px;border-radius:26px;transform:rotate(5deg);animation:devFloat 6s ease-in-out -2s infinite}
 @keyframes devFloat{50%{translate:0 -10px}}
 @media (max-width:860px){.touchsec{grid-template-columns:1fr;padding:24px}.ts-devices{height:330px}.dev.tablet{width:220px;height:295px;left:2%}.dev.phone{width:126px;height:250px;right:4%}}
-@media (prefers-reduced-motion: reduce){.sc-track,.dev.tablet,.dev.phone{animation:none}}
+@media (prefers-reduced-motion: reduce){.dev.tablet,.dev.phone{animation:none}.show-stage{transform:none}}
 
 /* Teamarbeit */
 .teamsec{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center}
@@ -534,6 +566,67 @@ footer .small{color:var(--muted)}
 .card ul code,.card p code{font-size:.85em}
 @media (max-width:1000px){ .dl.dl3{grid-template-columns:repeat(2,minmax(0,1fr))} .dl .card.wide{grid-template-columns:1fr} .dl .card.wide .btns{flex-wrap:wrap} }
 @media (max-width:760px){ .dl.dl3{grid-template-columns:1fr} }
+/* Neu: Flow & Schnell-erfassen-Demo */
+.flow-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:56px;align-items:center}
+.flow-list{list-style:none;padding:0;margin:22px 0 0;display:flex;flex-direction:column;gap:10px}
+.flow-list li{display:flex;align-items:center;gap:14px;color:var(--fg-2)}
+.flow-list b{flex-shrink:0;width:42px;height:32px;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line-2);border-bottom-width:3px;background:var(--panel);font:700 .8rem var(--mono);color:var(--brass)}
+.qc-demo{position:relative;padding:18px;border-radius:16px;border:1px solid var(--line-2);background:linear-gradient(160deg,color-mix(in srgb,var(--brass) 9%,var(--panel)),var(--panel));box-shadow:var(--shadow)}
+.qd-head{display:flex;align-items:center;gap:10px;font:600 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.qd-dots{display:flex;gap:5px}.qd-dots i{width:9px;height:9px;border-radius:50%;background:var(--line-2)}.qd-dots i:first-child{background:#c25247}.qd-dots i:nth-child(2){background:#c48f2c}.qd-dots i:last-child{background:#5f9e6e}
+.qd-kinds{display:inline-flex;gap:3px;padding:3px;border-radius:9px;border:1px solid var(--line);background:var(--bg);margin-bottom:10px}
+.qd-kinds button{padding:6px 12px;border:none;border-radius:7px;background:none;color:var(--fg-2);font:600 .82rem var(--body);cursor:pointer;transition:background .15s,color .15s}
+.qd-kinds button.on{background:color-mix(in srgb,var(--brass) 18%,transparent);color:var(--fg)}
+.qd-form{display:flex;gap:8px}
+.qd-form input{flex:1;min-width:0;height:46px;padding:0 14px;border-radius:10px;border:1px solid var(--brass);background:var(--bg);color:var(--fg);font:500 1rem var(--body);outline:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--brass) 14%,transparent)}
+.qd-form button{width:46px;border-radius:10px;border:none;background:var(--brass);color:#1d1a16;font-size:1.2rem;cursor:pointer;transition:transform .15s cubic-bezier(.34,1.5,.64,1)}
+.qd-form button:active{transform:scale(.92)}
+.qd-out{display:flex;flex-direction:column;gap:8px;margin-top:14px;min-height:150px}
+.qd-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);animation:qdIn .45s cubic-bezier(.34,1.4,.64,1)}
+.qd-item i{font-style:normal;width:24px;height:24px;display:grid;place-items:center;border-radius:6px;background:color-mix(in srgb,var(--brass) 16%,transparent);color:var(--brass)}
+.qd-item span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--fg)}
+.qd-item small{font:500 .7rem var(--mono);color:var(--muted);white-space:nowrap}
+.qd-item.note{background:color-mix(in srgb,#e9d78a 12%,var(--bg))}
+@keyframes qdIn{from{opacity:0;transform:translateY(-10px) scale(.97)}}
+.qd-foot{margin:12px 0 0;font-size:.78rem;color:var(--muted)}
+@media (max-width:860px){.flow-grid{grid-template-columns:1fr;gap:28px}}
+/* Teilen & Markenkit */
+.share-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.share-card{display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:14px;border:1px solid var(--line);background:var(--panel);transition:transform .25s cubic-bezier(.34,1.3,.64,1),border-color .25s}
+.share-card:hover{transform:translateY(-3px);border-color:var(--line-2)}
+.share-card h3{font-size:1.05rem}
+.share-card p{margin:0;color:var(--fg-2);font-size:.92rem}
+.share-btns{display:flex;flex-wrap:wrap;gap:8px}
+.sbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:1px solid var(--line-2);background:var(--bg);color:var(--fg);font:600 .85rem var(--body);text-decoration:none;cursor:pointer;transition:transform .15s cubic-bezier(.34,1.5,.64,1),border-color .15s,background .15s}
+.sbtn:hover{transform:translateY(-2px);border-color:var(--brass)}
+.sbtn.star{border-color:var(--brass);background:color-mix(in srgb,var(--brass) 14%,transparent)}
+.sbtn.ok{border-color:var(--ok)}
+.pitch,.snip{position:relative;padding:12px 64px 12px 14px;border-radius:10px;border:1px dashed var(--line-2);background:var(--bg)}
+.pitch .k{display:block;font:600 .66rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.pitch p{font-size:.85rem;line-height:1.5}
+.pitch .copy,.snip .copy{position:absolute;right:10px;top:10px}
+.snip-tabs{display:flex;gap:4px;margin-bottom:8px}
+.snip-tabs button{padding:3px 9px;border-radius:6px;border:1px solid var(--line);background:none;color:var(--muted);font:600 .7rem var(--mono);cursor:pointer}
+.snip-tabs button.on{color:var(--fg);border-color:var(--brass)}
+.snip code{display:block;font:500 .72rem/1.5 var(--mono);color:var(--fg-2);word-break:break-all}
+.badge-prev{align-self:flex-start;transition:transform .2s cubic-bezier(.34,1.5,.64,1)}
+.badge-prev:hover{transform:scale(1.05) rotate(-1deg)}
+.kit{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.kit li{display:flex;align-items:center;gap:12px;font-size:.9rem;color:var(--fg-2)}
+.kit img{width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--line)}
+.kit img.wide{width:60px}
+.kit a{color:var(--brass)}
+.swatches{display:flex;flex-wrap:wrap;gap:8px}
+.swatches button{display:inline-flex;align-items:center;gap:7px;padding:5px 10px 5px 5px;border-radius:99px;border:1px solid var(--line);background:none;color:var(--fg-2);font:600 .74rem var(--mono);cursor:pointer;transition:border-color .15s,transform .15s}
+.swatches button:hover{border-color:var(--brass);transform:translateY(-1px)}
+.swatches i{width:20px;height:20px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.swatches button.ok{border-color:var(--ok)}
+@media (max-width:1000px){.share-grid{grid-template-columns:1fr}}
+/* Wechselndes Wort in der Überschrift */
+.rot{display:inline-block;text-decoration:underline 3px color-mix(in srgb,var(--brass) 70%,transparent);text-underline-offset:.16em;text-decoration-skip-ink:none;transition:opacity .28s,transform .28s cubic-bezier(.6,0,.4,1),filter .28s}
+.rot.out{opacity:0;transform:translateY(-.35em);filter:blur(4px)}
+.rot.in{animation:rotIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes rotIn{from{opacity:0;transform:translateY(.35em);filter:blur(4px)}}
 
 </style>
 </head>
@@ -546,11 +639,12 @@ footer .small{color:var(--muted)}
     <nav class="nav" aria-label="Sections">
       <a href="#views"><span data-en>Tour</span><span data-de>Einblick</span></a>
       <a href="#features"><span data-en>Features</span><span data-de>Funktionen</span></a>
+      <a href="#customize"><span data-en>Styles</span><span data-de>Designs</span></a>
       <a href="#download">Download</a>
       <a href="install.html"><span data-en>Install guide</span><span data-de>Anleitung</span></a>
       <a href="#security"><span data-en>Security</span><span data-de>Sicherheit</span></a>
       <a href="#open-source">Open Source</a>
-      <a href="#about"><span data-en>About</span><span data-de>Über</span></a>
+      <a href="#share"><span data-en>Share</span><span data-de>Teilen</span></a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
       <button type="button" id="langEn" data-setlang="en" aria-pressed="true">EN</button>
@@ -564,7 +658,7 @@ footer .small{color:var(--muted)}
   <div class="wrap hero-grid">
     <div>
       <div class="eyebrow rise" style="--d:0"><span data-en>Free · open source · for 3D artists</span><span data-de>Kostenlos · Open Source · für 3D-Artists</span></div>
-      <h1 class="rise" style="margin-top:14px;--d:1"><span data-en>Plan your 3D project like a <em>production</em>.</span><span data-de>Plane dein 3D-Projekt wie eine <em>Produktion</em>.</span></h1>
+      <h1 class="rise" style="margin-top:14px;--d:1"><span data-en>Plan your <span class="rot" data-words="3D project|short film|creature|game asset|diorama|portfolio piece">3D project</span> like a <em>production</em>.</span><span data-de>Plane <span class="rot" data-words="dein 3D-Projekt|deinen Kurzfilm|deine Kreatur|dein Game-Asset|dein Diorama|dein Portfolio-Piece">dein 3D-Projekt</span> wie eine <em>Produktion</em>.</span></h1>
       <p class="lead rise" style="--d:2"><span data-en>VertexForge Studio keeps pipeline, deadlines, references, shots and story of a personal 3D project in one calm place – next to Blender, ZBrush, Substance and the rest of your tools.</span><span data-de>VertexForge Studio hält Pipeline, Deadlines, Referenzen, Shots und Story eines persönlichen 3D-Projekts an einem ruhigen Ort zusammen – neben Blender, ZBrush, Substance und deinen anderen Programmen.</span></p>
       <div class="ctas rise" style="--d:3">
         <a class="btn primary" id="heroDl" data-gh="releases/latest/download/VertexForge-Studio-Setup.exe" href="#download">
@@ -627,6 +721,33 @@ footer .small{color:var(--muted)}
   </div>
 </section>
 
+<section id="flow">
+  <div class="wrap flow-grid">
+    <div class="reveal">
+      <div class="eyebrow"><span data-en>New in 2.9 · Made for flow</span><span data-de>Neu in 2.9 · Für deinen Flow</span></div>
+      <h2 style="margin-top:12px"><span data-en>Catch the idea. Keep sculpting.</span><span data-de>Idee festhalten. Weiter sculpten.</span></h2>
+      <p class="lead" style="margin-top:14px"><span data-en>Press <kbd>Q</kbd> anywhere – like Blender’s quick menu – and drop a task, a note or a shot into your project without leaving what you are doing. The library shows what is <b>up next</b> across all projects, and every number in the pipeline is a shortcut.</span><span data-de>Drück überall <kbd>Q</kbd> – wie Blenders Schnellmenü – und leg eine Aufgabe, Notiz oder einen Shot ins Projekt, ohne die Arbeit zu verlassen. Die Bibliothek zeigt, was <b>als Nächstes</b> ansteht, über alle Projekte, und jede Zahl in der Pipeline ist eine Abkürzung.</span></p>
+      <ul class="flow-list">
+        <li><b>Q</b><span><span data-en>Quick capture: task, note or shot in two seconds</span><span data-de>Schnell erfassen: Aufgabe, Notiz oder Shot in zwei Sekunden</span></span></li>
+        <li><b>↗</b><span><span data-en>Up next: tick off the most urgent tasks right from the library</span><span data-de>Als Nächstes: die dringendsten Aufgaben direkt in der Bibliothek abhaken</span></span></li>
+        <li><b>#</b><span><span data-en>Click “Overdue” or “Critical” and the pipeline filters itself</span><span data-de>„Überfällig“ oder „Kritisch“ anklicken, und die Pipeline filtert sich</span></span></li>
+        <li><b>⌘K</b><span><span data-en>Find any task, card, shot or chapter</span><span data-de>Jede Aufgabe, Karte, Szene oder jedes Kapitel finden</span></span></li>
+      </ul>
+    </div>
+    <div class="qc-demo reveal" id="qcDemo" aria-label="Try quick capture">
+      <div class="qd-head"><span class="qd-dots"><i></i><i></i><i></i></span><span data-en>Try it – type and press Enter</span><span data-de>Probier’s – tippen und Enter drücken</span></div>
+      <div class="qd-kinds" role="tablist">
+        <button type="button" class="on" data-k="task"><span data-en>Task</span><span data-de>Aufgabe</span></button>
+        <button type="button" data-k="note"><span data-en>Note</span><span data-de>Notiz</span></button>
+        <button type="button" data-k="shot">Shot</button>
+      </div>
+      <form class="qd-form" id="qdForm" autocomplete="off"><input id="qdIn" maxlength="70" aria-label="Quick capture"><button type="submit" aria-label="Add">↵</button></form>
+      <div class="qd-out" id="qdOut"></div>
+      <p class="qd-foot"><span data-en>This is a tiny demo on this page – nothing is saved.</span><span data-de>Das ist nur eine kleine Demo auf dieser Seite – nichts wird gespeichert.</span></p>
+    </div>
+  </div>
+</section>
+
 <section id="customize" class="alt">
   <div class="wrap">
     <div class="head reveal">
@@ -635,22 +756,31 @@ footer .small{color:var(--muted)}
       <p class="lead"><span data-en>Put your projects on a DVD shelf, tape them to a wall as film posters, bind them in leather or hang them in a gallery. Plan the pipeline on a blueprint, write the story on a typewriter page. Only the look changes: every feature and every overview stays exactly where it is.</span><span data-de>Stell deine Projekte als DVDs ins Regal, kleb sie als Filmposter an die Wand, bind sie in Leder oder häng sie in eine Galerie. Plane die Pipeline auf einer Blaupause, schreib die Story auf einer Schreibmaschinenseite. Nur die Optik ändert sich: Jede Funktion und jede Übersicht bleibt genau da, wo sie ist.</span></p>
     </div>
     <figure class="showcase reveal" aria-label="Design styles">
-      <ol class="sc-areas" aria-hidden="true">
-        <li data-area="library"><span data-en>Library</span><span data-de>Bibliothek</span></li>
-        <li data-area="pipeline">Pipeline</li>
-        <li data-area="board"><span data-en>Mind board</span><span data-de>Denkbrett</span></li>
-        <li data-area="shots"><span data-en>Shot list</span><span data-de>Shotlist</span></li>
-        <li data-area="story">Story</li>
-      </ol>
-      <div class="show-stage" id="show">
+      <div class="sc-areas" role="tablist" id="scAreas">
+        <button type="button" data-area="all" class="on"><span data-en>All</span><span data-de>Alle</span><b></b></button>
+        <button type="button" data-area="library"><span data-en>Library</span><span data-de>Bibliothek</span><b></b></button>
+        <button type="button" data-area="pipeline">Pipeline<b></b></button>
+        <button type="button" data-area="board"><span data-en>Mind board</span><span data-de>Denkbrett</span><b></b></button>
+        <button type="button" data-area="shots"><span data-en>Shot list</span><span data-de>Shotlist</span><b></b></button>
+        <button type="button" data-area="story">Story<b></b></button>
+      </div>
+      <div class="show-stage" id="show" tabindex="0" aria-roledescription="carousel" aria-label="Design styles">
         <img class="show-img on" src="assets/custom-lib-books.webp" alt="" width="1360" height="820">
         <img class="show-img" src="" alt="" width="1360" height="820">
         <div class="show-tag"><span class="show-kind" id="showKind"></span><span class="show-name" id="showName"></span></div>
+        <div class="show-ctl">
+          <button type="button" id="showPrev" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <span class="show-count" id="showCount">1 / 1</span>
+          <button type="button" id="showPlay" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+          <button type="button" id="showDice" aria-label="Surprise me"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg></button>
+          <button type="button" id="showNext" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="show-hint" aria-hidden="true"><span data-en>← → or swipe · click a style below</span><span data-de>← → oder wischen · unten einen Stil anklicken</span></div>
         <div class="show-bar"><i id="showBar"></i></div>
         <div class="tr-title" id="trTitle" aria-hidden="true"></div>
         <div class="tr-flash" id="trFlash" aria-hidden="true"></div>
       </div>
-      <div class="sc-strip" aria-hidden="true"><div class="sc-track" id="scTrack"><img src="assets/custom-lib-books-t.webp" alt="" width="136" height="82" data-k="lib-books" loading="lazy"><img src="assets/custom-lib-dvd-t.webp" alt="" width="136" height="82" data-k="lib-dvd" loading="lazy"><img src="assets/custom-lib-posters-t.webp" alt="" width="136" height="82" data-k="lib-posters" loading="lazy"><img src="assets/custom-lib-gallery-t.webp" alt="" width="136" height="82" data-k="lib-gallery" loading="lazy"><img src="assets/custom-pipeline-blueprint-t.webp" alt="" width="136" height="82" data-k="pipeline-blueprint" loading="lazy"><img src="assets/custom-pipeline-paper-t.webp" alt="" width="136" height="82" data-k="pipeline-paper" loading="lazy"><img src="assets/custom-pipeline-kraft-t.webp" alt="" width="136" height="82" data-k="pipeline-kraft" loading="lazy"><img src="assets/custom-cards-board-t.webp" alt="" width="136" height="82" data-k="cards-board" loading="lazy"><img src="assets/custom-cards-deck-t.webp" alt="" width="136" height="82" data-k="cards-deck" loading="lazy"><img src="assets/custom-board-desk-t.webp" alt="" width="136" height="82" data-k="board-desk" loading="lazy"><img src="assets/custom-board-workshop-t.webp" alt="" width="136" height="82" data-k="board-workshop" loading="lazy"><img src="assets/custom-board-felt-t.webp" alt="" width="136" height="82" data-k="board-felt" loading="lazy"><img src="assets/custom-board-pinboard-t.webp" alt="" width="136" height="82" data-k="board-pinboard" loading="lazy"><img src="assets/custom-board-blueprint-t.webp" alt="" width="136" height="82" data-k="board-blueprint" loading="lazy"><img src="assets/custom-board-chalk-t.webp" alt="" width="136" height="82" data-k="board-chalk" loading="lazy"><img src="assets/custom-board-glass-t.webp" alt="" width="136" height="82" data-k="board-glass" loading="lazy"><img src="assets/custom-shots-film-t.webp" alt="" width="136" height="82" data-k="shots-film" loading="lazy"><img src="assets/custom-shots-paper-t.webp" alt="" width="136" height="82" data-k="shots-paper" loading="lazy"><img src="assets/custom-story-typewriter-t.webp" alt="" width="136" height="82" data-k="story-typewriter" loading="lazy"><img src="assets/custom-story-parchment-t.webp" alt="" width="136" height="82" data-k="story-parchment" loading="lazy"><img src="assets/custom-story-night-t.webp" alt="" width="136" height="82" data-k="story-night" loading="lazy"><img src="assets/custom-designer-t.webp" alt="" width="136" height="82" data-k="designer" loading="lazy"><img src="assets/custom-lib-books-t.webp" alt="" width="136" height="82" data-k="lib-books" loading="lazy"><img src="assets/custom-lib-dvd-t.webp" alt="" width="136" height="82" data-k="lib-dvd" loading="lazy"><img src="assets/custom-lib-posters-t.webp" alt="" width="136" height="82" data-k="lib-posters" loading="lazy"><img src="assets/custom-lib-gallery-t.webp" alt="" width="136" height="82" data-k="lib-gallery" loading="lazy"><img src="assets/custom-pipeline-blueprint-t.webp" alt="" width="136" height="82" data-k="pipeline-blueprint" loading="lazy"><img src="assets/custom-pipeline-paper-t.webp" alt="" width="136" height="82" data-k="pipeline-paper" loading="lazy"><img src="assets/custom-pipeline-kraft-t.webp" alt="" width="136" height="82" data-k="pipeline-kraft" loading="lazy"><img src="assets/custom-cards-board-t.webp" alt="" width="136" height="82" data-k="cards-board" loading="lazy"><img src="assets/custom-cards-deck-t.webp" alt="" width="136" height="82" data-k="cards-deck" loading="lazy"><img src="assets/custom-board-desk-t.webp" alt="" width="136" height="82" data-k="board-desk" loading="lazy"><img src="assets/custom-board-workshop-t.webp" alt="" width="136" height="82" data-k="board-workshop" loading="lazy"><img src="assets/custom-board-felt-t.webp" alt="" width="136" height="82" data-k="board-felt" loading="lazy"><img src="assets/custom-board-pinboard-t.webp" alt="" width="136" height="82" data-k="board-pinboard" loading="lazy"><img src="assets/custom-board-blueprint-t.webp" alt="" width="136" height="82" data-k="board-blueprint" loading="lazy"><img src="assets/custom-board-chalk-t.webp" alt="" width="136" height="82" data-k="board-chalk" loading="lazy"><img src="assets/custom-board-glass-t.webp" alt="" width="136" height="82" data-k="board-glass" loading="lazy"><img src="assets/custom-shots-film-t.webp" alt="" width="136" height="82" data-k="shots-film" loading="lazy"><img src="assets/custom-shots-paper-t.webp" alt="" width="136" height="82" data-k="shots-paper" loading="lazy"><img src="assets/custom-story-typewriter-t.webp" alt="" width="136" height="82" data-k="story-typewriter" loading="lazy"><img src="assets/custom-story-parchment-t.webp" alt="" width="136" height="82" data-k="story-parchment" loading="lazy"><img src="assets/custom-story-night-t.webp" alt="" width="136" height="82" data-k="story-night" loading="lazy"><img src="assets/custom-designer-t.webp" alt="" width="136" height="82" data-k="designer" loading="lazy"></div></div>
+      <div class="sc-strip" id="scStrip"><div class="sc-track" id="scTrack" role="listbox" aria-label="Styles"></div></div>
     </figure>
     <div class="cz-facts reveal-stagger">
       <div><b class="num">5</b><h3><span data-en>Library looks</span><span data-de>Bibliotheks-Looks</span></h3><p><span data-en>Studio, DVD shelf, poster wall, leather books, gallery. Progress and deadlines stay visible on every one.</span><span data-de>Studio, DVD-Regal, Poster-Wand, Lederbücher, Galerie. Fortschritt und Fristen bleiben überall sichtbar.</span></p></div>
@@ -847,6 +977,47 @@ footer .small{color:var(--muted)}
       <div><h3><span data-en>Check it yourself</span><span data-de>Selbst prüfen</span></h3><p><span data-en>Windows: <kbd>certutil -hashfile FILE SHA256</kbd> · Mac: <kbd>shasum -a 256 FILE</kbd> · Linux: <kbd>sha256sum FILE</kbd>. The result must match the table above.</span><span data-de>Windows: <kbd>certutil -hashfile DATEI SHA256</kbd> · Mac: <kbd>shasum -a 256 DATEI</kbd> · Linux: <kbd>sha256sum DATEI</kbd>. Das Ergebnis muss mit der Tabelle oben übereinstimmen.</span></p></div>
       <div><h3><span data-en>Read the code</span><span data-de>Den Code lesen</span></h3><p><span data-en>Everything is open: the app, the installer, the build script and the automated release. Nothing is built outside the public repository.</span><span data-de>Alles ist offen: App, Installer, Build-Skript und das automatische Release. Nichts wird außerhalb des öffentlichen Repositorys gebaut.</span></p></div>
       <div><h3><span data-en>Found a problem?</span><span data-de>Ein Problem gefunden?</span></h3><p><span data-en>Security issues can be reported privately via a <a data-gh="security/advisories/new" href="#security">GitHub security advisory</a>. Everything else: <a href="#report">open an issue</a>.</span><span data-de>Sicherheitslücken kannst du vertraulich über ein <a data-gh="security/advisories/new" href="#security">GitHub Security Advisory</a> melden. Alles andere: <a href="#report">Issue öffnen</a>.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="share" class="alt">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span data-en>Spread the word</span><span data-de>Erzähl es weiter</span></div>
+      <h2><span data-en>Know a 3D artist drowning in sticky notes?</span><span data-de>Kennst du 3D-Artists, die in Zetteln versinken?</span></h2>
+      <p class="lead"><span data-en>VertexForge has no ads, no tracking and no marketing budget. It grows only when artists tell each other about it. If it helps you, a share or a star on GitHub means a lot.</span><span data-de>VertexForge hat keine Werbung, kein Tracking und kein Marketing-Budget. Es wächst nur, wenn Artists einander davon erzählen. Wenn es dir hilft, bedeutet ein Teilen oder ein Stern auf GitHub sehr viel.</span></p>
+    </div>
+    <div class="share-grid reveal-stagger">
+      <div class="share-card">
+        <h3><span data-en>Share in one click</span><span data-de>Mit einem Klick teilen</span></h3>
+        <div class="share-btns">
+          <a class="sbtn" id="shReddit" target="_blank" rel="noopener">Reddit</a>
+          <a class="sbtn" id="shBsky" target="_blank" rel="noopener">Bluesky</a>
+          <a class="sbtn" id="shX" target="_blank" rel="noopener">X</a>
+          <button type="button" class="sbtn" id="shCopy"><span data-en>Copy link</span><span data-de>Link kopieren</span></button>
+          <a class="sbtn star" data-gh="" href="#share">★ <span data-en>Star on GitHub</span><span data-de>Stern auf GitHub</span></a>
+        </div>
+        <p class="small"><span data-en>The buttons are plain links: no share widgets, no cookies, nothing loads until you click.</span><span data-de>Die Knöpfe sind einfache Links: keine Share-Widgets, keine Cookies, nichts lädt, bevor du klickst.</span></p>
+        <div class="pitch"><span class="k"><span data-en>Ready-made post</span><span data-de>Fertiger Beitrag</span></span><p id="pitch"></p><button type="button" class="copy" id="pitchCopy">copy</button></div>
+      </div>
+      <div class="share-card">
+        <h3><span data-en>“Planned with VertexForge” badge</span><span data-de>Badge „Planned with VertexForge“</span></h3>
+        <p><span data-en>Put it on your ArtStation description, portfolio or a project README. It links back here.</span><span data-de>Für deine ArtStation-Beschreibung, dein Portfolio oder eine Projekt-README. Er verlinkt hierher.</span></p>
+        <a class="badge-prev" href="https://vertexforge.pages.dev" target="_blank" rel="noopener"><img src="assets/badge-planned.svg" alt="Planned with VertexForge" width="210" height="32"></a>
+        <div class="snip"><div class="snip-tabs"><button type="button" class="on" data-snip="md">Markdown</button><button type="button" data-snip="html">HTML</button></div><code id="snipCode"></code><button type="button" class="copy" id="snipCopy">copy</button></div>
+      </div>
+      <div class="share-card">
+        <h3><span data-en>Press &amp; brand kit</span><span data-de>Presse- &amp; Markenkit</span></h3>
+        <p><span data-en>Writing about it or making a video? Use these freely.</span><span data-de>Du schreibst darüber oder machst ein Video? Nutze das gerne.</span></p>
+        <ul class="kit">
+          <li><img src="assets/logo.svg" alt="" width="34" height="34"><span><b>Logo</b> <a href="assets/logo.svg" download>SVG</a> · <a href="assets/logo-256.png" download>PNG</a></span></li>
+          <li><img src="assets/og-card.jpg" alt="" width="60" height="32" class="wide"><span><b><span data-en>Share image</span><span data-de>Teilen-Bild</span></b> <a href="assets/og-card.jpg" download>1200×630</a></span></li>
+          <li><img src="assets/shot-projects.webp" alt="" width="60" height="32" class="wide"><span><b>Screenshots</b> <a href="assets/shot-projects.webp" download><span data-en>Library</span><span data-de>Bibliothek</span></a> · <a href="assets/shot-pipeline.webp" download>Pipeline</a> · <a href="assets/shot-board-studio.webp" download><span data-en>Board</span><span data-de>Denkbrett</span></a></span></li>
+        </ul>
+        <div class="swatches"><button type="button" style="--c:#cfa75c" data-hex="#CFA75C"><i></i>Brass</button><button type="button" style="--c:#1d1a16" data-hex="#1D1A16"><i></i>Ink</button><button type="button" style="--c:#ece6da" data-hex="#ECE6DA"><i></i>Parchment</button><button type="button" style="--c:#7fb6a5" data-hex="#7FB6A5"><i></i>Patina</button></div>
+        <p class="small"><span data-en>Typefaces: Cinzel (titles), Inter (text), JetBrains Mono (labels).</span><span data-de>Schriften: Cinzel (Titel), Inter (Text), JetBrains Mono (Beschriftungen).</span></p>
+      </div>
     </div>
   </div>
 </section>
@@ -1069,44 +1240,121 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
     ['story-night','Story','Story','Night','Nacht','story'],
     ['designer','Covers','Cover','Cover designer','Cover-Designer','library']
   ];
+  /* Interaktive Design-Vorstellung: läuft von selbst wie ein Trailer, lässt sich aber jederzeit steuern:
+     Bereich wählen, Stil anklicken oder überfahren, Pfeile/Wischen, Würfel, Pause. */
   const imgs = [...document.querySelectorAll('.show-img')], kind = document.getElementById('showKind'), nm = document.getElementById('showName'), bar = document.getElementById('showBar');
-  let si = 0, front = 0, showT = null, showVis = false;
-  const label = () => { const d = SHOW[si], de = VF.lang==='de'; kind.textContent = de ? d[2] : d[1]; nm.textContent = de ? d[4] : d[3]; imgs[front].alt = kind.textContent + ': ' + nm.textContent;
-    document.querySelectorAll('.sc-areas li').forEach(li=>li.classList.toggle('on', li.dataset.area===d[5]));
-    document.querySelectorAll('#scTrack img').forEach(im=>im.classList.toggle('on', im.dataset.k===d[0])); };
-  /* Trailer: schnelle Schnitte, jeder Übergang anders; beim Bereichswechsel blitzt der Bereichsname auf */
-  const TRANS = ['wipe','zoom','iris','slide','split','tilt'], AREA = {library:['Library','Bibliothek'], pipeline:['Pipeline','Pipeline'], board:['Mind board','Denkbrett'], shots:['Shot list','Shotlist'], story:['Story','Story']};
   const stage = document.getElementById('show'), trTitle = document.getElementById('trTitle'), trFlash = document.getElementById('trFlash');
-  let ti = 0, SCENE = 1500;
-  function nextShow(){
-    const prevArea = SHOW[si][5];
-    si = (si + 1) % SHOW.length;
-    const inc = imgs[1 - front], out = imgs[front], pre = new Image(), tr = TRANS[ti++ % TRANS.length];
-    pre.onload = () => {
+  const track = document.getElementById('scTrack'), areasEl = document.getElementById('scAreas'), countEl = document.getElementById('showCount'), playBtn = document.getElementById('showPlay');
+  const TRANS = ['wipe','zoom','iris','slide','split','tilt'], AREA = {library:['Library','Bibliothek'], pipeline:['Pipeline','Pipeline'], board:['Mind board','Denkbrett'], shots:['Shot list','Shotlist'], story:['Story','Story']};
+  let si = 0, front = 0, showT = null, showVis = false, ti = 0, area = 'all', user = false, idleT = 0, busy = false;
+  const SCENE = 2200, list = () => SHOW.map((d,i)=>i).filter(i=>area==='all' || SHOW[i][5]===area);
+  areasEl.querySelectorAll('[data-area]').forEach(b=>{ const n = b.dataset.area==='all' ? SHOW.length : SHOW.filter(d=>d[5]===b.dataset.area).length; b.querySelector('b').textContent = n; });
+  track.innerHTML = SHOW.map((d,i)=>`<button type="button" role="option" data-i="${i}" data-area="${d[5]}"><img src="assets/custom-${d[0]}-t.webp" alt="" width="136" height="82" loading="lazy"><span data-en>${d[3]}</span><span data-de>${d[4]}</span></button>`).join('');
+  const label = () => {
+    const d = SHOW[si], de = VF.lang==='de', L = list();
+    kind.textContent = de ? d[2] : d[1]; nm.textContent = de ? d[4] : d[3]; imgs[front].alt = kind.textContent + ': ' + nm.textContent;
+    countEl.textContent = (L.indexOf(si) + 1) + ' / ' + L.length;
+    track.querySelectorAll('[data-i]').forEach(b=>{ const on = +b.dataset.i===si; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); b.hidden = area!=='all' && b.dataset.area!==area; });
+    const cur = track.querySelector('.on'); if(cur && showVis){ const sr = track.parentNode, x = cur.offsetLeft - sr.clientWidth/2 + cur.offsetWidth/2; sr.scrollTo({left:x, behavior:VF.still ? 'auto' : 'smooth'}); }
+  };
+  function show(n, dir){
+    if(n===si || busy) return;
+    const prevArea = SHOW[si][5]; si = n; busy = true;
+    const inc = imgs[1 - front], out = imgs[front], pre = new Image(), tr = dir < 0 ? 'slideback' : TRANS[ti++ % TRANS.length];
+    pre.onload = pre.onerror = () => {
       inc.className = 'show-img'; inc.src = pre.src; void inc.offsetWidth;
       inc.classList.add('on', 'enter', 'tr-' + tr); out.classList.add('leave');
-      setTimeout(()=>{ out.className = 'show-img'; inc.classList.remove('enter', 'tr-' + tr); }, 520);
+      setTimeout(()=>{ out.className = 'show-img'; inc.classList.remove('enter', 'tr-' + tr); busy = false; }, 520);
       front = 1 - front; label();
       stage.classList.remove('flip'); void stage.offsetWidth; stage.classList.add('flip');
-      if(SHOW[si][5]!==prevArea){
-        trTitle.textContent = AREA[SHOW[si][5]][VF.lang==='de'?1:0];
-        trTitle.classList.remove('go'); trFlash.classList.remove('go'); void trTitle.offsetWidth; trTitle.classList.add('go'); trFlash.classList.add('go');
-      }
+      if(SHOW[si][5]!==prevArea){ trTitle.textContent = AREA[SHOW[si][5]][VF.lang==='de'?1:0]; trTitle.classList.remove('go'); trFlash.classList.remove('go'); void trTitle.offsetWidth; trTitle.classList.add('go'); trFlash.classList.add('go'); }
     };
     pre.src = 'assets/custom-' + SHOW[si][0] + '.webp';
   }
+  const step = d => { const L = list(), k = L.indexOf(si); show(L[((k < 0 ? -1 : k) + d + L.length) % L.length], d); };
   function runShow(){
     clearInterval(showT); bar.classList.remove('run');
-    if(VF.still || !showVis || document.hidden || stage.classList.contains('paused')) return;
+    const paused = VF.still || !showVis || document.hidden || stage.classList.contains('paused') || stage.classList.contains('stopped');
+    playBtn.setAttribute('aria-label', stage.classList.contains('stopped') ? 'Play' : 'Pause');
+    if(paused) return;
     void bar.offsetWidth; bar.classList.add('run');
-    showT = setInterval(()=>{ nextShow(); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); }, SCENE);
+    showT = setInterval(()=>{ step(1); bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); }, SCENE);
   }
-  stage.addEventListener('mouseenter', ()=>{ stage.classList.add('paused'); runShow(); });
-  stage.addEventListener('mouseleave', ()=>{ stage.classList.remove('paused'); runShow(); });
-  if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{ showVis = e.isIntersecting; runShow(); }), {threshold:.3}).observe(document.getElementById('show'));
+  /* Nach einer Bedienung kurz innehalten, dann läuft der Trailer weiter */
+  const touched = () => { stage.classList.add('paused'); runShow(); clearTimeout(idleT); idleT = setTimeout(()=>{ stage.classList.remove('paused'); runShow(); }, 7000); };
+  document.getElementById('showPrev').onclick = () => { step(-1); touched(); };
+  document.getElementById('showNext').onclick = () => { step(1); touched(); };
+  document.getElementById('showDice').onclick = () => { const L = list().filter(i=>i!==si); show(L[Math.floor(Math.random()*L.length)], 1); stage.classList.remove('roll'); void stage.offsetWidth; stage.classList.add('roll'); touched(); };
+  playBtn.onclick = () => { stage.classList.toggle('stopped'); runShow(); };
+  areasEl.onclick = e => { const b = e.target.closest('[data-area]'); if(!b) return;
+    area = b.dataset.area; areasEl.querySelectorAll('[data-area]').forEach(x=>x.classList.toggle('on', x===b));
+    const L = list(); if(!L.includes(si)) show(L[0], 1); else label(); touched(); };
+  track.onclick = e => { const b = e.target.closest('[data-i]'); if(b){ show(+b.dataset.i, 1); touched(); } };
+  let hoverT = 0;
+  track.onpointerover = e => { const b = e.target.closest('[data-i]'); if(!b || e.pointerType==='touch') return; clearTimeout(hoverT); hoverT = setTimeout(()=>{ show(+b.dataset.i, 1); touched(); }, 220); };
+  track.onpointerleave = () => clearTimeout(hoverT);
+  stage.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'){ e.preventDefault(); step(1); touched(); } if(e.key==='ArrowLeft'){ e.preventDefault(); step(-1); touched(); } if(e.key===' '){ e.preventDefault(); playBtn.click(); } });
+  /* Wischen auf dem Touchscreen, leichte Neigung mit der Maus */
+  let sx = null;
+  stage.addEventListener('pointerdown', e=>{ if(e.target.closest('button')) return; sx = e.clientX; });
+  stage.addEventListener('pointerup', e=>{ if(sx===null) return; const dx = e.clientX - sx; sx = null; if(Math.abs(dx) > 40){ step(dx < 0 ? 1 : -1); touched(); } });
+  stage.addEventListener('pointermove', e=>{ if(e.pointerType==='touch' || VF.still) return; const r = stage.getBoundingClientRect(), x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
+    stage.style.setProperty('--sx', (x*-4).toFixed(2) + 'deg'); stage.style.setProperty('--sy', (y*3).toFixed(2) + 'deg'); stage.style.setProperty('--gx', ((x+.5)*100).toFixed(1) + '%'); stage.style.setProperty('--gy', ((y+.5)*100).toFixed(1) + '%'); });
+  stage.addEventListener('mouseenter', ()=>{ stage.classList.add('paused', 'hov'); runShow(); });
+  stage.addEventListener('mouseleave', ()=>{ stage.classList.remove('paused', 'hov'); stage.style.removeProperty('--sx'); stage.style.removeProperty('--sy'); runShow(); });
+  if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{ showVis = e.isIntersecting; runShow(); if(showVis) label(); }), {threshold:.3}).observe(stage);
   document.addEventListener('visibilitychange', runShow);
-  SHOW.forEach(d=>{ const i = new Image(); i.src = 'assets/custom-' + d[0] + '.webp'; });
   VF.onLang.push(label); label();
+
+  /* Überschrift: das Projekt wechselt – Kurzfilm, Kreatur, Game-Asset … */
+  if(!VF.still) document.querySelectorAll('.rot').forEach(el=>{
+    const words = el.dataset.words.split('|'); let i = 0;
+    /* Platz für das längste Wort reservieren, damit die Zeilen nicht springen */
+    const fit = () => { if(!el.offsetParent) return; const cur = el.textContent; el.style.minWidth = '0'; let m = 0; words.forEach(w=>{ el.textContent = w; m = Math.max(m, el.offsetWidth); }); el.textContent = cur; el.style.minWidth = m + 'px'; };
+    fit(); VF.onLang.push(()=>setTimeout(fit, 0)); addEventListener('resize', fit); document.fonts && document.fonts.ready.then(fit);
+    setInterval(()=>{ if(document.hidden) return; i = (i + 1) % words.length; el.classList.add('out');
+      setTimeout(()=>{ el.textContent = words[i]; el.classList.remove('out'); el.classList.add('in'); setTimeout(()=>el.classList.remove('in'), 450); }, 280); }, 2600);
+  });
+
+  /* Teilen: einfache Links, fertiger Text, Badge-Code, Markenfarben */
+  const URL_ = 'https://vertexforge.pages.dev';
+  const PITCH = ['VertexForge Studio – a free, open-source planner for 3D projects: pipeline with deadlines, an infinite mind board with collectible asset cards, shot list and story. Offline, no account, Windows/Mac/Linux. ' + URL_,
+    'VertexForge Studio – ein kostenloser Open-Source-Planer für 3D-Projekte: Pipeline mit Deadlines, ein unendliches Denkbrett mit Asset-Sammelkarten, Shotlist und Story. Offline, ohne Konto, Windows/Mac/Linux. ' + URL_];
+  const shareSet = () => { const de = VF.lang==='de', txt = PITCH[de?1:0], short = de ? 'VertexForge Studio – kostenloser Planer für 3D-Projekte' : 'VertexForge Studio – a free planner for 3D projects';
+    document.getElementById('pitch').textContent = txt;
+    document.getElementById('shReddit').href = 'https://www.reddit.com/submit?url=' + encodeURIComponent(URL_) + '&title=' + encodeURIComponent(short);
+    document.getElementById('shBsky').href = 'https://bsky.app/intent/compose?text=' + encodeURIComponent(txt);
+    document.getElementById('shX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(short) + '&url=' + encodeURIComponent(URL_); };
+  if(document.getElementById('pitch')){
+    VF.onLang.push(shareSet); shareSet();
+    const copyBtn = (btn, get) => btn.addEventListener('click', ()=>{ const done = () => { const o = btn.innerHTML; btn.classList.add('ok'); btn.textContent = '✓'; setTimeout(()=>{ btn.innerHTML = o; btn.classList.remove('ok'); }, 1300); }; try{ navigator.clipboard.writeText(get()).then(done, done); }catch(e){} });
+    copyBtn(document.getElementById('shCopy'), ()=>URL_);
+    copyBtn(document.getElementById('pitchCopy'), ()=>document.getElementById('pitch').textContent);
+    const SNIP = {md:'[![Planned with VertexForge](' + URL_ + '/assets/badge-planned.svg)](' + URL_ + ')', html:'<a href="' + URL_ + '"><img src="' + URL_ + '/assets/badge-planned.svg" alt="Planned with VertexForge" width="210" height="32"></a>'};
+    let snip = 'md'; const sc = document.getElementById('snipCode'); sc.textContent = SNIP.md;
+    document.querySelectorAll('[data-snip]').forEach(b=>b.onclick = () => { snip = b.dataset.snip; sc.textContent = SNIP[snip]; document.querySelectorAll('[data-snip]').forEach(x=>x.classList.toggle('on', x===b)); });
+    copyBtn(document.getElementById('snipCopy'), ()=>SNIP[snip]);
+    document.querySelectorAll('.swatches [data-hex]').forEach(b=>copyBtn(b, ()=>b.dataset.hex));
+  }
+
+  /* Mini-Demo „Schnell erfassen“ */
+  const qd = document.getElementById('qcDemo');
+  if(qd){
+    const inp = document.getElementById('qdIn'), out = document.getElementById('qdOut');
+    const PH = {task:['Retopo the hands','Hände retopologisieren'], note:['Reference: wet frog skin','Referenz: nasse Froschhaut'], shot:['Close-up: the staff starts to glow','Close-up: der Stab beginnt zu leuchten']};
+    const ICO = {task:'☐', note:'✎', shot:'▣'}, WHERE = {task:['Pipeline · Sculpting','Pipeline · Sculpting'], note:['Mind board','Denkbrett'], shot:['Shot list · SH_040','Shotlist · SH_040']};
+    let k = 'task';
+    const ph = () => { inp.placeholder = PH[k][VF.lang==='de'?1:0]; };
+    qd.querySelector('.qd-kinds').onclick = e => { const b = e.target.closest('[data-k]'); if(!b) return; k = b.dataset.k; qd.querySelectorAll('[data-k]').forEach(x=>x.classList.toggle('on', x===b)); ph(); inp.focus(); };
+    inp.addEventListener('keydown', e=>{ if(e.key==='Tab' && !inp.value){ e.preventDefault(); const ks = ['task','note','shot']; qd.querySelector(`[data-k="${ks[(ks.indexOf(k)+1)%3]}"]`).click(); } });
+    document.getElementById('qdForm').onsubmit = e => {
+      e.preventDefault(); const v = (inp.value.trim() || inp.placeholder).slice(0,70);
+      const row = document.createElement('div'); row.className = 'qd-item ' + k;
+      row.innerHTML = `<i>${ICO[k]}</i><span></span><small>${WHERE[k][VF.lang==='de'?1:0]}</small>`; row.querySelector('span').textContent = v;
+      out.prepend(row); while(out.children.length > 4) out.lastChild.remove(); inp.value = '';
+    };
+    VF.onLang.push(ph); ph();
+  }
 
   /* Sammelkarten: austeilen, Licht folgt der Maus, Klick dreht um */
   const hand = document.getElementById('hand');
