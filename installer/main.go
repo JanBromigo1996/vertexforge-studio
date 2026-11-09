@@ -32,7 +32,7 @@ import (
 
 const (
 	appName    = "VertexForge Studio"
-	appVersion = "2.8.1"
+	appVersion = "2.9.0"
 	publisher  = "VertexForge"
 	exeName    = "VertexForge Studio.exe"
 	uninstName = "Uninstall VertexForge Studio.exe"

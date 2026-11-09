@@ -1,3 +1,26 @@
+## VertexForge Studio 2.9.0
+
+### Faster from idea to project
+- **Quick capture** – press **Q** anywhere (or the **+** in the top bar): type a task, a note or a shot and press
+  Enter. It lands in the right place without leaving what you are doing. **Tab** switches the type.
+- **Up next** in the library: the three most urgent open tasks across all projects. Tick them off right there
+  (with undo) or click to jump straight to the task in the pipeline.
+- **Quick jump** buttons on every project card: open it directly in pipeline, mind board, shot list or story.
+- **Pipeline numbers are shortcuts:** click "Overdue" or "Critical" to filter, "Next deadline" to jump to that
+  task. Phases without matches shrink to their header while a filter is on.
+
+### Calmer and sharper
+- **Collectible cards stay sharp** when you zoom into the mind board.
+- **Tooltips redesigned** to fit the app: accent edge, a small arrow, keyboard shortcuts as key caps; the board
+  toolbar uses the same style.
+- A phase's program list shows only the chips; the text field appears when you edit it.
+
+### Website
+- Interactive style showcase (areas, film strip, arrows, swipe, dice), a quick-capture demo, a share section with
+  a "Planned with VertexForge" badge and a press & brand kit.
+
+---
+
 ## VertexForge Studio 2.8.1
 
 An important update – especially for Linux.
