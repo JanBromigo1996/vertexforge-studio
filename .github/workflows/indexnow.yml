@@ -1,0 +1,23 @@
+# Meldet geänderte Seiten an Bing/DuckDuckGo/Yandex (IndexNow), damit sie schneller in der Suche auftauchen.
+name: Notify search engines
+
+on:
+  push:
+    branches: [main]
+    paths: ['docs/index.html', 'docs/install.html']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for the website to deploy
+        run: sleep 90
+      - name: Ping IndexNow
+        run: |
+          curl -sS -o /dev/null -w "IndexNow: %{http_code}\n" -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            -d '{"host":"vertexforge.pages.dev","key":"b7c2e9f04a1d4e6c8f35a2d9c1e0f7a4","keyLocation":"https://vertexforge.pages.dev/b7c2e9f04a1d4e6c8f35a2d9c1e0f7a4.txt","urlList":["https://vertexforge.pages.dev/","https://vertexforge.pages.dev/install.html"]}'
