@@ -389,8 +389,18 @@
       <div class="share-card">
         <h3><span data-en>“Planned with VertexForge” badge</span><span data-de>Badge „Planned with VertexForge“</span></h3>
         <p><span data-en>Put it on your ArtStation description, portfolio or a project README. It links back here.</span><span data-de>Für deine ArtStation-Beschreibung, dein Portfolio oder eine Projekt-README. Er verlinkt hierher.</span></p>
-        <a class="badge-prev" href="https://vertexforge.pages.dev" target="_blank" rel="noopener"><img src="assets/badge-planned.svg" alt="Planned with VertexForge" width="210" height="32"></a>
-        <div class="snip"><div class="snip-tabs"><button type="button" class="on" data-snip="md">Markdown</button><button type="button" data-snip="html">HTML</button></div><code id="snipCode"></code><button type="button" class="copy" id="snipCopy">copy</button></div>
+        <div class="badge-pick" role="radiogroup" aria-label="Badge style">
+          <button type="button" class="on" data-bv="" aria-checked="true"><img src="assets/badge-planned.svg" alt="Planned with VertexForge (dark)" width="210" height="32"></button>
+          <button type="button" data-bv="-light" aria-checked="false"><img src="assets/badge-planned-light.svg" alt="Planned with VertexForge (light)" width="210" height="32"></button>
+        </div>
+        <div class="badge-acts">
+          <a class="sbtn" id="bdPng" href="assets/badge-planned.png" download>⤓ PNG</a>
+          <a class="sbtn" id="bdSvg" href="assets/badge-planned.svg" download>⤓ SVG</a>
+          <button type="button" class="sbtn" id="bdCopyImg"><span data-en>Copy image</span><span data-de>Bild kopieren</span></button>
+        </div>
+        <div class="snip"><div class="snip-tabs"><button type="button" class="on" data-snip="text"><span data-en>Text</span><span data-de>Text</span></button><button type="button" data-snip="md">Markdown</button><button type="button" data-snip="html">HTML</button></div><code id="snipCode"></code><button type="button" class="copy" id="snipCopy">copy</button></div>
+        <p class="small"><span data-en>ArtStation, Instagram &amp; co.: download the PNG or copy the image, then paste the text line with the link. Websites and READMEs: use Markdown or HTML.</span><span data-de>ArtStation, Instagram &amp; Co.: PNG laden oder Bild kopieren und dazu die Textzeile mit Link einfügen. Websites und READMEs: Markdown oder HTML nehmen.</span></p>
+      </div>
       </div>
       <div class="share-card">
         <h3><span data-en>Press &amp; brand kit</span><span data-de>Presse- &amp; Markenkit</span></h3>
@@ -661,10 +671,21 @@
     const copyBtn = (btn, get) => btn.addEventListener('click', ()=>{ const done = () => { const o = btn.innerHTML; btn.classList.add('ok'); btn.textContent = '✓'; setTimeout(()=>{ btn.innerHTML = o; btn.classList.remove('ok'); }, 1300); }; try{ navigator.clipboard.writeText(get()).then(done, done); }catch(e){} });
     copyBtn(document.getElementById('shCopy'), ()=>URL_);
     copyBtn(document.getElementById('pitchCopy'), ()=>document.getElementById('pitch').textContent);
-    const SNIP = {md:'[![Planned with VertexForge](' + URL_ + '/assets/badge-planned.svg)](' + URL_ + ')', html:'<a href="' + URL_ + '"><img src="' + URL_ + '/assets/badge-planned.svg" alt="Planned with VertexForge" width="210" height="32"></a>'};
-    let snip = 'md'; const sc = document.getElementById('snipCode'); sc.textContent = SNIP.md;
-    document.querySelectorAll('[data-snip]').forEach(b=>b.onclick = () => { snip = b.dataset.snip; sc.textContent = SNIP[snip]; document.querySelectorAll('[data-snip]').forEach(x=>x.classList.toggle('on', x===b)); });
-    copyBtn(document.getElementById('snipCopy'), ()=>SNIP[snip]);
+    let bv = '';
+    const SNIP = () => ({text:(VF.lang==='de' ? 'Geplant mit VertexForge Studio – ' : 'Planned with VertexForge Studio – ') + URL_,
+      md:'[![Planned with VertexForge](' + URL_ + '/assets/badge-planned' + bv + '.svg)](' + URL_ + ')',
+      html:'<a href="' + URL_ + '"><img src="' + URL_ + '/assets/badge-planned' + bv + '.svg" alt="Planned with VertexForge" width="210" height="32"></a>'});
+    let snip = 'text'; const sc = document.getElementById('snipCode'), paintSnip = () => { sc.textContent = SNIP()[snip]; };
+    document.querySelectorAll('[data-snip]').forEach(b=>b.onclick = () => { snip = b.dataset.snip; paintSnip(); document.querySelectorAll('[data-snip]').forEach(x=>x.classList.toggle('on', x===b)); });
+    document.querySelectorAll('[data-bv]').forEach(b=>b.onclick = () => { bv = b.dataset.bv;
+      document.querySelectorAll('[data-bv]').forEach(x=>{ x.classList.toggle('on', x===b); x.setAttribute('aria-checked', x===b); });
+      document.getElementById('bdPng').href = 'assets/badge-planned' + bv + '.png'; document.getElementById('bdSvg').href = 'assets/badge-planned' + bv + '.svg'; paintSnip(); });
+    paintSnip(); VF.onLang.push(paintSnip);
+    /* Bild direkt in die Zwischenablage (Chrome, Edge, Safari); sonst wird das PNG geladen */
+    document.getElementById('bdCopyImg').onclick = async e => { const btn = e.currentTarget, url = 'assets/badge-planned' + bv + '.png';
+      try{ const blob = await (await fetch(url)).blob(); await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]); const o = btn.innerHTML; btn.classList.add('ok'); btn.textContent = '✓'; setTimeout(()=>{ btn.innerHTML = o; btn.classList.remove('ok'); }, 1300); }
+      catch(err){ const a = document.createElement('a'); a.href = url; a.download = 'badge-planned' + bv + '.png'; a.click(); } };
+    copyBtn(document.getElementById('snipCopy'), ()=>SNIP()[snip]);
     document.querySelectorAll('.swatches [data-hex]').forEach(b=>copyBtn(b, ()=>b.dataset.hex));
   }
 

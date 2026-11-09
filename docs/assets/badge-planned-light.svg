@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210" height="32" viewBox="0 0 210 32" role="img" aria-label="Planned with VertexForge">
+  <rect width="210" height="32" rx="8" fill="#f6f1e7"/>
+  <rect x=".5" y=".5" width="209" height="31" rx="7.5" fill="none" stroke="#b9853a" stroke-opacity=".6"/>
+  <g transform="translate(8 6) scale(.078)">
+    <polygon points="50,64 98,64 128,152 128,204" fill="#e9bb5c"/>
+    <polygon points="206,64 158,64 128,152 128,204" fill="#b9853a"/>
+    <polygon points="128,78 143,98 128,118 113,98" fill="#fff6dc"/>
+  </g>
+  <text x="34" y="20.5" fill="#6f6556" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11" letter-spacing=".3">Planned with</text>
+  <text x="107" y="20.5" fill="#2a241c" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="700" letter-spacing=".4">VertexForge</text>
+</svg>

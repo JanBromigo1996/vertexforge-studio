@@ -652,6 +652,12 @@ footer .small{color:var(--muted)}
 .cm-ask a{color:var(--brass)}
 @media (max-width:620px){.cm-tile.dl{grid-column:auto}}
 @media (prefers-reduced-motion:reduce){.live-dot{animation:none}}
+.badge-pick{display:flex;flex-wrap:wrap;gap:8px}
+.badge-pick button{padding:6px;border-radius:10px;border:2px solid transparent;background:none;cursor:pointer;line-height:0;transition:border-color .15s,transform .2s cubic-bezier(.34,1.5,.64,1)}
+.badge-pick button:hover{transform:translateY(-2px)}
+.badge-pick button.on{border-color:var(--brass)}
+.badge-pick img{max-width:100%;height:auto}
+.badge-acts{display:flex;flex-wrap:wrap;gap:8px}
 
 </style>
 
