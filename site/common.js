@@ -53,3 +53,20 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
 
   VF.setLang(VF.lang);
 })();
+
+// Demo-Video: Sprache wechseln, eigener Play-Knopf
+(()=>{
+  const v = document.getElementById('demoVid'), b = document.getElementById('demoPlay');
+  if(!v) return;
+  const fr = v.parentElement;
+  const sync = ()=>{
+    const l = VF.lang === 'de' ? 'de' : 'en', src = v.dataset['src' + (l==='de'?'De':'En')];
+    if(v.currentSrc && v.currentSrc.endsWith(src)) return;
+    const playing = !v.paused; v.poster = v.dataset['poster' + (l==='de'?'De':'En')];
+    v.querySelector('source').src = src; v.load(); if(playing) v.play().catch(()=>{});
+  };
+  VF.onLang.push(sync); sync();
+  b.addEventListener('click', ()=>{ v.play().catch(()=>{}); });
+  v.addEventListener('play', ()=>fr.classList.add('playing'));
+  v.addEventListener('ended', ()=>fr.classList.remove('playing'));
+})();

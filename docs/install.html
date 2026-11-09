@@ -664,6 +664,14 @@ footer .small{color:var(--muted)}
 .badge-pick img{max-width:100%;height:auto}
 .badge-acts{display:flex;flex-wrap:wrap;gap:8px}
 
+/* Demo-Video */
+.demo-frame{position:relative;max-width:1000px;margin:0 auto;border-radius:18px;overflow:hidden;border:1px solid var(--line,rgba(255,255,255,.1));box-shadow:0 30px 80px rgba(0,0,0,.45);background:#141316;aspect-ratio:16/9}
+.demo-frame video{display:block;width:100%;height:100%;object-fit:cover}
+.demo-play{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;border:1px solid rgba(207,167,92,.6);background:rgba(20,19,22,.72);backdrop-filter:blur(8px);color:#e2bf7a;display:grid;place-items:center;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),background .2s,opacity .25s}
+.demo-play:hover{transform:scale(1.08);background:rgba(207,167,92,.22)}
+.demo-play svg{margin-left:4px}
+.demo-frame.playing .demo-play{opacity:0;pointer-events:none}
+
 </style>
 </head>
 <body>
@@ -947,6 +955,23 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
   }
 
   VF.setLang(VF.lang);
+})();
+
+// Demo-Video: Sprache wechseln, eigener Play-Knopf
+(()=>{
+  const v = document.getElementById('demoVid'), b = document.getElementById('demoPlay');
+  if(!v) return;
+  const fr = v.parentElement;
+  const sync = ()=>{
+    const l = VF.lang === 'de' ? 'de' : 'en', src = v.dataset['src' + (l==='de'?'De':'En')];
+    if(v.currentSrc && v.currentSrc.endsWith(src)) return;
+    const playing = !v.paused; v.poster = v.dataset['poster' + (l==='de'?'De':'En')];
+    v.querySelector('source').src = src; v.load(); if(playing) v.play().catch(()=>{});
+  };
+  VF.onLang.push(sync); sync();
+  b.addEventListener('click', ()=>{ v.play().catch(()=>{}); });
+  v.addEventListener('play', ()=>fr.classList.add('playing'));
+  v.addEventListener('ended', ()=>fr.classList.remove('playing'));
 })();
 
 </script>
