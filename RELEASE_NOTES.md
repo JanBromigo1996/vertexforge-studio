@@ -19,6 +19,13 @@
 - Interactive style showcase (areas, film strip, arrows, swipe, dice), a quick-capture demo, a share section with
   a "Planned with VertexForge" badge and a press & brand kit.
 
+**ClamAV:** all 9 files clean (`clamscan.txt`).
+**VirusTotal (2.9.0):** Linux .deb and .tar.gz: 0 detections. Windows: 3 of about 70 – **Bkav Pro**
+`W32.Malware.DDFDC5D0` (generic), **CrowdStrike Falcon** `Win/malicious_confidence_60% (D)` and **Trapmine**
+`Malicious.moderate.ml.score` (machine-learning guesses, same as 2.8.0). macOS .dmg: 1 – **Microsoft**
+`Trojan:Script/Wacatac.C!ml` (machine-learning guess; the 2.8.0 DMG was clean). None names a real virus;
+all reported as false positives.
+
 ---
 
 ## VertexForge Studio 2.8.1
