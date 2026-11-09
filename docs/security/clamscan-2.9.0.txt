@@ -1,0 +1,25 @@
+LibClamAV Warning: **************************************************
+LibClamAV Warning: ***  The virus database is older than 7 days!  ***
+LibClamAV Warning: ***   Please update it as soon as possible.    ***
+LibClamAV Warning: **************************************************
+VertexForge-Studio-Setup.exe: OK
+VertexForge-Studio.exe: OK
+Uninstall-VertexForge-Studio.exe: OK
+WebView2Loader.dll: OK
+VertexForge-Studio-Portable.zip: OK
+VertexForge-Studio-macOS.dmg: OK
+VertexForge-Studio-linux-amd64.deb: OK
+VertexForge-Studio-linux-x86_64.tar.gz: OK
+VertexForge-Studio-Browser.html: OK
+
+----------- SCAN SUMMARY -----------
+Known viruses: 3628245
+Engine version: 1.5.4
+Scanned directories: 0
+Scanned files: 9
+Infected files: 0
+Data scanned: 147.03 MiB
+Data read: 57.77 MiB (ratio 2.54:1)
+Time: 35.326 sec (0 m 35 s)
+Start Date: 2026:11:09 00:05:55
+End Date:   2026:11:09 00:06:31
