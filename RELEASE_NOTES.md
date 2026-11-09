@@ -24,7 +24,7 @@
 `W32.Malware.DDFDC5D0` (generic), **CrowdStrike Falcon** `Win/malicious_confidence_60% (D)` and **Trapmine**
 `Malicious.moderate.ml.score` (machine-learning guesses, same as 2.8.0). macOS .dmg: 1 – **Microsoft**
 `Trojan:Script/Wacatac.C!ml` (machine-learning guess; the 2.8.0 DMG was clean). None names a real virus;
-all reported as false positives.
+being reported as false positives.
 
 ---
 
