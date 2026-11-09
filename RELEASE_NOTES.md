@@ -15,6 +15,14 @@
   toolbar uses the same style.
 - A phase's program list shows only the chips; the text field appears when you edit it.
 
+### Also included (fixes from 2.8.1, which was not published separately)
+- **Linux: dialogs and saving work.** In 2.8.0 "Save as", "Open", linking files and team folders silently did
+  nothing on normal systems. **If you use Linux, please update.**
+- **Much lighter when idle:** endless pulse animations could use more than a full CPU core without graphics
+  acceleration; idle CPU is now close to 0 %.
+- **macOS:** the window fits small screens such as the 13-inch MacBook Neo; quitting via Dock or menu saves first.
+- Startup can no longer hang on a slow system query.
+
 ### Website
 - Interactive style showcase (areas, film strip, arrows, swipe, dice), a quick-capture demo, a share section with
   a "Planned with VertexForge" badge and a press & brand kit.
@@ -28,7 +36,7 @@ being reported as false positives.
 
 ---
 
-## VertexForge Studio 2.8.1
+## VertexForge Studio 2.8.1 (not published separately – included in 2.9.0)
 
 An important update – especially for Linux.
 
