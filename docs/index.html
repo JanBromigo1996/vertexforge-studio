@@ -627,6 +627,33 @@ footer .small{color:var(--muted)}
 .rot.out{opacity:0;transform:translateY(-.35em);filter:blur(4px)}
 .rot.in{animation:rotIn .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes rotIn{from{opacity:0;transform:translateY(.35em);filter:blur(4px)}}
+/* Community: Live-Zahlen und Stimmen */
+.live-dot{display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:50%;background:#5f9e6e;box-shadow:0 0 0 0 rgba(95,158,110,.6);animation:liveDot 2s ease-out infinite;vertical-align:1px}
+@keyframes liveDot{70%{box-shadow:0 0 0 8px rgba(95,158,110,0)}100%{box-shadow:0 0 0 0 rgba(95,158,110,0)}}
+.cm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.cm-tile{position:relative;display:flex;flex-direction:column;gap:8px;padding:20px 20px 18px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--fg);text-decoration:none;overflow:hidden;transition:transform .25s cubic-bezier(.34,1.3,.64,1),border-color .25s,box-shadow .25s}
+.cm-tile[href]:hover{transform:translateY(-3px);border-color:var(--brass);box-shadow:0 18px 40px -22px color-mix(in srgb,var(--brass) 70%,transparent)}
+.cm-tile.dl{grid-column:span 2}
+.cm-src{font:600 .68rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cm-big{font:700 2.6rem/1 var(--display);color:var(--fg);font-variant-numeric:tabular-nums}
+.cm-rows{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.86rem;color:var(--fg-2)}
+.cm-rows span{display:inline-flex;align-items:center;gap:6px}
+.cm-rows em{font-style:normal;color:var(--muted)}
+.cm-rows i{width:9px;height:9px;border-radius:3px}
+.cm-bar{display:flex;height:8px;border-radius:99px;overflow:hidden;background:var(--line);gap:2px}
+.cm-bar i{min-width:4px;transition:flex .8s cubic-bezier(.2,.8,.2,1)}
+.pl-windows{background:#cfa75c}.pl-macos{background:#7fb6a5}.pl-linux{background:#c27a5a}.pl-browser{background:#8f8aa8}
+.cm-tile.star .cm-big::after{content:" ★";color:var(--brass);font-size:.6em;vertical-align:.25em}
+.cm-note{margin-top:14px;color:var(--muted)}
+.cm-quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.cm-q{margin:0;padding:20px 22px;border-radius:14px;border:1px solid var(--line);background:var(--bg)}
+.cm-q blockquote{margin:0;font:500 1.02rem/1.55 var(--body);color:var(--fg)}
+.cm-q figcaption{margin-top:10px;font-size:.84rem;color:var(--muted)}
+.cm-q a{color:var(--brass)}
+.cm-ask{grid-column:1/-1;padding:16px 20px;border-radius:12px;border:1px dashed var(--line-2);color:var(--fg-2)}
+.cm-ask a{color:var(--brass)}
+@media (max-width:620px){.cm-tile.dl{grid-column:auto}}
+@media (prefers-reduced-motion:reduce){.live-dot{animation:none}}
 
 </style>
 </head>
@@ -848,6 +875,19 @@ footer .small{color:var(--muted)}
         <svg class="tv-lines" viewBox="0 0 400 300" preserveAspectRatio="none"><path d="M90 60 C150 80 170 120 200 150"/><path d="M320 70 C260 90 230 120 200 150"/><path d="M200 270 C200 230 200 200 200 150"/></svg>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="community" class="alt" hidden>
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow"><span class="live-dot"></span><span data-en>Live from the community</span><span data-de>Live aus der Community</span></div>
+      <h2><span data-en>Out in the wild</span><span data-de>Draußen in der Welt</span></h2>
+      <p class="lead"><span data-en>Real numbers, refreshed automatically every two hours from GitHub, itch.io and the forums where VertexForge was shared.</span><span data-de>Echte Zahlen, automatisch alle zwei Stunden aktualisiert – von GitHub, itch.io und den Foren, in denen VertexForge vorgestellt wurde.</span></p>
+    </div>
+    <div class="cm-grid reveal-stagger" id="cmGrid"></div>
+    <p class="small cm-note" id="cmNote"></p>
+    <div class="cm-quotes reveal" id="cmQuotes"></div>
   </div>
 </section>
 
@@ -1341,6 +1381,41 @@ const VF = {lang:'en', onLang:[], still: matchMedia('(prefers-reduced-motion: re
     document.querySelectorAll('[data-snip]').forEach(b=>b.onclick = () => { snip = b.dataset.snip; sc.textContent = SNIP[snip]; document.querySelectorAll('[data-snip]').forEach(x=>x.classList.toggle('on', x===b)); });
     copyBtn(document.getElementById('snipCopy'), ()=>SNIP[snip]);
     document.querySelectorAll('.swatches [data-hex]').forEach(b=>copyBtn(b, ()=>b.dataset.hex));
+  }
+
+  /* Community: Zahlen und Stimmen aus docs/stats.json (eigene Domain, keine Anfragen an Dritte) */
+  const cm = document.getElementById('community');
+  if(cm){
+    let ST = null;
+    const fmt = n => (n||0).toLocaleString(VF.lang==='de' ? 'de-DE' : 'en-US');
+    const L = (en, de) => VF.lang==='de' ? de : en;
+    const ago = iso => { const m = Math.max(1, Math.round((Date.now() - Date.parse(iso)) / 60000)); return m < 60 ? L(m + ' min ago', 'vor ' + m + ' Min.') : m < 1440 ? L(Math.round(m/60) + ' h ago', 'vor ' + Math.round(m/60) + ' Std.') : L(Math.round(m/1440) + ' days ago', 'vor ' + Math.round(m/1440) + ' Tagen'); };
+    const tile = (cls, href, label, big, rows, extra='') => `<a class="cm-tile ${cls}" ${href ? `href="${href}" target="_blank" rel="noopener"` : ''}><span class="cm-src">${label}</span><b class="cm-big" data-to="${big}">0</b>${extra}<span class="cm-rows">${rows}</span></a>`;
+    const paint = () => {
+      if(!ST) return; const g = ST.github || {}, P = g.platforms || {}, tot = g.downloads || 0, out = [];
+      const segs = [['windows','Windows'],['macos','macOS'],['linux','Linux'],['browser',L('Browser','Browser')]].filter(([k])=>P[k]);
+      out.push(tile('dl', 'https://github.com/JanBromigo1996/vertexforge-studio/releases', 'GitHub · ' + L('downloads','Downloads'), tot,
+        segs.map(([k,n])=>`<span><i class="pl-${k}"></i>${n} <em>${fmt(P[k])}</em></span>`).join(''),
+        `<span class="cm-bar">${segs.map(([k])=>`<i class="pl-${k}" style="flex:${P[k]}"></i>`).join('')}</span>`));
+      if(ST.itch) out.push(tile('itch', ST.itch.url, 'itch.io', ST.itch.downloads, `<span>${L('downloads','Downloads')}</span><span>${fmt(ST.itch.views)} <em>${L('page views','Seitenaufrufe')}</em></span>`));
+      if(ST.reddit) out.push(tile('reddit', ST.reddit.url, 'Reddit', ST.reddit.upvotes, `<span>${L('upvotes','Upvotes')}</span><span>${fmt(ST.reddit.comments)} <em>${L('comments','Kommentare')}</em></span>`));
+      if(ST.blenderartists) out.push(tile('ba', ST.blenderartists.url, 'BlenderArtists', ST.blenderartists.views, `<span>${L('views','Aufrufe')}</span><span>${fmt(ST.blenderartists.likes)} <em>Likes</em> · ${fmt(ST.blenderartists.replies)} <em>${L('replies','Antworten')}</em></span>`));
+      out.push(tile('star', 'https://github.com/JanBromigo1996/vertexforge-studio', 'GitHub · ' + L('stars','Sterne'), g.stars || 0, `<span>${L('Give it a star if it helps you ★','Gib einen Stern, wenn es dir hilft ★')}</span>`));
+      const grid = document.getElementById('cmGrid'); grid.innerHTML = out.join('');
+      grid.querySelectorAll('.cm-big').forEach(el=>{ const to = +el.dataset.to; if(VF.still || !cm.classList.contains('seen')){ el.textContent = fmt(to); return; }
+        const t0 = performance.now(), d = 900; const f = now => { const k = Math.min(1, (now - t0)/d); el.textContent = fmt(Math.round(to * (1 - Math.pow(1-k, 3)))); if(k < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); });
+      document.getElementById('cmNote').innerHTML = L(`Updated ${ago(ST.updated)} · counted since ${ST.since} · GitHub counts every download, including repeated ones.`, `Aktualisiert ${ago(ST.updated)} · gezählt seit ${ST.since} · GitHub zählt jeden Download, auch wiederholte.`);
+      const Q = (ST.quotes || []).filter(q=>q && q.text);
+      const lk = ST.links || {}, where = [['reddit','Reddit'],['blenderartists','BlenderArtists'],['itch','itch.io']].filter(([k])=>lk[k]).map(([k,n])=>`<a href="${lk[k]}" target="_blank" rel="noopener">${n}</a>`).join(' · ');
+      document.getElementById('cmQuotes').innerHTML = (Q.length ? Q.map(q=>`<figure class="cm-q"><blockquote></blockquote><figcaption>— <a target="_blank" rel="noopener"></a></figcaption></figure>`).join('') : '') +
+        `<div class="cm-ask"><b>${L('Used VertexForge?','Schon mit VertexForge gearbeitet?')}</b> ${L('Tell other artists what you think','Erzähl anderen Artists, wie du es findest')}${where ? ': ' + where : '.'}</div>`;
+      document.querySelectorAll('#cmQuotes .cm-q').forEach((f,i)=>{ const q = Q[i]; f.querySelector('blockquote').textContent = '“' + q.text + '”'; const a = f.querySelector('a'); a.textContent = (q.author || '') + (q.source ? ' · ' + q.source : ''); if(q.url) a.href = q.url; else a.removeAttribute('href'); });
+      cm.hidden = false;
+    };
+    const load = () => fetch('stats.json', {cache:'no-cache'}).then(r=>r.ok ? r.json() : null).then(d=>{ if(d){ ST = d; paint(); } }).catch(()=>{});
+    if('IntersectionObserver' in window) new IntersectionObserver((es, o)=>es.forEach(e=>{ if(e.isIntersecting){ cm.classList.add('seen'); paint(); o.disconnect(); } }), {threshold:.25}).observe(cm);
+    load(); setInterval(()=>{ if(!document.hidden) load(); }, 5 * 60 * 1000);
+    VF.onLang.push(paint);
   }
 
   /* Mini-Demo „Schnell erfassen“ */

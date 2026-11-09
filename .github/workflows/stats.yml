@@ -1,0 +1,37 @@
+# Aktualisiert docs/stats.json (Downloads, Sterne, Beiträge) für die Website – alle zwei Stunden.
+# Optional: Repository-Secret ITCH_API_KEY (itch.io ▸ Settings ▸ API keys) für die itch.io-Zahlen.
+name: Update website stats
+
+on:
+  schedule:
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['site/community.json']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stats
+  cancel-in-progress: false
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect numbers
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          ITCH_API_KEY: ${{ secrets.ITCH_API_KEY }}
+        run: python3 scripts/update_stats.py
+      - name: Commit if changed
+        run: |
+          if git diff --quiet docs/stats.json; then echo "no change"; exit 0; fi
+          git config user.name "vertexforge-stats[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/stats.json
+          git commit -m "Website stats update"
+          git pull --rebase -q && git push
