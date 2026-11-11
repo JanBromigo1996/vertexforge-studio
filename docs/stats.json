@@ -1,13 +1,13 @@
 {
- "updated": "2026-11-09T23:25:57Z",
+ "updated": "2026-11-11T14:23:16Z",
  "since": "2026-11-09",
  "github": {
-  "downloads": 10,
+  "downloads": 11,
   "platforms": {
    "windows": 5,
    "macos": 1,
    "linux": 3,
-   "browser": 1
+   "browser": 2
   },
   "stars": 1,
   "latest": "v2.9.0"
